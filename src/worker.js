@@ -1,4 +1,6 @@
-// Webskan – Worker: statyczne pliki z public/ + /api/order (checkout Polar albo kolejka przedsprzedażowa w KV).
+// Webskan – Worker: statyczne pliki z public/ + /api/order (checkout Polar albo kolejka przedsprzedażowa w KV) + darmowy szybki skan (src/scan.js).
+import { startScan, nextScans, scanResult, scanPage, ScanQueue } from "./scan.js";
+export { ScanQueue };
 const PRIVATE_HOST = /^(localhost|127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|0\.|\[?::1\]?$|.*\.local$|.*\.internal$)/i;
 
 function normalizeUrl(raw) {
@@ -115,6 +117,11 @@ async function route(request, env, pathname) {
       try { return await handleOrder(request, env); }
       catch (e) { return page("pl", "Błąd", `<p>${String(e.message || e)}</p>`); }
     }
+    if (pathname === "/api/scan" && request.method === "POST") return startScan(request, env, normalizeUrl);
+    if (pathname === "/api/scan/next") return nextScans(request, env);
+    if (pathname === "/api/scan/result" && request.method === "POST") return scanResult(request, env);
+    { const m = pathname.match(/^\/skan\/([0-9a-f]+)\/?$/); if (m) return scanPage(request, env, "pl", m[1]); }
+    { const m = pathname.match(/^\/en\/scan\/([0-9a-f]+)\/?$/); if (m) return scanPage(request, env, "en", m[1]); }
     if (pathname === "/api/health") return Response.json({ ok: true, polar: Boolean(env.POLAR_TOKEN && env.POLAR_PRODUCT_PL), mode: env.SALES_MODE || "live" });
     return env.ASSETS.fetch(request);
   }

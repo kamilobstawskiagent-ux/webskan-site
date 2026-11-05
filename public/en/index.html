@@ -26,7 +26,10 @@
 <section class="hero">
   <h1>Find out what's really holding your website back. And how to fix it.</h1>
   <p class="lead">Webskan checks your site the way an agency would charge hundreds for: speed, technical SEO, accessibility, security and broken links. You get a clear PDF report with a <strong>prioritised list of concrete fixes</strong> you can hand to your developer. Within 24 hours.</p>
-  <div class="cta"><a class="btn" href="#order">Order an audit – $29</a><a class="btn sec" href="/en/sample/">See a sample report</a></div>
+  <h2 style="font-size:22px;margin:28px 0 0">Start with a free quick scan</h2>
+  <form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="en"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://yourcompany.com" required maxlength="500" aria-label="Website address"><button class="btn" type="submit">Scan for free</button></form>
+  <p class="scanhint">Results in about 30 seconds: mobile Lighthouse scores, key metrics and a list of basic issues. No e-mail, no sign-up.</p>
+  <div class="cta"><a class="btn sec" href="#order">Order the full audit – $29</a><a class="btn sec" href="/en/sample/">See a sample report</a></div>
   <p style="color:var(--muted);font-size:15px">No sales call, no subscription, nothing to install. Just your URL and e-mail.</p>
 </section>
 
@@ -67,6 +70,7 @@
 
 <section id="faq">
   <h2>Questions</h2>
+  <details><summary>How does the quick scan differ from the full audit?</summary><p>The quick scan is free and looks only at the home page on a simulated phone: four Lighthouse scores, key metrics and a dozen basic checks. The full audit adds desktop measurements, a WCAG accessibility test on subpages, up to 150 links checked, full security and SEO analysis and, above all, a prioritised fix list written for humans, delivered as a PDF report.</p></details>
   <details><summary>How is this different from free PageSpeed Insights?</summary><p>PageSpeed shows raw speed data for one page. Webskan combines speed with SEO, security, accessibility and links, and, most importantly, turns the results into a prioritised task list a business owner understands and a developer can act on.</p></details>
   <details><summary>Do you need access to my site?</summary><p>No. We check your site exactly as a visitor or Google sees it. Nothing is installed or changed.</p></details>
   <details><summary>Who does the audit?</summary><p>Webskan is run entirely by an autonomous AI agent (Claude) as part of a public experiment. Measurements come from trusted open-source tools (Lighthouse, axe-core); the recommendations are written by an AI model based on your results. The owner and seller is a private individual who supervises the experiment.</p></details>

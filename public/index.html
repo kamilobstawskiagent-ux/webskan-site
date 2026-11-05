@@ -26,7 +26,10 @@
 <section class="hero">
   <h1>Dowiedz się, co naprawdę hamuje Twoją stronę. I jak to naprawić.</h1>
   <p class="lead">Webskan sprawdza Twoją stronę tak, jak zrobiłaby to agencja za kilkaset złotych: szybkość, SEO techniczne, dostępność, bezpieczeństwo i zepsute linki. Dostajesz czytelny raport PDF z <strong>priorytetową listą konkretnych poprawek</strong>, którą możesz przekazać swojemu webmasterowi. W 24 godziny.</p>
-  <div class="cta"><a class="btn" href="#zamow">Zamów audyt – 99 zł</a><a class="btn sec" href="/przyklad/">Zobacz przykładowy raport</a></div>
+  <h2 style="font-size:22px;margin:28px 0 0">Zacznij od darmowego szybkiego skanu</h2>
+  <form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="pl"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://twojafirma.pl" required maxlength="500" aria-label="Adres strony"><button class="btn" type="submit">Skanuj za darmo</button></form>
+  <p class="scanhint">Wynik w ok. 30 sekund: ocena Lighthouse na telefonie, kluczowe pomiary i lista podstawowych problemów. Bez e-maila, bez rejestracji.</p>
+  <div class="cta"><a class="btn sec" href="#zamow">Zamów pełny audyt – 99 zł</a><a class="btn sec" href="/przyklad/">Zobacz przykładowy raport</a></div>
   <p style="color:var(--muted);font-size:15px">Bez rozmowy handlowej, bez abonamentu, bez instalowania czegokolwiek. Podajesz adres strony i e-mail.</p>
 </section>
 
@@ -74,6 +77,7 @@
 
 <section id="faq">
   <h2>Pytania</h2>
+  <details><summary>Czym szybki skan różni się od pełnego audytu?</summary><p>Szybki skan jest darmowy i patrzy tylko na stronę główną na symulowanym telefonie: cztery oceny Lighthouse, kluczowe pomiary i kilkanaście podstawowych sprawdzeń. Pełny audyt dodaje pomiar na komputerze, test dostępności WCAG na podstronach, sprawdzenie do 150 linków, pełną analizę bezpieczeństwa i SEO, a przede wszystkim priorytetową listę poprawek napisaną po ludzku, w formie raportu PDF.</p></details>
   <details><summary>Czym to się różni od darmowego PageSpeed Insights?</summary><p>PageSpeed pokazuje surowe dane o szybkości jednej strony. Webskan łączy szybkość z SEO, bezpieczeństwem, dostępnością i linkami, a przede wszystkim tłumaczy wyniki na listę konkretnych zadań z priorytetami, którą rozumie właściciel firmy, a webmaster może od razu wykonać.</p></details>
   <details><summary>Czy musicie mieć dostęp do mojej strony?</summary><p>Nie. Sprawdzamy stronę tak, jak widzi ją każdy odwiedzający i Google. Nic nie instalujemy i niczego nie zmieniamy.</p></details>
   <details><summary>Kto robi ten audyt?</summary><p>Webskan jest w całości prowadzony przez autonomicznego agenta AI (Claude) w ramach publicznego eksperymentu. Pomiary wykonują sprawdzone narzędzia open source (Lighthouse, axe-core), a rekomendacje pisze model AI na podstawie Twoich wyników. Właścicielem i sprzedawcą jest osoba fizyczna, która nadzoruje eksperyment.</p></details>
