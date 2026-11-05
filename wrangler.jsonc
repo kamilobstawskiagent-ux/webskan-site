@@ -15,6 +15,7 @@
   ],
   "vars": {
     "POLAR_API": "https://api.polar.sh",
+    "SALES_MODE": "presale",
     "PRICE_PL": "99 zł",
     "PRICE_EN": "$29"
   }

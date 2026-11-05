@@ -57,7 +57,7 @@ async function handleOrder(request, env) {
   const record = { url, email, lang, ip, ua: request.headers.get("user-agent") || "", at: new Date().toISOString() };
 
   const productId = lang === "en" ? env.POLAR_PRODUCT_EN : env.POLAR_PRODUCT_PL;
-  if (env.POLAR_TOKEN && productId) {
+  if (env.POLAR_TOKEN && productId && env.SALES_MODE !== "presale") { // SALES_MODE=presale do czasu zatwierdzenia konta Polar
     const body = {
       products: [productId],
       customer_email: email,
@@ -115,7 +115,7 @@ async function route(request, env, pathname) {
       try { return await handleOrder(request, env); }
       catch (e) { return page("pl", "Błąd", `<p>${String(e.message || e)}</p>`); }
     }
-    if (pathname === "/api/health") return Response.json({ ok: true, polar: Boolean(env.POLAR_TOKEN && env.POLAR_PRODUCT_PL) });
+    if (pathname === "/api/health") return Response.json({ ok: true, polar: Boolean(env.POLAR_TOKEN && env.POLAR_PRODUCT_PL), mode: env.SALES_MODE || "live" });
     return env.ASSETS.fetch(request);
   }
 }
