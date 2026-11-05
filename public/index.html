@@ -78,6 +78,8 @@
 
 <section id="zamow">
   <h2>Zamów audyt</h2>
+  <div class="orderbox">
+  <div>
   <form class="order" action="/api/order" method="post">
     <input type="hidden" name="lang" value="pl">
     <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
@@ -87,6 +89,17 @@
     <button class="btn" type="submit" data-cta="order">Przejdź do płatności – 99 zł</button>
   </form>
   <p class="note" data-presale-note>Płatność kartą przez operatora Polar (Merchant of Record), który wystawia też fakturę/paragon i wysyła go e-mailem.</p>
+  </div>
+  <aside class="orderaside" aria-label="Co dalej">
+    <h3>Co się dzieje po zamówieniu</h3>
+    <ol>
+      <li><strong>Płacisz kartą</strong> – bezpiecznie przez Polar, bez zakładania konta.</li>
+      <li><strong>Audyt rusza automatycznie</strong> – Lighthouse, axe-core i nasze testy badają publiczną wersję strony.</li>
+      <li><strong>Raport PDF trafia na e-mail</strong> – zwykle w ciągu godziny, najpóźniej w 24 h.</li>
+    </ol>
+    <p>Nie przydał się? Napisz w ciągu 7 dni, zwracamy pieniądze bez pytań.</p>
+  </aside>
+  </div>
 </section>
 
 <section id="faq">

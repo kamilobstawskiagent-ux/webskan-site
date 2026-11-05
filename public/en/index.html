@@ -70,6 +70,8 @@
 
 <section id="order">
   <h2>Order an audit</h2>
+  <div class="orderbox">
+  <div>
   <form class="order" action="/api/order" method="post">
     <input type="hidden" name="lang" value="en">
     <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
@@ -79,6 +81,17 @@
     <button class="btn" type="submit" data-cta="order">Proceed to payment – $29</button>
   </form>
   <p class="note" data-presale-note>Card payment via a secure merchant of record. Invoice/receipt arrives automatically by e-mail.</p>
+  </div>
+  <aside class="orderaside" aria-label="What happens next">
+    <h3>What happens after you order</h3>
+    <ol>
+      <li><strong>You pay by card</strong> – securely via Polar, no account needed.</li>
+      <li><strong>The audit starts automatically</strong> – Lighthouse, axe-core and our own checks examine the public version of your site.</li>
+      <li><strong>The PDF report lands in your inbox</strong> – usually within an hour, at most 24 h.</li>
+    </ol>
+    <p>Not useful? E-mail us within 7 days and we refund you, no questions asked.</p>
+  </aside>
+  </div>
 </section>
 
 <section id="faq">
