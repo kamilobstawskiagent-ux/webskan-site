@@ -20,20 +20,33 @@
 </head>
 <body>
 <div class="wrap">
-<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a href="#how">How it works</a><a href="#price">Price</a><a href="#faq">FAQ</a><a href="/">PL</a></nav></header>
+<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a class="m-hide" href="#how">How it works</a><a class="m-hide" href="#scope">Scope</a><a href="#price">Price</a><a href="#faq">FAQ</a><a href="/">PL</a></nav></header>
 <main>
 
 <section class="hero">
+  <div class="hero-text">
+  <p class="eyebrow">Automated website audit · PDF report within 24 h</p>
   <h1>Find out what's really holding your website back. And how to fix it.</h1>
-  <p class="lead">Webskan checks your site the way an agency would charge hundreds for: speed, technical SEO, accessibility, security and broken links. You get a clear PDF report with a <strong>prioritised list of concrete fixes</strong> you can hand to your developer. Within 24 hours.</p>
-  <h2 style="font-size:22px;margin:28px 0 0">Start with a free quick scan</h2>
+  <p class="lead">Webskan checks your site the way an agency would charge hundreds for: speed, technical SEO, accessibility, security and broken links. You get a clear PDF report with a <strong>prioritised list of concrete fixes</strong> you can hand to your developer.</p>
+  <h2 class="h-scan">Start with a free quick scan</h2>
   <form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="en"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://yourcompany.com" required maxlength="500" aria-label="Website address"><button class="btn" type="submit">Scan for free</button></form>
   <p class="scanhint">Results in about 30 seconds: mobile Lighthouse scores, key metrics and a list of basic issues. No e-mail, no sign-up.</p>
-  <div class="cta"><a class="btn sec" href="#order">Order the full audit – $29</a><a class="btn sec" href="/en/sample/">See a sample report</a></div>
-  <p style="color:var(--muted);font-size:15px">No sales call, no subscription, nothing to install. Just your URL and e-mail.</p>
+  <div class="cta"><a class="btn sec" href="#order">Order the full audit – $29</a><a class="link" href="/en/sample/">See a sample report →</a></div>
+  </div>
+  <div class="hero-img"><a href="/en/sample/" aria-label="Sample report (PDF)"><img src="/img/report-en.webp" width="760" height="670" alt="First page of a sample Webskan report: mobile and desktop scores and the list of fixes" fetchpriority="high"><span class="imgtag">Sample report · kamilobstawski.com</span></a></div>
 </section>
+<p class="trust">Powered by Google Lighthouse and axe-core (WCAG 2.1 AA) · Nothing to install · Card payments via Polar · 7-day no-questions refund</p>
 
 <section id="how">
+  <h2>How it works</h2>
+  <div class="steps">
+    <div class="step"><span class="n">1</span><h3>Enter your URL and e-mail</h3><p>Nothing to install, no access needed. We check the public version of your site, exactly as Google and your customers see it.</p></div>
+    <div class="step"><span class="n">2</span><h3>The audit runs automatically</h3><p>Lighthouse on mobile and desktop, accessibility test, up to 150 links, security headers, technical SEO. Usually within the hour.</p></div>
+    <div class="step"><span class="n">3</span><h3>You get a PDF report</h3><p>A prioritised list of fixes in plain language: what, why, how and how long it takes. Hand it to your developer or do it yourself.</p></div>
+  </div>
+</section>
+
+<section id="scope">
   <h2>What we check</h2>
   <div class="grid">
     <div class="card"><h3>Speed (Core Web Vitals)</h3><p>Measured on mobile and desktop, the way Google does it. We show exactly what slows the page down and how many seconds you can win.</p></div>
@@ -63,9 +76,9 @@
     <label>Website address<br><input type="text" name="url" inputmode="url" placeholder="https://yourcompany.com" required maxlength="500"></label>
     <label>Your e-mail (we send the report there)<br><input type="email" name="email" placeholder="you@yourcompany.com" required maxlength="254"></label>
     <label class="consent"><input type="checkbox" name="consent" required> I accept the <a href="/en/terms/">terms</a> and <a href="/en/privacy/">privacy policy</a>. I understand the report is generated automatically and covers the publicly accessible version of the site.</label>
-    <button class="btn" type="submit">Proceed to payment – $29</button>
+    <button class="btn" type="submit" data-cta="order">Proceed to payment – $29</button>
   </form>
-  <p class="note">Card payment via a secure merchant of record. Invoice/receipt arrives automatically by e-mail.</p>
+  <p class="note" data-presale-note>Card payment via a secure merchant of record. Invoice/receipt arrives automatically by e-mail.</p>
 </section>
 
 <section id="faq">

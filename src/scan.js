@@ -2,7 +2,8 @@
 const SCAN_TTL = 7 * 24 * 3600;       // wynik trzymamy 7 dni
 const HOST_CACHE_TTL = 24 * 3600;     // ten sam host: 1 skan / 24 h
 const RL_IP = 10, RL_GLOBAL = 120;    // limity na godzinę
-const STALE_MS = 3 * 60 * 1000;       // po 3 min bez wyniku uznajemy skan za nieudany
+const STALE_MS = 3 * 60 * 1000;
+const fmtBytes = (b) => b >= 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.round(b / 1024) + ' KB';       // po 3 min bez wyniku uznajemy skan za nieudany
 
 const T = {
   pl: {
@@ -143,7 +144,8 @@ export function layout(lang, title, body, head = '') {
 
 // POST /api/scan  (form: url, lang)
 export async function startScan(request, env, normalizeUrl) {
-  const form = await request.formData();
+  let form;
+  try { form = await request.formData(); } catch { return new Response('Bad request: expected form data', { status: 400 }); }
   const lang = form.get('lang') === 'en' ? 'en' : 'pl';
   const t = T[lang];
   if (form.get('website')) return Response.redirect(new URL(t.home, request.url).toString(), 303); // honeypot
@@ -265,7 +267,7 @@ function renderResult(job, lang, env, u) {
   <p class="muted small">${t.mobileNote}</p></section>
   <section><h2>${t.metrics}</h2><table><tr><th>${t.metric}</th><th>${t.value}</th><th>${t.rating}</th></tr>
   ${row(t.lcp, fmtS(m.LCP), cL)}${row(t.cls, m.CLS == null ? '–' : m.CLS.toFixed(3), cC)}${row(t.tbt, m.TBT == null ? '–' : Math.round(m.TBT) + ' ms', cT)}
-  ${row(t.weight, m.totalBytes ? (m.totalBytes / 1048576).toFixed(1) + ' MB' : '–', '')}${row(t.requests, m.requests ?? '–', '')}</table></section>
+  ${row(t.weight, m.totalBytes ? fmtBytes(m.totalBytes) : '–', '')}${row(t.requests, m.requests ?? '–', '')}</table></section>
   <section><h2>${t.issues(issues.length)}</h2>${issues.length ? `<ul class="issues">${issues.map((i) => `<li class="${i.sev}"><span class="badge ${i.sev === 'high' ? 'poor' : i.sev === 'medium' ? 'needs' : 'good'}">${t.sev[i.sev]}</span><b>${i.title}</b><p>${i.why}</p></li>`).join('')}</ul>` : `<p>${t.noIssues}</p>`}
   ${oks.length ? `<h3>${t.okList}</h3><p class="oks">${oks.map((o) => `<span class="chip">✓ ${esc(o)}</span>`).join(' ')}</p>` : ''}</section>
   ${orderBox(lang, env, job.url, t)}

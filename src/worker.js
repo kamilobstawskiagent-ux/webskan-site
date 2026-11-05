@@ -123,6 +123,21 @@ async function route(request, env, pathname) {
     { const m = pathname.match(/^\/skan\/([0-9a-f]+)\/?$/); if (m) return scanPage(request, env, "pl", m[1]); }
     { const m = pathname.match(/^\/en\/scan\/([0-9a-f]+)\/?$/); if (m) return scanPage(request, env, "en", m[1]); }
     if (pathname === "/api/health") return Response.json({ ok: true, polar: Boolean(env.POLAR_TOKEN && env.POLAR_PRODUCT_PL), mode: env.SALES_MODE || "live" });
-    return env.ASSETS.fetch(request);
+    const res = await env.ASSETS.fetch(request);
+    if (env.SALES_MODE === "presale" && (pathname === "/" || pathname === "/en/")) return presaleRewrite(res, pathname === "/en/" ? "en" : "pl");
+    return res;
   }
+}
+
+// Tryb przedsprzedaży: ten sam statyczny HTML, ale uczciwy przycisk i notka (bez „przejdź do płatności”, gdy Polar jeszcze nie przyjmuje płatności).
+const PRESALE = {
+  pl: { btn: "Zarezerwuj audyt – 99 zł (płatność po uruchomieniu)", note: "Płatności uruchamiamy w najbliższych dniach. Zostaw adres strony i e-mail, a wyślemy Ci link do płatności. Nic nie pobieramy teraz." },
+  en: { btn: "Reserve the audit – $29 (pay when checkout opens)", note: "Payments go live within days. Leave your URL and e-mail and we will send you a payment link. Nothing is charged now." },
+};
+function presaleRewrite(res, lang) {
+  const t = PRESALE[lang];
+  return new HTMLRewriter()
+    .on("button[data-cta=order]", { element(el) { el.setInnerContent(t.btn); } })
+    .on("p[data-presale-note]", { element(el) { el.setInnerContent(t.note); } })
+    .transform(res);
 }
