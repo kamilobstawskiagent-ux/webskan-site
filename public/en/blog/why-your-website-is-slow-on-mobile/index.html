@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why your website is slow on mobile (and what to do about it) – Webskan</title>
+<meta name="description" content="It flies on your laptop and takes 8 seconds on a customer's phone. The five most common causes on small-business sites, how to spot them in PageSpeed and the order to fix them in so you don't overpay.">
+<link rel="canonical" href="https://webskan.com/en/blog/why-your-website-is-slow-on-mobile/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/why-your-website-is-slow-on-mobile/">
+<link rel="alternate" hreflang="pl" href="https://webskan.com/blog/dlaczego-strona-jest-wolna-na-telefonie/">
+<meta property="og:title" content="Why your website is slow on mobile (and what to do about it)">
+<meta property="og:description" content="The five most common causes of a slow mobile site, how to spot them and the order to fix them in.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/en/blog/why-your-website-is-slow-on-mobile/">
+<meta property="og:image" content="https://webskan.com/og-en.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Why your website is slow on mobile (and what to do about it)","description":"The five most common causes of a slow mobile site, how to spot them in PageSpeed and the order to fix them in.","datePublished":"2026-11-05","dateModified":"2026-11-05","inLanguage":"en","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/en/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/en/"},"mainEntityOfPage":"https://webskan.com/en/blog/why-your-website-is-slow-on-mobile/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a href="/en/blog/">Blog</a><a href="/en/#price">Price</a><a href="/blog/dlaczego-strona-jest-wolna-na-telefonie/">PL</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 5 November 2026 · 7 min read</p>
+<h1>Why your website is slow on mobile (and&nbsp;what to do about&nbsp;it)</h1>
+<p class="lead">“It's fast for me” is the most common reaction from an owner who sees a red PageSpeed score. And it is usually true: on a work laptop, on fibre, with the site already cached from last time. Your customer opens the same page on a three-year-old phone, on a bus, for the first time. This article explains where the gap comes from, what most often ruins the score on small-business sites, and where to start.</p>
+
+<h2>A phone is not a small laptop</h2>
+<p>Three things stack up. First, the <strong>processor</strong>: a typical mid-range Android phone runs a page's scripts four to eight times slower than a laptop. Every slider, visitor counter, chat widget and cookie plugin is code the phone has to chew through before it lets anyone tap anything. Second, the <strong>network</strong>: 4G in a city centre can be quick, but it has high latency and wild swings, and every extra file is another round trip. Third, the <strong>first visit</strong>: you have the site in your browser's cache; the customer downloads everything from scratch.</p>
+<p>Google knows this, which is why it has judged sites by their mobile version since 2018 (mobile-first indexing), and why <a href="/en/blog/core-web-vitals-explained/">Core Web Vitals</a> are driven mainly by measurements from real users' phones. The “Desktop” score in PageSpeed is nice to look at, but rankings and conversions follow the other one.</p>
+
+<h2>The five causes we see most often</h2>
+<p>This is not theory. It is what keeps coming up in our scans of service businesses, small shops and clinics, ordered by how often it appears.</p>
+<table class="vitals headers">
+<thead><tr><th>Cause</th><th>How it shows in PageSpeed</th><th>What to do</th><th>Who does it</th></tr></thead>
+<tbody>
+<tr><td><strong>1. Oversized images</strong><br><span class="muted">a 4 MB photo straight from the camera as the hero background</span></td><td data-l="How it shows">“Serve images in next-gen formats”, “Properly size images”, high LCP</td><td data-l="What to do">Resize to the width actually displayed, save as WebP/AVIF, lazy-load everything below the fold (<code>loading="lazy"</code>)</td><td data-l="Who">Owner or webmaster, 1–3 h; on WordPress an image-optimisation plugin</td></tr>
+<tr><td><strong>2. Too much JavaScript</strong><br><span class="muted">page builder, 20 plugins, slider, chat, three analytics tools</span></td><td data-l="How it shows">“Reduce JavaScript execution time”, “Minimize main-thread work”, high INP and TBT</td><td data-l="What to do">Remove plugins and widgets nobody uses; defer chat and analytics scripts</td><td data-l="Who">Webmaster, 2–6 h; the owner decides what goes</td></tr>
+<tr><td><strong>3. Slow server or no caching</strong><br><span class="muted">cheap shared hosting, every visit rebuilds the page</span></td><td data-l="How it shows">“Reduce initial server response time” (TTFB above 0.8 s)</td><td data-l="What to do">Enable page caching (plugin or host-level), put a CDN in front; change hosts only as a last resort</td><td data-l="Who">Webmaster or host, 1–2 h; a hosting move is its own project</td></tr>
+<tr><td><strong>4. Web fonts</strong><br><span class="muted">four typefaces in six weights from a third-party server</span></td><td data-l="How it shows">“Ensure text remains visible during webfont load”, layout shifts (CLS)</td><td data-l="What to do">Keep one or two typefaces, self-host them, add <code>font-display: swap</code>, preload the main file</td><td data-l="Who">Webmaster, 1 h</td></tr>
+<tr><td><strong>5. Third-party scripts</strong><br><span class="muted">Google Map, embedded video, chat, ad pixels, consent banner</span></td><td data-l="How it shows">“Reduce the impact of third-party code”, the list of domains under “Third-party usage”</td><td data-l="What to do">Replace the map and video with a linked image (load on click), fire pixels after interaction, remove duplicates</td><td data-l="Who">Webmaster, 1–3 h; marketing decides which pixels stay</td></tr>
+</tbody>
+</table>
+<p>They almost always come together. A typical page-builder business site has a 2 MB hero photo, eight plugins, three fonts and an embedded map, and takes 7–9 seconds to load on a phone while looking fine on the owner's laptop.</p>
+
+<h2>How to check it yourself in two minutes</h2>
+<ol>
+<li>Go to <a href="https://pagespeed.web.dev/" rel="noopener">pagespeed.web.dev</a>, paste your address and wait. Look at the <strong>“Mobile”</strong> tab, not “Desktop”.</li>
+<li>If there is a “Discover what your real users are experiencing” section at the top, those are measurements from your customers' phones over the last 28 days, and they are what Google uses. If it is missing, the site has too little traffic and you are left with the lab measurement below.</li>
+<li>Scroll to “Diagnostics” and look for the messages from the table above. Each one expands into a list of files, which is a ready-made to-do list for your webmaster.</li>
+<li>Repeat the test for a service page or the contact page, not just the home page. That is often where it is worst.</li>
+</ol>
+<p>Our <a href="/en/">free quick scan</a> does the same in one step (a mobile Lighthouse run) and adds the security and SEO checks PageSpeed does not mention.</p>
+
+<h2>What order to fix things in</h2>
+<p>If the budget is limited, and it usually is, order matters. This is the sequence that gives the most for the least in practice:</p>
+<ol>
+<li><strong>Images.</strong> The cheapest fix with the biggest effect. Shrinking a hero photo from 3 MB to 150 kB alone can cut 2–4 seconds on 4G.</li>
+<li><strong>Caching and a CDN.</strong> An hour's work, often free (Cloudflare's free plan, for instance). It cuts server response time for every visitor.</li>
+<li><strong>A script clear-out.</strong> Go through the plugin and widget list and ask one question: “has anyone used this in the last quarter?” Half of it usually goes with no loss.</li>
+<li><strong>Fonts.</strong> A small thing, but it removes layout shifts and one or two files from the critical path.</li>
+<li><strong>Hosting.</strong> Only if TTFB is still above a second after the four steps above. Moving hosts without doing 1–4 rarely changes much.</li>
+</ol>
+
+<h2>What not to do</h2>
+<ul>
+<li><strong>Don't buy a “speed plugin” blind.</strong> Good caching plugins help, but they will not fix a 4 MB photo or twenty scripts. Diagnose first, then pick the tool.</li>
+<li><strong>Don't chase 100.</strong> The difference between 92 and 100 is invisible to a customer; the difference between 35 and 75 is enormous. The goal is the green Core Web Vitals range, not a perfect score.</li>
+<li><strong>Don't switch off things that sell.</strong> If the chat widget brings enquiries, keep it, but make it load after the first user interaction instead of in the first second.</li>
+<li><strong>Don't commission “optimisation” without a list.</strong> The contractor should get specific items from the diagnostics, and you should get a measurement before and after. Otherwise you are paying for a promise.</li>
+</ul>
+
+<section class="fullbox">
+<h2>See what is slowing your site down on mobile</h2>
+<p>The free Webskan quick scan measures your page the way a customer's phone sees it (Lighthouse mobile) and shows the biggest problems alongside security and SEO checks. No e-mail, no sign-up, results in about 30 seconds.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="en"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://yourcompany.com" required maxlength="500" aria-label="Website address"><button class="btn" type="submit">Scan for free</button></form>
+<p class="note">Need a prioritised list for your webmaster with the expected gain for each item? The <a href="/en/#price">full Webskan audit</a> ($29) covers mobile and desktop performance with the exact files to fix, plus technical SEO, security, accessibility and broken links, in one PDF report within 24 hours.</p>
+</section>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy</a></footer>
+</div>
+</body>
+</html>
