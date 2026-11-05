@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Core Web Vitals po ludzku: LCP, INP i CLS – Webskan</title>
+<meta name="description" content="Czym są Core Web Vitals, jakie progi liczą się dla Google, skąd biorą się złe wyniki na typowej firmowej stronie i co naprawić najpierw. Bez żargonu.">
+<link rel="canonical" href="https://webskan.webskan.workers.dev/blog/core-web-vitals-po-ludzku/">
+<link rel="alternate" hreflang="pl" href="https://webskan.webskan.workers.dev/blog/core-web-vitals-po-ludzku/">
+<link rel="alternate" hreflang="en" href="https://webskan.webskan.workers.dev/en/blog/core-web-vitals-explained/">
+<meta property="og:title" content="Core Web Vitals po ludzku: LCP, INP i CLS">
+<meta property="og:description" content="Trzy liczby, którymi Google ocenia wygodę Twojej strony – co znaczą, jakie progi obowiązują i co naprawić najpierw.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.webskan.workers.dev/blog/core-web-vitals-po-ludzku/">
+<meta property="og:image" content="https://webskan.webskan.workers.dev/og-pl.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Core Web Vitals po ludzku: LCP, INP i CLS","description":"Czym są Core Web Vitals, jakie progi liczą się dla Google i co naprawić najpierw.","datePublished":"2026-11-05","dateModified":"2026-11-05","inLanguage":"pl","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.webskan.workers.dev/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.webskan.workers.dev/"},"mainEntityOfPage":"https://webskan.webskan.workers.dev/blog/core-web-vitals-po-ludzku/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cena</a><a href="/en/blog/core-web-vitals-explained/">EN</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 5 listopada 2026 · 7 min czytania</p>
+<h1>Core Web Vitals po ludzku: LCP, INP i CLS</h1>
+<p class="lead">Google ocenia wygodę Twojej strony trzema liczbami. Nie trzeba być programistą, żeby je zrozumieć – i żeby wiedzieć, komu i co zlecić do poprawy. Ten tekst tłumaczy każdą z nich na przykładach z typowej firmowej strony.</p>
+
+<h2>Skąd w ogóle te trzy liczby</h2>
+<p>Core Web Vitals (po polsku „podstawowe wskaźniki internetowe”) to zestaw pomiarów, które Google zbiera z prawdziwych przeglądarek Chrome użytkowników odwiedzających Twoją stronę. Nie są to opinie, tylko czasy i odległości zmierzone na telefonach i komputerach ludzi, którzy naprawdę u Ciebie byli. Google publikuje je w <a href="https://pagespeed.web.dev/" rel="noopener">PageSpeed Insights</a> i w Search Console, w raporcie „Podstawowe wskaźniki internetowe”.</p>
+<p>Dlaczego warto się tym przejmować? Z dwóch powodów. Po pierwsze, od 2021 r. wskaźniki są jednym z sygnałów rankingowych Google. Sam w sobie to sygnał słaby – dobra treść nadal wygrywa z szybką pustą stroną – ale przy podobnej treści konkurentów robi różnicę. Po drugie, i ważniejsze: te same rzeczy, które psują wskaźniki, psują sprzedaż. Strona, która ładuje się 6 sekund na telefonie, traci dużą część odwiedzających, zanim cokolwiek zobaczą.</p>
+
+<h2>Trzy wskaźniki w jednym zdaniu każdy</h2>
+<table class="vitals">
+<thead><tr><th>Wskaźnik</th><th>Co mierzy</th><th>Dobrze</th><th>Źle</th></tr></thead>
+<tbody>
+<tr><td><strong>LCP</strong><br><span class="muted">Largest Contentful Paint</span></td><td>Po ilu sekundach widać największy element strony (zwykle zdjęcie w nagłówku albo główny tytuł)</td><td data-l="Dobrze">≤ 2,5 s</td><td data-l="Źle">&gt; 4 s</td></tr>
+<tr><td><strong>INP</strong><br><span class="muted">Interaction to Next Paint</span></td><td>Jak szybko strona reaguje na kliknięcie, dotknięcie lub wpisanie znaku – najgorsza taka reakcja podczas wizyty</td><td data-l="Dobrze">≤ 200 ms</td><td data-l="Źle">&gt; 500 ms</td></tr>
+<tr><td><strong>CLS</strong><br><span class="muted">Cumulative Layout Shift</span></td><td>Jak bardzo treść „skacze” podczas ładowania (przycisk ucieka spod palca, bo doładowało się zdjęcie wyżej)</td><td data-l="Dobrze">≤ 0,1</td><td data-l="Źle">&gt; 0,25</td></tr>
+</tbody>
+</table>
+<p>Między „dobrze” a „źle” jest strefa „wymaga poprawy”. Google patrzy na <strong>75. percentyl</strong>: strona zalicza próg, jeśli co najmniej trzy czwarte wizyt mieści się w zielonym. Jedna wolna wizyta z pociągu niczego nie psuje; stale wolny telefon przeciętnego klienta – tak.</p>
+
+<h2>LCP – „ile czekam, zanim coś zobaczę”</h2>
+<p>LCP to moment, w którym pojawia się największy widoczny element. Na firmowej stronie to prawie zawsze duże zdjęcie w górnej części strony albo tło sekcji powitalnej. Typowe przyczyny złego LCP:</p>
+<ul>
+<li><strong>Za ciężkie zdjęcie nagłówkowe.</strong> Zdjęcie 4000 × 3000 px prosto z aparatu, 3 MB, wyświetlane w okienku o szerokości 400 px na telefonie. Powinno ważyć 100–200 KB, w formacie WebP lub AVIF, w kilku rozmiarach (<code>srcset</code>).</li>
+<li><strong>Wolny serwer.</strong> Jeśli pierwszy bajt strony przychodzi po 1,5 s (TTFB), nic nie wyświetli się przed 2,5 s. Najtańszy hosting współdzielony, brak cache w WordPressie, brak CDN – to zwykle tu.</li>
+<li><strong>Blokujące skrypty i style.</strong> Przeglądarka nie namaluje nic, dopóki nie pobierze wszystkich plików CSS z nagłówka i skryptów bez atrybutu <code>defer</code>. Motywy i wtyczki potrafią ich dołożyć kilkadziesiąt.</li>
+<li><strong>Zdjęcie nagłówkowe ładowane leniwie.</strong> Paradoks: <code>loading="lazy"</code> jest świetny dla zdjęć na dole, ale ustawiony na zdjęciu głównym opóźnia je o kilkaset milisekund.</li>
+</ul>
+<p>Co zlecić: skompresować i zmniejszyć obrazy (narzędzia: Squoosh, wtyczki typu ShortPixel), włączyć cache strony i CDN, oznaczyć główny obraz <code>fetchpriority="high"</code>, usunąć <code>loading="lazy"</code> z elementów nad linią zgięcia.</p>
+
+<h2>INP – „czy strona reaguje, gdy klikam”</h2>
+<p>INP zastąpił w 2024 r. starszy wskaźnik FID i jest bardziej wymagający: mierzy nie tylko pierwsze kliknięcie, ale całą wizytę, i bierze pod uwagę najgorszą reakcję. Jeśli po dotknięciu „Dodaj do koszyka” przez pół sekundy nic się nie dzieje, użytkownik klika drugi raz, a Twoje INP ląduje na czerwono.</p>
+<p>Przyczyna jest prawie zawsze jedna: <strong>za dużo JavaScriptu</strong>. Konkretnie:</p>
+<ul>
+<li>Kreatory stron (page buildery) i motywy „wszystko w jednym”, które ładują kod wszystkich funkcji, także nieużywanych.</li>
+<li>Skrypty zewnętrzne: czat, mapy, piksele reklamowe, narzędzia do nagrywania sesji, kilka systemów analityki naraz. Każdy z nich zajmuje główny wątek przeglądarki, który jest jeden i obsługuje też Twoje kliknięcia.</li>
+<li>Suwaki (slidery) i animacje działające w tle na każdej podstronie.</li>
+</ul>
+<p>Co zlecić: przegląd wtyczek i skryptów – wyłączyć nieużywane, pozostałe ładować z <code>defer</code> albo po pierwszej interakcji; zrezygnować z duplikatów (dwa systemy analityki, dwa czaty). Na telefonie z niższej półki efekt jest wielokrotnie większy niż na komputerze dewelopera, dlatego INP trzeba oceniać po danych z terenu, nie po własnym laptopie.</p>
+
+<h2>CLS – „dlaczego kliknąłem nie to, co chciałem”</h2>
+<p>CLS nie ma jednostki czasu, bo mierzy ruch: jak dużą część ekranu i jak daleko przesunęła się treść już po tym, jak się pojawiła. Znasz to: czytasz akapit, nagle nad nim doładowuje się baner i tekst zjeżdża o 300 pikseli. Albo celujesz w „Wyślij”, a w ostatniej chwili pojawia się pasek o ciasteczkach i trafiasz w reklamę.</p>
+<p>Typowe przyczyny:</p>
+<ul>
+<li><strong>Obrazy bez wymiarów.</strong> Przeglądarka nie wie, ile miejsca zostawić, więc najpierw układa tekst, a potem wpycha zdjęcie. Rozwiązanie jest banalne: atrybuty <code>width</code> i <code>height</code> na każdym <code>&lt;img&gt;</code>.</li>
+<li><strong>Wstawki ładowane później</strong> – reklamy, osadzone mapy, filmy, widżety opinii – bez zarezerwowanego miejsca.</li>
+<li><strong>Fonty internetowe</strong>, które po pobraniu podmieniają tekst na inny krój o innej szerokości, więc wszystko się przesuwa.</li>
+<li><strong>Paski i powiadomienia wsuwane od góry</strong> (zgody na ciasteczka, promocje), które spychają resztę strony w dół zamiast nachodzić na nią.</li>
+</ul>
+<p>Co zlecić: wymiary dla obrazów i osadzeń, <code>font-display: swap</code> z dopasowanym fontem zastępczym (albo po prostu font systemowy), paski informacyjne jako warstwa nad treścią, nie nad nią „w dokumencie”.</p>
+
+<h2>Jak to sprawdzić samemu w 2 minuty</h2>
+<ol>
+<li>Wejdź na <a href="https://pagespeed.web.dev/" rel="noopener">pagespeed.web.dev</a>, wpisz adres swojej strony, wybierz zakładkę „Telefon”.</li>
+<li>Sekcja u góry, „Sprawdź, jak radzą sobie prawdziwi użytkownicy”, to dane z terenu. Jeśli jej nie ma, strona ma za mało ruchu, żeby Google zebrało próbkę – wtedy liczy się tylko dolna część, czyli pomiar laboratoryjny.</li>
+<li>Dolna część („Zdiagnozuj problemy z wydajnością”) to symulacja na wolniejszym telefonie i wolniejszej sieci. Wyniki są surowsze niż w terenie, ale za to pokazują konkretne przyczyny i pliki.</li>
+</ol>
+<p>Jeśli masz Search Console, zajrzyj do raportu „Podstawowe wskaźniki internetowe” – pokazuje, które grupy podstron zawodzą, a nie tylko stronę główną. Często okazuje się, że strona główna jest w porządku, a problem mają wszystkie wpisy na blogu, bo mają ten sam ciężki szablon.</p>
+
+<h2>Od czego zacząć, gdy wszystko jest na czerwono</h2>
+<p>Kolejność, która w praktyce daje najwięcej za najmniej pracy:</p>
+<ol>
+<li><strong>Obrazy</strong> – kompresja, właściwe rozmiary, wymiary w HTML. Jedna popołudniowa robota, poprawia LCP i CLS naraz.</li>
+<li><strong>Cache i hosting</strong> – wtyczka cache (WordPress) albo zmiana hostingu, do tego CDN. Poprawia LCP na każdej podstronie.</li>
+<li><strong>Porządek w skryptach</strong> – usunięcie nieużywanych wtyczek i podwójnych narzędzi. Poprawia INP i często LCP.</li>
+<li><strong>Fonty i paski</strong> – ostatnie dziesiąte CLS.</li>
+</ol>
+<p>Czego nie robić: nie instalować trzech wtyczek „optymalizujących” naraz w nadziei, że któraś pomoże. Każda z nich dokłada własny kod, a konflikty między nimi to klasyczny sposób, żeby strona przestała działać na telefonie w piątek wieczorem.</p>
+
+<section class="fullbox">
+<h2>Sprawdź swoją stronę</h2>
+<p>Darmowy szybki skan Webskan uruchamia Lighthouse na symulowanym telefonie i pokazuje wynik wydajności, kluczowe pomiary oraz listę podstawowych problemów. Bez e-maila, bez rejestracji, wynik w ok. 30 sekund.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="pl"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://twojafirma.pl" required maxlength="500" aria-label="Adres strony"><button class="btn" type="submit">Skanuj za darmo</button></form>
+<p class="note">Potrzebujesz konkretnej listy poprawek do przekazania webmasterowi? <a href="/#cena">Pełny audyt Webskan</a> (99 zł) obejmuje Core Web Vitals na telefonie i komputerze, SEO techniczne, dostępność, bezpieczeństwo i zepsute linki – w jednym raporcie PDF, z priorytetami.</p>
+</section>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a></footer>
+</div>
+</body>
+</html>

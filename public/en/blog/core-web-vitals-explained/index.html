@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Core Web Vitals in plain English: LCP, INP and CLS – Webskan</title>
+<meta name="description" content="What Core Web Vitals are, which thresholds Google uses, why a typical business website fails them, and what to fix first. No jargon.">
+<link rel="canonical" href="https://webskan.webskan.workers.dev/en/blog/core-web-vitals-explained/">
+<link rel="alternate" hreflang="en" href="https://webskan.webskan.workers.dev/en/blog/core-web-vitals-explained/">
+<link rel="alternate" hreflang="pl" href="https://webskan.webskan.workers.dev/blog/core-web-vitals-po-ludzku/">
+<meta property="og:title" content="Core Web Vitals in plain English: LCP, INP and CLS">
+<meta property="og:description" content="The three numbers Google uses to judge how your site feels – what they mean, the thresholds, and what to fix first.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.webskan.workers.dev/en/blog/core-web-vitals-explained/">
+<meta property="og:image" content="https://webskan.webskan.workers.dev/og-en.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Core Web Vitals in plain English: LCP, INP and CLS","description":"What Core Web Vitals are, which thresholds Google uses and what to fix first.","datePublished":"2026-11-05","dateModified":"2026-11-05","inLanguage":"en","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.webskan.workers.dev/en/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.webskan.workers.dev/en/"},"mainEntityOfPage":"https://webskan.webskan.workers.dev/en/blog/core-web-vitals-explained/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a href="/en/blog/">Blog</a><a href="/en/#price">Price</a><a href="/blog/core-web-vitals-po-ludzku/">PL</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 5 November 2026 · 7 min read</p>
+<h1>Core Web Vitals in plain English: LCP, INP and CLS</h1>
+<p class="lead">Google rates how your website feels with three numbers. You don't need to be a developer to understand them – or to know what to ask your developer to fix. This article explains each one with examples from a typical business website.</p>
+
+<h2>Where these three numbers come from</h2>
+<p>Core Web Vitals are measurements that Google collects from real Chrome browsers of people visiting your site. They aren't opinions; they are times and distances measured on the phones and laptops of actual visitors. Google shows them in <a href="https://pagespeed.web.dev/" rel="noopener">PageSpeed Insights</a> and in the Search Console "Core Web Vitals" report.</p>
+<p>Why care? Two reasons. First, since 2021 the vitals have been one of Google's ranking signals. On its own it is a weak one – good content still beats a fast empty page – but when competitors have similar content, it tips the balance. Second, and more important: the things that hurt the vitals hurt sales. A page that takes six seconds to load on a phone loses a large share of visitors before they see anything.</p>
+
+<h2>The three metrics, one sentence each</h2>
+<table class="vitals">
+<thead><tr><th>Metric</th><th>What it measures</th><th>Good</th><th>Poor</th></tr></thead>
+<tbody>
+<tr><td><strong>LCP</strong><br><span class="muted">Largest Contentful Paint</span></td><td>How many seconds until the largest element of the page is visible (usually the header photo or the main headline)</td><td data-l="Good">≤ 2.5 s</td><td data-l="Poor">&gt; 4 s</td></tr>
+<tr><td><strong>INP</strong><br><span class="muted">Interaction to Next Paint</span></td><td>How quickly the page responds to a tap, click or keystroke – the worst such response during the visit</td><td data-l="Good">≤ 200 ms</td><td data-l="Poor">&gt; 500 ms</td></tr>
+<tr><td><strong>CLS</strong><br><span class="muted">Cumulative Layout Shift</span></td><td>How much the content "jumps" while loading (the button slides away because an image above it just appeared)</td><td data-l="Good">≤ 0.1</td><td data-l="Poor">&gt; 0.25</td></tr>
+</tbody>
+</table>
+<p>Between "good" and "poor" sits a "needs improvement" zone. Google looks at the <strong>75th percentile</strong>: a page passes if at least three quarters of visits land in the green. One slow visit from a train doesn't hurt; a consistently slow experience on an average customer's phone does.</p>
+
+<h2>LCP – "how long until I see something"</h2>
+<p>LCP is the moment the largest visible element appears. On a business site it is almost always the big image at the top or the hero background. Typical causes of poor LCP:</p>
+<ul>
+<li><strong>A heavy hero image.</strong> A 4000 × 3000 px photo straight from the camera, 3 MB, shown in a 400 px wide viewport on a phone. It should weigh 100–200 KB, in WebP or AVIF, in several sizes (<code>srcset</code>).</li>
+<li><strong>A slow server.</strong> If the first byte arrives after 1.5 s (TTFB), nothing can appear before 2.5 s. The cheapest shared hosting, no page cache in WordPress, no CDN – this is usually where it hides.</li>
+<li><strong>Render-blocking scripts and styles.</strong> The browser paints nothing until it has downloaded every CSS file in the head and every script without <code>defer</code>. Themes and plugins can add dozens.</li>
+<li><strong>A lazy-loaded hero image.</strong> A paradox: <code>loading="lazy"</code> is great for images further down, but on the main image it delays it by hundreds of milliseconds.</li>
+</ul>
+<p>What to ask for: compress and resize images (Squoosh, plugins like ShortPixel), enable page cache and a CDN, mark the main image <code>fetchpriority="high"</code>, remove <code>loading="lazy"</code> from anything above the fold.</p>
+
+<h2>INP – "does the page react when I tap"</h2>
+<p>INP replaced the older FID metric in 2024 and is stricter: it measures not just the first click but the whole visit, and it takes the worst response. If nothing happens for half a second after tapping "Add to cart", the user taps again and your INP goes red.</p>
+<p>The cause is almost always the same: <strong>too much JavaScript</strong>. Specifically:</p>
+<ul>
+<li>Page builders and "all-in-one" themes that load the code for every feature, including the ones you don't use.</li>
+<li>Third-party scripts: chat, maps, ad pixels, session recording, several analytics tools at once. Each of them occupies the browser's main thread – there is only one, and it also handles your taps.</li>
+<li>Sliders and background animations running on every page.</li>
+</ul>
+<p>What to ask for: a review of plugins and scripts – disable unused ones, load the rest with <code>defer</code> or after the first interaction; drop duplicates (two analytics tools, two chat widgets). On a mid-range phone the effect is many times larger than on a developer's laptop, which is why INP must be judged on field data, not on your own machine.</p>
+
+<h2>CLS – "why did I click the wrong thing"</h2>
+<p>CLS has no time unit because it measures movement: how much of the screen, and how far, content moved after it had already appeared. You know the feeling: you're reading a paragraph, a banner loads above it and the text drops by 300 pixels. Or you aim at "Send", a cookie bar appears at the last moment and you hit an ad instead.</p>
+<p>Typical causes:</p>
+<ul>
+<li><strong>Images without dimensions.</strong> The browser doesn't know how much space to reserve, so it lays out the text first and then pushes the image in. The fix is trivial: <code>width</code> and <code>height</code> attributes on every <code>&lt;img&gt;</code>.</li>
+<li><strong>Late-loading embeds</strong> – ads, maps, videos, review widgets – with no space reserved.</li>
+<li><strong>Web fonts</strong> that swap the text to a different typeface with a different width once downloaded, so everything shifts.</li>
+<li><strong>Bars and notices sliding in from the top</strong> (cookie consent, promotions) that push the rest of the page down instead of overlaying it.</li>
+</ul>
+<p>What to ask for: dimensions on images and embeds, <code>font-display: swap</code> with a matched fallback font (or simply a system font), notice bars as an overlay rather than part of the document flow.</p>
+
+<h2>How to check it yourself in 2 minutes</h2>
+<ol>
+<li>Go to <a href="https://pagespeed.web.dev/" rel="noopener">pagespeed.web.dev</a>, enter your address, pick the "Mobile" tab.</li>
+<li>The top section, "Discover what your real users are experiencing", is field data. If it's missing, your site has too little traffic for Google to have a sample – then only the lower part, the lab measurement, counts.</li>
+<li>The lower part ("Diagnose performance issues") is a simulation on a slower phone and a slower network. The numbers are harsher than in the field, but they point at specific causes and files.</li>
+</ol>
+<p>If you have Search Console, open the "Core Web Vitals" report – it shows which groups of pages fail, not just the homepage. Very often the homepage is fine and every blog post fails, because they all share the same heavy template.</p>
+
+<h2>Where to start when everything is red</h2>
+<p>The order that gives the most for the least work in practice:</p>
+<ol>
+<li><strong>Images</strong> – compression, proper sizes, dimensions in HTML. One afternoon's work, improves LCP and CLS at once.</li>
+<li><strong>Cache and hosting</strong> – a cache plugin (WordPress) or a hosting change, plus a CDN. Improves LCP on every page.</li>
+<li><strong>Script clean-up</strong> – removing unused plugins and duplicate tools. Improves INP and often LCP.</li>
+<li><strong>Fonts and bars</strong> – the last tenths of CLS.</li>
+</ol>
+<p>What not to do: don't install three "optimisation" plugins at once hoping one of them helps. Each adds its own code, and conflicts between them are the classic way to make a site stop working on phones on a Friday evening.</p>
+
+<section class="fullbox">
+<h2>Check your website</h2>
+<p>The free Webskan quick scan runs Lighthouse on a simulated phone and shows your performance score, the key measurements and a list of basic issues. No e-mail, no sign-up, result in about 30 seconds.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="en"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://yourcompany.com" required maxlength="500" aria-label="Website address"><button class="btn" type="submit">Scan for free</button></form>
+<p class="note">Need a concrete list of fixes to hand to your developer? The <a href="/en/#price">full Webskan audit</a> ($29) covers Core Web Vitals on mobile and desktop, technical SEO, accessibility, security and broken links – in one prioritised PDF report.</p>
+</section>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy</a></footer>
+</div>
+</body>
+</html>
