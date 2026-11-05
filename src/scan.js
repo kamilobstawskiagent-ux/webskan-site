@@ -233,7 +233,7 @@ function orderBox(lang, env, url, t) {
   <label class="consent"><input type="checkbox" name="consent" required> ${t.consent}</label>
   <button class="btn" type="submit">${presale ? t.btnPresale : t.btnLive}</button></form>
   ${presale ? `<p class="note">${t.presaleNote}</p>` : ''}
-  <p><a href="${lang === 'pl' ? '/przyklad/' : '/en/sample/'}">${t.sample} →</a></p></section>`;
+  <p><a href="${lang === 'pl' ? '/przyklad/' : '/en/sample/'}">${t.sample}&nbsp;→</a></p></section>`;
 }
 
 function renderResult(job, lang, env, u) {
