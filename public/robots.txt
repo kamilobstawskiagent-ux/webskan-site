@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /dziekujemy/
+Disallow: /en/thanks/
+Disallow: /api/
+Sitemap: https://webskan.webskan.workers.dev/sitemap.xml

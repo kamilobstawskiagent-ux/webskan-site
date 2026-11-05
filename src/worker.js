@@ -86,9 +86,30 @@ async function handleOrder(request, env) {
   return page(lang, ...t.saved);
 }
 
+const SECURITY_HEADERS = {
+  "strict-transport-security": "max-age=15552000",
+  "x-content-type-options": "nosniff",
+  "x-frame-options": "DENY",
+  "referrer-policy": "strict-origin-when-cross-origin",
+  "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=()",
+  "content-security-policy": "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'none'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https://polar.sh https://*.polar.sh",
+};
+function secure(res) {
+  const h = new Headers(res.headers);
+  for (const [k, v] of Object.entries(SECURITY_HEADERS)) h.set(k, v);
+  return new Response(res.body, { status: res.status, statusText: res.statusText, headers: h });
+}
+
 export default {
   async fetch(request, env) {
-    const { pathname } = new URL(request.url);
+    const u = new URL(request.url);
+    if (u.protocol === "http:") { u.protocol = "https:"; return Response.redirect(u.toString(), 301); }
+    return secure(await route(request, env, u.pathname));
+  },
+};
+
+async function route(request, env, pathname) {
+  {
     if (pathname === "/api/order") {
       if (request.method !== "POST") return new Response("Method not allowed", { status: 405 });
       try { return await handleOrder(request, env); }
@@ -96,5 +117,5 @@ export default {
     }
     if (pathname === "/api/health") return Response.json({ ok: true, polar: Boolean(env.POLAR_TOKEN && env.POLAR_PRODUCT_PL) });
     return env.ASSETS.fetch(request);
-  },
-};
+  }
+}
