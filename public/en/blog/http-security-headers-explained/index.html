@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HTTP security headers in plain English – Webskan</title>
+<meta name="description" content="The six HTTP headers every security scanner flags as missing: what each one does, what it protects your visitors from, and how to enable it on WordPress, shared hosting or Cloudflare without breaking your site.">
+<link rel="canonical" href="https://webskan.webskan.workers.dev/en/blog/http-security-headers-explained/">
+<link rel="alternate" hreflang="en" href="https://webskan.webskan.workers.dev/en/blog/http-security-headers-explained/">
+<link rel="alternate" hreflang="pl" href="https://webskan.webskan.workers.dev/blog/naglowki-bezpieczenstwa-http/">
+<meta property="og:title" content="HTTP security headers in plain English">
+<meta property="og:description" content="Six lines of configuration that protect your visitors from tampered content and stolen data. What they do and how to turn them on.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.webskan.workers.dev/en/blog/http-security-headers-explained/">
+<meta property="og:image" content="https://webskan.webskan.workers.dev/og-en.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"HTTP security headers in plain English","description":"The six HTTP headers every scanner flags: what they do, what they protect against and how to enable them without breaking your site.","datePublished":"2026-11-05","dateModified":"2026-11-05","inLanguage":"en","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.webskan.workers.dev/en/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.webskan.workers.dev/en/"},"mainEntityOfPage":"https://webskan.webskan.workers.dev/en/blog/http-security-headers-explained/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a href="/en/blog/">Blog</a><a href="/en/#price">Price</a><a href="/blog/naglowki-bezpieczenstwa-http/">PL</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 5 November 2026 · 8 min read</p>
+<h1>HTTP security headers in plain English</h1>
+<p class="lead">Every security scanner – including our free quick scan – tells small-business websites they have “missing security headers”. It sounds alarming, but it usually comes down to six lines of configuration you can add in an hour. This article explains what each one does, what it protects your visitors from, and how to enable it without breaking your site.</p>
+
+<h2>What an “HTTP header” actually is</h2>
+<p>When a browser fetches your page, the server sends back more than the content. It also sends a short label: a dozen or so lines such as “this is HTML”, “cache it for an hour”, “server: nginx”. Those are headers. Visitors never see them, but the browser reads and obeys them. Some are security instructions: “don’t let anyone show this page inside a frame”, “only ever talk to me over an encrypted connection”.</p>
+<p>When those instructions are absent, the browser falls back to its most permissive defaults – the ones from the 1990s. The site still works, but your visitors are more exposed to a handful of classic attacks. That is why scanners (Mozilla Observatory, securityheaders.com, Lighthouse, Webskan) deduct points for missing headers, and why corporate clients and auditors increasingly ask about them.</p>
+
+<h2>The six headers that matter most</h2>
+<table class="vitals headers">
+<thead><tr><th>Header</th><th>What it tells the browser</th><th>What it protects against</th><th>Risk of enabling it</th></tr></thead>
+<tbody>
+<tr><td><strong>Strict-Transport-Security</strong><br><span class="muted">HSTS</span></td><td data-l="Tells the browser">“Only ever connect to this domain over HTTPS, even if someone types http://”</td><td data-l="Protects against">Eavesdropping and content tampering on open Wi-Fi (hotels, cafés)</td><td data-l="Risk">Low, as long as the whole site works over HTTPS</td></tr>
+<tr><td><strong>Content-Security-Policy</strong><br><span class="muted">CSP</span></td><td data-l="Tells the browser">“Scripts, styles and images may only be loaded from these sources”</td><td data-l="Protects against">Injected third-party scripts (XSS) – stolen sessions, swapped payment forms</td><td data-l="Risk">High if misconfigured – start in report-only mode</td></tr>
+<tr><td><strong>X-Content-Type-Options</strong></td><td data-l="Tells the browser">“Don’t guess file types – if I say it’s an image, it’s an image”</td><td data-l="Protects against">Scripts smuggled in files pretending to be images</td><td data-l="Risk">Practically none</td></tr>
+<tr><td><strong>X-Frame-Options</strong><br><span class="muted">or CSP frame-ancestors</span></td><td data-l="Tells the browser">“Don’t let other sites embed me in a frame”</td><td data-l="Protects against">Clickjacking – an invisible frame with your “Confirm” button hidden under someone else’s game</td><td data-l="Risk">None, unless you embed your own site in a frame elsewhere</td></tr>
+<tr><td><strong>Referrer-Policy</strong></td><td data-l="Tells the browser">“When visitors follow my links, don’t reveal the full address they came from”</td><td data-l="Protects against">Private URLs (password reset links, customer portal pages) leaking to other sites</td><td data-l="Risk">None; may trim data in other people’s analytics, not yours</td></tr>
+<tr><td><strong>Permissions-Policy</strong></td><td data-l="Tells the browser">“This site doesn’t need the camera, microphone or location”</td><td data-l="Protects against">Permission abuse by a third-party script (e.g. from an ad) loaded on your page</td><td data-l="Risk">None, if you genuinely don’t use those features</td></tr>
+</tbody>
+</table>
+
+<h2>Two of them are worth understanding properly</h2>
+<h3>HSTS – “always the padlock”</h3>
+<p>Most sites today have a certificate and a redirect from http:// to https://. The catch is that the first, unencrypted request still happens – and on an open network someone can intercept it before the redirect kicks in. HSTS tells the browser to remember: “from now on, I only visit this domain over HTTPS”, so after the first visit the unencrypted request is never sent at all.</p>
+<p>A typical value is <code>max-age=31536000; includeSubDomains</code> (one year, including subdomains). Before enabling it, make sure <strong>every</strong> subdomain you use (shop., portal., webmail) works over HTTPS – otherwise it will be unreachable for a year for anyone who has visited your main site once. If you are not sure, start without <code>includeSubDomains</code> and with a shorter time, e.g. <code>max-age=86400</code>.</p>
+
+<h3>CSP – the biggest win and the biggest risk</h3>
+<p>Content-Security-Policy is the only header of the six that genuinely has to be tailored to your site. It tells the browser where scripts, styles, images and fonts may be loaded from. Set up well, it blocks the most dangerous class of attacks on business websites: a foreign script injected through a vulnerable plugin or a hijacked account that swaps your bank details or siphons off what customers type into forms.</p>
+<p>Set up badly, it blocks your own chat widget, map, ad pixel or gallery, and the site “stops working” with no message to the visitor. So the order is always the same:</p>
+<ol>
+<li>List where your site loads resources from: your own domain, Google Fonts, Google Analytics / Tag Manager, maps, chat, YouTube, your payment provider.</li>
+<li>Deploy the policy in <strong>report-only</strong> mode (<code>Content-Security-Policy-Report-Only</code>). It blocks nothing; it just prints in the browser console what <em>would</em> have been blocked.</li>
+<li>Click around the site on a phone and a desktop, adjust the list of sources until the console is clean.</li>
+<li>Only then rename the header to <code>Content-Security-Policy</code>.</li>
+</ol>
+<p>If a full policy is too much at once, a sensible first step is just the <code>frame-ancestors 'self'</code> directive (the modern replacement for X-Frame-Options) plus <code>upgrade-insecure-requests</code>. That alone improves scanner scores and cannot break anything.</p>
+
+<h2>How to enable them – the three most common setups</h2>
+<h3>1. Site behind Cloudflare (or another CDN)</h3>
+<p>The easiest case. In the Cloudflare dashboard: <em>Rules → Transform Rules → Modify Response Header</em>, add static headers for the whole domain. HSTS has its own switch under <em>SSL/TLS → Edge Certificates</em>. Changes apply immediately and you never touch the server.</p>
+<h3>2. WordPress on shared hosting</h3>
+<p>Two routes. A plugin (e.g. “Headers Security Advanced &amp; HSTS WP”, or the headers module in plugins like Really Simple Security) – convenient, but one more plugin to maintain. Or a few lines in <code>.htaccess</code> (Apache / LiteSpeed, i.e. most shared hosts):</p>
+<pre><code>&lt;IfModule mod_headers.c&gt;
+Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+Header always set X-Content-Type-Options "nosniff"
+Header always set X-Frame-Options "SAMEORIGIN"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+&lt;/IfModule&gt;</code></pre>
+<p>Back the file up first. If the site shows a 500 error after saving, your host doesn’t have the headers module enabled – use a plugin or ask support.</p>
+<h3>3. Your own server (nginx)</h3>
+<p>Inside the <code>server</code> block:</p>
+<pre><code>add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+add_header X-Content-Type-Options "nosniff" always;
+add_header X-Frame-Options "SAMEORIGIN" always;
+add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;</code></pre>
+<p>The word <code>always</code> matters: without it nginx omits the headers on error pages, and scanners notice.</p>
+
+<h2>Two headers worth removing</h2>
+<p>Scanners also look the other way: at what the server gives away. Headers like <code>Server: Apache/2.4.29 (Ubuntu)</code> or <code>X-Powered-By: PHP/7.4.3</code> tell an attacker exactly which vulnerabilities to try. The bare name (“nginx”, “cloudflare”) is harmless; the version number is not, especially an old one. In PHP it’s <code>expose_php = Off</code>, in Apache <code>ServerTokens Prod</code>, in nginx <code>server_tokens off;</code>. On shared hosting you often can’t change this yourself – ask support, or put a CDN in front of the server.</p>
+
+<h2>What not to worry about</h2>
+<ul>
+<li><strong>“If I enable headers, the site will break.”</strong> Four of the six (X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy) are safe on virtually any business website. HSTS needs one check (is everything on HTTPS?). Only CSP needs testing.</li>
+<li><strong>“This only matters for banks.”</strong> Clickjacking and injected scripts hit ordinary business sites precisely because they are less protected. The common scenario is a swapped bank account number on an invoice page, or a contact form quietly sending a copy of the data somewhere else.</li>
+<li><strong>“I have SSL, so I’m safe.”</strong> A certificate encrypts the connection. It says nothing to the browser about what may be done with your page once it has loaded – that is what headers are for.</li>
+</ul>
+
+<section class="fullbox">
+<h2>Check which headers your site is missing</h2>
+<p>The free Webskan quick scan checks all six headers, the HTTPS redirect, server version leaks – and mobile performance on top. No e-mail, no sign-up, results in about 30 seconds.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="en"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://yourcompany.com" required maxlength="500" aria-label="Website address"><button class="btn" type="submit">Scan for free</button></form>
+<p class="note">Need a ready-made list for your developer or host? The <a href="/en/#price">full Webskan audit</a> ($29) covers the certificate, redirects, all headers and server information leaks – together with performance, technical SEO, accessibility and broken links, in one prioritised PDF report.</p>
+</section>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy</a></footer>
+</div>
+</body>
+</html>

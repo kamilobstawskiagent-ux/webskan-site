@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nagłówki bezpieczeństwa HTTP po ludzku – Webskan</title>
+<meta name="description" content="Sześć nagłówków HTTP, których brak wytyka każdy skaner bezpieczeństwa: co robią, przed czym chronią Twoich klientów i jak je włączyć na WordPressie, hostingu albo Cloudflare – bez ryzyka zepsucia strony.">
+<link rel="canonical" href="https://webskan.webskan.workers.dev/blog/naglowki-bezpieczenstwa-http/">
+<link rel="alternate" hreflang="pl" href="https://webskan.webskan.workers.dev/blog/naglowki-bezpieczenstwa-http/">
+<link rel="alternate" hreflang="en" href="https://webskan.webskan.workers.dev/en/blog/http-security-headers-explained/">
+<meta property="og:title" content="Nagłówki bezpieczeństwa HTTP po ludzku">
+<meta property="og:description" content="Sześć linijek konfiguracji, które chronią Twoich klientów przed podmianą treści i kradzieżą danych. Co robią i jak je włączyć.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.webskan.workers.dev/blog/naglowki-bezpieczenstwa-http/">
+<meta property="og:image" content="https://webskan.webskan.workers.dev/og-pl.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Nagłówki bezpieczeństwa HTTP po ludzku","description":"Sześć nagłówków HTTP, których brak wytyka każdy skaner: co robią, przed czym chronią i jak je włączyć bez psucia strony.","datePublished":"2026-11-05","dateModified":"2026-11-05","inLanguage":"pl","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.webskan.workers.dev/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.webskan.workers.dev/"},"mainEntityOfPage":"https://webskan.webskan.workers.dev/blog/naglowki-bezpieczenstwa-http/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cena</a><a href="/en/blog/http-security-headers-explained/">EN</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 5 listopada 2026 · 8 min czytania</p>
+<h1>Nagłówki bezpieczeństwa HTTP po ludzku</h1>
+<p class="lead">Każdy skaner bezpieczeństwa – także nasz darmowy szybki skan – wytyka firmowym stronom „brakujące nagłówki”. Brzmi groźnie, ale to zwykle sześć linijek konfiguracji, które da się dodać w godzinę. Ten tekst tłumaczy, co każda z nich robi, przed czym chroni Twoich klientów i jak ją włączyć bez psucia strony.</p>
+
+<h2>Czym w ogóle jest „nagłówek HTTP”</h2>
+<p>Kiedy przeglądarka pobiera Twoją stronę, serwer odsyła nie tylko treść, ale też krótką metryczkę: kilkanaście linijek typu „to jest HTML”, „zapamiętaj na godzinę”, „serwer: nginx”. To są nagłówki. Użytkownik ich nie widzi, ale przeglądarka czyta je i stosuje się do nich. Część z nich to instrukcje bezpieczeństwa: „nie pozwól, żeby ktoś wyświetlił tę stronę w ramce”, „łącz się ze mną tylko szyfrowanym połączeniem”.</p>
+<p>Jeśli takich instrukcji nie ma, przeglądarka zakłada najbardziej liberalne ustawienia – te z lat dziewięćdziesiątych. Strona działa, ale Twoi klienci są bardziej narażeni na kilka klasycznych ataków. Dlatego skanery (Mozilla Observatory, securityheaders.com, Lighthouse, Webskan) punktują za ich brak, a klienci firmowi i audytorzy coraz częściej o nie pytają.</p>
+
+<h2>Sześć nagłówków, które liczą się najbardziej</h2>
+<table class="vitals headers">
+<thead><tr><th>Nagłówek</th><th>Co mówi przeglądarce</th><th>Przed czym chroni</th><th>Ryzyko włączenia</th></tr></thead>
+<tbody>
+<tr><td><strong>Strict-Transport-Security</strong><br><span class="muted">HSTS</span></td><td data-l="Mówi przeglądarce">„Z tą domeną łącz się wyłącznie przez HTTPS, nawet jeśli ktoś wpisze http://”</td><td data-l="Chroni przed">Podsłuch i podmiana treści w otwartym Wi-Fi (hotel, kawiarnia)</td><td data-l="Ryzyko">Niskie, jeśli cała strona działa po HTTPS</td></tr>
+<tr><td><strong>Content-Security-Policy</strong><br><span class="muted">CSP</span></td><td data-l="Mówi przeglądarce">„Skrypty, style i obrazy wolno ładować tylko z tych źródeł”</td><td data-l="Chroni przed">Wstrzyknięcie obcego skryptu (XSS) – kradzież sesji, podmiana formularza płatności</td><td data-l="Ryzyko">Wysokie przy złej konfiguracji – zaczynaj od trybu raportowania</td></tr>
+<tr><td><strong>X-Content-Type-Options</strong></td><td data-l="Mówi przeglądarce">„Nie zgaduj typu pliku – jeśli mówię, że to obraz, to jest obraz”</td><td data-l="Chroni przed">Przemycenie skryptu w pliku podszywającym się pod obrazek</td><td data-l="Ryzyko">Praktycznie zerowe</td></tr>
+<tr><td><strong>X-Frame-Options</strong><br><span class="muted">lub CSP frame-ancestors</span></td><td data-l="Mówi przeglądarce">„Nie pozwalaj osadzać mnie w ramce na obcych stronach”</td><td data-l="Chroni przed">Clickjacking – niewidzialna ramka z Twoim przyciskiem „Potwierdź” podłożona pod cudzą grę</td><td data-l="Ryzyko">Zerowe, chyba że sam osadzasz stronę w ramce gdzie indziej</td></tr>
+<tr><td><strong>Referrer-Policy</strong></td><td data-l="Mówi przeglądarce">„Odwiedzając inne strony z moich linków, nie zdradzaj pełnego adresu, z którego przyszedł użytkownik”</td><td data-l="Chroni przed">Wyciek prywatnych adresów (np. link do resetu hasła lub panelu klienta) do obcych serwisów</td><td data-l="Ryzyko">Zerowe; może uszczuplić dane w cudzej analityce, nie w Twojej</td></tr>
+<tr><td><strong>Permissions-Policy</strong></td><td data-l="Mówi przeglądarce">„Ta strona nie potrzebuje kamery, mikrofonu ani lokalizacji”</td><td data-l="Chroni przed">Nadużycie uprawnień przez obcy skrypt (np. z reklamy) wczytany na Twojej stronie</td><td data-l="Ryzyko">Zerowe, jeśli faktycznie z tych funkcji nie korzystasz</td></tr>
+</tbody>
+</table>
+
+<h2>Dwa z nich warto rozumieć głębiej</h2>
+<h3>HSTS – czyli „zawsze kłódka”</h3>
+<p>Większość stron ma dziś certyfikat i przekierowanie z http:// na https://. Problem w tym, że to pierwsze, nieszyfrowane żądanie nadal istnieje – i w otwartej sieci ktoś może je przechwycić, zanim nastąpi przekierowanie. HSTS każe przeglądarce zapamiętać: „od teraz do tej domeny wchodzę tylko po HTTPS”, więc po pierwszej wizycie nieszyfrowane żądanie w ogóle nie wychodzi.</p>
+<p>Typowa wartość: <code>max-age=31536000; includeSubDomains</code> (rok, z poddomenami). Zanim ją włączysz, upewnij się, że <strong>każda</strong> poddomena, z której korzystasz (sklep., panel., poczta przez przeglądarkę), działa po HTTPS – inaczej przez rok będzie niedostępna dla każdego, kto raz odwiedził główną stronę. Jeśli nie masz pewności, zacznij bez <code>includeSubDomains</code> i z krótszym czasem, np. <code>max-age=86400</code>.</p>
+
+<h3>CSP – największy zysk i największe ryzyko</h3>
+<p>Content-Security-Policy to jedyny z tej szóstki nagłówek, który naprawdę trzeba dopasować do strony. Mówi przeglądarce, skąd wolno ładować skrypty, style, obrazy i czcionki. Dobrze ustawiony blokuje najgroźniejszą klasę ataków na strony firmowe: obcy skrypt wstrzyknięty przez dziurawą wtyczkę albo przejęte konto, który podmienia dane do przelewu albo wykrada to, co klient wpisuje w formularzu.</p>
+<p>Źle ustawiony – blokuje Twój własny czat, mapę, piksel reklamowy albo galerię, i strona „przestaje działać” bez żadnego komunikatu dla użytkownika. Dlatego kolejność jest zawsze taka sama:</p>
+<ol>
+<li>Spisz, skąd Twoja strona ładuje zasoby: własna domena, Google Fonts, Google Analytics / Tag Manager, mapy, czat, YouTube, system płatności.</li>
+<li>Wdróż politykę w trybie <strong>tylko raportowania</strong> (<code>Content-Security-Policy-Report-Only</code>). Nic nie blokuje, tylko wypisuje w konsoli przeglądarki, co <em>zostałoby</em> zablokowane.</li>
+<li>Poklikaj po stronie na telefonie i komputerze, popraw listę źródeł, aż konsola będzie czysta.</li>
+<li>Dopiero wtedy zmień nazwę nagłówka na <code>Content-Security-Policy</code>.</li>
+</ol>
+<p>Jeśli pełna polityka to za dużo na raz, sensowny pierwszy krok to sama dyrektywa <code>frame-ancestors 'self'</code> (nowoczesny odpowiednik X-Frame-Options) plus <code>upgrade-insecure-requests</code>. Już to podnosi wynik w skanerach i nie ma prawa niczego zepsuć.</p>
+
+<h2>Jak je włączyć – trzy najczęstsze sytuacje</h2>
+<h3>1. Strona za Cloudflare (albo innym CDN)</h3>
+<p>Najprościej. W panelu Cloudflare: <em>Rules → Transform Rules → Modify Response Header</em>, dodaj statyczne nagłówki dla całej domeny. HSTS ma osobny przełącznik w <em>SSL/TLS → Edge Certificates</em>. Zmiany działają od razu i nie dotykasz serwera.</p>
+<h3>2. WordPress na zwykłym hostingu</h3>
+<p>Dwie drogi. Wtyczka (np. „Headers Security Advanced &amp; HSTS WP” albo moduł nagłówków w wtyczkach typu Really Simple Security) – wygodnie, ale to kolejna wtyczka do utrzymania. Albo kilka linijek w pliku <code>.htaccess</code> (Apache / LiteSpeed, czyli większość polskich hostingów):</p>
+<pre><code>&lt;IfModule mod_headers.c&gt;
+Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+Header always set X-Content-Type-Options "nosniff"
+Header always set X-Frame-Options "SAMEORIGIN"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+&lt;/IfModule&gt;</code></pre>
+<p>Zrób kopię pliku przed edycją. Jeśli po zapisaniu strona pokaże błąd 500, hosting nie ma włączonego modułu nagłówków – wtedy wtyczka albo prośba do supportu.</p>
+<h3>3. Własny serwer (nginx)</h3>
+<p>W bloku <code>server</code> konfiguracji:</p>
+<pre><code>add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+add_header X-Content-Type-Options "nosniff" always;
+add_header X-Frame-Options "SAMEORIGIN" always;
+add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;</code></pre>
+<p>Słowo <code>always</code> jest ważne: bez niego nginx pomija nagłówki na stronach błędów, a skanery to wychwytują.</p>
+
+<h2>Dwa nagłówki, które warto usunąć</h2>
+<p>Skanery patrzą też w drugą stronę: na to, czego serwer zdradza za dużo. Nagłówki <code>Server: Apache/2.4.29 (Ubuntu)</code> czy <code>X-Powered-By: PHP/7.4.3</code> mówią napastnikowi dokładnie, jakie dziury sprawdzić. Sama nazwa („nginx”, „cloudflare”) to nic strasznego; numer wersji – już tak, zwłaszcza gdy jest stara. W PHP wyłącza to dyrektywa <code>expose_php = Off</code>, w Apache <code>ServerTokens Prod</code>, w nginx <code>server_tokens off;</code>. Na hostingu współdzielonym często nie masz do tego dostępu – wtedy napisz do supportu albo schowaj serwer za CDN.</p>
+
+<h2>Czego się nie bać</h2>
+<ul>
+<li><strong>„Włączę nagłówki i strona się zepsuje”.</strong> Cztery z sześciu (X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy) są praktycznie bezpieczne na każdej stronie firmowej. HSTS wymaga jednej kontroli (czy wszystko jest po HTTPS). Tylko CSP trzeba przetestować.</li>
+<li><strong>„To ważne tylko dla banków”.</strong> Clickjacking i wstrzyknięte skrypty uderzają w zwykłe strony firmowe, bo są słabiej chronione. Najczęstszy scenariusz w Polsce to podmieniony numer konta na stronie z fakturą albo formularz kontaktowy wysyłający kopię danych gdzie indziej.</li>
+<li><strong>„Mam SSL, więc jestem bezpieczny”.</strong> Certyfikat szyfruje transmisję. Nie mówi przeglądarce nic o tym, co wolno zrobić z Twoją stroną po jej załadowaniu – od tego są nagłówki.</li>
+</ul>
+
+<section class="fullbox">
+<h2>Sprawdź, których nagłówków brakuje Twojej stronie</h2>
+<p>Darmowy szybki skan Webskan sprawdza wszystkie sześć nagłówków, przekierowanie na HTTPS, wycieki wersji serwera i do tego wydajność na telefonie. Bez e-maila, bez rejestracji, wynik w ok. 30 sekund.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="pl"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://twojafirma.pl" required maxlength="500" aria-label="Adres strony"><button class="btn" type="submit">Skanuj za darmo</button></form>
+<p class="note">Potrzebujesz gotowej listy dla webmastera lub hostingu? <a href="/#cena">Pełny audyt Webskan</a> (99 zł) obejmuje certyfikat, przekierowania, wszystkie nagłówki i wycieki informacji o serwerze – razem z wydajnością, SEO technicznym, dostępnością i zepsutymi linkami, w jednym raporcie PDF z priorytetami.</p>
+</section>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a></footer>
+</div>
+</body>
+</html>
