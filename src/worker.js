@@ -10,9 +10,12 @@ function normalizeUrl(raw) {
   let u;
   try { u = new URL(s); } catch { return null; }
   if (!/^https?:$/.test(u.protocol)) return null;
+  if (u.username || u.password) return null; // "jan@firma.pl" wpisane w pole adresu to nie strona
   const host = u.hostname.toLowerCase();
   if (!host.includes(".") || PRIVATE_HOST.test(host)) return null;
+  if (!/^[a-z0-9.-]+\.[a-z]{2,}$/.test(host) && !/^xn--/.test(host.split(".").pop())) return null; // host z literową TLD (po IDN→punycode)
   if (/^\d+\.\d+\.\d+\.\d+$/.test(host)) return null;
+  u.hash = "";
   return u.toString();
 }
 
