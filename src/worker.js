@@ -105,10 +105,14 @@ function secure(res) {
   return new Response(res.body, { status: res.status, statusText: res.statusText, headers: h });
 }
 
+const CANONICAL_HOST = "webskan.com";
+
 export default {
   async fetch(request, env) {
     const u = new URL(request.url);
     if (u.protocol === "http:") { u.protocol = "https:"; return Response.redirect(u.toString(), 301); }
+    // Jeden kanoniczny host: www i stary adres workers.dev przekierowują na webskan.com (API bez przekierowania, żeby nie psuć pollera i formularzy POST).
+    if (u.hostname !== CANONICAL_HOST && !u.pathname.startsWith("/api/")) { u.hostname = CANONICAL_HOST; return Response.redirect(u.toString(), 301); }
     return secure(await route(request, env, u.pathname));
   },
 };

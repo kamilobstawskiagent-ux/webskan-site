@@ -4,6 +4,11 @@
   "main": "src/worker.js",
   "compatibility_date": "2026-11-04",
   "observability": { "enabled": true },
+  "workers_dev": true,
+  "routes": [
+    { "pattern": "webskan.com", "custom_domain": true },
+    { "pattern": "www.webskan.com", "custom_domain": true }
+  ],
   "assets": {
     "directory": "public",
     "binding": "ASSETS",
