@@ -8,7 +8,7 @@
     "directory": "public",
     "binding": "ASSETS",
     "not_found_handling": "404-page",
-    "run_worker_first": ["/api/*"]
+    "run_worker_first": true
   },
   "kv_namespaces": [
     { "binding": "ORDERS", "id": "a3f4667b50d34ecba4aaf23578f5783b" }
