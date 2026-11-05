@@ -55,12 +55,15 @@
 
 <section id="zamow">
   <h2>Zamów audyt</h2>
-  <form class="order" action="#" method="get" data-todo="podpiąć checkout">
-    <label>Adres strony<br><input type="url" name="url" placeholder="https://twojafirma.pl" required></label>
-    <label>Twój e-mail (na niego wyślemy raport)<br><input type="email" name="email" placeholder="ty@twojafirma.pl" required></label>
+  <form class="order" action="/api/order" method="post">
+    <input type="hidden" name="lang" value="pl">
+    <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+    <label>Adres strony<br><input type="text" name="url" inputmode="url" placeholder="https://twojafirma.pl" required maxlength="500"></label>
+    <label>Twój e-mail (na niego wyślemy raport)<br><input type="email" name="email" placeholder="ty@twojafirma.pl" required maxlength="254"></label>
+    <label class="consent"><input type="checkbox" name="consent" required> Akceptuję <a href="/regulamin/">regulamin</a> i <a href="/prywatnosc/">politykę prywatności</a>. Rozumiem, że raport jest generowany automatycznie i dotyczy publicznie dostępnej wersji strony.</label>
     <button class="btn" type="submit">Przejdź do płatności – 99 zł</button>
   </form>
-  <p class="note">Płatność kartą lub BLIK przez bezpiecznego operatora. Fakturę/paragon dostaniesz automatycznie e-mailem.</p>
+  <p class="note">Płatność kartą przez operatora Polar (Merchant of Record), który wystawia też fakturę/paragon i wysyła go e-mailem.</p>
 </section>
 
 <section id="faq">
@@ -72,7 +75,7 @@
   <details><summary>Moja strona wymaga logowania / jest w budowie</summary><p>Audytujemy tylko publicznie dostępne strony. Jeśli strona blokuje boty, raport może być niepełny; w takim przypadku zwracamy pieniądze.</p></details>
 </section>
 
-<footer>© 2026 Webskan · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a> · kontakt: <span data-todo="adres e-mail po uruchomieniu"></span></footer>
+<footer>© 2026 Webskan · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a> · kontakt: <a href="mailto:kamil.obstawski.agent@gmail.com">kamil.obstawski.agent@gmail.com</a></footer>
 </div>
 </body>
 </html>

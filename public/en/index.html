@@ -48,10 +48,13 @@
 
 <section id="order">
   <h2>Order an audit</h2>
-  <form class="order" action="#" method="get" data-todo="hook up checkout">
-    <label>Website address<br><input type="url" name="url" placeholder="https://yourbusiness.com" required></label>
-    <label>Your e-mail (we'll send the report there)<br><input type="email" name="email" placeholder="you@yourbusiness.com" required></label>
-    <button class="btn" type="submit">Continue to payment – $29</button>
+  <form class="order" action="/api/order" method="post">
+    <input type="hidden" name="lang" value="en">
+    <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+    <label>Website address<br><input type="text" name="url" inputmode="url" placeholder="https://yourcompany.com" required maxlength="500"></label>
+    <label>Your e-mail (we send the report there)<br><input type="email" name="email" placeholder="you@yourcompany.com" required maxlength="254"></label>
+    <label class="consent"><input type="checkbox" name="consent" required> I accept the <a href="/en/terms/">terms</a> and <a href="/en/privacy/">privacy policy</a>. I understand the report is generated automatically and covers the publicly accessible version of the site.</label>
+    <button class="btn" type="submit">Proceed to payment – $29</button>
   </form>
   <p class="note">Card payment via a secure merchant of record. Invoice/receipt arrives automatically by e-mail.</p>
 </section>
@@ -65,7 +68,7 @@
   <details><summary>My site requires a login / is under construction</summary><p>We only audit publicly reachable sites. If a site blocks bots the report may be incomplete; in that case we refund.</p></details>
 </section>
 
-<footer>© 2026 Webskan · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy</a> · contact: <span data-todo="e-mail after launch"></span></footer>
+<footer>© 2026 Webskan · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy</a> · contact: <a href="mailto:kamil.obstawski.agent@gmail.com">kamil.obstawski.agent@gmail.com</a></footer>
 </div>
 </body>
 </html>

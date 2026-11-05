@@ -1,0 +1,100 @@
+// Webskan – Worker: statyczne pliki z public/ + /api/order (checkout Polar albo kolejka przedsprzedażowa w KV).
+const PRIVATE_HOST = /^(localhost|127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|0\.|\[?::1\]?$|.*\.local$|.*\.internal$)/i;
+
+function normalizeUrl(raw) {
+  let s = (raw || "").trim();
+  if (!s) return null;
+  if (!/^https?:\/\//i.test(s)) s = "https://" + s;
+  let u;
+  try { u = new URL(s); } catch { return null; }
+  if (!/^https?:$/.test(u.protocol)) return null;
+  const host = u.hostname.toLowerCase();
+  if (!host.includes(".") || PRIVATE_HOST.test(host)) return null;
+  if (/^\d+\.\d+\.\d+\.\d+$/.test(host)) return null;
+  return u.toString();
+}
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+function page(lang, title, body) {
+  const html = `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} – Webskan</title><link rel="stylesheet" href="/style.css"></head><body><div class="wrap"><header><a class="logo" href="${lang === "pl" ? "/" : "/en/"}">web<span>skan</span></a></header><section class="hero"><h1>${title}</h1>${body}</section></div></body></html>`;
+  return new Response(html, { headers: { "content-type": "text/html; charset=utf-8" } });
+}
+
+const T = {
+  pl: {
+    badUrl: ["Nieprawidłowy adres strony", "<p>Podaj publiczny adres w formie <code>https://twojafirma.pl</code>. <a href=\"/#zamow\">Wróć do formularza</a>.</p>"],
+    badEmail: ["Nieprawidłowy e-mail", "<p>Sprawdź adres e-mail. <a href=\"/#zamow\">Wróć do formularza</a>.</p>"],
+    noConsent: ["Brak akceptacji regulaminu", "<p>Aby zamówić audyt, zaakceptuj regulamin i politykę prywatności. <a href=\"/#zamow\">Wróć do formularza</a>.</p>"],
+    saved: ["Zgłoszenie przyjęte", "<p>Dziękujemy! Płatności uruchamiamy w ciągu kilku dni. Gdy tylko będzie można zapłacić, wyślemy na podany e-mail link do płatności dla Twojej strony. Nic nie zostało pobrane.</p><p><a href=\"/\">Wróć na stronę główną</a></p>"],
+    fail: ["Coś poszło nie tak", "<p>Nie udało się uruchomić płatności. Spróbuj ponownie za chwilę albo napisz do nas. <a href=\"/#zamow\">Wróć do formularza</a>.</p>"],
+    thanksPath: "/dziekujemy/",
+  },
+  en: {
+    badUrl: ["Invalid website address", "<p>Enter a public address such as <code>https://yourcompany.com</code>. <a href=\"/en/#order\">Back to the form</a>.</p>"],
+    badEmail: ["Invalid e-mail", "<p>Please check your e-mail address. <a href=\"/en/#order\">Back to the form</a>.</p>"],
+    noConsent: ["Terms not accepted", "<p>To order an audit, please accept the terms and privacy policy. <a href=\"/en/#order\">Back to the form</a>.</p>"],
+    saved: ["Request received", "<p>Thank you! Payments go live within a few days. As soon as checkout is open we will e-mail you a payment link for your site. Nothing has been charged.</p><p><a href=\"/en/\">Back to the homepage</a></p>"],
+    fail: ["Something went wrong", "<p>We could not start the checkout. Please try again in a moment or e-mail us. <a href=\"/en/#order\">Back to the form</a>.</p>"],
+    thanksPath: "/en/thanks/",
+  },
+};
+
+async function handleOrder(request, env) {
+  const form = await request.formData();
+  const lang = form.get("lang") === "en" ? "en" : "pl";
+  const t = T[lang];
+  const url = normalizeUrl(form.get("url"));
+  const email = (form.get("email") || "").trim().toLowerCase();
+  const consent = form.get("consent") === "on" || form.get("consent") === "1";
+  if (form.get("website")) return page(lang, ...t.saved); // honeypot: udajemy sukces
+  if (!url) return page(lang, ...t.badUrl);
+  if (!EMAIL_RE.test(email) || email.length > 254) return page(lang, ...t.badEmail);
+  if (!consent) return page(lang, ...t.noConsent);
+
+  const origin = new URL(request.url).origin;
+  const ip = request.headers.get("cf-connecting-ip") || "";
+  const record = { url, email, lang, ip, ua: request.headers.get("user-agent") || "", at: new Date().toISOString() };
+
+  const productId = lang === "en" ? env.POLAR_PRODUCT_EN : env.POLAR_PRODUCT_PL;
+  if (env.POLAR_TOKEN && productId) {
+    const body = {
+      products: [productId],
+      customer_email: email,
+      metadata: { url, lang, source: "webskan" },
+      success_url: `${origin}${t.thanksPath}?checkout_id={CHECKOUT_ID}`,
+      locale: lang === "pl" ? "pl-PL" : "en-US",
+      customer_ip_address: ip || undefined,
+    };
+    const r = await fetch(`${env.POLAR_API}/v1/checkouts/`, {
+      method: "POST",
+      headers: { authorization: `Bearer ${env.POLAR_TOKEN}`, "content-type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (r.ok) {
+      const checkout = await r.json();
+      await env.ORDERS.put(`checkout:${checkout.id}`, JSON.stringify({ ...record, checkout_id: checkout.id }), { expirationTtl: 60 * 60 * 24 * 90 });
+      return Response.redirect(checkout.url, 303);
+    }
+    const err = await r.text();
+    await env.ORDERS.put(`error:${Date.now()}`, JSON.stringify({ ...record, status: r.status, err: err.slice(0, 2000) }), { expirationTtl: 60 * 60 * 24 * 30 });
+    return page(lang, ...t.fail);
+  }
+
+  // Przedsprzedaż: zapis zgłoszenia, bez płatności.
+  await env.ORDERS.put(`pre:${Date.now()}:${crypto.randomUUID().slice(0, 8)}`, JSON.stringify(record));
+  return page(lang, ...t.saved);
+}
+
+export default {
+  async fetch(request, env) {
+    const { pathname } = new URL(request.url);
+    if (pathname === "/api/order") {
+      if (request.method !== "POST") return new Response("Method not allowed", { status: 405 });
+      try { return await handleOrder(request, env); }
+      catch (e) { return page("pl", "Błąd", `<p>${String(e.message || e)}</p>`); }
+    }
+    if (pathname === "/api/health") return Response.json({ ok: true, polar: Boolean(env.POLAR_TOKEN && env.POLAR_PRODUCT_PL) });
+    return env.ASSETS.fetch(request);
+  },
+};
