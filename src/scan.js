@@ -279,5 +279,5 @@ function renderResult(job, lang, env, u) {
   <section><h2>${t.issues(issues.length)}</h2>${issues.length ? `<ul class="issues">${issues.map((i) => `<li class="${i.sev}"><span class="badge ${i.sev === 'high' ? 'poor' : i.sev === 'medium' ? 'needs' : 'good'}">${t.sev[i.sev]}</span><b>${i.title}</b><p>${i.why}</p>${i.detail ? `<p class="muted small">${i.detail}</p>` : ''}</li>`).join('')}</ul>` : `<p>${t.noIssues}</p>`}
   ${oks.length ? `<h3>${t.okList}</h3><p class="oks">${oks.map((o) => `<span class="chip">✓ ${esc(o)}</span>`).join(' ')}</p>` : ''}</section>
   ${orderBox(lang, env, job.url, t)}
-  <section><p class="muted small">${t.share} <code>${esc(link)}</code></p>${scanForm(lang, '')}<p class="muted small">${lang === 'pl' ? '↑ ' + t.again : '↑ ' + t.again}</p></section>`;
+  <section><p class="muted small">${t.share} <a class="share" href="${esc(link)}">${esc(link)}</a></p>${scanForm(lang, '')}<p class="muted small">${lang === 'pl' ? '↑ ' + t.again : '↑ ' + t.again}</p></section>`;
 }
