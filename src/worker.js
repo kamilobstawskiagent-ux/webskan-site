@@ -52,6 +52,8 @@ async function handleOrder(request, env) {
   const url = normalizeUrl(form.get("url"));
   const email = (form.get("email") || "").trim().toLowerCase();
   const consent = form.get("consent") === "on" || form.get("consent") === "1";
+  const product = form.get("product") === "monitor" ? "monitor" : "audit"; // audit = audyt pogłębiony (jednorazowo), monitor = abonament z audytem na start
+  const competitors = String(form.get("competitors") || "").split(/[,\s;]+/).map((c) => normalizeUrl(c)).filter(Boolean).slice(0, 2);
   if (form.get("website")) return page(lang, ...t.saved); // honeypot: udajemy sukces
   if (!url) return page(lang, ...t.badUrl);
   if (!EMAIL_RE.test(email) || email.length > 254) return page(lang, ...t.badEmail);
@@ -59,14 +61,16 @@ async function handleOrder(request, env) {
 
   const origin = new URL(request.url).origin;
   const ip = request.headers.get("cf-connecting-ip") || "";
-  const record = { url, email, lang, ip, ua: request.headers.get("user-agent") || "", at: new Date().toISOString() };
+  const record = { url, email, lang, product, competitors, ip, ua: request.headers.get("user-agent") || "", at: new Date().toISOString() };
 
-  const productId = lang === "en" ? env.POLAR_PRODUCT_EN : env.POLAR_PRODUCT_PL;
+  // Produkty Polar: POLAR_PRODUCT_AUDIT_{PL,EN}, POLAR_PRODUCT_MONITOR_{PL,EN}; stare POLAR_PRODUCT_{PL,EN} jako zapas dla audytu
+  const L = lang.toUpperCase();
+  const productId = product === "monitor" ? env[`POLAR_PRODUCT_MONITOR_${L}`] : (env[`POLAR_PRODUCT_AUDIT_${L}`] || env[`POLAR_PRODUCT_${L}`]);
   if (env.POLAR_TOKEN && productId && env.SALES_MODE !== "presale") { // SALES_MODE=presale do czasu zatwierdzenia konta Polar
     const body = {
       products: [productId],
       customer_email: email,
-      metadata: { url, lang, source: "webskan" },
+      metadata: { url, lang, product, competitors: competitors.join(","), source: "webskan" },
       success_url: `${origin}${t.thanksPath}?checkout_id={CHECKOUT_ID}`,
       locale: lang === "pl" ? "pl-PL" : "en-US",
       customer_ip_address: ip || undefined,
@@ -138,8 +142,8 @@ async function route(request, env, pathname) {
 
 // Tryb przedsprzedaży: ten sam statyczny HTML, ale uczciwy przycisk i notka (bez „przejdź do płatności”, gdy Polar jeszcze nie przyjmuje płatności).
 const PRESALE = {
-  pl: { btn: "Zarezerwuj audyt – 99 zł (płatność po uruchomieniu)", note: "Płatności uruchamiamy w najbliższych dniach. Zostaw adres strony i e-mail, a wyślemy Ci link do płatności. Nic nie pobieramy teraz." },
-  en: { btn: "Reserve the audit – $29 (pay when checkout opens)", note: "Payments go live within days. Leave your URL and e-mail and we will send you a payment link. Nothing is charged now." },
+  pl: { btn: "Zarezerwuj (płatność po uruchomieniu)", note: "Płatności uruchamiamy w najbliższych dniach. Zostaw adres strony i e-mail, a wyślemy Ci link do płatności. Nic nie pobieramy teraz." },
+  en: { btn: "Reserve (pay when checkout opens)", note: "Payments go live within days. Leave your URL and e-mail and we will send you a payment link. Nothing is charged now." },
 };
 function presaleRewrite(res, lang) {
   const t = PRESALE[lang];
