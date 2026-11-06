@@ -18,11 +18,11 @@
   .good b{color:var(--good);border-color:var(--good)}.needs b{color:var(--needs);border-color:var(--needs)}.poor b{color:var(--poor);border-color:var(--poor)}.score small{color:var(--muted);font-size:12px;line-height:1.3;display:block;margin-top:4px}
   details{border-bottom:1px solid var(--line);padding:12px 0}summary{cursor:pointer;font-weight:600}
   .orderbox{display:grid;grid-template-columns:minmax(0,560px) minmax(260px,1fr);gap:40px;align-items:start}.orderaside{border:1px solid var(--line);border-radius:12px;padding:20px 22px;background:var(--bg);font-size:15px;color:#374151}.orderaside h3{margin:0 0 10px;font-size:17px;color:var(--ink)}.orderaside ol{margin:0;padding-left:20px}.orderaside li{margin:0 0 8px}.orderaside p{margin:12px 0 0}@media(max-width:900px){.orderbox{grid-template-columns:1fr;gap:24px}.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.grid{grid-template-columns:1fr}}
-.order{display:grid;gap:10px;max-width:560px}form.order label{display:block}form.order input:not([type=checkbox]){width:100%}input{font:inherit;padding:12px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;color:var(--ink)}form.order+.note{max-width:560px;margin-top:14px}
+.order{display:grid;gap:10px;max-width:560px}form.order label{display:block}form.order input:not([type=checkbox]):not([type=radio]){width:100%}form.order button.btn{border:0;cursor:pointer;font:inherit;font-weight:700}input[type=radio],input[type=checkbox]{width:18px;height:18px;padding:0;margin:0;accent-color:var(--acc);flex:none}input{font:inherit;padding:12px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;color:var(--ink)}form.order+.note{max-width:560px;margin-top:14px}
   .note{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px;font-size:15px}
   footer{margin:64px 0 32px;color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:20px}
   @media(max-width:600px){h1{font-size:30px}.lead{font-size:18px}}
-.consent{display:block;font-size:14px;color:var(--muted);margin:10px 0}.consent input{margin-right:6px}
+.consent{display:block;font-size:14px;color:var(--muted);margin:10px 0}.consent input{margin-right:6px;vertical-align:-3px}
 .legal h2{font-size:20px;margin-top:28px}.legal p,.legal li{font-size:15px}
 
 /* szybki skan */
@@ -87,5 +87,5 @@ nav{display:flex;gap:18px;flex-wrap:wrap;justify-content:flex-end}nav a{margin-l
 .plan ul.check{margin:16px 0 20px;flex:1}.plan ul.check li{font-size:16px}.plan .btn{align-self:stretch;text-align:center}
 .plan .tag{position:absolute;top:-13px;left:22px;background:var(--acc);color:#fff;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:4px 10px;border-radius:999px}
 .plans-pick{border:1px solid var(--line);border-radius:10px;padding:10px 14px 12px;margin:0 0 4px}.plans-pick legend{font-size:14px;color:var(--muted);padding:0 6px}
-.pick{display:flex;gap:10px;align-items:flex-start;padding:6px 0;font-size:16px;cursor:pointer}.pick input{margin-top:5px}
+form.order label.pick{display:flex;gap:10px;align-items:flex-start;padding:7px 0;font-size:16px;cursor:pointer}.pick input{margin-top:4px}.pick span{line-height:1.45}
 @media(max-width:760px){.plans{grid-template-columns:1fr}.plan .amt{font-size:36px}}
