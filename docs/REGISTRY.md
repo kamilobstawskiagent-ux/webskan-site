@@ -5,7 +5,7 @@
 
 ## Plik
 `docs/server.json` – szkic dla serwera **tylko zdalnego** (bez `packages`, tylko `remotes`).
-- Pola wymagane przez schemat: `name`, `description` (1–100 znaków; nasz ma 97), `version` (semver; przy każdej
+- Pola wymagane przez schemat: `name`, `description` (1–100 znaków; nasz ma 93), `version` (semver; przy każdej
   kolejnej publikacji podbij numer – zakresy typu `^1.2` są odrzucane).
 - `websiteUrl`, `repository`, `title`, `remotes[].headers` są opcjonalne. `remotes[].type` ∈ {`streamable-http`, `sse`}.
 - Rejestr NIE sprawdza, czy kontrolujemy adres z `remotes[].url` („It does not verify that you control the remote
