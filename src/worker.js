@@ -154,7 +154,7 @@ async function route(request, env, pathname) {
 function notFound(lang) {
   const t = lang === "en"
     ? { title: "Page not found", lead: "This link is broken, expired or mistyped.", links: [["/en/", "Home page"], ["/en/#pricing", "Pricing"], ["/en/sample/", "Sample audit"], ["/en/blog/", "Blog"]], mail: "If you arrived here from one of our e-mails, write to" }
-    : { title: "Nie ma takiej strony", lead: "Ten link jest zepsuty, wygasł albo wkradła się literówka.", links: [["/", "Strona główna"], ["/#cennik", "Cennik"], ["/przyklad/", "Przykładowy audyt"], ["/blog/", "Blog"]], mail: "Jeśli trafiłeś tu z naszego e-maila, napisz na" };
+    : { title: "Nie ma takiej strony", lead: "Ten link jest zepsuty, wygasł albo wkradła się literówka.", links: [["/", "Strona główna"], ["/#cena", "Cennik"], ["/przyklad/", "Przykładowy audyt"], ["/blog/", "Blog"]], mail: "Jeśli trafiłeś tu z naszego e-maila, napisz na" };
   const body = `<section class="hero"><p class="eyebrow">404</p><h1>${t.title}</h1><p class="lead">${t.lead}</p><p>${t.links.map(([h, l]) => `<a class="btn sec" href="${h}" style="margin:0 8px 8px 0">${l}</a>`).join("")}</p><p class="note">${t.mail} <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a>.</p></section>`;
   const r = layout(lang, t.title, body);
   return new Response(r.body, { status: 404, headers: r.headers });
