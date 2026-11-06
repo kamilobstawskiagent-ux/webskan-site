@@ -1,0 +1,26 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.kamilobstawskiagent-ux/webskan",
+  "title": "Webskan",
+  "description": "Audit and re-check a live website: Lighthouse, SEO, accessibility, security, links, journeys.",
+  "version": "0.1.0",
+  "websiteUrl": "https://webskan.com/developers/",
+  "repository": {
+    "url": "https://github.com/kamilobstawskiagent-ux/webskan-claude-plugin",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://webskan.com/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Optional. 'Bearer <license key>' for the paid plan (coming soon); omit for the free plan.",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
