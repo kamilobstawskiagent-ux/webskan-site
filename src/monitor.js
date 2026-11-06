@@ -126,7 +126,7 @@ const fmtDur = (s, t) => s < 3600 ? `${Math.max(1, Math.round(s / 60))} ${t.min}
 export async function statusPage(env, lang, token) {
   const t = S[lang], h = hub(env);
   const m = await h.byToken(token);
-  if (!m) { const r = layout(lang, '404', '<section class="hero"><h1>404</h1></section>'); return new Response(r.body, { status: 404, headers: r.headers }); }
+  if (!m) { const t404 = lang === 'en' ? ['Status page not found', 'This status link is invalid or the monitor was removed.', '/en/', 'Home page'] : ['Nie ma takiej strony stanu', 'Ten link jest nieprawidłowy albo monitor został usunięty.', '/', 'Strona główna']; const r = layout(lang, t404[0], `<section class="hero"><p class="eyebrow">404</p><h1>${t404[0]}</h1><p class="lead">${t404[1]}</p><p><a class="btn sec" href="${t404[2]}">${t404[3]}</a></p></section>`); return new Response(r.body, { status: 404, headers: r.headers }); }
   const [s1, s7, s30] = await Promise.all([h.stats(m.id, 1), h.stats(m.id, 7), h.stats(m.id, 30)]);
   const state = !m.active ? 'paused' : m.state;
   const color = { up: '#1a7f37', down: '#b42318', unknown: '#6b7280', paused: '#6b7280' }[state];
@@ -151,5 +151,5 @@ export async function statusPage(env, lang, token) {
 ${incidents.length ? `<ul style="list-style:none;padding:0;margin:0">${incidents.map((i) => `<li style="border-top:1px solid #e5e7eb;padding:.6rem 0;display:flex;flex-wrap:wrap;gap:.25rem 1.25rem"><span style="color:#b42318;font-weight:600">${t.downAt} ${fmtDate(i.down, lang)}</span><span>${i.up ? `${t.upAt} ${fmtDate(i.up, lang)}` : '…'}</span><span style="color:#6b7280">${t.dur}: ${fmtDur(i.dur, t)}</span></li>`).join('')}</ul>` : `<p>${t.none}</p>`}
 </section>
 <section><p style="color:#6b7280;font-size:.9rem">${t.how}</p></section>`;
-  return layout(lang, t.title(m.host), body); // layout: noindex + no-store
+  return layout(lang, t.title(m.host), body, '<style>@media(max-width:600px){.grid3{grid-template-columns:1fr!important}.grid3>div{display:grid;grid-template-columns:1fr auto;column-gap:12px;align-items:baseline}.grid3>div p:last-child{grid-column:1/-1}}</style>'); // layout: noindex + no-store
 }

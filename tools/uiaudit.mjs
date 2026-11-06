@@ -114,7 +114,9 @@ async function shoot(page, outDir, key, prof, url) {
   } catch (e) { errors.push('axe: ' + String(e).slice(0, 120)); }
   const file = path.join(outDir, `${key}-${prof}.png`);
   await page.screenshot({ path: file, fullPage: true, animations: 'disabled' });
-  return { key, prof, url, status: res?.status(), file, ...info, axe, errors: [...new Set(errors)].slice(0, 10) };
+  const expected404 = /^(notfound|recheck_)/.test(key); // strony błędu: 404 dokumentu jest oczekiwane
+  const errs = [...new Set(errors)].filter((e) => !(expected404 && /^(http 404: |console: Failed to load resource: the server responded with a status of 404)/.test(e)));
+  return { key, prof, url, status: res?.status(), file, ...info, axe, errors: errs.slice(0, 10) };
 }
 
 function readPng(f) { return PNG.sync.read(fs.readFileSync(f)); }
