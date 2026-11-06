@@ -1,6 +1,7 @@
 // Webskan – Worker: statyczne pliki z public/ + /api/order (checkout Polar albo kolejka przedsprzedażowa w KV) + darmowy szybki skan (src/scan.js).
 import { startScan, nextScans, scanResult, scanPage, ScanQueue } from "./scan.js";
-export { ScanQueue };
+import { MonitorHub, monitorCron, monitorApi, statusPage } from "./monitor.js";
+export { ScanQueue, MonitorHub };
 const PRIVATE_HOST = /^(localhost|127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|0\.|\[?::1\]?$|.*\.local$|.*\.internal$)/i;
 
 function normalizeUrl(raw) {
@@ -119,6 +120,7 @@ export default {
     if (u.hostname !== CANONICAL_HOST && !u.pathname.startsWith("/api/")) { u.hostname = CANONICAL_HOST; return Response.redirect(u.toString(), 301); }
     return secure(await route(request, env, u.pathname));
   },
+  async scheduled(event, env, ctx) { ctx.waitUntil(monitorCron(env)); }, // co minutę: kontrola dostępności monitorowanych stron
 };
 
 async function route(request, env, pathname) {
@@ -133,6 +135,9 @@ async function route(request, env, pathname) {
     if (pathname === "/api/scan/result" && request.method === "POST") return scanResult(request, env);
     { const m = pathname.match(/^\/skan\/([0-9a-f]+)\/?$/); if (m) return scanPage(request, env, "pl", m[1]); }
     { const m = pathname.match(/^\/en\/scan\/([0-9a-f]+)\/?$/); if (m) return scanPage(request, env, "en", m[1]); }
+    if (pathname.startsWith("/api/monitor")) return monitorApi(request, env, pathname, normalizeUrl);
+    { const m = pathname.match(/^\/status\/([0-9a-f]{32})\/?$/); if (m) return statusPage(env, "pl", m[1]); }
+    { const m = pathname.match(/^\/en\/status\/([0-9a-f]{32})\/?$/); if (m) return statusPage(env, "en", m[1]); }
     if (pathname === "/api/health") return Response.json({ ok: true, polar: Boolean(env.POLAR_TOKEN && env.POLAR_PRODUCT_PL), mode: env.SALES_MODE || "live" });
     const res = await env.ASSETS.fetch(request);
     if (env.SALES_MODE === "presale" && (pathname === "/" || pathname === "/en/")) return presaleRewrite(res, pathname === "/en/" ? "en" : "pl");

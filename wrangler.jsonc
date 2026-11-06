@@ -15,8 +15,9 @@
     "not_found_handling": "404-page",
     "run_worker_first": true
   },
-  "durable_objects": { "bindings": [{ "name": "SCAN_QUEUE", "class_name": "ScanQueue" }] },
-  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["ScanQueue"] }],
+  "durable_objects": { "bindings": [{ "name": "SCAN_QUEUE", "class_name": "ScanQueue" }, { "name": "MONITOR_HUB", "class_name": "MonitorHub" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["ScanQueue"] }, { "tag": "v2", "new_sqlite_classes": ["MonitorHub"] }],
+  "triggers": { "crons": ["* * * * *"] },
   "kv_namespaces": [
     { "binding": "ORDERS", "id": "a3f4667b50d34ecba4aaf23578f5783b" }
   ],
