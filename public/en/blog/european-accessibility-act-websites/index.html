@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The European Accessibility Act and your website: who must comply, who is exempt, what to do – Webskan</title>
+<meta name="description" content="Since 28 June 2025 the European Accessibility Act applies to online shops and booking sites across the EU. Who it covers, the microenterprise exemption, what WCAG 2.1 AA means in practice, the penalties, and a one-week plan.">
+<link rel="canonical" href="https://webskan.com/en/blog/european-accessibility-act-websites/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/european-accessibility-act-websites/">
+<link rel="alternate" hreflang="pl" href="https://webskan.com/blog/dostepnosc-strony-a-prawo-eaa/">
+<meta property="og:title" content="The European Accessibility Act and your website">
+<meta property="og:description" content="Who must comply, who is exempt, what WCAG 2.1 AA means in practice, and where to start.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/en/blog/european-accessibility-act-websites/">
+<meta property="og:image" content="https://webskan.com/og-en.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"The European Accessibility Act and your website: who must comply, who is exempt, what to do","description":"Who the EAA covers, the microenterprise exemption, what WCAG 2.1 AA means in practice, the penalties, and a one-week plan.","datePublished":"2026-11-06","dateModified":"2026-11-06","inLanguage":"en","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/en/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/en/"},"mainEntityOfPage":"https://webskan.com/en/blog/european-accessibility-act-websites/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a href="/en/blog/">Blog</a><a href="/en/#price">Pricing</a><a href="/blog/dostepnosc-strony-a-prawo-eaa/">PL</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 6 November 2026 · 9 min read</p>
+<h1>The European Accessibility Act and your website: who must comply, who is exempt, what to do</h1>
+<p class="lead">Since 28 June 2025, EU law requires <em>private</em> businesses, not just public bodies, to make certain digital services accessible: online shops, booking systems, banking, e-books. A lot of what circulates about it is fear marketing (“every website must pass WCAG or you get fined”). This article sorts out who the law really applies to, who is exempt, what you concretely have to do, and why accessibility pays off even if the law does not reach you.</p>
+<p class="note">This is not legal advice. It is a simplified summary of the legal situation as of November 2026; national implementations differ in detail. Check your own situation with a lawyer.</p>
+
+<h2>Where it comes from</h2>
+<p>The <strong>European Accessibility Act</strong> (EAA, Directive (EU) 2019/882) is an EU directive, which means each member state has transposed it into its own law: Germany’s BFSG, Poland’s “Polski Akt o Dostępności”, Ireland’s S.I. 636/2023, and so on. The rules apply from <strong>28 June 2025</strong> in all member states. If you sell to consumers in the EU, the law of each country you sell into can apply to you, even if your company is based outside the EU.</p>
+<p>Before the EAA, accessibility laws in most EU countries covered only the public sector (Web Accessibility Directive 2016/2102). The EAA is the first EU-wide act that reaches private businesses, though not all of them.</p>
+
+<h2>Does it apply to your website? Three questions</h2>
+<h3>1. Do you provide one of the covered services?</h3>
+<p>The Act does not say “every website must be accessible”. It lists specific products and services. For a typical business the relevant item is <strong>e-commerce services</strong>, defined as services provided at a distance, through websites and mobile applications, by electronic means and at the individual request of a consumer <strong>with a view to concluding a consumer contract</strong>. Also covered: consumer banking, e-books and e-readers, electronic communications, access to audiovisual media, and parts of passenger transport (websites, apps, e-tickets).</p>
+<p>In practice:</p>
+<ul>
+<li><strong>Online shop</strong> selling to consumers: yes, whatever the product (clothing, cosmetics, online courses, medicines).</li>
+<li><strong>Online booking or ordering with payment</strong> (appointments, rooms, tickets): yes, because the contract is concluded online.</li>
+<li><strong>Brochure website</strong> with a description of your services, a phone number and a contact form: generally no. No contract is concluded on the site, so the statutory duties probably do not reach you (but see below why it is still worth it).</li>
+<li><strong>B2B only</strong>: the Act protects consumers. A purely business-to-business shop does not fit the definition, unless private individuals actually buy from you too.</li>
+</ul>
+
+<h3>2. Are you a microenterprise?</h3>
+<p>The Act <strong>does not apply to services provided by microenterprises</strong>: businesses with fewer than 10 employees and an annual turnover or balance sheet total not exceeding EUR 2 million. Sole traders and most small shops fall under this definition, so they are off the hook for <em>services</em>. Two traps:</p>
+<ul>
+<li>The exemption covers services, not products. If you manufacture, import or distribute covered <em>products</em> (computers, smartphones, e-readers, payment terminals), the product obligations apply regardless of company size.</li>
+<li>Thresholds count for the whole company, not the e-commerce team. A 12-person firm with a small web shop is not a microenterprise.</li>
+</ul>
+
+<h3>3. Can a larger company opt out?</h3>
+<p>Businesses that are not microenterprises can invoke “disproportionate burden” or “fundamental alteration”, but this is not an automatic exemption: you must document it with an assessment and, in most countries, notify the supervisory authority. For an ordinary online shop it is hard to argue that proper colour contrast and image descriptions are a disproportionate cost.</p>
+
+<h2>What “accessible” concretely means</h2>
+<p>The directive itself phrases requirements functionally (“perceivable, operable, understandable, robust”). The specifics come from the harmonised standard <strong>EN 301 549</strong> (currently cited version V3.2.1, 2021), whose chapter on web content maps directly onto <strong>WCAG 2.1 Level AA</strong>. If your site meets WCAG 2.1 AA, it is presumed to meet the Act’s requirements for web content. This is the same level public-sector sites have had to meet for years, so the knowledge and tools already exist.</p>
+<p>Beyond the site itself there are information duties: in your terms of service (or an equivalent document) you must explain how the service meets the accessibility requirements, and some countries require you to notify the authority if it does not, along with your remediation plan.</p>
+
+<h2>The most common failures we find on business websites</h2>
+<p>WCAG has dozens of criteria, but most sites fail on the same handful. The table shows what each one is, who it excludes and how hard it is to fix.</p>
+<table class="vitals headers">
+<thead><tr><th>Problem</th><th>What it is</th><th>Who it excludes</th><th>Fix</th></tr></thead>
+<tbody>
+<tr><td><strong>Low contrast</strong></td><td data-l="What it is">Grey text on white, white text on a light photo; at least 4.5:1 is required for normal text</td><td data-l="Excludes">People with low vision, older users, anyone on a phone in sunlight</td><td data-l="Fix">Easy: colour changes in CSS, no rebuild</td></tr>
+<tr><td><strong>Images without alt text</strong></td><td data-l="What it is">Product photo, banner or icon without an <code>alt</code> attribute; a screen reader says “image” or reads the file name</td><td data-l="Excludes">Blind users; you also lose Google Images</td><td data-l="Fix">Easy, but laborious with a thousand products</td></tr>
+<tr><td><strong>Form fields without labels</strong></td><td data-l="What it is">The field only has a placeholder that disappears on focus; no associated <code>label</code></td><td data-l="Excludes">Screen readers, autofill, people with memory impairments</td><td data-l="Fix">Easy in a template, harder inside plugins</td></tr>
+<tr><td><strong>No keyboard support</strong></td><td data-l="What it is">Menu, carousel or cookie banner works only with a mouse; no visible focus indicator</td><td data-l="Excludes">People with motor impairments, screen reader users, power users</td><td data-l="Fix">Medium: usually replacing a component or fixing JS</td></tr>
+<tr><td><strong>Broken heading structure</strong></td><td data-l="What it is">Headings chosen by looks (several <code>h1</code>, jumps from <code>h2</code> to <code>h5</code>) or bold paragraphs instead of headings</td><td data-l="Excludes">Screen readers navigate by headings; so does Google</td><td data-l="Fix">Easy in content, medium in the template</td></tr>
+<tr><td><strong>“Click here” links</strong></td><td data-l="What it is">Link text does not say where it leads; icon buttons with no name</td><td data-l="Excludes">People listening to a list of links out of context</td><td data-l="Fix">Easy: better link text or <code>aria-label</code></td></tr>
+<tr><td><strong>Meaning only in colour or only in video</strong></td><td data-l="What it is">“Fields with errors are marked in red”; a video without captions</td><td data-l="Excludes">Colour-blind users, deaf users, anyone watching without sound on a train</td><td data-l="Fix">Easy (icon + text); captions take time</td></tr>
+</tbody>
+</table>
+
+<h2>What an automated test catches, and what it does not</h2>
+<p>Tools such as axe-core (used by Lighthouse and by our audit) reliably detect roughly <strong>30–40% of the criteria</strong>: contrast, missing <code>alt</code>, labels, button names, heading structure, language attributes, ARIA correctness. That is precisely the part that fails most often and is easiest to fix, so it is the right place to start.</p>
+<p>An automated tool <strong>cannot judge</strong> whether alt text makes sense (“IMG_2034.jpg” fills the attribute perfectly well), whether focus order is logical, whether error messages are understandable, or whether a video’s captions are any good. That needs a manual test: walking through the purchase path with the keyboard alone and once with a screen reader (NVDA is free on Windows, VoiceOver is built into macOS and iOS, TalkBack into Android). If your site has one key path (basket to payment), that test is about an hour of work.</p>
+
+<h2>What happens if you do not comply</h2>
+<p>Enforcement is national: each country has designated market surveillance authorities, and consumers can file complaints with them. The procedure is generally staged: first a <strong>notice</strong> to remedy the problems within a deadline, and only if you ignore it a <strong>fine</strong> or an order to withdraw the service. Fine levels vary by country (Germany’s BFSG provides for up to EUR 100,000; Poland ties the cap to average wages and turnover). In other words, nobody gets fined for a single missing <code>alt</code> on the day of an inspection, but an ignored notice does cost money.</p>
+<p>The bigger risk is usually commercial rather than regulatory: public procurement and large B2B customers increasingly ask for an accessibility statement, and platforms and marketplaces pass the obligations on to sellers in their terms.</p>
+
+<h2>Why it is worth doing even if the Act does not cover you</h2>
+<ul>
+<li><strong>More customers.</strong> Around one in four adults in the EU reports some disability, and the same improvements help older users, people with temporary injuries and anyone in bad conditions (sunlight, noise, one hand busy). An inaccessible checkout is simply an abandoned checkout.</li>
+<li><strong>The same fixes help SEO.</strong> Alt text, heading structure, meaningful links, usable forms: Google evaluates a page much like a screen reader does.</li>
+<li><strong>Cheaper now than later.</strong> Accessibility designed in costs almost nothing; retrofitted, it means template rework. If you are planning a new site, put WCAG 2.1 AA into the brief for the agency.</li>
+<li><strong>“Micro” is not forever.</strong> A company with 8 people today may have 12 in two years, and then the rules apply with no transition period.</li>
+</ul>
+
+<h2>Where to start: a one-week plan</h2>
+<ol>
+<li><strong>Establish whether you are covered</strong> (the three questions above). If you are, say so in your terms together with how you provide accessibility.</li>
+<li><strong>Run an automated test</strong> on the home page, a product page, the basket and the checkout. List the errors by frequency, not by the order in the report.</li>
+<li><strong>Fix the cheap errors</strong>: contrast, field labels, button names, headings, language attribute. This is usually 80% of the error count and a day of work.</li>
+<li><strong>Walk the purchase path with the keyboard</strong> (Tab, Enter, Esc) and once with a screen reader. Note where you got stuck.</li>
+<li><strong>Fill in the content</strong>: meaningful <code>alt</code> for product photos, captions for videos, understandable error messages in forms.</li>
+<li><strong>Repeat</strong> after every larger change to the template or plugins; that is when accessibility most often breaks.</li>
+</ol>
+
+<section class="fullbox">
+<h2>See how your site does in an accessibility test</h2>
+<p>The full Webskan audit runs axe-core on your home page and subpages, checks contrast, alt text, form labels, heading structure and ARIA attributes, and gives you a PDF report with fixes ordered by priority, alongside mobile performance, technical SEO and security. $29, report usually within the hour.</p>
+<p><a class="btn" href="/en/#order">Order the full audit – $29</a></p>
+<p class="note">Want a quick picture first? The <a href="/en/">free quick scan</a> shows the Lighthouse accessibility score and the most common errors on your home page in about 30 seconds, no e-mail, no sign-up.</p>
+</section>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a></footer>
+</div>
+</body>
+</html>
