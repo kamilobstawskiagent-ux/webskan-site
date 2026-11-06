@@ -137,10 +137,11 @@ async function scanWebsite({ url: raw }, ctx) {
 
 // --- audit_website / recheck_website -------------------------------------------------------------------------
 function queuedStructured(a, ahead, extra = {}) {
-  return { auditId: a.id, status: a.status, url: a.url, pages: a.pages, parent: a.parent || undefined, etaSeconds: a.status === 'running' ? etaFor(a.pages, 0) : etaFor(a.pages, ahead), pollWith: 'get_audit', ...extra };
+  return { auditId: a.id, status: a.status, url: a.url, pages: a.pages, parent: a.parent || undefined, etaSeconds: a.status === 'done' ? 0 : a.status === 'running' ? etaFor(a.pages, 0) : etaFor(a.pages, ahead), pollWith: 'get_audit', ...extra };
 }
 function queuedMarkdown(s, verb) {
-  return `${verb} ${s.url} (${s.pages} pages) – auditId \`${s.auditId}\`, status ${s.status}, ETA ~${s.etaSeconds} s. Poll get_audit({auditId: "${s.auditId}"}) every 20-30 s until status is "done".${s.note ? `\n${s.note}` : ''}${s.plan ? `\nPlan: ${s.plan}${s.keyNote ? ` (${s.keyNote})` : ''}.` : ''}`;
+  const next = s.status === 'done' ? `Already finished (${s.finishedAt || 'within the last 24 h'}) – call get_audit({auditId: "${s.auditId}"}) for the result.` : `ETA ~${s.etaSeconds} s. Poll get_audit({auditId: "${s.auditId}"}) every 20-30 s until status is "done".`;
+  return `${verb} ${s.url} (${s.pages} pages) – auditId \`${s.auditId}\`, status ${s.status}. ${next}${s.note ? `\n${s.note}` : ''}${s.plan ? `\nPlan: ${s.plan}${s.keyNote ? ` (${s.keyNote})` : ''}.` : ''}`;
 }
 async function enqueueAudit(ctx, { url, pages, parent }) {
   const host = hostOf(url), db = scanStore(ctx.env), { plan, keyHash, keyInvalid } = ctx.plan;
@@ -150,7 +151,7 @@ async function enqueueAudit(ctx, { url, pages, parent }) {
   if (existing) {
     const ahead = await db.auditQueuedAhead(new Date(existing.at).getTime());
     const note = existing.status === 'done' ? `An audit of ${host} from the last 24 h already exists (free plan: 1 audit per host per 24 h) – returning it. Use recheck_website to run it again after fixes.` : `An audit of ${host} is already ${existing.status} – returning it instead of starting a duplicate.`;
-    const s = queuedStructured(existing, ahead, { reused: true, note, ...planNotes });
+    const s = queuedStructured(existing, ahead, { reused: true, note, finishedAt: existing.finishedAt || undefined, ...planNotes });
     return okResult(queuedMarkdown(s, existing.status === 'done' ? 'Existing audit of' : 'Audit of'), s);
   }
   // 2. Limity: free 2 / IP / 24 h, developer 30 / klucz / 24 h.
