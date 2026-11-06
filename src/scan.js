@@ -102,6 +102,8 @@ const A11Y = {
   en: { 'color-contrast': 'insufficient text contrast', 'image-alt': 'images without alt text', 'link-name': 'links without a discernible name', 'button-name': 'buttons without a name', label: 'form fields without labels', 'html-has-lang': 'missing language attribute', 'html-lang-valid': 'invalid language code', 'heading-order': 'skipped heading levels', 'document-title': 'missing page title', 'meta-viewport': 'zooming disabled on phones', list: 'invalid list structure', listitem: 'list items outside a list', tabindex: 'forced tab order', 'target-size': 'touch targets too small', 'link-in-text-block': 'links indistinguishable from text', 'frame-title': 'frames without a title', 'select-name': 'select elements without a name', 'input-image-alt': 'image buttons without alt text', 'duplicate-id-aria': 'duplicate ARIA ids', 'aria-allowed-attr': 'disallowed ARIA attributes', 'aria-required-attr': 'missing required ARIA attributes', 'aria-valid-attr-value': 'invalid ARIA attribute values', 'aria-valid-attr': 'non-existent ARIA attributes', 'aria-hidden-focus': 'hidden elements still focusable', 'aria-hidden-body': 'whole page hidden (aria-hidden)', 'aria-required-children': 'incomplete ARIA roles (children)', 'aria-required-parent': 'incomplete ARIA roles (parent)', 'aria-roles': 'invalid ARIA roles', 'aria-command-name': 'ARIA controls without a name', 'aria-input-field-name': 'ARIA inputs without a name', 'aria-toggle-field-name': 'toggles without a name', 'aria-progressbar-name': 'progress bars without a name', 'aria-dialog-name': 'dialogs without a name', 'aria-allowed-role': 'disallowed ARIA roles', 'valid-lang': 'invalid language codes on fragments', accesskeys: 'duplicate accesskeys', bypass: 'no way to skip navigation', 'definition-list': 'invalid definition lists', dlitem: 'definition items outside a list', 'form-field-multiple-labels': 'fields with multiple labels', 'object-alt': 'object elements without alt text', 'video-caption': 'video without captions', 'empty-heading': 'empty headings', 'identical-links-same-purpose': 'identical links with different targets', 'landmark-one-main': 'no main landmark', 'skip-link': 'broken skip link', 'td-headers-attr': 'invalid table cell headers', 'th-has-data-cells': 'table headers without data cells', 'table-duplicate-name': 'tables with duplicated description', 'table-fake-caption': 'table captions inside cells' },
 };
 const A11Y_FOUND = { pl: 'Co wykrył Lighthouse', en: 'What Lighthouse found' };
+export const ISSUE_TEXT_EN = T.en.issue; // kody problemów szybkiego skanu → angielskie tytuły (używa też serwer MCP)
+export const SCAN_STALE_MS = STALE_MS;
 
 // Stan skanów w Durable Object (SQLite) – spójne odczyty; KV ma do 60 s opóźnienia, co wydłużało oczekiwanie.
 import { DurableObject } from 'cloudflare:workers';
@@ -111,8 +113,48 @@ export class ScanQueue extends DurableObject {
     this.sql = ctx.storage.sql;
     this.sql.exec(`CREATE TABLE IF NOT EXISTS scans(id TEXT PRIMARY KEY, host TEXT, lang TEXT, url TEXT, status TEXT, at INTEGER, started INTEGER, finished INTEGER, data TEXT, error TEXT);
       CREATE INDEX IF NOT EXISTS scans_host ON scans(host, finished); CREATE INDEX IF NOT EXISTS scans_status ON scans(status, at);
-      CREATE TABLE IF NOT EXISTS counters(key TEXT PRIMARY KEY, n INTEGER, exp INTEGER)`);
+      CREATE TABLE IF NOT EXISTS counters(key TEXT PRIMARY KEY, n INTEGER, exp INTEGER);
+      CREATE TABLE IF NOT EXISTS audits(id TEXT PRIMARY KEY, host TEXT, url TEXT, pages INTEGER, parent TEXT, status TEXT, at INTEGER, started INTEGER, finished INTEGER, data TEXT, error TEXT, key_hash TEXT, ip_hash TEXT);
+      CREATE INDEX IF NOT EXISTS audits_host ON audits(host, at); CREATE INDEX IF NOT EXISTS audits_status ON audits(status, at)`);
   }
+  // --- Pełne audyty (MCP: audit_website / recheck_website) ---
+  auditCreate(a) {
+    this.sql.exec('INSERT INTO audits(id,host,url,pages,parent,status,at,key_hash,ip_hash) VALUES(?,?,?,?,?,?,?,?,?)', a.id, a.host, a.url, a.pages, a.parent || null, 'queued', Date.now(), a.keyHash || null, a.ipHash || null);
+    if (Math.random() < 0.05) this.sql.exec('DELETE FROM audits WHERE at < ?', Date.now() - AUDIT_TTL_MS);
+    return this.auditGet(a.id);
+  }
+  auditGet(id, withData = false) {
+    this.auditTimeout();
+    const r = this.sql.exec(`SELECT ${withData ? '*' : AUDIT_COLS} FROM audits WHERE id=?`, id).toArray()[0];
+    return r ? rowToAudit(r) : null;
+  }
+  // Ostatni audyt hosta: trwający (queued/running) albo ukończony w ciągu `withinMs` – żeby nie dublować pracy.
+  auditLatestForHost(host, withinMs, parent) {
+    const active = this.sql.exec(`SELECT ${AUDIT_COLS} FROM audits WHERE host=? AND status IN ('queued','running') AND (? IS NULL OR parent=?) ORDER BY at DESC LIMIT 1`, host, parent || null, parent || null).toArray()[0];
+    if (active) return rowToAudit(active);
+    if (!withinMs) return null;
+    const done = this.sql.exec(`SELECT ${AUDIT_COLS} FROM audits WHERE host=? AND status='done' AND finished > ? ORDER BY finished DESC LIMIT 1`, host, Date.now() - withinMs).toArray()[0];
+    return done ? rowToAudit(done) : null;
+  }
+  auditQueuedAhead(at) { return this.sql.exec("SELECT COUNT(*) n FROM audits WHERE status IN ('queued','running') AND at < ?", at).toArray()[0].n; }
+  auditNext(limit) {
+    this.auditTimeout();
+    const rows = this.sql.exec("SELECT id,url,pages,parent FROM audits WHERE status='queued' ORDER BY at LIMIT ?", limit).toArray();
+    for (const r of rows) this.sql.exec("UPDATE audits SET status='running', started=? WHERE id=?", Date.now(), r.id);
+    return rows;
+  }
+  auditFinish(id, status, data, error) {
+    this.sql.exec('UPDATE audits SET status=?, finished=?, data=?, error=? WHERE id=?', status, Date.now(), data ? JSON.stringify(data) : null, error || null, id);
+    return this.auditGet(id);
+  }
+  // running > 15 min → error (poller padł w trakcie); queued > 2 h → error (poller offline), żeby get_audit nie czekał w nieskończoność.
+  auditTimeout() {
+    const now = Date.now();
+    this.sql.exec("UPDATE audits SET status='error', finished=?, error='timeout: the audit worker did not finish within 15 minutes' WHERE status='running' AND started < ?", now, now - AUDIT_RUN_TIMEOUT_MS);
+    this.sql.exec("UPDATE audits SET status='error', finished=?, error='timeout: no audit worker picked up the job within 2 hours' WHERE status='queued' AND at < ?", now, now - AUDIT_QUEUE_TIMEOUT_MS);
+  }
+  // Trwający skan hosta (queued/running, nie starszy niż STALE_MS) – MCP czeka na niego zamiast tworzyć duplikat.
+  activeScan(host) { const r = this.sql.exec("SELECT * FROM scans WHERE host=? AND status IN ('queued','running') AND at > ? ORDER BY at DESC LIMIT 1", host, Date.now() - STALE_MS).toArray()[0]; return r ? rowToJob(r) : null; }
   create(job) {
     this.sql.exec('INSERT INTO scans(id,host,lang,url,status,at) VALUES(?,?,?,?,?,?)', job.id, job.host, job.lang, job.url, 'queued', Date.now());
     if (Math.random() < 0.05) { this.sql.exec('DELETE FROM scans WHERE at < ?', Date.now() - SCAN_TTL * 1000); this.sql.exec('DELETE FROM counters WHERE exp < ?', Date.now()); }
@@ -137,7 +179,11 @@ export class ScanQueue extends DurableObject {
   }
 }
 const rowToJob = (r) => ({ id: r.id, host: r.host, lang: r.lang, url: r.url, status: r.status, at: new Date(r.at).toISOString(), startedAt: r.started ? new Date(r.started).toISOString() : null, finishedAt: r.finished ? new Date(r.finished).toISOString() : null, result: r.data ? JSON.parse(r.data) : null, error: r.error });
+const AUDIT_TTL_MS = 30 * 86400000, AUDIT_RUN_TIMEOUT_MS = 15 * 60000, AUDIT_QUEUE_TIMEOUT_MS = 2 * 3600000;
+const AUDIT_COLS = 'id,host,url,pages,parent,status,at,started,finished,error,key_hash,ip_hash';
+const rowToAudit = (r) => ({ id: r.id, host: r.host, url: r.url, pages: r.pages, parent: r.parent, status: r.status, at: new Date(r.at).toISOString(), startedAt: r.started ? new Date(r.started).toISOString() : null, finishedAt: r.finished ? new Date(r.finished).toISOString() : null, result: r.data ? JSON.parse(r.data) : null, error: r.error, keyHash: r.key_hash, ipHash: r.ip_hash });
 const store = (env) => env.SCAN_QUEUE.get(env.SCAN_QUEUE.idFromName('main'));
+export const scanStore = store;
 
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const fill = (s, v) => s.replace(/\{(\w+)\}/g, (_, k) => esc(Array.isArray(v[k]) ? v[k].join(', ') : v[k] ?? ''));
@@ -200,6 +246,28 @@ export async function scanResult(request, env) {
 function authed(request, env) {
   const k = request.headers.get('x-scan-key') || '';
   return Boolean(env.SCAN_KEY) && k.length === env.SCAN_KEY.length && k === env.SCAN_KEY;
+}
+
+// GET /api/audit/next  (poller pełnych audytów; max 1 zadanie naraz, status → running)
+export async function nextAudits(request, env) {
+  if (!authed(request, env)) return new Response('unauthorized', { status: 401 });
+  const jobs = await store(env).auditNext(1);
+  return Response.json({ jobs });
+}
+
+// POST /api/audit/result  {id, result?, error?}
+export async function auditResult(request, env) {
+  if (!authed(request, env)) return new Response('unauthorized', { status: 401 });
+  let body;
+  try { body = await request.json(); } catch { return new Response('bad json', { status: 400 }); }
+  const { id, result, error } = body;
+  if (!/^[0-9a-f]{16}$/.test(id || '')) return new Response('bad id', { status: 400 });
+  const db = store(env);
+  const a = await db.auditGet(id);
+  if (!a) return new Response('not found', { status: 404 });
+  const ok = result && result.lighthouse?.mobile?.scores && Array.isArray(result.findings) && !result.fatal;
+  const job = await db.auditFinish(id, ok ? 'done' : 'error', ok ? result : null, ok ? null : String(error || result?.fatal || result?.errors?.[0]?.error || 'unknown').slice(0, 300));
+  return Response.json({ ok: true, status: job.status });
 }
 
 // GET /skan/<id> | /en/scan/<id>

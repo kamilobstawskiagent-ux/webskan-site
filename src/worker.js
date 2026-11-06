@@ -1,25 +1,10 @@
 // Webskan – Worker: statyczne pliki z public/ + /api/order (checkout Polar albo kolejka przedsprzedażowa w KV) + darmowy szybki skan (src/scan.js).
-import { startScan, nextScans, scanResult, scanPage, ScanQueue, layout } from "./scan.js";
+import { startScan, nextScans, scanResult, scanPage, nextAudits, auditResult, ScanQueue, layout } from "./scan.js";
 import { MonitorHub, monitorCron, monitorApi, statusPage } from "./monitor.js";
 import { recheckApi, recheckPage } from "./recheck.js";
+import { handleMcp } from "./mcp.js";
+import { normalizeUrl } from "./url.js";
 export { ScanQueue, MonitorHub };
-const PRIVATE_HOST = /^(localhost|127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|0\.|\[?::1\]?$|.*\.local$|.*\.internal$)/i;
-
-function normalizeUrl(raw) {
-  let s = (raw || "").trim();
-  if (!s) return null;
-  if (!/^https?:\/\//i.test(s)) s = "https://" + s;
-  let u;
-  try { u = new URL(s); } catch { return null; }
-  if (!/^https?:$/.test(u.protocol)) return null;
-  if (u.username || u.password) return null; // "jan@firma.pl" wpisane w pole adresu to nie strona
-  const host = u.hostname.toLowerCase();
-  if (!host.includes(".") || PRIVATE_HOST.test(host)) return null;
-  if (!/^[a-z0-9.-]+\.[a-z]{2,}$/.test(host) && !/^xn--/.test(host.split(".").pop())) return null; // host z literową TLD (po IDN→punycode)
-  if (/^\d+\.\d+\.\d+\.\d+$/.test(host)) return null;
-  u.hash = "";
-  return u.toString();
-}
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -126,6 +111,9 @@ export default {
 
 async function route(request, env, pathname) {
   {
+    if (pathname === "/mcp") return handleMcp(request, env); // serwer MCP (Streamable HTTP) dla agentów kodujących – przed assets
+    if (pathname === "/api/audit/next") return nextAudits(request, env);
+    if (pathname === "/api/audit/result" && request.method === "POST") return auditResult(request, env);
     if (pathname === "/api/order") {
       if (request.method !== "POST") return new Response("Method not allowed", { status: 405 });
       try { return await handleOrder(request, env); }
