@@ -251,7 +251,7 @@ function renderResult(job, lang, env, u) {
   const [cL] = rate(m.LCP, [2500, 4000]), [cC] = rate(m.CLS, [0.1, 0.25]), [cT] = rate(m.TBT, [200, 600]);
   const fmtS = (v) => (v == null ? '–' : (v / 1000).toFixed(1) + ' s');
   const fa = (lh.failed?.accessibility || []).map((x) => A11Y[lang][x.id] || x.title).filter(Boolean);
-  const issues = (r.issues || []).map((i) => { const d = t.issue[i.code]; return d ? { ...i, title: fill(d[0], i), why: fill(d[1], i), detail: i.code === 'a11y_low' && fa.length ? `${A11Y_FOUND[lang]}: ${esc(fa.join(', '))}.` : '' } : null; }).filter(Boolean);
+  const issues = (r.issues || []).map((i) => { const d = t.issue[i.code]; const dec = (x) => (lang === 'pl' ? x.replace(/(\d)\.(\d)/g, '$1,$2') : x); return d ? { ...i, title: dec(fill(d[0], i)), why: dec(fill(d[1], i)), detail: i.code === 'a11y_low' && fa.length ? `${A11Y_FOUND[lang]}: ${esc(fa.join(', '))}.` : '' } : null; }).filter(Boolean);
   const codes = new Set(issues.map((i) => i.code));
   const seo = r.seo || {}, hc = r.http?.headers?.checks || {};
   const oks = [];
