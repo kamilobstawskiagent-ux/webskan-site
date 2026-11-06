@@ -152,6 +152,17 @@ print('\\n'.join(out))`;
   return execFileSync('python3', ['-I', '-c', py, file, prof], { encoding: 'utf8' }).trim().split('\n').filter(Boolean);
 }
 
+// Kontrola treści: nieaktualne ceny i nazwy produktów w całym public/ i src/ (wpadka 06.11: blog reklamował „pełny audyt 99 zł” przez 9 h po zmianie cennika).
+const STALE = [/99\s?zł/, /\$\s?29\b/, /[Pp]ełny audyt/, /[Ff]ull audit/, /zwrot(?:y|ów)? bez (?:pytań|podania przyczyny)/i, /no[- ]questions[- ]asked/i];
+function contentCheck() {
+  const SITE = path.resolve(new URL('..', import.meta.url).pathname);
+  const roots = [path.join(SITE, 'public'), path.join(SITE, 'src')];
+  const hits = [];
+  const walk = (d) => { for (const e of fs.readdirSync(d, { withFileTypes: true })) { const f = path.join(d, e.name); if (e.isDirectory()) walk(f); else if (/\.(html|js|xml)$/.test(e.name)) { const txt = fs.readFileSync(f, 'utf8'); for (const re of STALE) { const m = txt.match(re); if (m) hits.push(`${path.relative(SITE, f)}: „${m[0]}”`); } } } };
+  for (const r of roots) if (fs.existsSync(r)) walk(r);
+  return hits;
+}
+
 async function run() {
   const outDir = path.join(RUNS, today);
   fs.rmSync(outDir, { recursive: true, force: true }); fs.mkdirSync(outDir, { recursive: true });
@@ -174,15 +185,16 @@ async function run() {
     }
   }
   await browser.close();
+  const stale = contentCheck();
   fs.writeFileSync(path.join(outDir, 'report.json'), JSON.stringify(results, null, 1));
-  const md = report(results, outDir);
+  const md = report(results, outDir, stale);
   fs.writeFileSync(path.join(outDir, 'report.md'), md);
   fs.writeFileSync(path.join(BRAIN, 'UI_AUDIT.md'), md);
   fs.writeFileSync(path.join(BRAIN, 'NEXT_RUN'), 'now\n');
   console.log('→', path.join(BRAIN, 'UI_AUDIT.md'));
 }
 
-function report(results, outDir) {
+function report(results, outDir, stale = []) {
   const dow = ['niedziela', 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek', 'sobota'][new Date().getDay()];
   const full = new Date().getDay() === 1 || !fs.existsSync(BASELINE);
   const changed = results.filter((r) => r.diff && (r.diff.changedPct >= 0.5 || Math.abs(r.diff.heightAfter - r.diff.heightBefore) > 40));
@@ -197,6 +209,7 @@ function report(results, outDir) {
   for (const r of noBase) L.push(`- ${r.key}/${r.prof} – brak bazy (nowa strona); arkusze: ${r.sheets.map((s) => path.relative(outDir, s)).join(', ')}`);
   L.push('', '## Problemy automatyczne');
   let any = false;
+  if (stale.length) { any = true; L.push('- **Nieaktualne ceny/nazwy produktów w plikach** (lista STALE w uiaudit.mjs):'); for (const h of stale) L.push(`  - ${h}`); }
   for (const r of results) {
     const items = [...(r.issues || []).map((i) => `${i.k}: ${i.d}`), ...(r.axe || []).map((a) => `axe ${a.id} (${a.impact}, ${a.n}×): ${a.ex.join(' | ')}`), ...(r.errors || [])];
     if (!items.length) continue; any = true;
@@ -222,5 +235,6 @@ function approve() {
 const cmd = process.argv[2];
 if (cmd === 'run') await run();
 else if (cmd === 'approve') approve();
+else if (cmd === 'check') { const h = contentCheck(); console.log(h.length ? h.join('\n') : 'OK: brak nieaktualnych cen/nazw'); process.exit(h.length ? 1 : 0); }
 else if (cmd === 'sheets') { const r = JSON.parse(fs.readFileSync(path.join(RUNS, today, 'report.json'), 'utf8')); for (const x of r) if (!process.argv[3] || x.key === process.argv[3]) console.log(x.key, x.prof, (x.sheets || []).join(' ')); }
-else { console.error('użycie: uiaudit.mjs run|approve|sheets [page]'); process.exit(2); }
+else { console.error('użycie: uiaudit.mjs run|approve|check|sheets [page]'); process.exit(2); }

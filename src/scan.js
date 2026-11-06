@@ -11,13 +11,13 @@ const T = {
     title: (h) => `Szybki skan: ${h}`, scanning: (h) => `Skanujemy ${h}…`,
     scanningBody: 'Uruchamiamy Lighthouse na symulowanym telefonie i sprawdzamy podstawy SEO oraz bezpieczeństwa. Zwykle trwa to 20–40 sekund. Strona odświeży się sama.',
     queuedLong: 'Trwa to dłużej niż zwykle. Jeśli za minutę nadal nic się nie pojawi, spróbuj ponownie ze strony głównej.',
-    failed: 'Nie udało się przeskanować tej strony', failedBody: (e) => `Powód: ${e}. Najczęściej strona blokuje boty, jest niedostępna albo bardzo wolna. Spróbuj ponownie za chwilę albo zamów pełny audyt – jeśli i on się nie uda, zwracamy pieniądze.`,
+    failed: 'Nie udało się przeskanować tej strony', failedBody: (e) => `Powód: ${e}. Najczęściej strona blokuje boty, jest niedostępna albo bardzo wolna. Spróbuj ponownie za chwilę albo zamów audyt pogłębiony – jeśli i on się nie uda, zwracamy pieniądze.`,
     notFound: 'Nie ma takiego skanu', notFoundBody: 'Wyniki trzymamy 7 dni. Uruchom nowy skan ze strony głównej.',
     mobileNote: 'Ocena Lighthouse, symulowany telefon z łączem 4G. Wynik laboratoryjny – u realnych użytkowników może się różnić.',
     perf: 'Wydajność', a11y: 'Dostępność', bp: 'Dobre praktyki', seo: 'SEO',
     metrics: 'Kluczowe pomiary (telefon)', metric: 'Pomiar', value: 'Wartość', rating: 'Ocena', good: 'dobrze', needs: 'do poprawy', poor: 'słabo',
     lcp: 'Największy element treści (LCP)', cls: 'Przeskoki układu (CLS)', tbt: 'Czas blokowania (TBT)', weight: 'Waga strony', requests: 'Liczba żądań',
-    issues: (n) => n ? `Znalezione problemy (${n})` : 'Podstawowe sprawdzenia: bez zastrzeżeń', noIssues: 'Szybki skan nie znalazł podstawowych problemów. Pełny audyt sprawdza znacznie więcej (poniżej).',
+    issues: (n) => n ? `Znalezione problemy (${n})` : 'Podstawowe sprawdzenia: bez zastrzeżeń', noIssues: 'Szybki skan nie znalazł podstawowych problemów. Audyt pogłębiony sprawdza znacznie więcej (poniżej).',
     okList: 'Co jest w porządku', sev: { high: 'ważne', medium: 'warto poprawić', low: 'drobiazg' },
     fullH: 'To tylko szybki skan strony głównej. Audyt pogłębiony sprawdza całą witrynę jak klient.', fullLead: 'Szybki skan patrzy na stronę główną na telefonie i sprawdza kilkanaście podstaw. Audyt pogłębiony Webskan to:',
     fullList: ['Cała witryna: do 30 podstron (SEO każdej) i do 500 linków z informacją, gdzie są zepsute', 'Ścieżki klienta w prawdziwej przeglądarce mobilnej: menu, wyszukiwarka, formularz, w sklepie produkt → koszyk → kasa, strona 404', 'Strona oczami pierwszego klienta: oferta, przycisk „zamów”, kontakt, baner cookies – każda uwaga z dowodem', 'Szybkość na telefonie i komputerze, bezpieczeństwo, SEO techniczne, dostępność WCAG z selektorem i kodem każdego błędu', 'Plan działań z gotowymi poprawkami dla developera, dopasowanymi do Twojej platformy', 'Ponowne sprawdzenie po poprawkach w ciągu 30 dni: naprawione / nadal otwarte / nowe', 'Raport PDF e-mailem do 24 h; w cenie 30 dni Webskan Monitora (dostępność co minutę, codzienne kontrole, alerty)'],
@@ -55,13 +55,13 @@ const T = {
     title: (h) => `Quick scan: ${h}`, scanning: (h) => `Scanning ${h}…`,
     scanningBody: 'Running Lighthouse on a simulated phone and checking SEO and security basics. This usually takes 20–40 seconds. The page refreshes itself.',
     queuedLong: 'This is taking longer than usual. If nothing shows up within a minute, please try again from the homepage.',
-    failed: 'We could not scan this site', failedBody: (e) => `Reason: ${e}. Usually the site blocks bots, is down, or is very slow. Try again in a moment, or order a full audit – if that fails too, we refund.`,
+    failed: 'We could not scan this site', failedBody: (e) => `Reason: ${e}. Usually the site blocks bots, is down, or is very slow. Try again in a moment, or order an in-depth audit – if that fails too, we refund.`,
     notFound: 'No such scan', notFoundBody: 'Results are kept for 7 days. Start a new scan from the homepage.',
     mobileNote: 'Lighthouse scores, simulated phone on 4G. Lab data – real users may see different numbers.',
     perf: 'Performance', a11y: 'Accessibility', bp: 'Best practices', seo: 'SEO',
     metrics: 'Key measurements (mobile)', metric: 'Metric', value: 'Value', rating: 'Rating', good: 'good', needs: 'needs work', poor: 'poor',
     lcp: 'Largest Contentful Paint (LCP)', cls: 'Layout shift (CLS)', tbt: 'Total Blocking Time (TBT)', weight: 'Page weight', requests: 'Requests',
-    issues: (n) => n ? `Issues found (${n})` : 'Basic checks: nothing to report', noIssues: 'The quick scan found no basic issues. The full audit checks far more (see below).',
+    issues: (n) => n ? `Issues found (${n})` : 'Basic checks: nothing to report', noIssues: 'The quick scan found no basic issues. The in-depth audit checks far more (see below).',
     okList: 'What looks fine', sev: { high: 'important', medium: 'worth fixing', low: 'minor' },
     fullH: 'This was a quick scan of the home page. The in-depth audit checks the whole site like a customer.', fullLead: 'The quick scan looks at the home page on a phone and checks a dozen basics. The in-depth Webskan audit is:',
     fullList: ['The whole site: up to 30 pages (SEO of each) and up to 500 links with the page where each broken one sits', 'Customer journeys in a real mobile browser: menu, search, contact form, in shops product → cart → checkout, 404 page', 'Your site through a first-time customer’s eyes: offer, call to action, contact, cookie banner – every remark with evidence', 'Speed on mobile and desktop, security, technical SEO, WCAG accessibility with selector and code for every issue', 'Action plan with ready-made fixes for your developer, tailored to your platform', 'Re-check after fixes within 30 days: fixed / still open / new', 'PDF report by e-mail within 24 h; 30 days of Webskan Monitor included (uptime every minute, daily checks, alerts)'],
@@ -170,7 +170,7 @@ export async function startScan(request, env, normalizeUrl) {
   const hour = Math.floor(Date.now() / 3600000);
   const ipHash = [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(ip)))].slice(0, 8).map((b) => b.toString(16).padStart(2, '0')).join('');
   if (!(await db.bump(`ip:${ipHash}:${hour}`, RL_IP, 3600000)) || !(await db.bump(`global:${hour}`, RL_GLOBAL, 3600000))) {
-    return layout(lang, lang === 'pl' ? 'Za dużo skanów' : 'Too many scans', `<section class="hero"><h1>${lang === 'pl' ? 'Za dużo skanów na raz' : 'Too many scans right now'}</h1><p>${lang === 'pl' ? 'Spróbuj ponownie za godzinę. Pełny audyt możesz zamówić bez limitu.' : 'Please try again in an hour. Full audits are not limited.'} <a href="${t.home}">${lang === 'pl' ? 'Wróć' : 'Back'}</a>.</p></section>`);
+    return layout(lang, lang === 'pl' ? 'Za dużo skanów' : 'Too many scans', `<section class="hero"><h1>${lang === 'pl' ? 'Za dużo skanów na raz' : 'Too many scans right now'}</h1><p>${lang === 'pl' ? 'Spróbuj ponownie za godzinę. Audyt pogłębiony możesz zamówić bez limitu.' : 'Please try again in an hour. In-depth audits are not limited.'} <a href="${t.home}">${lang === 'pl' ? 'Wróć' : 'Back'}</a>.</p></section>`);
   }
 
   const id = newId();
