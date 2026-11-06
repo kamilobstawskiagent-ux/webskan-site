@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Co sprawdzić po wdrożeniu nowej strony: checklista 24 punktów – Webskan</title>
+<meta name="description" content="Nowa strona właśnie wystartowała? Lista 24 rzeczy, które najczęściej psują się przy wdrożeniu: noindex ze stagingu, brak przekierowań, formularz, który nie wysyła, mixed content, analityka. Każdy punkt z instrukcją, jak sprawdzić w minutę.">
+<link rel="canonical" href="https://webskan.com/blog/co-sprawdzic-po-wdrozeniu-nowej-strony/">
+<link rel="alternate" hreflang="pl" href="https://webskan.com/blog/co-sprawdzic-po-wdrozeniu-nowej-strony/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/website-launch-checklist/">
+<meta property="og:title" content="Co sprawdzić po wdrożeniu nowej strony: checklista 24 punktów">
+<meta property="og:description" content="Rzeczy, które najczęściej psują się przy wdrożeniu nowej strony, i jak sprawdzić każdą z nich w minutę.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/blog/co-sprawdzic-po-wdrozeniu-nowej-strony/">
+<meta property="og:image" content="https://webskan.com/og-pl.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Co sprawdzić po wdrożeniu nowej strony: checklista 24 punktów","description":"Rzeczy, które najczęściej psują się przy wdrożeniu nowej strony, i jak sprawdzić każdą z nich w minutę.","datePublished":"2026-11-06","dateModified":"2026-11-06","inLanguage":"pl","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"mainEntityOfPage":"https://webskan.com/blog/co-sprawdzic-po-wdrozeniu-nowej-strony/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cena</a><a href="/en/blog/website-launch-checklist/">EN</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 6 listopada 2026 · 10 min czytania</p>
+<h1>Co sprawdzić po wdrożeniu nowej strony: checklista 24 punktów</h1>
+<p class="lead">Nowa strona wygląda świetnie, agencja wystawiła fakturę, wszyscy są zadowoleni. A potem okazuje się, że od trzech tygodni Google jej nie widzi, formularz kontaktowy wysyła maile w próżnię, a stare adresy z wizytówek prowadzą na „404”. To nie są rzadkie wpadki – to standardowy zestaw błędów wdrożeniowych, które widzimy niemal w każdym audycie świeżo uruchomionej strony. Poniżej lista rzeczy do sprawdzenia w pierwszym tygodniu, z instrukcją, jak każdą z nich zweryfikować samodzielnie w minutę.</p>
+
+<h2>Dzień pierwszy: czy strona w ogóle jest widoczna</h2>
+<ol>
+<li><strong>Czy ze stagingu nie został „noindex”.</strong> Wersje robocze blokuje się przed Google znacznikiem <code>&lt;meta name="robots" content="noindex"&gt;</code> albo wpisem w <code>robots.txt</code>; przy przenoszeniu na produkcję bardzo często zostaje. <em>Jak sprawdzić:</em> otwórz <code>twojadomena.pl/robots.txt</code> – nie powinno tam być <code>Disallow: /</code>; w kodzie strony głównej (Ctrl+U) wyszukaj „noindex”. W WordPressie: Ustawienia → Czytanie → odhaczone „Proś wyszukiwarki o nieindeksowanie”.</li>
+<li><strong>Przekierowania ze starych adresów.</strong> Jeśli strona istniała wcześniej, każdy stary adres podstrony (oferta, kontakt, wpisy na blogu) powinien przekierowywać kodem 301 na nowy odpowiednik. Bez tego tracisz pozycje w Google i ruch z linków, które przez lata trafiły do internetu i na wizytówki. <em>Jak sprawdzić:</em> weź 10 starych adresów z Search Console lub ze starej mapy strony i wklej je w przeglądarkę. Każdy ma wylądować na sensownej nowej stronie, nie na 404 i nie na stronie głównej.</li>
+<li><strong>Jedna wersja adresu.</strong> <code>http://</code>, <code>https://</code>, z <code>www</code> i bez – trzy z czterech wersji muszą przekierowywać na czwartą. Inaczej Google widzi duplikaty, a użytkownicy różne ciasteczka. <em>Jak sprawdzić:</em> wpisz wszystkie cztery warianty i zobacz, czy adres w pasku zawsze kończy tak samo.</li>
+<li><strong>Mapa strony i Search Console.</strong> Nowa strona ma zwykle nową mapę (<code>/sitemap.xml</code>); wyślij ją w Google Search Console i poproś o zindeksowanie strony głównej. Jeśli zmieniła się domena, użyj narzędzia „Zmiana adresu”. <em>Jak sprawdzić:</em> Search Console → Mapy witryn → status „Powodzenie”; po kilku dniach zakładka „Strony” pokazuje, ile adresów trafiło do indeksu.</li>
+<li><strong>Adresy kanoniczne.</strong> Każda podstrona powinna wskazywać samą siebie znacznikiem <code>&lt;link rel="canonical"&gt;</code> – częsty błąd po migracji to canonical wskazujący nadal na staging albo starą domenę. <em>Jak sprawdzić:</em> w kodzie kilku podstron wyszukaj „canonical” i porównaj adres z paskiem przeglądarki.</li>
+<li><strong>Własna strona 404.</strong> Wpisz nieistniejący adres. Strona powinna zwracać kod 404 (nie 200 z napisem „nie znaleziono” – Google indeksuje takie „miękkie 404” jako śmieci) i prowadzić użytkownika dalej: menu, wyszukiwarka, kontakt.</li>
+</ol>
+
+<h2>HTTPS i bezpieczeństwo podstawowe</h2>
+<ol start="7">
+<li><strong>Certyfikat i przekierowanie na https.</strong> Kłódka na stronie głównej to za mało; sprawdź, czy wpisanie <code>http://</code> przenosi na <code>https://</code> i czy certyfikat obejmuje też wersję z <code>www</code>. <em>Jak sprawdzić:</em> wpisz adres z <code>http://</code> ręcznie; kliknij kłódkę i zobacz datę ważności certyfikatu – jeśli nie odnawia się automatycznie, wpisz przypomnienie do kalendarza.</li>
+<li><strong>Mixed content.</strong> Obrazki, skrypty lub czcionki ładowane po <code>http://</code> na stronie https – klasyka po migracji ze starej strony, bo adresy siedzą w treści. Przeglądarka blokuje je albo usuwa kłódkę. <em>Jak sprawdzić:</em> otwórz konsolę przeglądarki (F12 → Console) na kilku podstronach i poszukaj ostrzeżeń „Mixed Content”.</li>
+<li><strong>Nagłówki bezpieczeństwa.</strong> HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy – sześć linijek konfiguracji, których brak wytyka każdy skaner. Co robią i jak je włączyć: <a href="/blog/naglowki-bezpieczenstwa-http/">osobny tekst</a>.</li>
+<li><strong>Panel administracyjny.</strong> Zmień domyślny login „admin”, włącz dwuskładnikowe logowanie, usuń konta testowe założone przez wykonawcę (albo zmień im hasła), sprawdź, kto ma uprawnienia administratora. Włącz automatyczne aktualizacje CMS i wtyczek albo ustal, kto je robi.</li>
+<li><strong>Kopia zapasowa.</strong> Zapytaj hosting lub agencję: jak często, gdzie i czy ktoś kiedykolwiek próbował ją odtworzyć. Kopia, której nikt nie testował, to życzenie, nie kopia.</li>
+</ol>
+
+<h2>Czy to działa: formularze, analityka, zgody</h2>
+<ol start="12">
+<li><strong>Formularz kontaktowy – wyślij testowe zgłoszenie.</strong> Z telefonu, nie z komputera agencji. Sprawdź, czy mail doszedł, do kogo, czy nie wpadł do spamu i czy odpowiedź „Dziękujemy” pojawia się na stronie. Najczęstsze awarie: hosting blokuje wysyłkę PHP, adres docelowy to skrzynka programisty, brak konfiguracji SPF/DKIM dla domeny, przez co wszystko ląduje w spamie.</li>
+<li><strong>SPF, DKIM, DMARC dla domeny.</strong> Jeśli strona wysyła maile (formularz, sklep, newsletter), domena potrzebuje tych trzech rekordów DNS – inaczej Gmail i Outlook odrzucają lub oznaczają jako spam. <em>Jak sprawdzić:</em> wyślij mail z formularza na konto Gmail → „Pokaż oryginał” → trzy linijki PASS.</li>
+<li><strong>Analityka.</strong> Google Analytics / Tag Manager / piksel reklamowy: czy kod jest na <em>wszystkich</em> podstronach, czy rejestruje wizyty w czasie rzeczywistym, czy nie został identyfikator ze stagingu lub poprzedniej strony. <em>Jak sprawdzić:</em> wejdź na stronę z telefonu i zobacz raport „Czas rzeczywisty”.</li>
+<li><strong>Zgody na cookies.</strong> Baner musi faktycznie blokować skrypty analityczne i reklamowe do czasu zgody, dawać równie łatwe „Odrzuć” jak „Akceptuj” i działać klawiaturą. Baner-atrapa, pod którym analityka startuje od razu, to ryzyko kary z UODO i skarg klientów. <em>Jak sprawdzić:</em> tryb incognito, F12 → Network, odśwież: przed kliknięciem zgody nie powinno być żądań do Google Analytics ani Facebooka.</li>
+<li><strong>Cele konwersji.</strong> Jeśli płacisz za reklamy, wyślij testowe zgłoszenie i sprawdź, czy konwersja pojawiła się w Google Ads / Analytics. Bez tego algorytm reklamowy optymalizuje w ciemno.</li>
+</ol>
+
+<h2>Telefon, szybkość, dostępność</h2>
+<ol start="17">
+<li><strong>Wynik PageSpeed na telefonie.</strong> Nowa strona z nowego szablonu bywa wolniejsza od starej, bo ma animacje, ciężkie czcionki i nieskompresowane zdjęcia z sesji. <em>Jak sprawdzić:</em> <a href="https://pagespeed.web.dev/" rel="noopener">pagespeed.web.dev</a>, zakładka „Telefon”; LCP poniżej 2,5 s to cel. Dlaczego strony są wolne na telefonie i co z tym zrobić: <a href="/blog/dlaczego-strona-jest-wolna-na-telefonie/">tutaj</a>.</li>
+<li><strong>Obrazy.</strong> Zdjęcie 4000×3000 px wyświetlane w okienku 400 px to najczęstsza pojedyncza przyczyna wolnej strony. Sprawdź wagę strony głównej (PageSpeed pokaże „Prawidłowo dobieraj rozmiar obrazów”) i czy CMS generuje wersje WebP/AVIF.</li>
+<li><strong>Klikalność na telefonie.</strong> Przejdź przez stronę kciukiem: menu, formularz, przyciski telefonu i mapy. Linki za blisko siebie i tekst wymagający powiększania to kryteria, za które Google obniża ocenę mobilną.</li>
+<li><strong>Dostępność podstawowa.</strong> Kontrast tekstu, opisy alternatywne zdjęć, etykiety pól formularza, możliwość obsługi klawiaturą. Dla sklepów i serwisów rezerwacyjnych to od 2025 r. także wymóg prawny – <a href="/blog/dostepnosc-strony-a-prawo-eaa/">kogo dotyczy i od czego zacząć</a>. <em>Jak sprawdzić:</em> wynik „Ułatwienia dostępu” w PageSpeed / Lighthouse i lista błędów pod nim.</li>
+</ol>
+
+<h2>Treść i formalności</h2>
+<ol start="21">
+<li><strong>Dane firmy.</strong> Pełna nazwa, adres, NIP, e-mail i telefon w stopce lub na stronie kontaktu – to wymóg prawny dla firm (ustawa o świadczeniu usług drogą elektroniczną), a dla klientów sygnał, że firma istnieje. Sprawdź też, czy numer telefonu jest klikalny (<code>tel:</code>) i czy mapa prowadzi pod właściwy adres.</li>
+<li><strong>Regulamin i polityka prywatności.</strong> Aktualne, z nową nazwą domeny, z opisem faktycznie używanych narzędzi (analityka, formularze, newsletter). Kopiuj-wklej ze starej strony zwykle wymienia narzędzia, których już nie ma, i pomija te, które są.</li>
+<li><strong>Podgląd linków i favicon.</strong> Wklej adres strony w wiadomości na Messengerze, LinkedInie lub w Slacku – powinien pojawić się tytuł, opis i obrazek (znaczniki Open Graph). Favicon powinien być widoczny w zakładce i na ekranie telefonu po dodaniu skrótu. Drobiazg, ale pierwsze wrażenie w udostępnianym linku robi właśnie to.</li>
+<li><strong>Teksty zastępcze i literówki.</strong> Wyszukaj w całej stronie „Lorem ipsum”, „tytuł wpisu”, „tutaj wstaw”, „example.com” i numer telefonu z szablonu. Sprawdź tytuły zakładek (<code>&lt;title&gt;</code>) na kilku podstronach – często wszystkie mają ten sam tytuł albo „Strona główna – Nowa witryna”.</li>
+</ol>
+
+<h2>Po tygodniu</h2>
+<p>Wróć do Search Console: zakładka „Strony” pokaże, ile adresów Google zindeksował i dlaczego pominął resztę (najczęściej: przekierowania, duplikaty, „wykryta – obecnie niezindeksowana”). Zakładka „Podstawowe wskaźniki internetowe” zacznie pokazywać dane od prawdziwych użytkowników, gdy ruch jest wystarczający. Porównaj liczbę zgłoszeń z formularza i telefonów z okresem sprzed wdrożenia – spadek po nowej stronie to zwykle nie „gorszy sezon”, tylko któryś z punktów powyżej.</p>
+
+<h2>Kto za to odpowiada</h2>
+<p>Większość tych punktów leży formalnie po stronie wykonawcy, ale w praktyce nikt ich nie sprawdza, jeśli zleceniodawca nie poprosi. Dobra praktyka: wpisać tę listę do umowy jako warunki odbioru i przejść ją wspólnie przed ostatnią płatnością. Agencja, która sama o to prosi, to dobry znak.</p>
+
+<section class="fullbox">
+<h2>Nie masz czasu przechodzić 24 punktów ręcznie?</h2>
+<p>Pełny audyt Webskan sprawdza automatycznie dużą część tej listy: przekierowanie na https, certyfikat, mixed content, nagłówki bezpieczeństwa i wycieki o serwerze, mapę strony, robots.txt, canonical, zepsute linki (do 150), wydajność na telefonie i komputerze, dostępność (axe-core), Open Graph i SEO techniczne. Dostajesz raport PDF z listą poprawek uporządkowaną według ważności – gotową do wysłania wykonawcy. 99 zł, zwykle w ciągu godziny.</p>
+<p><a class="btn" href="/#zamow">Zamów pełny audyt – 99 zł</a></p>
+<p class="note">Szybki obraz za darmo: <a href="/">darmowy szybki skan</a> w 30 sekund sprawdzi przekierowanie na https, certyfikat, nagłówki, podstawy SEO i wydajność strony głównej na telefonie.</p>
+</section>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a></footer>
+</div>
+</body>
+</html>

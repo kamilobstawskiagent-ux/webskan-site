@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Website launch checklist: 24 things to check after your new site goes live – Webskan</title>
+<meta name="description" content="New website just launched? The 24 things that most often break at launch: a leftover noindex from staging, missing redirects, a contact form that sends nowhere, mixed content, analytics. Each with a one-minute check.">
+<link rel="canonical" href="https://webskan.com/en/blog/website-launch-checklist/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/website-launch-checklist/">
+<link rel="alternate" hreflang="pl" href="https://webskan.com/blog/co-sprawdzic-po-wdrozeniu-nowej-strony/">
+<meta property="og:title" content="Website launch checklist: 24 things to check after going live">
+<meta property="og:description" content="The things that most often break when a new website launches, and how to check each one in a minute.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/en/blog/website-launch-checklist/">
+<meta property="og:image" content="https://webskan.com/og-en.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Website launch checklist: 24 things to check after your new site goes live","description":"The things that most often break when a new website launches, and how to check each one in a minute.","datePublished":"2026-11-06","dateModified":"2026-11-06","inLanguage":"en","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/en/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/en/"},"mainEntityOfPage":"https://webskan.com/en/blog/website-launch-checklist/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a href="/en/blog/">Blog</a><a href="/en/#price">Pricing</a><a href="/blog/co-sprawdzic-po-wdrozeniu-nowej-strony/">PL</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 6 November 2026 · 10 min read</p>
+<h1>Website launch checklist: 24 things to check after your new site goes live</h1>
+<p class="lead">The new site looks great, the agency has sent its invoice, everyone is happy. Then it turns out Google has not seen the site for three weeks, the contact form sends e-mails into the void, and the old URLs printed on your business cards lead to a 404. These are not rare accidents. They are the standard set of launch mistakes we see in almost every audit of a freshly launched site. Below is a list of things to check in the first week, each with a way to verify it yourself in about a minute.</p>
+
+<h2>Day one: can anyone find the site at all</h2>
+<ol>
+<li><strong>No leftover “noindex” from staging.</strong> Draft versions are hidden from Google with <code>&lt;meta name="robots" content="noindex"&gt;</code> or a rule in <code>robots.txt</code>, and this very often survives the move to production. <em>How to check:</em> open <code>yourdomain.com/robots.txt</code>; there should be no <code>Disallow: /</code>. View the home page source (Ctrl+U) and search for “noindex”. In WordPress: Settings → Reading → “Discourage search engines” must be unticked.</li>
+<li><strong>Redirects from old URLs.</strong> If a site existed before, every old page URL (services, contact, blog posts) should 301-redirect to its new equivalent. Without this you lose rankings and the traffic from links that have accumulated over the years. <em>How to check:</em> take 10 old URLs from Search Console or the old sitemap and paste them into the browser. Each should land on a sensible new page, not a 404 and not the home page.</li>
+<li><strong>One canonical address.</strong> <code>http://</code>, <code>https://</code>, with <code>www</code> and without: three of the four must redirect to the fourth. Otherwise Google sees duplicates and users get different cookies. <em>How to check:</em> type all four variants and see whether the address bar always ends up the same.</li>
+<li><strong>Sitemap and Search Console.</strong> A new site usually has a new sitemap (<code>/sitemap.xml</code>); submit it in Google Search Console and request indexing of the home page. If the domain changed, use the “Change of address” tool. <em>How to check:</em> Search Console → Sitemaps → status “Success”; after a few days the “Pages” report shows how many URLs made it into the index.</li>
+<li><strong>Canonical tags.</strong> Each page should point to itself with <code>&lt;link rel="canonical"&gt;</code>. A common post-migration bug is a canonical still pointing at the staging host or the old domain. <em>How to check:</em> search the source of a few pages for “canonical” and compare the URL with the address bar.</li>
+<li><strong>A proper 404 page.</strong> Type a non-existent URL. The page should return status 404 (not 200 with a “not found” message, which Google indexes as junk, a “soft 404”) and help the visitor onwards: menu, search, contact.</li>
+</ol>
+
+<h2>HTTPS and basic security</h2>
+<ol start="7">
+<li><strong>Certificate and https redirect.</strong> A padlock on the home page is not enough; check that typing <code>http://</code> takes you to <code>https://</code> and that the certificate also covers the <code>www</code> version. <em>How to check:</em> type the address with <code>http://</code> by hand; click the padlock and note the certificate expiry. If it does not renew automatically, put a reminder in your calendar.</li>
+<li><strong>Mixed content.</strong> Images, scripts or fonts loaded over <code>http://</code> on an https page: a classic after migrating an old site, because the URLs sit inside the content. Browsers block them or drop the padlock. <em>How to check:</em> open the browser console (F12 → Console) on a few pages and look for “Mixed Content” warnings.</li>
+<li><strong>Security headers.</strong> HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy: six lines of configuration that every scanner flags when missing. What they do and how to enable them: <a href="/en/blog/http-security-headers-explained/">separate article</a>.</li>
+<li><strong>Admin panel.</strong> Change the default “admin” login, enable two-factor authentication, remove test accounts created by the developers (or change their passwords), check who has administrator rights. Enable automatic updates for the CMS and plugins, or agree who does them.</li>
+<li><strong>Backups.</strong> Ask the host or agency: how often, where, and has anyone ever tried to restore one. A backup nobody has tested is a wish, not a backup.</li>
+</ol>
+
+<h2>Does it work: forms, analytics, consent</h2>
+<ol start="12">
+<li><strong>Contact form: send a test enquiry.</strong> From your phone, not from the agency’s computer. Check that the e-mail arrived, to whom, that it did not land in spam, and that the “Thank you” message appears on the site. The usual failures: the host blocks PHP mail, the destination address is the developer’s mailbox, or the domain lacks SPF/DKIM so everything goes to spam.</li>
+<li><strong>SPF, DKIM, DMARC for the domain.</strong> If the site sends e-mail (forms, shop, newsletter), the domain needs these three DNS records, otherwise Gmail and Outlook reject or flag the messages. <em>How to check:</em> send a form e-mail to a Gmail account → “Show original” → three lines saying PASS.</li>
+<li><strong>Analytics.</strong> Google Analytics / Tag Manager / ad pixel: is the code on <em>every</em> page, does it register visits in real time, and is the ID not a leftover from staging or the previous site? <em>How to check:</em> open the site on your phone and watch the “Realtime” report.</li>
+<li><strong>Cookie consent.</strong> The banner must actually block analytics and advertising scripts until consent, offer “Reject” as easily as “Accept”, and work with the keyboard. A fake banner with analytics firing underneath is a regulatory risk and a source of customer complaints. <em>How to check:</em> incognito window, F12 → Network, reload: before you click consent there should be no requests to Google Analytics or Facebook.</li>
+<li><strong>Conversion goals.</strong> If you pay for ads, send a test enquiry and check that the conversion appears in Google Ads / Analytics. Without it the ad algorithm optimises blind.</li>
+</ol>
+
+<h2>Phone, speed, accessibility</h2>
+<ol start="17">
+<li><strong>PageSpeed score on mobile.</strong> A new site built on a new template is often slower than the old one: animations, heavy fonts, uncompressed photos from the shoot. <em>How to check:</em> <a href="https://pagespeed.web.dev/" rel="noopener">pagespeed.web.dev</a>, “Mobile” tab; LCP under 2.5 s is the target. Why sites are slow on mobile and what to do: <a href="/en/blog/why-your-website-is-slow-on-mobile/">here</a>.</li>
+<li><strong>Images.</strong> A 4000×3000 px photo displayed in a 400 px box is the single most common cause of a slow page. Check the home page weight (PageSpeed will say “Properly size images”) and whether the CMS generates WebP/AVIF versions.</li>
+<li><strong>Tappability on a phone.</strong> Go through the site with your thumb: menu, form, phone and map buttons. Links too close together and text that needs zooming are criteria Google uses to lower the mobile rating.</li>
+<li><strong>Basic accessibility.</strong> Text contrast, alt text on images, labels on form fields, keyboard operability. For shops and booking sites this has also been a legal requirement in the EU since 2025: <a href="/en/blog/european-accessibility-act-websites/">who is covered and where to start</a>. <em>How to check:</em> the “Accessibility” score in PageSpeed / Lighthouse and the list of failures under it.</li>
+</ol>
+
+<h2>Content and formalities</h2>
+<ol start="21">
+<li><strong>Company details.</strong> Full legal name, address, registration or VAT number, e-mail and phone in the footer or on the contact page: a legal requirement for businesses in most EU countries, and for customers a sign that the company exists. Check that the phone number is clickable (<code>tel:</code>) and that the map leads to the right address.</li>
+<li><strong>Terms and privacy policy.</strong> Current, with the new domain name, describing the tools actually in use (analytics, forms, newsletter). Copy-paste from the old site usually lists tools that are gone and omits the ones that are there.</li>
+<li><strong>Link previews and favicon.</strong> Paste the site address into a message on WhatsApp, LinkedIn or Slack: a title, description and image should appear (Open Graph tags). The favicon should show in the tab and on a phone’s home screen after “Add to home screen”. Small things, but they make the first impression in every shared link.</li>
+<li><strong>Placeholder text and typos.</strong> Search the whole site for “Lorem ipsum”, “Post title”, “Insert here”, “example.com” and the template’s phone number. Check the tab titles (<code>&lt;title&gt;</code>) on several pages; often they are all identical or read “Home – New site”.</li>
+</ol>
+
+<h2>After a week</h2>
+<p>Go back to Search Console: the “Pages” report shows how many URLs Google has indexed and why it skipped the rest (most often: redirects, duplicates, “Discovered – currently not indexed”). The “Core Web Vitals” report starts showing data from real users once there is enough traffic. Compare the number of form enquiries and calls with the period before the launch. A drop after a new site is usually not “a slow season”, it is one of the points above.</p>
+
+<h2>Whose job is this</h2>
+<p>Most of these points are formally the contractor’s responsibility, but in practice nobody checks them unless the client asks. Good practice: put this list into the contract as acceptance criteria and walk through it together before the final payment. An agency that asks for this itself is a good sign.</p>
+
+<section class="fullbox">
+<h2>No time to go through 24 points by hand?</h2>
+<p>The full Webskan audit checks a large part of this list automatically: https redirect, certificate, mixed content, security headers and server information leaks, sitemap, robots.txt, canonical tags, broken links (up to 150), mobile and desktop performance, accessibility (axe-core), Open Graph and technical SEO. You get a PDF report with fixes ordered by priority, ready to forward to your developer. $29, usually within the hour.</p>
+<p><a class="btn" href="/en/#order">Order the full audit – $29</a></p>
+<p class="note">A quick picture for free: the <a href="/en/">free quick scan</a> checks the https redirect, certificate, headers, SEO basics and home-page mobile performance in 30 seconds.</p>
+</section>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a></footer>
+</div>
+</body>
+</html>
