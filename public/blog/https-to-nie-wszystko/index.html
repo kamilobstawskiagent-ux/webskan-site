@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HTTPS to nie wszystko: 7 rzeczy, które psują się mimo kłódki – Webskan</title>
+<meta name="description" content="Kłódka w przeglądarce nie znaczy, że strona jest poprawnie zabezpieczona. Wygasający certyfikat, brak przekierowania z http, dwie wersje www, mixed content, łańcuchy przekierowań – jak je rozpoznać i naprawić.">
+<link rel="canonical" href="https://webskan.com/blog/https-to-nie-wszystko/">
+<link rel="alternate" hreflang="pl" href="https://webskan.com/blog/https-to-nie-wszystko/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/https-is-not-enough/">
+<meta property="og:title" content="HTTPS to nie wszystko: 7 rzeczy, które psują się mimo kłódki">
+<meta property="og:description" content="Certyfikat, przekierowania, www, mixed content, HSTS – co sprawdzić, żeby kłódka była czymś więcej niż ikonką.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/blog/https-to-nie-wszystko/">
+<meta property="og:image" content="https://webskan.com/og-pl.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"HTTPS to nie wszystko: 7 rzeczy, które psują się mimo kłódki","description":"Kłódka w przeglądarce nie znaczy, że strona jest poprawnie zabezpieczona. Siedem typowych problemów z certyfikatem i przekierowaniami, jak je rozpoznać i naprawić.","datePublished":"2026-11-06","dateModified":"2026-11-06","inLanguage":"pl","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"mainEntityOfPage":"https://webskan.com/blog/https-to-nie-wszystko/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cena</a><a href="/en/blog/https-is-not-enough/">EN</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 6 listopada 2026 · 8 min czytania</p>
+<h1>HTTPS to nie wszystko: 7 rzeczy, które psują się mimo kłódki</h1>
+<p class="lead">„Mamy SSL, jest kłódka, temat zamknięty”. Tak brzmi najczęstsza odpowiedź właściciela firmowej strony na pytanie o bezpieczeństwo. Kłódka mówi tylko tyle, że <em>ta jedna</em> strona została załadowana szyfrowanym połączeniem z certyfikatem, któremu przeglądarka ufa. Nie mówi nic o tym, czy wersja http:// nadal wisi w sieci, czy certyfikat wygasa w przyszłym tygodniu, czy klient wpisujący adres bez „www” trafi tam, gdzie trzeba. Oto siedem rzeczy, które regularnie znajdujemy na stronach „z kłódką”.</p>
+
+<h2>Co właściwie oznacza kłódka</h2>
+<p>Certyfikat TLS (potocznie „SSL”) robi dwie rzeczy: szyfruje dane między przeglądarką a serwerem i potwierdza, że serwer faktycznie odpowiada za domenę w pasku adresu. Tyle. Nie sprawdza, czy strona jest wolna od złośliwego kodu, czy formularz wysyła dane we właściwe miejsce, ani czy pozostałe adresy Twojej witryny też są chronione. Dlatego poniższe problemy są tak częste: każdy z nich współistnieje z poprawnie wyświetlaną kłódką.</p>
+
+<h2>Siedem problemów, które kłódka ukrywa</h2>
+<table class="vitals headers">
+<thead><tr><th>Problem</th><th>Jak go rozpoznać</th><th>Co się dzieje</th><th>Naprawa</th></tr></thead>
+<tbody>
+<tr><td><strong>1. Certyfikat zaraz wygaśnie</strong></td><td data-l="Jak rozpoznać">Kliknij kłódkę → „Certyfikat” → data „Ważny do”. Mniej niż 14 dni = alarm</td><td data-l="Co się dzieje">Pewnego ranka każdy klient widzi czerwoną stronę „Połączenie nie jest prywatne”. Sklep nie sprzedaje, formularz nie działa</td><td data-l="Naprawa">Automatyczne odnawianie (Let's Encrypt, panel hostingu, Cloudflare) + przypomnienie w kalendarzu 30 dni przed</td></tr>
+<tr><td><strong>2. Strona działa też po http://</strong></td><td data-l="Jak rozpoznać">Wpisz ręcznie <code>http://twojadomena.pl</code>. Jeśli nie przeskoczy na https://, masz dwie wersje</td><td data-l="Co się dzieje">Każdy, kto kliknie stary link albo wpisze adres z pamięci, ogląda nieszyfrowaną kopię. Google widzi duplikat</td><td data-l="Naprawa">Przekierowanie 301 z http na https dla całej domeny (snippety niżej)</td></tr>
+<tr><td><strong>3. Brak HSTS</strong></td><td data-l="Jak rozpoznać">Darmowy skan albo narzędzia deweloperskie → nagłówki odpowiedzi → brak <code>Strict-Transport-Security</code></td><td data-l="Co się dzieje">Nawet z przekierowaniem pierwsze wejście idzie po http – w otwartym Wi-Fi to okno na podmianę treści</td><td data-l="Naprawa">Jeden nagłówek, gdy cała witryna jest już po HTTPS. Opis w <a href="/blog/naglowki-bezpieczenstwa-http/">artykule o nagłówkach</a></td></tr>
+<tr><td><strong>4. Certyfikat nie obejmuje „www” (lub odwrotnie)</strong></td><td data-l="Jak rozpoznać">Wejdź na obie wersje: <code>https://domena.pl</code> i <code>https://www.domena.pl</code>. Jedna z nich straszy ostrzeżeniem</td><td data-l="Co się dzieje">Część klientów (ta, która wpisuje „www”) widzi czerwoną stronę. Ty nie, bo wchodzisz z zakładki</td><td data-l="Naprawa">Certyfikat z oboma nazwami (SAN) – Let's Encrypt i Cloudflare robią to domyślnie, trzeba tylko poprosić</td></tr>
+<tr><td><strong>5. Dwie równoprawne wersje: www i bez www</strong></td><td data-l="Jak rozpoznać">Obie wersje otwierają się bez przekierowania i mają ten sam adres w pasku</td><td data-l="Co się dzieje">Google traktuje je jak dwie strony z tą samą treścią; linki i statystyki rozjeżdżają się na pół</td><td data-l="Naprawa">Wybierz jedną wersję, drugą przekieruj 301. Ustaw tę samą w <code>canonical</code> i w Search Console</td></tr>
+<tr><td><strong>6. Mixed content</strong></td><td data-l="Jak rozpoznać">Kłódka z ostrzeżeniem lub jej brak, obrazki się nie ładują, w konsoli „Mixed Content: … was loaded over HTTP”</td><td data-l="Co się dzieje">Przeglądarka blokuje skrypty i style ładowane po http, obrazy pokazuje z ostrzeżeniem. Typowe po migracji WordPressa</td><td data-l="Naprawa">Podmiana <code>http://</code> na <code>https://</code> w treści i bazie (wtyczka Better Search Replace lub <code>wp search-replace</code>)</td></tr>
+<tr><td><strong>7. Łańcuch przekierowań</strong></td><td data-l="Jak rozpoznać"><code>http://www.domena.pl</code> → <code>https://www.domena.pl</code> → <code>https://domena.pl</code> → <code>https://domena.pl/pl/</code></td><td data-l="Co się dzieje">Każdy skok to kolejne połączenie; na telefonie w słabym zasięgu to łatwo pół sekundy, zanim cokolwiek się pojawi</td><td data-l="Naprawa">Z każdego starego adresu jedno przekierowanie prosto do ostatecznego</td></tr>
+</tbody>
+</table>
+
+<h2>1. Certyfikat, który zaraz wygaśnie</h2>
+<p>To najbardziej „widowiskowa” awaria z całej listy, bo nie dzieje się stopniowo. Do północy strona działa, po północy każdy klient widzi pełnoekranowe ostrzeżenie, które większość ludzi zamyka bez czytania. Przyczyny są prozaiczne: ktoś opłacił certyfikat roczny i zmienił pracę, automat Let's Encrypt przestał działać po zmianie DNS albo przeniesieniu hostingu, karta do odnowienia wygasła.</p>
+<p>Warto wiedzieć, że czasy certyfikatów na rok czy dwa się kończą. Zgodnie z decyzją CA/Browser Forum z 2025 r. maksymalny okres ważności publicznych certyfikatów jest skracany etapami: do 200 dni od marca 2026 r., docelowo do 47 dni w 2029 r. To oznacza, że ręczne odnawianie przestaje być realistyczne – automat (ACME) staje się jedynym rozsądnym rozwiązaniem, a jego awaria będzie się ujawniać częściej. Jeśli hosting nie oferuje automatycznego odnawiania, to argument, żeby zmienić hosting albo postawić przed stroną Cloudflare.</p>
+
+<h2>2 i 3. Przekierowanie z http i HSTS</h2>
+<p>Instalacja certyfikatu nie wyłącza wersji nieszyfrowanej. Serwer nadal odpowiada na porcie 80, a przeglądarka, gdy użytkownik wpisze sam adres bez „https://”, próbuje najpierw http. Jeśli nic jej nie przekieruje, zostaje na nieszyfrowanej stronie. Co gorsza, przeglądarka pamięta to na przyszłość i podpowiada ten adres w pasku.</p>
+<p>Przekierowanie to jedna reguła. Trzy najczęstsze środowiska:</p>
+<pre><code># Apache / większość hostingów współdzielonych (.htaccess)
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# nginx – osobny blok dla portu 80
+server {
+  listen 80;
+  server_name twojadomena.pl www.twojadomena.pl;
+  return 301 https://twojadomena.pl$request_uri;
+}
+
+# Cloudflare: SSL/TLS → Edge Certificates → „Always Use HTTPS”: On</code></pre>
+<p>HSTS to krok dalej: nagłówek, po którym przeglądarka już nigdy nie spróbuje http dla tej domeny, nawet za pierwszym razem po kliknięciu starego linku. Włącz go dopiero, gdy cała witryna (łącznie z subdomenami, jeśli używasz <code>includeSubDomains</code>) działa po HTTPS – wycofanie HSTS trwa tyle, ile ustawisz w <code>max-age</code>.</p>
+
+<h2>4 i 5. Dwie wersje domeny</h2>
+<p>Domena z „www” i bez niej to dla przeglądarki i Google dwa różne adresy. Powinny prowadzić w jedno miejsce, ale to trzeba ustawić, i to na dwóch poziomach. Po pierwsze certyfikat musi obejmować obie nazwy; certyfikat wystawiony tylko na <code>domena.pl</code> daje czerwone ostrzeżenie na <code>www.domena.pl</code>, czego właściciel zwykle nie widzi, bo sam wchodzi z zakładki. Po drugie jedna wersja powinna przekierowywać na drugą kodem 301, a wybrana wersja powinna być ta sama w tagu <code>canonical</code>, w mapie witryny i w Search Console. Która lepsza? Nie ma znaczenia. Ma znaczenie konsekwencja.</p>
+<p>Sprawdzisz to w minutę: wpisz w przeglądarce wszystkie cztery kombinacje (http/https × www/bez www) i zobacz, czy każda kończy w tym samym miejscu, bez ostrzeżeń.</p>
+
+<h2>6. Mixed content, czyli szyfrowana strona z nieszyfrowanymi dodatkami</h2>
+<p>Strona ładuje się po HTTPS, ale w jej kodzie zostały adresy zaczynające się od <code>http://</code>: zdjęcia wklejone lata temu, czcionka z zewnętrznego serwera, skrypt czatu. Przeglądarka reaguje różnie zależnie od typu: obrazy pokaże, ale odbierze kłódkę; skrypty, style i ramki zablokuje w ogóle. Efekt: „po migracji na SSL zniknął suwak ze zdjęciami” albo „przestał działać formularz”.</p>
+<p>W WordPressie przyczyną jest prawie zawsze baza danych, w której adresy obrazów zostały zapisane z http. Naprawa to podmiana w całej bazie, ale koniecznie narzędziem, które rozumie zserializowane dane (wtyczka Better Search Replace, polecenie <code>wp search-replace 'http://domena.pl' 'https://domena.pl'</code>), nie ręczny eksport SQL i „zamień wszystko” w edytorze. Jeśli zewnętrzny zasób nie ma wersji https, trzeba go zastąpić. Doraźnie pomaga nagłówek <code>Content-Security-Policy: upgrade-insecure-requests</code>, który każe przeglądarce próbować https dla wszystkiego, ale to plaster, nie leczenie.</p>
+
+<h2>7. Łańcuchy przekierowań</h2>
+<p>Pojedyncze przekierowanie jest niewidoczne. Problemem są łańcuchy, które powstają warstwami: hosting dokleja http→https, wtyczka SEO dokleja www→bez www, strona dokleja ukośnik na końcu, a wersja językowa dokleja <code>/pl/</code>. Na komputerze przy światłowodzie to kilkadziesiąt milisekund. Na telefonie w 4G każdy skok to osobne połączenie i łatwo zbiera się pół sekundy pustego ekranu, zanim przeglądarka w ogóle zacznie pobierać stronę (więcej w tekście <a href="/blog/dlaczego-strona-jest-wolna-na-telefonie/">dlaczego strona jest wolna na telefonie</a>). Zasada: z dowolnego starego adresu jedno przekierowanie prosto do adresu docelowego. Łańcuch zobaczysz w narzędziach deweloperskich (zakładka Sieć, pierwszy wiersz i kolejne z kodem 301/302) albo w wyniku naszego skanu.</p>
+
+<h2>Lista kontrolna na 5 minut</h2>
+<ul>
+<li>Data ważności certyfikatu i czy odnawia się sam (zapytaj hosting wprost: „czy certyfikat odnawia się automatycznie?”).</li>
+<li>Cztery kombinacje adresu (http/https × www/bez) kończą w jednym miejscu, bez ostrzeżeń, jednym skokiem.</li>
+<li>Kłódka bez wykrzyknika na stronie głównej, w sklepie/formularzu i na podstronie z największą liczbą zdjęć.</li>
+<li>Nagłówek HSTS obecny (po upewnieniu się, że wszystko jest po HTTPS).</li>
+<li>Adres w <code>canonical</code>, w mapie witryny i w Search Console to ten sam wariant.</li>
+</ul>
+
+<section class="fullbox">
+<h2>Sprawdź to automatycznie</h2>
+<p>Darmowy szybki skan Webskan sprawdza ważność certyfikatu i liczbę dni do wygaśnięcia, przekierowanie z http na https, nagłówek HSTS i mixed content – razem z pozostałymi nagłówkami bezpieczeństwa i wydajnością na telefonie. Bez e-maila, wynik w ok. 30 sekund.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="pl"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://twojafirma.pl" required maxlength="500" aria-label="Adres strony"><button class="btn" type="submit">Skanuj za darmo</button></form>
+<p class="note"><a href="/#cena">Pełny audyt Webskan</a> (99 zł) dokłada do tego wariant www, łańcuch przekierowań krok po kroku, dane certyfikatu (wystawca, objęte nazwy), wycieki wersji serwera oraz wydajność, SEO techniczne, dostępność i zepsute linki – w jednym raporcie PDF z listą poprawek w kolejności od najważniejszej.</p>
+</section>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a></footer>
+</div>
+</body>
+</html>

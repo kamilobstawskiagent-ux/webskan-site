@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HTTPS is not enough: 7 things that break behind the padlock – Webskan</title>
+<meta name="description" content="A padlock in the browser does not mean your site is set up correctly. Expiring certificates, no redirect from http, two www versions, mixed content, redirect chains – how to spot and fix each one.">
+<link rel="canonical" href="https://webskan.com/en/blog/https-is-not-enough/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/https-is-not-enough/">
+<link rel="alternate" hreflang="pl" href="https://webskan.com/blog/https-to-nie-wszystko/">
+<meta property="og:title" content="HTTPS is not enough: 7 things that break behind the padlock">
+<meta property="og:description" content="Certificate, redirects, www, mixed content, HSTS – what to check so the padlock is more than an icon.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/en/blog/https-is-not-enough/">
+<meta property="og:image" content="https://webskan.com/og-en.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"HTTPS is not enough: 7 things that break behind the padlock","description":"A padlock in the browser does not mean your site is set up correctly. Seven common certificate and redirect problems, how to spot and fix them.","datePublished":"2026-11-06","dateModified":"2026-11-06","inLanguage":"en","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"mainEntityOfPage":"https://webskan.com/en/blog/https-is-not-enough/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a href="/en/blog/">Blog</a><a href="/en/#price">Price</a><a href="/blog/https-to-nie-wszystko/">PL</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 6 November 2026 · 8 min read</p>
+<h1>HTTPS is not enough: 7 things that break behind the padlock</h1>
+<p class="lead">“We have SSL, there's a padlock, done.” That is the most common answer a small-business owner gives when asked about website security. The padlock only says that <em>this one</em> page was loaded over an encrypted connection with a certificate the browser trusts. It says nothing about whether the http:// version is still live, whether the certificate expires next week, or whether a customer who types the address without “www” ends up in the right place. Here are seven things we keep finding on sites “with a padlock”.</p>
+
+<h2>What the padlock actually means</h2>
+<p>A TLS certificate (colloquially “SSL”) does two things: it encrypts data between the browser and the server, and it confirms the server really answers for the domain in the address bar. That's all. It does not check whether the page is free of malicious code, whether the form sends data to the right place, or whether the rest of your site is protected too. That's why the problems below are so common: every one of them coexists with a perfectly green padlock.</p>
+
+<h2>Seven problems the padlock hides</h2>
+<table class="vitals headers">
+<thead><tr><th>Problem</th><th>How to spot it</th><th>What happens</th><th>Fix</th></tr></thead>
+<tbody>
+<tr><td><strong>1. Certificate about to expire</strong></td><td data-l="How to spot">Click the padlock → “Certificate” → “Valid until”. Less than 14 days = alarm</td><td data-l="What happens">One morning every visitor sees a red “Your connection is not private” page. The shop stops selling, the form stops working</td><td data-l="Fix">Automatic renewal (Let's Encrypt, hosting panel, Cloudflare) plus a calendar reminder 30 days ahead</td></tr>
+<tr><td><strong>2. Site still works over http://</strong></td><td data-l="How to spot">Type <code>http://yourdomain.com</code> by hand. If it doesn't jump to https://, you have two versions</td><td data-l="What happens">Anyone clicking an old link or typing from memory sees an unencrypted copy. Google sees a duplicate</td><td data-l="Fix">301 redirect from http to https for the whole domain (snippets below)</td></tr>
+<tr><td><strong>3. No HSTS</strong></td><td data-l="How to spot">Free scan, or DevTools → response headers → no <code>Strict-Transport-Security</code></td><td data-l="What happens">Even with a redirect, the first visit goes over http – on open Wi-Fi that's a window for content tampering</td><td data-l="Fix">One header, once the whole site is on HTTPS. Explained in <a href="/en/blog/http-security-headers-explained/">our headers article</a></td></tr>
+<tr><td><strong>4. Certificate doesn't cover “www” (or vice versa)</strong></td><td data-l="How to spot">Open both: <code>https://domain.com</code> and <code>https://www.domain.com</code>. One of them shows a warning</td><td data-l="What happens">The customers who type “www” see a red page. You don't, because you open the site from a bookmark</td><td data-l="Fix">A certificate covering both names (SAN) – Let's Encrypt and Cloudflare do this by default; you just have to ask</td></tr>
+<tr><td><strong>5. Two equal versions: www and non-www</strong></td><td data-l="How to spot">Both open without a redirect and keep their own address in the bar</td><td data-l="What happens">Google treats them as two sites with the same content; links and analytics split in half</td><td data-l="Fix">Pick one version, 301 the other. Use the same one in <code>canonical</code> and in Search Console</td></tr>
+<tr><td><strong>6. Mixed content</strong></td><td data-l="How to spot">Padlock with a warning or missing, images not loading, console says “Mixed Content: … was loaded over HTTP”</td><td data-l="What happens">The browser blocks scripts and styles loaded over http and flags images. Typical after a WordPress migration</td><td data-l="Fix">Replace <code>http://</code> with <code>https://</code> in content and database (Better Search Replace plugin or <code>wp search-replace</code>)</td></tr>
+<tr><td><strong>7. Redirect chain</strong></td><td data-l="How to spot"><code>http://www.domain.com</code> → <code>https://www.domain.com</code> → <code>https://domain.com</code> → <code>https://domain.com/en/</code></td><td data-l="What happens">Every hop is another connection; on a phone with weak signal that's easily half a second before anything appears</td><td data-l="Fix">From every old address, one redirect straight to the final one</td></tr>
+</tbody>
+</table>
+
+<h2>1. The certificate that's about to expire</h2>
+<p>This is the most spectacular failure on the list because it isn't gradual. Until midnight the site works; after midnight every visitor sees a full-screen warning most people close without reading. The causes are mundane: someone paid for a one-year certificate and then changed jobs, the Let's Encrypt automation stopped working after a DNS change or a hosting move, the card on file expired.</p>
+<p>It's worth knowing that one- or two-year certificates are on their way out. Following a 2025 CA/Browser Forum decision, the maximum lifetime of public certificates is being cut in stages: to 200 days from March 2026, and eventually to 47 days in 2029. Manual renewal stops being realistic; automation (ACME) becomes the only sensible option, and its failures will show up more often. If your host doesn't offer automatic renewal, that's a reason to change hosts or put Cloudflare in front of the site.</p>
+
+<h2>2 and 3. The http redirect and HSTS</h2>
+<p>Installing a certificate doesn't switch the unencrypted version off. The server still answers on port 80, and when a user types a bare address without “https://”, the browser tries http first. If nothing redirects it, it stays on the unencrypted page – and remembers that address for autocomplete next time.</p>
+<p>The redirect is one rule. The three most common environments:</p>
+<pre><code># Apache / most shared hosting (.htaccess)
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# nginx – a separate block for port 80
+server {
+  listen 80;
+  server_name yourdomain.com www.yourdomain.com;
+  return 301 https://yourdomain.com$request_uri;
+}
+
+# Cloudflare: SSL/TLS → Edge Certificates → “Always Use HTTPS”: On</code></pre>
+<p>HSTS goes one step further: a header after which the browser never tries http for that domain again, not even the first time after clicking an old link. Enable it only once the whole site (including subdomains, if you use <code>includeSubDomains</code>) runs on HTTPS – rolling HSTS back takes as long as the <code>max-age</code> you set.</p>
+
+<h2>4 and 5. Two versions of the domain</h2>
+<p>To browsers and to Google, the domain with “www” and without it are two different addresses. They should lead to one place, but that has to be configured on two levels. First, the certificate must cover both names; a certificate issued only for <code>domain.com</code> throws a red warning on <code>www.domain.com</code>, which the owner usually never sees because they arrive from a bookmark. Second, one version should 301-redirect to the other, and the chosen version should be the same in the <code>canonical</code> tag, the sitemap and Search Console. Which one is better? It doesn't matter. Consistency does.</p>
+<p>You can check this in a minute: type all four combinations (http/https × www/non-www) and see whether each one ends in the same place, with no warnings.</p>
+
+<h2>6. Mixed content: an encrypted page with unencrypted parts</h2>
+<p>The page loads over HTTPS, but its code still contains addresses starting with <code>http://</code>: photos pasted years ago, a font from an external server, a chat script. The browser reacts differently by type: it shows images but takes away the padlock; scripts, styles and frames it blocks outright. The result: “the photo slider disappeared after the SSL migration” or “the form stopped working”.</p>
+<p>In WordPress the cause is almost always the database, where image URLs were saved with http. The fix is a replace across the whole database – but with a tool that understands serialized data (the Better Search Replace plugin, or <code>wp search-replace 'http://domain.com' 'https://domain.com'</code>), not a manual SQL export and “replace all” in a text editor. If an external resource has no https version, it has to be replaced. As a stopgap, the header <code>Content-Security-Policy: upgrade-insecure-requests</code> tells the browser to try https for everything, but that's a bandage, not a cure.</p>
+
+<h2>7. Redirect chains</h2>
+<p>A single redirect is invisible. The problem is chains, which build up in layers: the host adds http→https, the SEO plugin adds www→non-www, the site adds a trailing slash, and the language setup adds <code>/en/</code>. On a desktop with fibre that's tens of milliseconds. On a phone on 4G every hop is a separate connection and half a second of blank screen adds up before the browser even starts downloading the page (more in <a href="/en/blog/why-your-website-is-slow-on-mobile/">why your website is slow on mobile</a>). The rule: from any old address, one redirect straight to the destination. You'll see the chain in DevTools (Network tab, the first row and the following ones with 301/302 codes) or in our scan result.</p>
+
+<h2>The 5-minute checklist</h2>
+<ul>
+<li>Certificate expiry date, and whether it renews itself (ask your host directly: “does the certificate renew automatically?”).</li>
+<li>All four address combinations (http/https × www/non-www) end in one place, with no warnings, in a single hop.</li>
+<li>A padlock without a warning on the homepage, in the shop/form, and on the page with the most images.</li>
+<li>HSTS header present (after confirming everything is on HTTPS).</li>
+<li>The address in <code>canonical</code>, the sitemap and Search Console is the same variant.</li>
+</ul>
+
+<section class="fullbox">
+<h2>Check it automatically</h2>
+<p>The free Webskan quick scan checks certificate validity and days to expiry, the http-to-https redirect, the HSTS header and mixed content – alongside the other security headers and mobile performance. No e-mail, result in about 30 seconds.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="en"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://yourcompany.com" required maxlength="500" aria-label="Website address"><button class="btn" type="submit">Scan for free</button></form>
+<p class="note">The <a href="/en/#price">full Webskan audit</a> ($29) adds the www variant, the redirect chain step by step, certificate details (issuer, covered names), server version leaks, plus performance, technical SEO, accessibility and broken links – in one PDF report with fixes listed in priority order.</p>
+</section>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy</a></footer>
+</div>
+</body>
+</html>
