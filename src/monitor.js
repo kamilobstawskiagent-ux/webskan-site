@@ -23,22 +23,26 @@ export class MonitorHub extends DurableObject {
       CREATE INDEX IF NOT EXISTS checks_mid ON checks(mid, at);
       CREATE TABLE IF NOT EXISTS events(id INTEGER PRIMARY KEY AUTOINCREMENT, mid TEXT, at INTEGER, kind TEXT, payload TEXT, delivered INTEGER DEFAULT 0);
       CREATE INDEX IF NOT EXISTS events_delivered ON events(delivered, id)`);
+    try { this.sql.exec('ALTER TABLE monitors ADD COLUMN until INTEGER'); } catch {} // monitoring w cenie audytu: koniec okresu (ms); NULL = abonament/bezterminowo
   }
   list() { return this.sql.exec('SELECT * FROM monitors ORDER BY created').toArray(); }
   get(id) { return this.sql.exec('SELECT * FROM monitors WHERE id=?', id).toArray()[0] || null; }
   byToken(token) { return this.sql.exec('SELECT * FROM monitors WHERE token=?', token).toArray()[0] || null; }
   async create(m) {
     const existing = this.sql.exec('SELECT * FROM monitors WHERE url=? AND email=?', m.url, m.email).toArray()[0];
-    if (existing) { this.sql.exec('UPDATE monitors SET active=1, sub_id=COALESCE(?,sub_id), order_id=COALESCE(?,order_id) WHERE id=?', m.sub_id || null, m.order_id || null, existing.id); return this.get(existing.id); }
+    if (existing) { // ponowne zamówienie tej samej strony: abonament kasuje termin „w cenie audytu”, sam audyt (until) nie skraca opłaconego abonamentu
+      this.sql.exec('UPDATE monitors SET active=1, sub_id=COALESCE(?,sub_id), order_id=COALESCE(?,order_id), until=CASE WHEN ? IS NOT NULL OR sub_id IS NOT NULL THEN NULL ELSE COALESCE(?,until) END WHERE id=?', m.sub_id || null, m.order_id || null, m.sub_id || null, m.until || null, existing.id);
+      return { ...this.get(existing.id), existed: true };
+    }
     const id = hex(6), token = hex(16);
-    this.sql.exec('INSERT INTO monitors(id,token,url,host,email,lang,active,created,sub_id,order_id,state,since,fails) VALUES(?,?,?,?,?,?,1,?,?,?,?,?,0)',
-      id, token, m.url, new URL(m.url).hostname, m.email, m.lang === 'en' ? 'en' : 'pl', Date.now(), m.sub_id || null, m.order_id || null, 'unknown', Date.now());
+    this.sql.exec('INSERT INTO monitors(id,token,url,host,email,lang,active,created,sub_id,order_id,state,since,fails,until) VALUES(?,?,?,?,?,?,1,?,?,?,?,?,0,?)',
+      id, token, m.url, new URL(m.url).hostname, m.email, m.lang === 'en' ? 'en' : 'pl', Date.now(), m.sub_id || null, m.order_id || null, 'unknown', Date.now(), m.until || null);
     await this.checkOne(this.get(id));
     return this.get(id);
   }
   update(id, patch) {
     const m = this.get(id); if (!m) return null;
-    for (const k of ['active', 'url', 'email', 'lang', 'sub_id', 'note']) if (patch[k] !== undefined) this.sql.exec(`UPDATE monitors SET ${k}=? WHERE id=?`, patch[k], id);
+    for (const k of ['active', 'url', 'email', 'lang', 'sub_id', 'note', 'until']) if (patch[k] !== undefined) this.sql.exec(`UPDATE monitors SET ${k}=? WHERE id=?`, patch[k], id);
     if (patch.url) this.sql.exec('UPDATE monitors SET host=? WHERE id=?', new URL(patch.url).hostname, id); // stan zostaje: otwarta awaria domknie się zdarzeniem „up”
     return this.get(id);
   }
@@ -98,7 +102,7 @@ export async function monitorApi(request, env, pathname, normalizeUrl) {
   const body = request.method === 'POST' ? await request.json().catch(() => ({})) : {};
   if (pathname === '/api/monitor' && request.method === 'POST') {
     const url = normalizeUrl(body.url); if (!url || !body.email) return Response.json({ error: 'url/email' }, { status: 400 });
-    return Response.json(await h.create({ url, email: String(body.email).toLowerCase(), lang: body.lang, sub_id: body.sub_id, order_id: body.order_id }));
+    return Response.json(await h.create({ url, email: String(body.email).toLowerCase(), lang: body.lang, sub_id: body.sub_id, order_id: body.order_id, until: body.until ? +body.until : null }));
   }
   if (pathname === '/api/monitor/list') return Response.json(await h.list());
   if (pathname === '/api/monitor/events') return Response.json(await h.events());

@@ -54,7 +54,7 @@ async function handleOrder(request, env) {
   const url = normalizeUrl(form.get("url"));
   const email = (form.get("email") || "").trim().toLowerCase();
   const consent = form.get("consent") === "on" || form.get("consent") === "1";
-  const product = form.get("product") === "monitor" ? "monitor" : "audit"; // audit = audyt pogłębiony (jednorazowo), monitor = abonament z audytem na start
+  const product = form.get("product") === "monitor" ? "monitor" : "audit"; // audit = audyt pogłębiony (jednorazowo), monitor = abonament (stan wyjściowy bez LLM); audyt daje 30 dni monitora w cenie
   const competitors = String(form.get("competitors") || "").split(/[,\s;]+/).map((c) => normalizeUrl(c)).filter(Boolean).slice(0, 2);
   if (form.get("website")) return page(lang, ...t.saved); // honeypot: udajemy sukces
   if (!url) return page(lang, ...t.badUrl);
