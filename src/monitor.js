@@ -144,8 +144,8 @@ export async function statusPage(env, lang, token) {
   <p style="margin:.25rem 0 0;color:#4b5563">${[state === 'up' || state === 'down' ? `${t.since} ${fmtDate(m.since, lang)}` : '', m.last_at ? `${t.lastCheck}: ${fmtDate(m.last_at, lang)}${m.last_ms ? `, ${t.resp} ${m.last_ms} ms` : ''}${m.last_err ? ` (${esc(m.last_err)})` : ''}` : ''].filter(Boolean).join(' · ')}</p>
 </section>
 <section><h2>${t.uptime}</h2>
-<div class="grid3" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem">
-  ${[[t.d1, s1], [t.d7, s7], [t.d30, s30]].map(([l, s]) => `<div style="border:1px solid #e5e7eb;border-radius:12px;padding:1rem"><p style="margin:0;color:#6b7280;font-size:.9rem">${l}</p><p style="margin:.2rem 0 0;font-size:1.5rem;font-weight:700">${pct(s)}</p><p style="margin:0;color:#6b7280;font-size:.85rem">${s.checks} ${t.checks}${s.avg_ms ? ` · ${t.avg.toLowerCase()} ${s.avg_ms} ms` : ''}</p></div>`).join('')}
+<div class="grid3" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem">
+  ${[[t.d1, s1], [t.d7, s7], [t.d30, s30]].map(([l, s]) => `<div style="border:1px solid #e5e7eb;border-radius:12px;padding:.9rem .8rem"><p style="margin:0;color:#6b7280;font-size:.85rem">${l}</p><p style="margin:.2rem 0 0;font-size:1.5rem;font-weight:700">${pct(s)}</p><p style="margin:0;color:#6b7280;font-size:.85rem">${s.checks} ${t.checks}${s.avg_ms ? ` · ${t.avg.toLowerCase()} ${s.avg_ms} ms` : ''}</p></div>`).join('')}
 </div></section>
 <section><h2>${t.incidents}</h2>
 ${incidents.length ? `<ul style="list-style:none;padding:0;margin:0">${incidents.map((i) => `<li style="border-top:1px solid #e5e7eb;padding:.6rem 0;display:flex;flex-wrap:wrap;gap:.25rem 1.25rem"><span style="color:#b42318;font-weight:600">${t.downAt} ${fmtDate(i.down, lang)}</span><span>${i.up ? `${t.upAt} ${fmtDate(i.up, lang)}` : '…'}</span><span style="color:#6b7280">${t.dur}: ${fmtDur(i.dur, t)}</span></li>`).join('')}</ul>` : `<p>${t.none}</p>`}

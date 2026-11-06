@@ -1,5 +1,5 @@
 // Webskan – Worker: statyczne pliki z public/ + /api/order (checkout Polar albo kolejka przedsprzedażowa w KV) + darmowy szybki skan (src/scan.js).
-import { startScan, nextScans, scanResult, scanPage, ScanQueue } from "./scan.js";
+import { startScan, nextScans, scanResult, scanPage, ScanQueue, layout } from "./scan.js";
 import { MonitorHub, monitorCron, monitorApi, statusPage } from "./monitor.js";
 import { recheckApi, recheckPage } from "./recheck.js";
 export { ScanQueue, MonitorHub };
@@ -145,8 +145,19 @@ async function route(request, env, pathname) {
     if (pathname === "/api/health") return Response.json({ ok: true, polar: Boolean(env.POLAR_TOKEN && env.POLAR_PRODUCT_PL), mode: env.SALES_MODE || "live" });
     const res = await env.ASSETS.fetch(request);
     if (env.SALES_MODE === "presale" && (pathname === "/" || pathname === "/en/")) return presaleRewrite(res, pathname === "/en/" ? "en" : "pl");
+    if (res.status === 404 && request.method === "GET" && (request.headers.get("accept") || "").includes("text/html")) return notFound(pathname.startsWith("/en/") ? "en" : "pl");
     return res;
   }
+}
+
+// Strona 404 (zamiast pustej odpowiedzi): po polsku lub angielsku zależnie od prefiksu ścieżki.
+function notFound(lang) {
+  const t = lang === "en"
+    ? { title: "Page not found", lead: "This link is broken, expired or mistyped.", links: [["/en/", "Home page"], ["/en/#pricing", "Pricing"], ["/en/sample/", "Sample audit"], ["/en/blog/", "Blog"]], mail: "If you arrived here from one of our e-mails, write to" }
+    : { title: "Nie ma takiej strony", lead: "Ten link jest zepsuty, wygasł albo wkradła się literówka.", links: [["/", "Strona główna"], ["/#cennik", "Cennik"], ["/przyklad/", "Przykładowy audyt"], ["/blog/", "Blog"]], mail: "Jeśli trafiłeś tu z naszego e-maila, napisz na" };
+  const body = `<section class="hero"><p class="eyebrow">404</p><h1>${t.title}</h1><p class="lead">${t.lead}</p><p>${t.links.map(([h, l]) => `<a class="btn sec" href="${h}" style="margin:0 8px 8px 0">${l}</a>`).join("")}</p><p class="note">${t.mail} <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a>.</p></section>`;
+  const r = layout(lang, t.title, body);
+  return new Response(r.body, { status: 404, headers: r.headers });
 }
 
 // Tryb przedsprzedaży: ten sam statyczny HTML, ale uczciwy przycisk i notka (bez „przejdź do płatności”, gdy Polar jeszcze nie przyjmuje płatności).
