@@ -103,7 +103,7 @@ const SECURITY_HEADERS = {
   "x-frame-options": "DENY",
   "referrer-policy": "strict-origin-when-cross-origin",
   "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=()",
-  "content-security-policy": "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'none'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https://polar.sh https://*.polar.sh",
+  "content-security-policy": "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https://polar.sh https://*.polar.sh",
 };
 function secure(res) {
   const h = new Headers(res.headers);
