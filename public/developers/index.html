@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Webskan for developers – MCP site check for AI agents</title>
+<meta name="description" content="A remote MCP server for Claude Code, Cursor, Codex CLI, VS Code and Windsurf: your agent audits the site it just shipped (Lighthouse, SEO, accessibility, security, broken links, customer journeys) and re-checks after the fixes. Free plan, no sign-up.">
+<link rel="canonical" href="https://webskan.com/developers/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/developers/">
+<link rel="alternate" hreflang="x-default" href="https://webskan.com/developers/">
+<meta property="og:title" content="Webskan for developers – check the site your agent just shipped">
+<meta property="og:description" content="Remote MCP server: Lighthouse, whole-site crawl, accessibility, security, broken links, customer journeys – with stable finding ids and a fixed / open / new re-check.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://webskan.com/developers/">
+<meta property="og:image" content="https://webskan.com/og-en.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a class="m-hide" href="#tools">Tools</a><a href="#install">Install</a><a href="#limits">Limits</a><a href="#faq">FAQ</a></nav></header>
+<main class="dev">
+
+<section class="hero">
+  <p class="eyebrow">Webskan for developers · remote MCP server</p>
+  <h1>Check the site your agent just shipped</h1>
+  <p class="lead">Your coding agent deploys the site, then calls Webskan: a 30-second Lighthouse scan, a full technical audit of the whole site in a real mobile browser, and a re-check that says what was <strong>fixed</strong>, what is <strong>still open</strong> and what is <strong>new</strong>. Every finding has a stable id, so the agent can fix it and prove it. <strong>No sign-up, no key for the free plan.</strong></p>
+  <pre><code>claude mcp add --transport http webskan https://webskan.com/mcp</code></pre>
+  <div class="cta"><a class="btn" href="#install">Install in your client</a><a class="link" href="#tools">See the 4 tools&nbsp;→</a></div>
+  <ul class="clients" aria-label="Works with"><li>Claude Code</li><li>Cursor</li><li>Codex CLI</li><li>VS Code / GitHub Copilot</li><li>Windsurf</li><li>any MCP client with Streamable HTTP</li></ul>
+</section>
+<p class="trust">Endpoint <code>https://webskan.com/mcp</code> · Streamable HTTP, stateless · Public websites only · Real Chrome, Pixel 7 emulation · Google Lighthouse and axe-core (WCAG 2.1 AA)</p>
+
+<section id="why">
+  <h2>Why not just run Lighthouse locally?</h2>
+  <p class="lead">Lighthouse measures one page. A freshly shipped site breaks in other places: a <code>noindex</code> left over from staging, a contact form that is not labelled, a cookie banner that covers the content on a phone, a 404 page with no way out, a cart that cannot reach the checkout. Webskan crawls the whole public site and clicks through it like a customer, from the outside, the way Google and your users see it.</p>
+  <div class="grid">
+    <div class="card"><h3>Lighthouse, mobile and desktop</h3><p>Performance, accessibility, best practices and SEO scores plus LCP, CLS, TBT, page weight and request count. Measured in a real Chrome, not estimated.</p></div>
+    <div class="card"><h3>Crawl of up to 30 pages</h3><p>Pages from navigation and the sitemap. For each: title, description, headings, canonical, indexing, language, structured data, response errors, duplicate titles across pages.</p></div>
+    <div class="card"><h3>Accessibility with axe-core</h3><p>WCAG 2.1 AA rules on the key pages, with the selector and the HTML of every failing element, so the agent can go straight to the code.</p></div>
+    <div class="card"><h3>Security headers and TLS</h3><p>CSP, HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy, certificate validity and expiry, leaked server details.</p></div>
+    <div class="card"><h3>Broken links</h3><p>Up to 500 internal and external links, each broken one reported with the page it sits on.</p></div>
+    <div class="card"><h3>Forms and cookie banner</h3><p>Unlabelled fields, missing consent, no spam protection, too many fields, a banner that blocks the content, horizontal overflow on a phone.</p></div>
+    <div class="card"><h3>Customer journeys</h3><p>On an emulated phone: the 404 page, the menu, the site search and, in shops, product → cart → checkout (no payment, no data entered).</p></div>
+    <div class="card"><h3>Stable ids and a real diff</h3><p>Over 60 finding types, each with a stable id such as <code>seo.title.missing@/about</code>, plus one id per axe-core rule and page. The re-check compares by id: fixed, still open, new.</p></div>
+  </div>
+</section>
+
+<section id="tools">
+  <h2>The four tools</h2>
+  <p class="lead">Tool names and fields are fixed; the server also returns a short Markdown summary written for an agent, so the model does not have to parse JSON.</p>
+
+  <div class="tool">
+    <h3><code>scan_website</code> – quick scan, result in about 30 seconds</h3>
+    <p><b>Input:</b> <code>url</code>. <b>Returns:</b> mobile Lighthouse <code>scores</code>, <code>metrics</code> (LCP, CLS, TBT, weight, requests), a list of basic <code>issues</code> with codes, and a <code>resultUrl</code> you can open in a browser. Results for the same host are cached for 24 hours (<code>cached: true</code>). If the scan takes longer than 90 seconds the tool returns <code>status: "pending"</code> and a <code>scanId</code>; call it again in 30 seconds.</p>
+    <p class="prompt">“Scan https://mysite.com and tell me the mobile Lighthouse scores and the biggest issue.”</p>
+  </div>
+
+  <div class="tool">
+    <h3><code>audit_website</code> – full audit of the whole site</h3>
+    <p><b>Input:</b> <code>url</code>, optional <code>pages</code> (1–30, default 15). <b>Returns immediately:</b> <code>auditId</code>, <code>status: "queued"</code>, <code>etaSeconds</code> and <code>pollWith: "get_audit"</code>. The audit runs in a real browser and usually takes a few minutes, depending on the number of pages and how fast the site is.</p>
+    <p class="prompt">“Audit https://mysite.com with 20 pages and wait for the result.”</p>
+  </div>
+
+  <div class="tool">
+    <h3><code>get_audit</code> – status or result</h3>
+    <p><b>Input:</b> <code>auditId</code>. <b>Returns:</b> the status while the audit runs; when done, <code>summary</code> (counts by severity), <code>lighthouse</code> (mobile and desktop), <code>findings</code> sorted high → low (each with <code>id</code>, <code>area</code>, <code>severity</code>, <code>title</code>, <code>detail</code>, <code>pages</code>), <code>pagesCrawled</code> and <code>finalUrl</code>. For a re-check it also returns <code>diff</code>: <code>fixed</code>, <code>open</code>, <code>new</code>, <code>unverified</code> and Lighthouse scores before and after.</p>
+    <p class="prompt">“Get audit 3f9a… and list the high-severity findings with the files I need to touch.”</p>
+  </div>
+
+  <div class="tool">
+    <h3><code>recheck_website</code> – the same audit again, with a diff</h3>
+    <p><b>Input:</b> <code>auditId</code> of the earlier audit. <b>Returns</b> like <code>audit_website</code>: a new <code>auditId</code> linked to the parent. Same URL, same number of pages, so the comparison is exact. Lighthouse metrics are shown as before → after rather than as fixed or new, because they vary by a few points between runs.</p>
+    <p class="prompt">“Audit https://mysite.com and fix the high-severity findings, then recheck.”</p>
+  </div>
+
+  <h3 style="margin-top:32px">The loop an agent runs</h3>
+  <div class="steps">
+    <div class="step"><span class="n">1</span><h3>Audit</h3><p><code>audit_website</code>, then <code>get_audit</code> until <code>status</code> is <code>done</code>.</p></div>
+    <div class="step"><span class="n">2</span><h3>Fix by id</h3><p>Work through <code>high</code> and <code>medium</code> findings. Each has the page, the detail and, for accessibility, the selector and HTML.</p></div>
+    <div class="step"><span class="n">3</span><h3>Re-check and report</h3><p>Deploy, <code>recheck_website</code>, read <code>diff.fixed</code> and <code>diff.open</code>. What is still open goes into the next commit or the hand-off note.</p></div>
+  </div>
+</section>
+
+<section id="install" class="install">
+  <h2>Install</h2>
+  <p class="lead">One endpoint for every client: <code>https://webskan.com/mcp</code>. Streamable HTTP, no session, no key required. Pick your client and paste.</p>
+
+  <h3>Claude Code</h3>
+  <pre><code>claude mcp add --transport http webskan https://webskan.com/mcp</code></pre>
+  <p class="small muted">Or install the plugin, which adds the server and a <code>/webskan:site-check</code> skill: <code>/plugin marketplace add kamilobstawskiagent-ux/webskan-claude-plugin</code> then <code>/plugin install webskan@webskan</code>. Source: <a href="https://github.com/kamilobstawskiagent-ux/webskan-claude-plugin">github.com/kamilobstawskiagent-ux/webskan-claude-plugin</a>.</p>
+
+  <h3>Cursor</h3>
+  <p class="small muted">Project file <code>.cursor/mcp.json</code> (or <code>~/.cursor/mcp.json</code> for all projects):</p>
+  <pre><code>{
+  "mcpServers": {
+    "webskan": {
+      "url": "https://webskan.com/mcp"
+    }
+  }
+}</code></pre>
+
+  <h3>VS Code with GitHub Copilot</h3>
+  <p class="small muted">Project file <code>.vscode/mcp.json</code>:</p>
+  <pre><code>{
+  "servers": {
+    "webskan": {
+      "type": "http",
+      "url": "https://webskan.com/mcp"
+    }
+  }
+}</code></pre>
+
+  <h3>Codex CLI</h3>
+  <pre><code>codex mcp add webskan --url https://webskan.com/mcp</code></pre>
+  <p class="small muted">Or in <code>~/.codex/config.toml</code>:</p>
+  <pre><code>[mcp_servers.webskan]
+url = "https://webskan.com/mcp"</code></pre>
+
+  <h3>Windsurf and other clients</h3>
+  <p class="small muted">Most clients accept a standard <code>mcpServers</code> entry with the URL (Windsurf: <code>~/.codeium/windsurf/mcp_config.json</code>, key <code>serverUrl</code> instead of <code>url</code>):</p>
+  <pre><code>{
+  "mcpServers": {
+    "webskan": {
+      "type": "http",
+      "url": "https://webskan.com/mcp"
+    }
+  }
+}</code></pre>
+
+  <h3>Try it without a client</h3>
+  <p class="small muted">The endpoint speaks plain JSON-RPC over HTTP, so you can list the tools with curl:</p>
+  <pre><code>curl -s https://webskan.com/mcp \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'</code></pre>
+</section>
+
+<section id="limits">
+  <h2>Free plan limits</h2>
+  <p class="lead">Generous enough for a solo developer or a small agency checking its own deploys. No key, no account. Counted per IP address and per website host.</p>
+  <table class="limits">
+    <thead><tr><th>Tool</th><th>Limit</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td data-l="Tool"><code>scan_website</code></td><td data-l="Limit">10 scans per hour per IP; 120 per hour for all users together</td><td data-l="Notes">A result for the same host from the last 24 hours is returned from cache and does not count. Results are kept for 7 days.</td></tr>
+      <tr><td data-l="Tool"><code>audit_website</code></td><td data-l="Limit">2 audits per IP per 24 hours; 1 audit per host per 24 hours</td><td data-l="Notes">A second audit of the same host within 24 hours returns the existing <code>auditId</code>. 1–30 pages, default 15. Up to 300 findings returned. Results are kept for 30 days.</td></tr>
+      <tr><td data-l="Tool"><code>recheck_website</code></td><td data-l="Limit">Same as <code>audit_website</code></td><td data-l="Notes">Uses the same URL and page count as the parent audit.</td></tr>
+      <tr><td data-l="Tool"><code>get_audit</code></td><td data-l="Limit">No limit</td><td data-l="Notes">Poll every 30–60 seconds; the audit usually finishes within a few minutes. An audit that does not finish within 15 minutes is marked as an error.</td></tr>
+    </tbody>
+  </table>
+  <p class="small muted">When a limit is hit the tool returns an error with a readable message (<code>isError: true</code>), not an empty result. Private hosts (<code>localhost</code>, <code>127.0.0.1</code>, <code>10.x</code>, <code>192.168.x</code>, <code>.local</code>) are rejected: the audit runs from our machines, so it can only reach public addresses.</p>
+</section>
+
+<section id="teams" class="fullbox">
+  <h2>Paid plan for teams – coming soon</h2>
+  <p>For agencies and teams that ship many sites: a key you pass as <code>Authorization: Bearer &lt;key&gt;</code>, higher audit limits (30 audits a day per key instead of 2 per IP), the same tools. The server already accepts the header; without a valid key you simply get the free limits (<code>plan: "free"</code> in every response), never an error.</p>
+  <p>Want to know when it opens? Write to <a href="mailto:kontakt@webskan.com?subject=Webskan%20for%20developers%20%E2%80%93%20paid%20plan">kontakt@webskan.com</a> with the subject “paid plan”.</p>
+</section>
+
+<section id="faq">
+  <h2>Questions</h2>
+  <details><summary>Does this replace running Lighthouse locally?</summary><p>No, and it is not meant to. Lighthouse in your terminal measures one page on your machine. Webskan looks at the whole deployed site from the outside, in a real browser, and adds what Lighthouse does not do: the crawl, accessibility with selectors on several pages, security headers and TLS, broken links, forms, the cookie banner, the customer journeys, and stable finding ids so a re-check can say exactly what changed. Run both.</p></details>
+  <details><summary>Which addresses can it scan?</summary><p>Only publicly reachable websites over HTTP or HTTPS. No <code>localhost</code>, private networks, tunnels that require a header, or sites behind a login. If the site blocks automated browsers the audit returns an error rather than a partial result.</p></details>
+  <details><summary>What data do you keep, and for how long?</summary><p>The URL you pass, the pages we crawled and the findings. A quick scan result is kept for 7 days, an audit for 30 days, both under an unguessable id. We do not store screenshots from MCP audits. For rate limiting we store a hash of the calling IP address, not the address itself. Details in the <a href="/en/privacy/">privacy policy</a>.</p></details>
+  <details><summary>Why do Lighthouse scores differ between two runs?</summary><p>Lighthouse is a lab measurement; the same page can score a few points higher or lower on consecutive runs because of network and CPU variance. Treat a difference of up to about 5 points as noise. That is why the re-check reports Lighthouse metrics as before → after instead of marking them fixed or new.</p></details>
+  <details><summary>How long does an audit take?</summary><p>Usually a few minutes for 15 pages: the crawl, two Lighthouse runs (mobile and desktop), axe-core on the key pages, link checks and the customer journeys. Slow sites and shops with a long checkout take longer. <code>audit_website</code> returns an <code>etaSeconds</code> estimate; poll <code>get_audit</code> every 30–60 seconds.</p></details>
+  <details><summary>Can the agent read the full report?</summary><p>Yes. <code>get_audit</code> returns every finding (up to 300) with id, area, severity, title, detail and the pages it occurs on, plus both Lighthouse runs. The text part of the response is a compact Markdown summary; the structured part is the full JSON.</p></details>
+  <details><summary>Do you need access to my repository or server?</summary><p>No. The server never sees your code. Your agent decides what to change; Webskan only measures the public site before and after.</p></details>
+  <details><summary>Is the process automated?</summary><p>Yes, end to end: Playwright drives a real Chrome, Lighthouse and axe-core do the measuring, our own checks cover SEO, security, links, forms and journeys. Nobody reads your results unless you write to us about them.</p></details>
+  <details><summary>I own a business, not a repo. Is there something for me?</summary><p>Yes: the <a href="/en/">in-depth audit for business owners</a> ($69, one-time) adds a PDF report, a customer-eye review written in plain language and ready-made fixes for your developer, and <a href="/en/#monitor">Webskan Monitor</a> ($15 per month) watches the site daily and alerts you when something gets worse.</p></details>
+</section>
+
+</main>
+<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a> · <a href="/en/">For business owners</a> · contact: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer>
+</div>
+</body>
+</html>

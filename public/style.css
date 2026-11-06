@@ -89,3 +89,17 @@ nav{display:flex;gap:18px;flex-wrap:wrap;justify-content:flex-end}nav a{margin-l
 .plans-pick{border:1px solid var(--line);border-radius:10px;padding:10px 14px 12px;margin:0 0 4px}.plans-pick legend{font-size:14px;color:var(--muted);padding:0 6px}
 form.order label.pick{display:flex;gap:10px;align-items:flex-start;padding:7px 0;font-size:16px;cursor:pointer}.pick input{margin-top:4px}.pick span{line-height:1.45}
 @media(max-width:760px){.plans{grid-template-columns:1fr}.plan .amt{font-size:36px}}
+/* /developers/ (2026-11-07) */
+.dev pre{background:#0f172a;color:#e2e8f0;border-radius:8px;padding:14px 16px;overflow-x:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.5;margin:10px 0 0;max-width:100%;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.dev pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit;font-family:inherit}
+.dev .hero pre{max-width:640px;margin:20px 0 0}.dev .hero .cta{margin-top:20px}
+.dev .clients{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 0;padding:0;list-style:none}.dev .clients li{border:1px solid var(--line);border-radius:999px;padding:5px 13px;font-size:14px;background:#fff;color:#374151}
+.dev .tool{border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:14px 0;background:#fff}
+.dev .tool h3{margin:0 0 8px;font-size:18px;line-height:1.35}.dev .tool h3 code{font-size:16px;background:#eef2ff;color:var(--acc)}
+.dev .tool p{margin:6px 0 0;font-size:15px;color:#374151}
+.dev .prompt{border-left:3px solid var(--acc);padding:8px 12px;background:var(--bg);font-size:15px;color:#374151;margin:12px 0 0;border-radius:0 8px 8px 0}
+.dev .install h3{margin:28px 0 4px;font-size:17px}.dev .install p.small{margin:4px 0 0}.dev .install pre+p.small{margin-top:10px}
+.dev .limits{width:100%;border-collapse:collapse;margin:16px 0;font-size:15px}.dev .limits th,.dev .limits td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}.dev .limits th{font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:600}
+.dev .fullbox p{margin:10px 0 0}
+.dev details p{margin:8px 0 4px;color:#374151}
+@media(max-width:600px){.dev .limits,.dev .limits tbody,.dev .limits tr,.dev .limits td{display:block}.dev .limits thead{display:none}.dev .limits tr{border-bottom:1px solid var(--line);padding:12px 0}.dev .limits td{border:0;padding:3px 0}.dev .limits td[data-l]::before{content:attr(data-l) ": ";color:var(--muted);font-weight:500}.dev .hero pre{font-size:13px}.dev .tool{padding:16px}}
