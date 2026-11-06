@@ -1,5 +1,5 @@
 // Webskan MCP – zdalny serwer MCP (Streamable HTTP, bezstanowy) pod /mcp dla agentów kodujących.
-// Narzędzia: scan_website (szybki skan, czeka do 90 s), audit_website / get_audit / recheck_website (pełny audyt przez kolejkę w DO + poller).
+// Narzędzia: scan_website (szybki skan, czeka do 90 s), audit_website / get_audit / recheck_website (audyt całej witryny przez kolejkę w DO + poller).
 // Na każde żądanie nowy McpServer + transport (stateless, bez sesji). Teksty dla agenta po angielsku.
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { WebStandardStreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js';
@@ -156,12 +156,12 @@ async function enqueueAudit(ctx, { url, pages, parent }) {
   }
   // 2. Limity: free 2 / IP / 24 h, developer 30 / klucz / 24 h.
   const ok = plan === 'developer' ? await db.bump(`audit:key:${keyHash}`, AUDIT_PAID_PER_KEY, DAY_MS) : await db.bump(`audit:ip:${ctx.ipHash}`, AUDIT_FREE_PER_IP, DAY_MS);
-  if (!ok) return errResult(plan === 'developer' ? `Rate limit: ${AUDIT_PAID_PER_KEY} audits per 24 h for this license key.` : `Rate limit: the free plan allows ${AUDIT_FREE_PER_IP} full audits (audit_website + recheck_website) per IP per 24 h. A Webskan Developer key raises this to ${AUDIT_PAID_PER_KEY}/day – see ${SITE}/developers/ . scan_website is still available.`, { code: 'rate_limit', plan });
+  if (!ok) return errResult(plan === 'developer' ? `Rate limit: ${AUDIT_PAID_PER_KEY} audits per 24 h for this license key.` : `Rate limit: the free plan allows ${AUDIT_FREE_PER_IP} whole-site audits (audit_website + recheck_website) per IP per 24 h. A Webskan Developer key raises this to ${AUDIT_PAID_PER_KEY}/day – see ${SITE}/developers/ . scan_website is still available.`, { code: 'rate_limit', plan });
   const id = newId();
   const a = await db.auditCreate({ id, host, url, pages, parent, keyHash: plan === 'developer' ? keyHash : null, ipHash: ctx.ipHash });
   const ahead = await db.auditQueuedAhead(new Date(a.at).getTime());
   const s = queuedStructured(a, ahead, planNotes);
-  return okResult(queuedMarkdown(s, parent ? 'Re-check of' : 'Queued full audit of'), s);
+  return okResult(queuedMarkdown(s, parent ? 'Re-check of' : 'Queued whole-site audit of'), s);
 }
 async function auditWebsite({ url: raw, pages }, ctx) {
   const url = normalizeUrl(raw);
@@ -204,7 +204,7 @@ function auditDoneStructured(a, parent) {
 function auditDoneMarkdown(s) {
   const L = [], lh = s.lighthouse || {}, ms = lh.mobile?.scores || {}, ds = lh.desktop?.scores || {};
   const scoreLine = (sc) => `perf ${sc.performance ?? '–'} · a11y ${sc.accessibility ?? '–'} · best practices ${sc['best-practices'] ?? '–'} · SEO ${sc.seo ?? '–'}`;
-  L.push(`# ${s.parent ? 'Re-check' : 'Full audit'}: ${hostOf(s.url)} (${s.pagesCrawled ?? '?'} pages crawled${s.platform ? `, platform: ${s.platform}` : ''}, ${s.durationSeconds ?? '?'} s)`);
+  L.push(`# ${s.parent ? 'Re-check' : 'Whole-site audit'}: ${hostOf(s.url)} (${s.pagesCrawled ?? '?'} pages crawled${s.platform ? `, platform: ${s.platform}` : ''}, ${s.durationSeconds ?? '?'} s)`);
   L.push(`Findings: ${s.summary.total} (high ${s.summary.high}, medium ${s.summary.medium}, low ${s.summary.low}, info ${s.summary.info})`);
   L.push(`Lighthouse mobile: ${scoreLine(ms)}${lh.mobile?.metrics ? ` · LCP ${fmtS(lh.mobile.metrics.LCP)} · CLS ${lh.mobile.metrics.CLS == null ? '–' : lh.mobile.metrics.CLS.toFixed(3)} · TBT ${lh.mobile.metrics.TBT == null ? '–' : Math.round(lh.mobile.metrics.TBT) + ' ms'}` : ''}`);
   if (lh.desktop?.scores) L.push(`Lighthouse desktop: ${scoreLine(ds)}`);
