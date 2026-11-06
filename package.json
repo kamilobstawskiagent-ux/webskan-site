@@ -1,0 +1,15 @@
+{
+  "name": "webskan-site",
+  "private": true,
+  "type": "module",
+  "description": "Webskan – Cloudflare Worker (landing, quick scan, monitor, recheck, MCP server)",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "mcp:smoke": "node tools/mcp-smoke.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "zod": "^4.6.7"
+  }
+}
