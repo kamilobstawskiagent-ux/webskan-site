@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WordPress: 10 ustawień bezpieczeństwa na godzinę – Webskan</title>
+<meta name="description" content="Dziesięć ustawień WordPressa, które zamykają najczęstsze drogi włamania na firmową stronę: aktualizacje, logowanie, XML-RPC, kopie zapasowe, uprawnienia plików, PHP. Bez programisty, w godzinę.">
+<link rel="canonical" href="https://webskan.com/blog/wordpress-10-ustawien-bezpieczenstwa/">
+<link rel="alternate" hreflang="pl" href="https://webskan.com/blog/wordpress-10-ustawien-bezpieczenstwa/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/wordpress-security-settings/">
+<meta property="og:title" content="WordPress: 10 ustawień bezpieczeństwa na godzinę">
+<meta property="og:description" content="Najczęstsze włamania na firmowe strony na WordPressie idą przez kilka tych samych dziur. Dziesięć ustawień, które je zamykają – bez programisty.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/blog/wordpress-10-ustawien-bezpieczenstwa/">
+<meta property="og:image" content="https://webskan.com/og-pl.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"WordPress: 10 ustawień bezpieczeństwa na godzinę","description":"Dziesięć ustawień WordPressa, które zamykają najczęstsze drogi włamania na firmową stronę. Bez programisty, w godzinę.","datePublished":"2026-11-06","dateModified":"2026-11-06","inLanguage":"pl","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"mainEntityOfPage":"https://webskan.com/blog/wordpress-10-ustawien-bezpieczenstwa/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a><a href="/en/blog/wordpress-security-settings/">EN</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 6 listopada 2026 · 9 min czytania</p>
+<h1>WordPress: 10 ustawień bezpieczeństwa na godzinę</h1>
+<p class="lead">Włamania na firmowe strony na WordPressie rzadko są dziełem geniusza. Prawie zawsze to automat, który przeczesuje internet w poszukiwaniu kilku tych samych dziur: nieaktualnej wtyczki, konta „admin” ze słabym hasłem, otwartego logowania bez limitu prób. Poniżej dziesięć ustawień, które te drogi zamykają. Żadne nie wymaga programisty, większość to jeden przełącznik w panelu, a całość da się zrobić w godzinę.</p>
+
+<h2>Skąd biorą się włamania na WordPressa</h2>
+<p>WordPress napędza około czterdziestu procent stron w internecie, więc jest celem domyślnym – nie dlatego, że jest słaby, tylko dlatego, że jest wszędzie. Sam rdzeń jest dobrze pilnowany i łata się sam. Prawie wszystkie luki ujawniane w ekosystemie (według corocznych raportów Patchstack ponad 90 %) dotyczą <strong>wtyczek i motywów</strong>. Drugi wektor to <strong>logowanie</strong>: słabe hasło, brak drugiego składnika, nieograniczone próby. Trzeci – <strong>zaniedbana konfiguracja</strong>: edytor plików w panelu, katalog uploads wykonujący PHP, kopie zapasowe, których nikt nie sprawdził.</p>
+<p>Dobra wiadomość: automat, który włamuje się do 10 000 stron dziennie, nie walczy z żadną konkretną. Jeśli Twoja strona nie ma trzech najczęstszych dziur, skrypt idzie dalej. Nie musisz być twierdzą – wystarczy, że nie jesteś najłatwiejszym celem na liście.</p>
+
+<h2>1. Automatyczne aktualizacje wtyczek i motywów</h2>
+<p><em>Gdzie:</em> Wtyczki → zainstalowane → kolumna „Automatyczne aktualizacje” → włącz dla każdej; to samo w Wygląd → Motywy.</p>
+<p>Rdzeń WordPressa aktualizuje się sam od lat (wydania poprawkowe od wersji 3.7, a nowe instalacje od 5.6 także wydania główne). Wtyczki i motywy – <strong>nie, dopóki tego nie włączysz</strong>. Tymczasem okno między publikacją łatki a masowym atakiem na niezałatane strony to często kilkanaście godzin. Włącz automatyczne aktualizacje dla wszystkiego, a wyjątki (np. wtyczka sklepu z własnymi modyfikacjami) aktualizuj ręcznie raz w tygodniu, nie „kiedyś”.</p>
+<p>Druga połowa tego punktu: <strong>usuń</strong> nieużywane wtyczki i motywy, nie tylko je wyłącz. Pliki wyłączonej wtyczki nadal leżą na serwerze i nadal można je wywołać – dziura w nieaktywnej wtyczce jest wciąż dziurą. Zostaw jeden motyw zapasowy z rodziny Twenty, resztę skasuj.</p>
+
+<h2>2. Konto „admin” i widoczne loginy</h2>
+<p><em>Gdzie:</em> Użytkownicy → Wszyscy.</p>
+<p>Automaty próbują logować się na konta <code>admin</code>, <code>administrator</code>, <code>test</code> oraz na loginy, które same wyczytają ze strony. Jeśli masz użytkownika „admin”, załóż nowe konto administratora z innym loginem, zaloguj się na nie, a stare usuń (WordPress zapyta, komu przypisać treści – wybierz nowe konto).</p>
+<p>WordPress ujawnia loginy w dwóch miejscach: w archiwum autora (adres <code>/?author=1</code> przekierowuje na <code>/author/twoj-login/</code>) i w interfejsie REST (<code>/wp-json/wp/v2/users</code>). Ustaw każdemu użytkownikowi „Nazwę wyświetlaną” inną niż login, a na stronie firmowej bez bloga wieloautorskiego po prostu wyłącz archiwa autorów (większość wtyczek SEO ma taki przełącznik; Yoast: SEO → Wygląd w wyszukiwarce → Archiwa).</p>
+
+<h2>3. Silne hasła i drugi składnik logowania</h2>
+<p><em>Gdzie:</em> Użytkownicy → Profil → Nowe hasło; wtyczka <a href="https://wordpress.org/plugins/two-factor/" rel="noopener">Two-Factor</a> (rozwijana przez zespół WordPressa) albo moduł 2FA w Wordfence / WP 2FA.</p>
+<p>Hasło do WordPressa to hasło do Twojej strony, Twojej listy klientów i – przez formularz – do ich zaufania. Wymagaj od siebie i od każdego administratora hasła z menedżera haseł (WordPress podpowiada silne przy zmianie) oraz drugiego składnika: kodu z aplikacji (Google Authenticator, Authy, 1Password) przy każdym logowaniu. Dla wygody wystarczy włączyć 2FA tylko dla ról Administrator i Redaktor.</p>
+<p>Przy okazji przejrzyj role. Osoba, która pisze wpisy, nie potrzebuje konta administratora – wystarczy Autor albo Redaktor. Agencja, która skończyła projekt rok temu, nie potrzebuje konta w ogóle.</p>
+
+<h2>4. Limit prób logowania i wyłączony XML-RPC</h2>
+<p><em>Gdzie:</em> wtyczka Limit Login Attempts Reloaded (albo moduł „Brute force” w Wordfence / Solid Security); XML-RPC – jedna linijka albo ta sama wtyczka.</p>
+<p>Standardowy WordPress pozwala zgadywać hasło bez końca. Limit prób (np. 4 nieudane → blokada adresu IP na 20 minut) zamienia atak słownikowy z minut w lata. Druga furtka to plik <code>xmlrpc.php</code> – stary interfejs dla aplikacji mobilnej i Jetpacka. Jego metoda <code>system.multicall</code> pozwala sprawdzić setki haseł w jednym żądaniu, omijając zwykłe limity. Jeśli nie używasz aplikacji WordPress na telefonie ani Jetpacka, wyłącz go: w pliku <code>functions.php</code> motywu potomnego lub we wtyczce typu Code Snippets dodaj</p>
+<pre><code>add_filter( 'xmlrpc_enabled', '__return_false' );</code></pre>
+<p>albo zablokuj dostęp do <code>xmlrpc.php</code> na poziomie serwera / Cloudflare. Sprawdzisz w minutę: wejdź na <code>twojadomena.pl/xmlrpc.php</code> – jeśli widzisz „XML-RPC server accepts POST requests only”, jest włączony.</p>
+
+<h2>5. Kopia zapasowa poza serwerem – i jeden test odtworzenia</h2>
+<p><em>Gdzie:</em> wtyczka UpdraftPlus / BackWPup / Duplicator; cel: Dysk Google, Dropbox, S3 – byle nie ten sam serwer.</p>
+<p>Kopia zapasowa to jedyne zabezpieczenie, które działa <em>po</em> włamaniu. Trzy zasady: <strong>codziennie</strong> (baza danych) i co najmniej raz w tygodniu (pliki), <strong>poza serwerem</strong> (kopia w tym samym koncie hostingowym ginie razem ze stroną – przy włamaniu, awarii dysku i przy nieopłaconej fakturze), <strong>przetestowana</strong>: raz na kwartał odtwórz kopię na subdomenie testowej albo lokalnie. Kopia, której nikt nie próbował odtworzyć, to nadzieja, nie kopia. „Hosting robi backupy” nie zwalnia z tego punktu – to jego kopia, na jego warunkach, w jego terminach.</p>
+
+<h2>6. Wyłączony edytor plików w panelu</h2>
+<p><em>Gdzie:</em> plik <code>wp-config.php</code> (przez FTP / menedżer plików hostingu), nad linią „That's all, stop editing!”.</p>
+<pre><code>define( 'DISALLOW_FILE_EDIT', true );</code></pre>
+<p>Domyślnie każdy administrator może w panelu (Wygląd → Edytor plików motywu) edytować kod PHP strony. To znaczy, że ktoś, kto zdobędzie hasło administratora – albo wykorzysta lukę w wtyczce dającą jego uprawnienia – w dwie minuty wgra tylne drzwi. Ta jedna linijka zabiera panelowi tę możliwość; kod nadal zmienisz przez FTP, czyli drugim, osobnym hasłem. Nikt na stronie firmowej nie edytuje PHP w przeglądarce, więc nic nie tracisz.</p>
+
+<h2>7. Uprawnienia plików i katalog uploads bez PHP</h2>
+<p><em>Gdzie:</em> menedżer plików hostingu lub FTP; plik <code>.htaccess</code> w <code>wp-content/uploads/</code>.</p>
+<p>Standard: katalogi <code>755</code>, pliki <code>644</code>, <code>wp-config.php</code> – <code>640</code> lub <code>600</code> (zależnie od hostingu; jeśli strona po zmianie pokazuje błąd, wróć do 644). Nigdy <code>777</code>, nawet „na chwilę, bo wtyczka prosiła”. Druga rzecz: katalog <code>uploads</code> przyjmuje pliki z formularzy i z biblioteki mediów, więc to ulubione miejsce na podrzucony skrypt. Zabroń w nim wykonywania PHP – na Apache / LiteSpeed (większość polskich hostingów) plik <code>wp-content/uploads/.htaccess</code> z treścią:</p>
+<pre><code>&lt;FilesMatch "\.(php|phtml|php[0-9])$"&gt;
+Require all denied
+&lt;/FilesMatch&gt;</code></pre>
+<p>Przy okazji upewnij się, że serwer nie pokazuje listy plików w katalogach (wejdź na <code>twojadomena.pl/wp-content/uploads/</code> – powinien być błąd 403, nie spis folderów). Jeśli widzisz spis, do głównego <code>.htaccess</code> dodaj <code>Options -Indexes</code>.</p>
+
+<h2>8. HTTPS wymuszony i nagłówki bezpieczeństwa</h2>
+<p><em>Gdzie:</em> Ustawienia → Ogólne (oba adresy z <code>https://</code>); nagłówki – panel hostingu, Cloudflare albo <code>.htaccess</code>.</p>
+<p>Certyfikat to dopiero początek. Oba adresy w ustawieniach WordPressa muszą zaczynać się od <code>https://</code>, inaczej część zasobów ładuje się nieszyfrowanie (mixed content), a logowanie potrafi iść otwartym tekstem. Potem nagłówki: HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy – sześć linijek, które chronią Twoich klientów przed podmianą treści w otwartym Wi-Fi i osadzeniem Twojego panelu w cudzej ramce. Jak je włączyć bez psucia strony, opisaliśmy krok po kroku w tekście <a href="/blog/naglowki-bezpieczenstwa-http/">Nagłówki bezpieczeństwa HTTP po ludzku</a>, a co jeszcze psuje się mimo kłódki – w <a href="/blog/https-to-nie-wszystko/">HTTPS to nie wszystko</a>.</p>
+
+<h2>9. Rejestracja wyłączona, komentarze pod kontrolą</h2>
+<p><em>Gdzie:</em> Ustawienia → Ogólne → „Każdy może się zarejestrować”; Ustawienia → Dyskusja.</p>
+<p>Na stronie firmowej nikt obcy nie powinien móc założyć konta. Odznacz „Każdy może się zarejestrować”, a „Domyślna rola nowego użytkownika” zostaw na Subskrybent – na wypadek, gdyby jakaś wtyczka znów to włączyła. Komentarze: jeśli nie prowadzisz bloga, wyłącz je globalnie (Dyskusja → odznacz „Zezwalaj na komentowanie nowych wpisów”) i zamknij na istniejących wpisach. Jeśli prowadzisz – „Komentarz musi zostać ręcznie zatwierdzony” plus Akismet. Spamowe komentarze z linkami to nie tylko bałagan: Google traktuje je jako Twoje linki wychodzące, a formularz komentarzy to kolejne miejsce, przez które wtyczki miewały luki.</p>
+
+<h2>10. Aktualne PHP i miesięczne spojrzenie w Stan witryny</h2>
+<p><em>Gdzie:</em> panel hostingu → wersja PHP; w WordPressie Narzędzia → Stan witryny.</p>
+<p>WordPress działa na PHP, a PHP ma daty ważności: wersja 8.1 przestała dostawać poprawki bezpieczeństwa z końcem 2025 r., 8.2 traci je z końcem 2026 r. Strona na starym PHP jest podatna na błędy, których nikt już nie naprawi – a przełączenie wersji w panelu hostingu to jedno kliknięcie (zrób kopię, przełącz na 8.3 lub nowszą, poklikaj po stronie; jeśli coś się wysypie, winna jest zwykle jedna stara wtyczka). Raz w miesiącu wejdź w <strong>Narzędzia → Stan witryny</strong>: WordPress sam wypisze nieaktywne motywy, stare PHP, brak HTTPS, wyłączone automatyczne aktualizacje i kilka innych rzeczy z tej listy.</p>
+
+<h2>Czego nie robić</h2>
+<ul>
+<li><strong>Nie instaluj trzech wtyczek bezpieczeństwa naraz.</strong> Jedna (Wordfence, Solid Security, SecuPress – dowolna porządna) wystarczy; dwie potrafią się blokować, a każda to kolejny kod do utrzymania.</li>
+<li><strong>Nie zastępuj 2FA „ukryciem” adresu logowania.</strong> Zmiana <code>/wp-login.php</code> na <code>/tajne-wejscie</code> odsiewa najgłupsze boty, ale nie jest zabezpieczeniem – adres wycieka w linkach, e-mailach i w kodzie strony.</li>
+<li><strong>Nigdy nie używaj „darmowych” płatnych motywów i wtyczek</strong> (tzw. nulled). Zdecydowana większość ma w środku tylne drzwi – to najprostszy sposób, żeby samemu zainstalować sobie włamanie.</li>
+<li><strong>Nie ufaj zielonej kłódce.</strong> Certyfikat szyfruje połączenie. Nie łata wtyczek, nie pilnuje hasła, nie robi kopii.</li>
+</ul>
+
+<h2>Plan na godzinę</h2>
+<ol>
+<li><strong>0–10 min:</strong> aktualizacje automatyczne włączone, nieużywane wtyczki i motywy usunięte (1).</li>
+<li><strong>10–25 min:</strong> nowe konto administratora, stare „admin” skasowane, role przejrzane, 2FA włączone (2, 3).</li>
+<li><strong>25–35 min:</strong> wtyczka limitu logowań, XML-RPC wyłączony, rejestracja i komentarze ustawione (4, 9).</li>
+<li><strong>35–50 min:</strong> kopia zapasowa poza serwer skonfigurowana i uruchomiona pierwszy raz (5).</li>
+<li><strong>50–60 min:</strong> <code>DISALLOW_FILE_EDIT</code>, <code>.htaccess</code> w uploads, wersja PHP, adresy https w ustawieniach (6, 7, 8, 10).</li>
+</ol>
+<p>Nagłówki bezpieczeństwa i test odtworzenia kopii zostaw na drugi wieczór – ale wpisz je do kalendarza, nie „na kiedyś”.</p>
+
+<section class="fullbox">
+<h2>Sprawdź, co z tej listy widać z zewnątrz</h2>
+<p>Darmowy szybki skan Webskan sprawdza to, co widzi każdy automat atakujący: HTTPS i przekierowania, nagłówki bezpieczeństwa, wycieki wersji serwera i wydajność na telefonie. Bez e-maila, bez rejestracji, wynik w ok. 30 sekund.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="pl"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://twojafirma.pl" required maxlength="500" aria-label="Adres strony"><button class="btn" type="submit">Skanuj za darmo</button></form>
+<p class="note">Chcesz, żeby ktoś pilnował tego codziennie? <a href="/#cena">Webskan Monitor</a> (49 zł/mies.) sprawdza dostępność co minutę, certyfikat i domenę, nagłówki, przypadkowy noindex i zmianę wyglądu strony głównej – i pisze tylko wtedy, gdy coś się pogorszy. <a href="/#cena">Audyt pogłębiony</a> (249 zł) przechodzi całą witrynę i oddaje plan poprawek w PDF, z ponownym sprawdzeniem po poprawkach.</p>
+</section>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a></footer>
+</div>
+</body>
+</html>
