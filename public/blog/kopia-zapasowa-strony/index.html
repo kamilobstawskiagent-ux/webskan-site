@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kopia zapasowa strony: co naprawdę masz, a czego nie – i jak to sprawdzić w 15 minut – Webskan</title>
+<meta name="description" content="„Hosting robi kopie” i „wykonawca ma pliki” to dwa najdroższe zdania w historii firmowych stron. Co musi zawierać kopia strony, co faktycznie obiecują polskie hostingi (48 godzin, 30 dni, „nie zastępują kopii użytkownika”), zasada 3-2-1 po ludzku i test w 15 minut, który pokazuje, czy po awarii masz do czego wrócić.">
+<link rel="canonical" href="https://webskan.com/blog/kopia-zapasowa-strony/">
+<link rel="alternate" hreflang="pl" href="https://webskan.com/blog/kopia-zapasowa-strony/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/website-backup-what-you-really-have/">
+<meta property="og:title" content="Kopia zapasowa strony: co naprawdę masz, a czego nie – i jak to sprawdzić w 15 minut">
+<meta property="og:description" content="Co musi zawierać kopia strony, co faktycznie obiecują hostingi, zasada 3-2-1 po ludzku i test w 15 minut, który pokazuje, czy po awarii masz do czego wrócić.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/blog/kopia-zapasowa-strony/">
+<meta property="og:image" content="https://webskan.com/og-pl.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Kopia zapasowa strony: co naprawdę masz, a czego nie – i jak to sprawdzić w 15 minut","description":"Co musi zawierać kopia strony, co faktycznie obiecują hostingi, zasada 3-2-1 po ludzku i test w 15 minut, który pokazuje, czy po awarii masz do czego wrócić.","datePublished":"2026-11-07","dateModified":"2026-11-07","inLanguage":"pl","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"mainEntityOfPage":"https://webskan.com/blog/kopia-zapasowa-strony/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a><a href="/en/blog/website-backup-what-you-really-have/">EN</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 7 listopada 2026 · 9 min czytania</p>
+<h1>Kopia zapasowa strony: co naprawdę masz, a czego nie – i jak to sprawdzić w 15 minut</h1>
+<p class="lead">Pytanie „czy macie kopię zapasową strony?” prawie zawsze dostaje odpowiedź „tak”. Problem w tym, że to „tak” znaczy zwykle jedno z trzech: „hosting chyba robi kopie”, „wykonawca ma pliki na dysku” albo „mam gdzieś stary ZIP z 2023”. Żadna z tych rzeczy nie jest kopią zapasową w sensie, który ratuje firmę po włamaniu, nieudanej aktualizacji albo omyłkowym usunięciu połowy produktów. Poniżej: co kopia musi zawierać, co faktycznie obiecują hostingi (z cytatami), ile kopii i gdzie je trzymać, oraz test w 15 minut, który pokazuje, czy po awarii masz do czego wrócić.</p>
+
+<h2>Trzy rzeczy, które właściciele mylą z kopią zapasową</h2>
+<ol>
+<li><strong>„Hosting robi kopie.”</strong> Robi – dla siebie. Kopie systemowe hostingu istnieją po to, żeby hosting przetrwał awarię własnego dysku, a nie po to, żeby Ty cofnął stronę do stanu sprzed wtorkowej aktualizacji. Jeden z największych polskich hostingów pisze to wprost: kopie systemowe „wykonywane są na wypadek awarii nośników danych i nie zastępują kopii bezpieczeństwa użytkownika”, a przechowywane są „przez co najmniej 48h”. Jeśli włamanie zauważysz w czwartek, a stało się w poniedziałek, kopia hostingu zawiera już zhakowaną stronę.</li>
+<li><strong>„Wykonawca ma pliki.”</strong> Wykonawca ma pliki motywu z dnia wdrożenia. Nie ma: bazy danych z Twoimi wpisami, zamówieniami i klientami, zdjęć wgranych przez Ciebie przez dwa lata, ustawień wtyczek, treści podstron, które sam poprawiałeś. Strona z 2024 odtworzona z plików wykonawcy to pusta strona z Twoim logo.</li>
+<li><strong>„Mam ZIP na dysku.”</strong> Kopia bez daty, bez bazy danych i bez sprawdzenia, czy się rozpakowuje, to nie kopia – to nadzieja. Dokumentacja WordPressa zaleca, by kopie automatyczne „co jakiś czas zabezpieczyć kopią ręczną, aby mieć gwarancję, że proces działa”. Innymi słowy: kopia, której nikt nigdy nie otworzył, ma nieznaną wartość.</li>
+</ol>
+
+<h2>Co musi zawierać kopia strony</h2>
+<p>Dokumentacja WordPressa ujmuje to w jednym zdaniu: są „dwie części kopii zapasowej witryny WordPress: baza danych i pliki. Potrzebujesz obu, aby w pełni przywrócić typową witrynę”. To samo dotyczy każdego CMS-a i sklepu (Joomla, PrestaShop, WooCommerce, Shoper na własnym serwerze).</p>
+<ul>
+<li><strong>Baza danych</strong> – treści, produkty, zamówienia, użytkownicy, ustawienia wtyczek, menu. To jest ta część, której wykonawca zwykle nie ma i której nie da się odtworzyć ręcznie.</li>
+<li><strong>Pliki</strong> – motyw, wtyczki, katalog z wgranymi zdjęciami i dokumentami (w WordPressie <code>wp-content/uploads</code>), plik konfiguracyjny z danymi dostępu do bazy (<code>wp-config.php</code>) oraz <code>.htaccess</code> lub inna konfiguracja serwera z przekierowaniami. Dokumentacja osobno podkreśla katalog <code>wp-content</code> i <code>wp-config.php</code>, a o plikach rdzenia WordPressa mówi, że „zwykle nie ma potrzeby ich kopiować, bo można je zastąpić świeżym pobraniem”.</li>
+<li><strong>To, czego w kopii „strony” zwykle nie ma, a co też trzeba mieć gdzie indziej:</strong> skrzynki e-mail (kopia strony ich nie obejmuje), ustawienia DNS domeny (zrzut ekranu panelu wystarczy), lista kont i dostępów (hosting, domena, CMS, Google Search Console, konta reklamowe), klucze API i dane integracji (płatności, kurier, faktury).</li>
+</ul>
+
+<h2>Co faktycznie obiecują hostingi</h2>
+<p>Sprawdziliśmy publiczne strony pomocy i oferty czterech popularnych w Polsce hostingów (stan na 7 listopada 2026; cytaty w oryginale). Wniosek wspólny: kopia hostingu to zabezpieczenie <em>hostingu</em>, przydatne jako ostatnia deska ratunku, a nie zamiast własnej.</p>
+<table class="vitals headers">
+<thead><tr><th>Hosting</th><th>Co deklaruje publicznie</th><th>Co to znaczy dla Ciebie</th></tr></thead>
+<tbody>
+<tr><td><strong>nazwa.pl</strong></td><td data-l="Deklaracja">„Raz na dobę systemowe kopie bezpieczeństwa wszystkich danych”; „utrzymywane są przez co najmniej 48h”; „nie zastępują kopii bezpieczeństwa użytkownika”. Dane z nich „mogą jednak zostać udostępnione na warunkach przedstawionych w ramach Usług IT”. Dłuższa retencja i samodzielne przywracanie – w osobnej, płatnej usłudze kopii zapasowej.</td><td data-l="Dla Ciebie">Masz najwyżej dwa dni na zauważenie problemu, a odzyskanie danych to osobna usługa, nie przycisk w panelu. Własna kopia jest konieczna.</td></tr>
+<tr><td><strong>LH.pl</strong></td><td data-l="Deklaracja">„Backup na serwerach LH.pl wykonywany jest codziennie i przechowywany przez 30 dni na zewnętrznym serwerze backupowym”; „kopia uwzględnia wszystkie pliki strony, a także bazę danych”. Przywracanie samodzielne: pobranie przez FTP i import. Ostrzeżenie: jeśli „infekcja na stronie występuje dłużej niż miesiąc, to przywracanie kopii zapasowej z ostatnich 30 dni nie przyniesie oczekiwanych rezultatów”.</td><td data-l="Dla Ciebie">Najdłuższe okno z czterech i jasna deklaracja zawartości. Przywrócenie wymaga umiejętności (FTP, import bazy) albo wykonawcy. Włamanie sprzed ponad miesiąca jest poza zasięgiem.</td></tr>
+<tr><td><strong>cyber_Folks</strong></td><td data-l="Deklaracja">Pomoc opisuje udostępnienie kopii z panelu i pobranie jej przez SSH (<code>wget</code>). Okresu przechowywania ani warunków odpowiedzialności nie znaleźliśmy na publicznych stronach pomocy.</td><td data-l="Dla Ciebie">Zapytaj supportu o retencję na piśmie, zanim jej będziesz potrzebować. Pobranie kopii wymaga terminala – dla większości właścicieli to zadanie dla wykonawcy.</td></tr>
+<tr><td><strong>home.pl</strong></td><td data-l="Deklaracja">Nie znaleźliśmy publicznej polityki kopii systemowych; baza wiedzy opisuje płatną usługę dodatkową (kopie w chmurze Acronis).</td><td data-l="Dla Ciebie">Załóż, że bez dodatkowej usługi kopii „dla Ciebie” nie ma. Potwierdź to jednym mailem do supportu.</td></tr>
+</tbody>
+</table>
+<p>Zasady mogą się zmienić i różnią się między pakietami – przed podjęciem decyzji sprawdź własną umowę i regulamin. Ale schemat jest ten sam u wszystkich: krótkie okno, przywracanie wymaga wiedzy lub kosztuje, odpowiedzialność za dane jest po Twojej stronie.</p>
+
+<h2>Zasada 3-2-1 po ludzku</h2>
+<p>Amerykańska agencja CISA (wcześniej US-CERT) opisuje regułę 3-2-1 tak: „3 – trzymaj 3 kopie każdego ważnego pliku: 1 podstawową i 2 zapasowe. 2 – trzymaj pliki na 2 różnych rodzajach nośników. 1 – przechowuj 1 kopię poza siedzibą”. Dla strony firmowej w 2026 wygląda to tak:</p>
+<ul>
+<li><strong>3 kopie:</strong> strona na serwerze (podstawowa) + kopia automatyczna z wtyczki lub panelu hostingu + kopia poza hostingiem.</li>
+<li><strong>2 nośniki:</strong> serwer hostingu to jeden. Drugi to dysk w chmurze (Google Drive, Dropbox, OneDrive) albo zewnętrzny dysk w firmie. Dokumentacja WordPressa radzi dokładnie taki układ: „jedna na serwerze hostingu, jedna w chmurze, jedna pobrana na własny komputer”.</li>
+<li><strong>1 poza siedzibą:</strong> poza hostingiem. Kopia na tym samym koncie hostingowym ginie razem ze stroną, gdy konto zostanie przejęte, zablokowane za zaległą fakturę albo gdy hosting ma awarię.</li>
+</ul>
+<p><strong>Jak często?</strong> WordPress: „dla mniejszych witryn z niewielką liczbą wpisów kopie powinny być robione raz w tygodniu”, „dla witryn o dużej aktywności – codziennie”, a bazę danych „zawsze przed aktualizacją”. Prostsza reguła dla sklepu: tak często, jak często wpływają zamówienia, których nie chcesz stracić. Trzymaj „co najmniej 3–5 ostatnich kopii” – jedna może być uszkodzona, a włamanie zauważone po tygodniu wymaga kopii starszej niż tydzień.</p>
+
+<h2>Test w 15 minut: czy masz do czego wrócić</h2>
+<ol>
+<li><strong>Znajdź ostatnią kopię (3 min).</strong> Zaloguj się do panelu hostingu i poszukaj zakładki „Kopie zapasowe”/„Backup”. Jeśli masz wtyczkę do kopii w WordPressie (UpdraftPlus, BackWPup, Duplicator, Jetpack VaultPress), otwórz jej listę kopii. Zapisz datę ostatniej. Jeśli nie ma żadnej z dzisiaj lub wczoraj – test skończony, wynik znasz.</li>
+<li><strong>Sprawdź, co jest w środku (5 min).</strong> Pobierz najnowszą kopię i rozpakuj. Szukaj dwóch rzeczy: pliku bazy danych (<code>.sql</code> lub <code>.sql.gz</code>) i katalogu z wgranymi plikami (<code>wp-content/uploads</code> lub odpowiednika). Brak pliku <code>.sql</code> = kopia bez treści i zamówień. Otwórz plik <code>.sql</code> w edytorze i poszukaj tytułu wczorajszego wpisu lub numeru ostatniego zamówienia – jeśli go nie ma, kopia jest stara albo niepełna.</li>
+<li><strong>Sprawdź, gdzie leży (2 min).</strong> Jeśli jedyne miejsce to ten sam serwer, co strona – przenieś najnowszą kopię na dysk w chmurze teraz, ręcznie. Potem ustaw w wtyczce lub panelu automatyczne wysyłanie kopii poza hosting.</li>
+<li><strong>Zapytaj o przywracanie (5 min).</strong> Napisz do hostingu lub wykonawcy jedno pytanie: „Gdybym dziś o 9:00 zgłosił, że strona jest zniszczona, do której godziny i za ile będzie przywrócona ze stanu z wczoraj?”. Odpowiedź z godziną i kwotą jest OK. Odpowiedź „to zależy” oznacza, że nikt tego nigdy nie zrobił.</li>
+</ol>
+<p>Pełny test przywrócenia (odtworzenie kopii na adresie testowym i kliknięcie po stronie) to zadanie dla wykonawcy, 1–2 godziny, raz na kwartał lub po większej zmianie. Dopiero po nim wiadomo, że kopia działa, a nie tylko istnieje.</p>
+
+<h2>Sytuacja → co Cię ratuje → czego nie uratuje</h2>
+<table class="vitals headers">
+<thead><tr><th>Co się stało</th><th>Co ratuje</th><th>Czego nie uratuje</th></tr></thead>
+<tbody>
+<tr><td><strong>Aktualizacja wtyczki zepsuła stronę</strong></td><td data-l="Ratuje">Wczorajsza kopia plików i bazy; w WordPressie często wystarczy wyłączyć wtyczkę przez FTP</td><td data-l="Nie uratuje">Kopia z zeszłego miesiąca – stracisz treści i zamówienia z 30 dni</td></tr>
+<tr><td><strong>Włamanie zauważone po tygodniu</strong></td><td data-l="Ratuje">Kopia starsza niż włamanie (co najmniej 2 tygodnie wstecz) + aktualizacje + zmiana haseł; Google radzi „zastąpić zainfekowane pliki ostatnią dobrą kopią”</td><td data-l="Nie uratuje">Kopia hostingu z 48-godzinnym oknem – zawiera już zhakowaną stronę</td></tr>
+<tr><td><strong>Ktoś usunął produkty lub podstrony</strong></td><td data-l="Ratuje">Kopia bazy sprzed usunięcia; wykonawca może przywrócić same rekordy</td><td data-l="Nie uratuje">Kopia samych plików (motyw, wtyczki) – treść jest w bazie</td></tr>
+<tr><td><strong>Konto hostingowe zablokowane lub przejęte</strong></td><td data-l="Ratuje">Kopia poza hostingiem (chmura/dysk) + dostęp do domeny, żeby wskazać nowy serwer</td><td data-l="Nie uratuje">Kopie trzymane na tym samym koncie hostingu</td></tr>
+<tr><td><strong>Wykonawca zniknął</strong></td><td data-l="Ratuje">Własna kopia + lista dostępów (hosting, domena, CMS) w Twoich rękach</td><td data-l="Nie uratuje">„On ma wszystko na laptopie”</td></tr>
+<tr><td><strong>Skrzynki e-mail zniknęły</strong></td><td data-l="Ratuje">Osobna kopia poczty (klient pocztowy z lokalną kopią lub archiwum)</td><td data-l="Nie uratuje">Kopia strony – nie zawiera poczty</td></tr>
+</tbody>
+</table>
+
+<h2>Pytania do hostingu i wykonawcy (do wklejenia)</h2>
+<ul>
+<li>Jak często robicie kopie mojej strony i jak długo je trzymacie? Czy obejmują bazę danych?</li>
+<li>Czy mogę sam przywrócić kopię z panelu, czy to zgłoszenie do supportu? Ile kosztuje i ile trwa?</li>
+<li>Gdzie fizycznie leżą kopie – na tym samym serwerze co strona czy poza nim?</li>
+<li>Kiedy ostatnio ktoś przywracał moją stronę z kopii i czy to zadziałało?</li>
+<li>(Do wykonawcy) Czy przed każdą aktualizacją robicie kopię i gdzie ją zapisujecie? Czy dostanę do niej dostęp?</li>
+</ul>
+
+<h2>Co sprawdzamy w Webskanie</h2>
+<p>Kopii zapasowej nie widać z zewnątrz – nie sprawdzimy, czy ją masz. Patrzymy na to, co widać od strony klienta i Google, i na to, co się zmienia. W <a href="/#cena">audycie pogłębionym</a> wykrywamy nagłówki zdradzające wersje oprogramowania serwera (ułatwiają dobór ataku, po którym kopia stanie się potrzebna) oraz publicznie dostępne pliki, których nie powinno być pod adresem strony: zrzuty bazy, archiwa kopii, pliki konfiguracyjne i repozytorium <code>.git</code> – kopia zapasowa leżąca w katalogu strony to wyciek danych, nie zabezpieczenie. <a href="/#cena">Webskan Monitor</a> codziennie sprawdza stronę, zapisuje zrzut strony głównej i porównuje go z wczorajszym: gdy strona zacznie zwracać błędy, wyświetlać pustą treść, przekierowywać gdzie indziej albo wyglądać znacząco inaczej, dostajesz e-mail tego samego dnia – a to właśnie dzień, w którym kopia sprzed awarii jeszcze istnieje.</p>
+
+<section class="fullbox">
+<h2>Szybki obraz za darmo</h2>
+<p>Darmowy szybki skan Webskan sprawdza stronę tak, jak widzi ją telefon klienta: certyfikat i przekierowanie na https, podstawowe nagłówki bezpieczeństwa, wydajność i SEO. Bez e-maila, bez rejestracji, wynik w ok. 30 sekund.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="pl"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://twojafirma.pl" required maxlength="500" aria-label="Adres strony"><button class="btn" type="submit">Skanuj za darmo</button></form>
+<p class="note">Chcesz, żeby ktoś codziennie porównywał stronę z wczorajszą i pisał, gdy coś się zmieni? <a href="/#cena">Webskan Monitor</a> (49 zł/mies.); 30 dni Monitora w cenie <a href="/#cena">audytu pogłębionego</a> (249 zł).</p>
+</section>
+
+<h2>Źródła i narzędzia</h2>
+<ul>
+<li>WordPress, <a href="https://developer.wordpress.org/advanced-administration/security/backup/" rel="noopener">Advanced Administration Handbook: WordPress Backups</a> oraz <a href="https://developer.wordpress.org/advanced-administration/security/backup/files/" rel="noopener">Backing Up Your WordPress Files</a> – baza i pliki, 3–5 ostatnich kopii w różnych miejscach, częstotliwość (tygodniowo/codziennie, przed aktualizacją), kopie hostingu a własne</li>
+<li>CISA / US-CERT, <a href="https://www.cisa.gov/sites/default/files/publications/data_backup_options.pdf" rel="noopener">Data Backup Options</a> (P. Ruggiero, M. Heckathorn) – definicja zasady 3-2-1; CISA, <a href="https://www.cisa.gov/stopransomware" rel="noopener">StopRansomware</a> – „utrzymuj szyfrowane kopie offline i regularnie je testuj”</li>
+<li>nazwa.pl, <a href="https://www.nazwa.pl/hosting/" rel="noopener">specyfikacja hostingu</a> – kopie systemowe raz na dobę, co najmniej 48 h, „nie zastępują kopii bezpieczeństwa użytkownika”</li>
+<li>LH.pl, <a href="https://www.lh.pl/pomoc/doc/jak-przywrocic-strone-z-backupu-w-lh-pl/" rel="noopener">Jak przywrócić stronę z backupu</a> – codziennie, 30 dni, pliki i baza, przywracanie przez FTP</li>
+<li>cyber_Folks, <a href="https://cyberfolks.pl/pomoc/pobieranie-udostepnionej-kopii/" rel="noopener">Pobieranie udostępnionej kopii</a> – udostępnienie z panelu, pobranie przez SSH</li>
+<li>Google Search Console – Centrum pomocy, <a href="https://support.google.com/webmasters/answer/9044101" rel="noopener">Raport „Problemy dotyczące bezpieczeństwa”</a> – przywracanie z ostatniej dobrej kopii po włamaniu</li>
+<li>Webskan, <a href="/blog/strona-zhakowana-jak-poznac/">Strona zhakowana: jak to poznać</a> i <a href="/blog/wordpress-10-ustawien-bezpieczenstwa/">WordPress: 10 ustawień bezpieczeństwa</a></li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a></footer>
+</div>
+</body>
+</html>

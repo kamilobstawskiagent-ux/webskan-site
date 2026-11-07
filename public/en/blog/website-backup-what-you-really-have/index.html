@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Website backup: what you really have, what you don't, and a 15-minute check – Webskan</title>
+<meta name="description" content="“The host does backups” and “the developer has the files” are the two most expensive sentences in the history of business websites. What a website backup must contain, what hosts actually promise (48 hours, 30 days, “does not replace the user's own backup”), the 3-2-1 rule in plain words and a 15-minute check that tells you whether you can recover after a hack or a broken update.">
+<link rel="canonical" href="https://webskan.com/en/blog/website-backup-what-you-really-have/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/website-backup-what-you-really-have/">
+<link rel="alternate" hreflang="pl" href="https://webskan.com/blog/kopia-zapasowa-strony/">
+<meta property="og:title" content="Website backup: what you really have, what you don't, and a 15-minute check">
+<meta property="og:description" content="What a website backup must contain, what hosts actually promise, the 3-2-1 rule in plain words and a 15-minute check that tells you whether you can recover after a hack or a broken update.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/en/blog/website-backup-what-you-really-have/">
+<meta property="og:image" content="https://webskan.com/og-en.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Website backup: what you really have, what you don't, and a 15-minute check","description":"What a website backup must contain, what hosts actually promise, the 3-2-1 rule in plain words and a 15-minute check that tells you whether you can recover after a hack or a broken update.","datePublished":"2026-11-07","dateModified":"2026-11-07","inLanguage":"en","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/en/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/en/"},"mainEntityOfPage":"https://webskan.com/en/blog/website-backup-what-you-really-have/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a href="/en/blog/">Blog</a><a href="/en/#pricing">Pricing</a><a href="/blog/kopia-zapasowa-strony/">PL</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 7 November 2026 · 9 min read</p>
+<h1>Website backup: what you really have, what you don't, and a 15-minute check</h1>
+<p class="lead">Ask a business owner “do you have a backup of your website?” and the answer is almost always “yes”. The trouble is that “yes” usually means one of three things: “the host does backups, I think”, “the developer has the files on their laptop” or “there is a ZIP from 2023 somewhere”. None of these is a backup in the sense that saves a business after a hack, a failed update or someone deleting half the product catalogue. Below: what a backup must contain, what hosts actually promise (with quotes), how many copies to keep and where, and a 15-minute check that shows whether you have anything to go back to.</p>
+
+<h2>Three things owners mistake for a backup</h2>
+<ol>
+<li><strong>“The host does backups.”</strong> It does – for itself. A host's system backups exist so the host survives a failed disk, not so you can roll your site back to the state before Tuesday's plugin update. One large Polish host says it plainly: system backups “are made in case of storage media failure and do not replace the user's own backups”, and they are kept “for at least 48 hours”. If you notice a hack on Thursday that happened on Monday, the host's copy already contains the hacked site. Retention windows differ between hosts, but the pattern is the same everywhere.</li>
+<li><strong>“The developer has the files.”</strong> The developer has the theme files from launch day. They do not have: the database with your posts, orders and customers, the photos you uploaded over two years, plugin settings, or the pages you edited yourself. A site rebuilt from the developer's files is an empty site with your logo.</li>
+<li><strong>“There is a ZIP on my drive.”</strong> A copy with no date, no database and no proof it even unpacks is not a backup – it is hope. The WordPress handbook recommends backing up the automatic backups “with a manual backup once in a while to guarantee that the process is working”. A backup nobody has ever opened has unknown value.</li>
+</ol>
+
+<h2>What a website backup must contain</h2>
+<p>The WordPress documentation puts it in one sentence: “There are two parts to backing up your WordPress site: Database and Files. You need both to be able to fully restore a typical WordPress site.” The same holds for every CMS and shop platform you host yourself (Joomla, PrestaShop, WooCommerce, Magento).</p>
+<ul>
+<li><strong>The database</strong> – content, products, orders, users, plugin settings, menus. This is the part the developer usually does not have and that cannot be recreated by hand.</li>
+<li><strong>The files</strong> – theme, plugins, the uploads folder with your images and documents (<code>wp-content/uploads</code> in WordPress), the configuration file with database credentials (<code>wp-config.php</code>) and <code>.htaccess</code> or the equivalent server config with your redirects. The handbook singles out <code>wp-content</code> and <code>wp-config.php</code>, and says of the WordPress core files that “normally, there would be no need to copy the WordPress core files, as you can replace them from a fresh download”.</li>
+<li><strong>What a “website” backup usually does not include, and you still need somewhere:</strong> mailboxes (a site backup does not contain e-mail), the domain's DNS settings (a screenshot of the panel is enough), the list of accounts and logins (hosting, domain, CMS, Search Console, ad accounts), API keys and integration credentials (payments, shipping, invoicing).</li>
+</ul>
+
+<h2>What hosts actually promise</h2>
+<p>We read the public help pages and offers of four hosts popular in our home market, Poland (as of 7 November 2026). The picture will look familiar wherever you host:</p>
+<ul>
+<li>One host keeps daily system backups “for at least 48 hours”, states they “do not replace the user's own backups”, and makes data from them available only as a separate IT service; longer retention and self-service restore are a separate paid product.</li>
+<li>Another makes a daily backup “kept for 30 days on an external backup server” that includes “all site files and the database”; restoring is self-service over FTP plus a database import, and the same page warns that if an infection “has been present for longer than a month, restoring a backup from the last 30 days will not bring the expected results”.</li>
+<li>A third documents how to share a backup from the panel and download it over SSH with <code>wget</code>, but publishes no retention period.</li>
+<li>For the fourth we found no public system-backup policy at all, only a paid cloud backup add-on.</li>
+</ul>
+<p>The common shape: a short window, restoring takes skills or money, and responsibility for the data is yours. The WordPress handbook says the same from the other side: “Most hosts back up the entire server, including your site, but it takes time to request a copy of your site from their backups, and a speedy recovery is critical. You need to learn how to back up your own site files and restore them.”</p>
+
+<h2>The 3-2-1 rule in plain words</h2>
+<p>The US cybersecurity agency CISA (formerly US-CERT) defines the 3-2-1 rule as: “3 – Keep 3 copies of any important file: 1 primary and 2 backups. 2 – Keep the files on 2 different media types to protect against different types of hazards. 1 – Store 1 copy offsite.” For a business website in 2026 that means:</p>
+<ul>
+<li><strong>3 copies:</strong> the live site on the server (primary) + an automatic backup from a plugin or the hosting panel + a copy outside the hosting account.</li>
+<li><strong>2 media:</strong> the hosting server is one. The second is cloud storage (Google Drive, Dropbox, OneDrive) or an external drive at the office. WordPress recommends exactly this layout: “one on your hosting server, one on cloud storage (Google Drive, Dropbox, etc.), and one downloaded to your local computer.”</li>
+<li><strong>1 offsite:</strong> outside the host. A backup on the same hosting account disappears together with the site when the account is hijacked, suspended over an unpaid invoice, or when the host has an outage.</li>
+</ul>
+<p><strong>How often?</strong> WordPress: “For smaller websites with fewer posts, backups should be made once a week”, “for high-activity websites with a lot of posts, backups should be made daily”, and back up the database “always before an upgrade”. A simpler rule for a shop: as often as orders arrive that you cannot afford to lose. Keep “at least 3–5 recent WordPress backups” – one may be corrupted, and a hack noticed after a week needs a copy older than a week. CISA adds a line that applies to every business: “Maintain offline, encrypted backups of data and regularly test your backups.”</p>
+
+<h2>The 15-minute check: do you have anything to go back to?</h2>
+<ol>
+<li><strong>Find the latest backup (3 min).</strong> Log in to the hosting panel and look for “Backups”. If you have a backup plugin in WordPress (UpdraftPlus, BackWPup, Duplicator, Jetpack VaultPress), open its list. Write down the date of the newest copy. If there is none from today or yesterday, the check is over – you have your answer.</li>
+<li><strong>Check what is inside (5 min).</strong> Download the newest backup and unpack it. Look for two things: a database file (<code>.sql</code> or <code>.sql.gz</code>) and the uploads folder (<code>wp-content/uploads</code> or its equivalent). No <code>.sql</code> file means a backup without content or orders. Open the <code>.sql</code> file in a text editor and search for yesterday's post title or the last order number – if it is not there, the backup is old or incomplete.</li>
+<li><strong>Check where it lives (2 min).</strong> If the only location is the same server as the site, move the newest copy to cloud storage now, by hand. Then set the plugin or panel to send backups off the host automatically.</li>
+<li><strong>Ask about restoring (5 min).</strong> Send your host or developer one question: “If I reported at 9:00 today that the site is destroyed, by what time and at what cost would it be restored to yesterday's state?” An answer with a time and a price is fine. “It depends” means nobody has ever done it.</li>
+</ol>
+<p>A full restore test (restoring the backup to a staging address and clicking through the site) is a job for the developer, 1–2 hours, once a quarter or after any major change. Only then do you know the backup works rather than merely exists.</p>
+
+<h2>Scenario → what saves you → what won't</h2>
+<table class="vitals headers">
+<thead><tr><th>What happened</th><th>What saves you</th><th>What won't</th></tr></thead>
+<tbody>
+<tr><td><strong>A plugin update broke the site</strong></td><td data-l="Saves you">Yesterday's backup of files and database; in WordPress, disabling the plugin over FTP is often enough</td><td data-l="Won't">Last month's backup – you lose 30 days of content and orders</td></tr>
+<tr><td><strong>A hack noticed a week later</strong></td><td data-l="Saves you">A backup older than the hack (at least 2 weeks back) + updates + new passwords; Google's advice is to “replace affected files with the last good backup”</td><td data-l="Won't">The host's 48-hour backup – it already contains the hacked site</td></tr>
+<tr><td><strong>Someone deleted products or pages</strong></td><td data-l="Saves you">A database backup from before the deletion; a developer can restore just those records</td><td data-l="Won't">A files-only backup (theme, plugins) – the content lives in the database</td></tr>
+<tr><td><strong>Hosting account suspended or hijacked</strong></td><td data-l="Saves you">A backup outside the host (cloud/drive) + access to the domain to point it at a new server</td><td data-l="Won't">Backups kept on the same hosting account</td></tr>
+<tr><td><strong>The developer disappeared</strong></td><td data-l="Saves you">Your own backup + the list of logins (hosting, domain, CMS) in your hands</td><td data-l="Won't">“They have everything on their laptop”</td></tr>
+<tr><td><strong>Mailboxes are gone</strong></td><td data-l="Saves you">A separate e-mail backup (a mail client with a local copy, or an archive)</td><td data-l="Won't">The website backup – it does not contain e-mail</td></tr>
+</tbody>
+</table>
+
+<h2>Questions for your host and developer (copy and paste)</h2>
+<ul>
+<li>How often do you back up my site and how long do you keep the copies? Do they include the database?</li>
+<li>Can I restore a backup myself from the panel, or is it a support ticket? What does it cost and how long does it take?</li>
+<li>Where are the backups physically stored – on the same server as the site or elsewhere?</li>
+<li>When did someone last restore my site from a backup, and did it work?</li>
+<li>(Developer) Do you take a backup before every update, where do you store it, and will I have access to it?</li>
+</ul>
+
+<h2>What Webskan checks</h2>
+<p>A backup is invisible from the outside – we cannot tell whether you have one. We look at what customers and Google can see, and at what changes. The <a href="/en/#pricing">in-depth audit</a> flags server headers that reveal software versions (they make the attack that will make you need a backup easier) and publicly accessible files that should never sit under your website's address: database dumps, backup archives, configuration files and a <code>.git</code> repository – a backup inside the web root is a data leak, not a safeguard. <a href="/en/#pricing">Webskan Monitor</a> checks the site every day, stores a screenshot of the home page and compares it with yesterday's: when the site starts returning errors, shows empty content, redirects elsewhere or looks significantly different, you get an e-mail the same day – which is exactly the day a pre-incident backup still exists.</p>
+
+<section class="fullbox">
+<h2>A quick picture, free</h2>
+<p>The free Webskan quick scan checks your site the way a customer's phone sees it: certificate and https redirect, basic security headers, performance and SEO. No e-mail, no sign-up, results in about 30 seconds.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="en"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://yourcompany.com" required maxlength="500" aria-label="Website address"><button class="btn" type="submit">Scan for free</button></form>
+<p class="note">Want someone to compare your site with yesterday's every day and write only when something changes? <a href="/en/#pricing">Webskan Monitor</a> ($15/month); 30 days of Monitor included with the <a href="/en/#pricing">in-depth audit</a> ($69).</p>
+</section>
+
+<h2>Sources and tools</h2>
+<ul>
+<li>WordPress, <a href="https://developer.wordpress.org/advanced-administration/security/backup/" rel="noopener">Advanced Administration Handbook: WordPress Backups</a> and <a href="https://developer.wordpress.org/advanced-administration/security/backup/files/" rel="noopener">Backing Up Your WordPress Files</a> – database and files, 3–5 recent copies in different locations, frequency (weekly/daily, before upgrades), host backups vs your own</li>
+<li>CISA / US-CERT, <a href="https://www.cisa.gov/sites/default/files/publications/data_backup_options.pdf" rel="noopener">Data Backup Options</a> (P. Ruggiero, M. Heckathorn) – the 3-2-1 rule; CISA, <a href="https://www.cisa.gov/stopransomware" rel="noopener">StopRansomware</a> – “Maintain offline, encrypted backups of data and regularly test your backups”</li>
+<li>nazwa.pl, <a href="https://www.nazwa.pl/hosting/" rel="noopener">hosting specification</a> (Polish) – daily system backups, at least 48 hours, “do not replace the user's backups”; LH.pl, <a href="https://www.lh.pl/pomoc/doc/jak-przywrocic-strone-z-backupu-w-lh-pl/" rel="noopener">How to restore a site from backup</a> (Polish) – daily, 30 days, files and database, FTP restore; cyber_Folks, <a href="https://cyberfolks.pl/pomoc/pobieranie-udostepnionej-kopii/" rel="noopener">Downloading a shared backup</a> (Polish)</li>
+<li>Google Search Console Help, <a href="https://support.google.com/webmasters/answer/9044101" rel="noopener">Security Issues report</a> – restoring from the last good backup after a hack</li>
+<li>Webskan, <a href="/en/blog/how-to-tell-your-website-was-hacked/">How to tell your website has been hacked</a> and <a href="/en/blog/wordpress-security-settings/">WordPress security settings</a></li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a></footer>
+</div>
+</body>
+</html>
