@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formularz kontaktowy nie działa? Jak to sprawdzić w 10 minut – Webskan</title>
+<meta name="description" content="Najczęstsza cicha awaria firmowej strony: formularz pokazuje „wysłano”, a zapytania nigdzie nie dochodzą. Osiem powodów, test w 10 minut krok po kroku i tabela objaw → przyczyna → kto naprawia.">
+<link rel="canonical" href="https://webskan.com/blog/formularz-kontaktowy-nie-dziala/">
+<link rel="alternate" hreflang="pl" href="https://webskan.com/blog/formularz-kontaktowy-nie-dziala/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/contact-form-not-working/">
+<meta property="og:title" content="Formularz kontaktowy nie działa? Jak to sprawdzić w 10 minut">
+<meta property="og:description" content="Osiem powodów, dla których zapytania ze strony znikają, test krok po kroku i tabela objaw → przyczyna → kto naprawia.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/blog/formularz-kontaktowy-nie-dziala/">
+<meta property="og:image" content="https://webskan.com/og-pl.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Formularz kontaktowy nie działa? Jak to sprawdzić w 10 minut","description":"Osiem powodów, dla których zapytania ze strony znikają, test krok po kroku i tabela objaw → przyczyna → kto naprawia.","datePublished":"2026-11-07","dateModified":"2026-11-07","inLanguage":"pl","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"mainEntityOfPage":"https://webskan.com/blog/formularz-kontaktowy-nie-dziala/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a><a href="/en/blog/contact-form-not-working/">EN</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 7 listopada 2026 · 7 min czytania</p>
+<h1>Formularz kontaktowy nie działa? Jak to sprawdzić w 10 minut</h1>
+<p class="lead">To najczęstsza cicha awaria firmowej strony. Strona się ładuje, kłódka świeci, formularz pokazuje „Dziękujemy, wiadomość wysłana” – a zapytania od tygodni lądują w próżni. Nikt nie dzwoni z pretensją, bo klient myśli, że to Ty nie odpisujesz, i idzie do konkurencji. Poniżej osiem powodów, dla których tak się dzieje, test, który zrobisz sam w 10 minut, i tabela, która podpowie, kogo prosić o naprawę.</p>
+
+<h2>Dlaczego formularz psuje się po cichu</h2>
+<p>Formularz to łańcuch: przeglądarka klienta → skrypt na stronie → serwer → wysyłka e-maila → serwer pocztowy odbiorcy → folder w Twojej skrzynce. Każde ogniwo może pęknąć osobno, a komunikat „wysłano” zwykle potwierdza tylko pierwsze dwa.</p>
+<ol>
+<li><strong>Wiadomości trafiają do spamu albo są odrzucane.</strong> Wiele wtyczek wysyła e-mail „od klienta”, czyli z adresem klienta w polu nadawcy. Dla serwera pocztowego to podszywanie się pod cudzą domenę: Gmail i Outlook coraz częściej takie wiadomości odrzucają albo kierują do spamu. Do tego dochodzi brak rekordu SPF lub DKIM dla Twojej domeny – Google wymaga co najmniej jednego z nich od każdego nadawcy piszącego na Gmaila (od lutego 2024), bo bez nich odbiorca nie ma jak sprawdzić, że e-mail naprawdę pochodzi z Twojego serwera.</li>
+<li><strong>Serwer przestał wysyłać pocztę.</strong> Po przenosinach hostingu, zmianie wersji PHP albo zaostrzeniu polityki dostawcy funkcja wysyłki bywa wyłączona. Wtyczka nie dostaje błędu, więc nadal pokazuje „wysłano”.</li>
+<li><strong>Wygasł klucz albo hasło do SMTP.</strong> Jeśli formularz wysyła przez zewnętrzną usługę (Gmail, Brevo, SendGrid, Mailgun), zmiana hasła, wygaśnięcie klucza API albo włączenie weryfikacji dwuetapowej odcina wysyłkę z dnia na dzień.</li>
+<li><strong>Zmienił się adres odbiorcy.</strong> Pracownik odszedł, skrzynka została skasowana lub jest pełna, a w ustawieniach formularza nadal widnieje jego adres. Serwer wysyła, nikt nie czyta.</li>
+<li><strong>Ochrona przed spamem odrzuca ludzi.</strong> reCAPTCHA z za wysokim progiem, honeypot, który wypełnia autouzupełnianie przeglądarki, albo filtr słów blokujący „http” w treści – klient widzi niejasny błąd albo wcale go nie widzi.</li>
+<li><strong>Formularz nie działa na telefonie.</strong> Pole wymagane schowane pod klawiaturą, przycisk poza ekranem, lista rozwijana, której nie da się otworzyć dotykiem. Większość zapytań do lokalnych firm przychodzi z telefonów, więc błąd „tylko na komórce” to błąd dla większości.</li>
+<li><strong>Po aktualizacji skrypt się wysypał.</strong> Nowa wersja wtyczki, motywu albo narzędzia do zgód na cookies potrafi zablokować skrypt formularza. Przycisk „Wyślij” kręci się w nieskończoność albo nic nie robi. W konsoli przeglądarki jest czerwony błąd, którego nikt nie widzi.</li>
+<li><strong>Strona z podziękowaniem zniknęła.</strong> Formularz przekierowuje po wysłaniu na stronę „/dziekujemy”, którą ktoś skasował przy porządkach. Klient widzi błąd 404 i wysyła drugi raz albo rezygnuje; przy okazji analityka przestaje liczyć zapytania.</li>
+</ol>
+
+<h2>Test w 10 minut, krok po kroku</h2>
+<ol>
+<li><strong>Wyślij zgłoszenie testowe tak, jak klient.</strong> Z telefonu, w sieci komórkowej (nie firmowe Wi-Fi), z prywatnego adresu spoza firmowej domeny, np. z Gmaila. W treści wpisz coś łatwego do odnalezienia: „TEST FORMULARZA, 7 listopada, 14:05”. Zanotuj godzinę i to, co pokazała strona po kliknięciu „Wyślij”.</li>
+<li><strong>Sprawdź wszystkie miejsca, do których mogła trafić.</strong> Skrzynka główna, Spam/Wiadomości-śmieci, Oferty/Powiadomienia (Gmail dzieli pocztę na karty), a jeśli wtyczka zapisuje zgłoszenia na stronie – także jej lista zgłoszeń. Daj jej 5 minut; e-mail, który nie dotarł w 5 minut, zwykle nie dotrze wcale.</li>
+<li><strong>Obejrzyj nagłówki wiadomości, jeśli dotarła.</strong> W Gmailu: trzy kropki → „Pokaż oryginał”. Szukaj linii SPF, DKIM i DMARC – powinny mieć wynik <code>PASS</code>. Jeśli widzisz <code>FAIL</code> albo <code>SOFTFAIL</code>, wiadomość przeszła tym razem, ale jest na granicy – następna może nie przejść. Sprawdź też pole „Od”: powinien tam być adres w Twojej domenie, a adres klienta w „Odpowiedz do”.</li>
+<li><strong>Wyślij celowo pusty formularz.</strong> Kliknij „Wyślij” bez wypełniania. Dobry formularz zaznacza puste pola i mówi, co poprawić. Zły – nie robi nic albo pokazuje „wystąpił błąd”. Przy okazji wypełnij pola błędnie (e-mail bez małpy, telefon literami) i sprawdź, czy komunikaty są zrozumiałe.</li>
+<li><strong>Zajrzyj do konsoli.</strong> Na komputerze otwórz stronę z formularzem, naciśnij F12, zakładka „Console”, i kliknij „Wyślij” jeszcze raz. Czerwone linie ze słowami <code>403</code>, <code>500</code>, <code>blocked</code>, <code>Content Security Policy</code> albo <code>recaptcha</code> to gotowa wskazówka dla wykonawcy – zrób zrzut ekranu.</li>
+<li><strong>Sprawdź, co widzi klient po wysłaniu.</strong> Czy strona z podziękowaniem istnieje? Czy klient dostaje automatyczne potwierdzenie (i czy to potwierdzenie nie trafia do spamu)? Czy jest na nim informacja, kiedy odpowiecie?</li>
+<li><strong>Sprawdź formalności.</strong> Przy polach na dane osobowe powinna być krótka informacja, kto i po co je przetwarza, z linkiem do polityki prywatności. To wymóg RODO, a dla klienta sygnał, że firma jest poukładana.</li>
+<li><strong>Zapisz wynik i powtórz za miesiąc.</strong> Test, który robi się raz, chroni raz. Wpisz go do kalendarza albo zleć komuś z zespołu na stałe – pierwszego dnia miesiąca, dwie minuty.</li>
+</ol>
+
+<h2>Objaw → przyczyna → kto naprawia</h2>
+<table class="vitals headers">
+<thead><tr><th>Co widzisz</th><th>Najczęstsza przyczyna</th><th>Kto naprawia i ile to pracy</th></tr></thead>
+<tbody>
+<tr><td><strong>„Wysłano”, ale nic nie dochodzi, także do spamu</strong></td><td data-l="Przyczyna">Serwer nie wysyła poczty (wyłączona funkcja mail, wygasły klucz SMTP) albo odbiorca odrzuca wiadomość bez informowania nadawcy</td><td data-l="Kto naprawia">Hosting lub wykonawca strony: przełączenie wysyłki na SMTP z własnej domeny, 1–2 h</td></tr>
+<tr><td><strong>Dochodzi tylko do spamu</strong></td><td data-l="Przyczyna">Nadawca podszywa się pod adres klienta; brak SPF/DKIM dla domeny; wysyłka z serwera o złej reputacji</td><td data-l="Kto naprawia">Administrator domeny (rekordy DNS, 30 min) + wykonawca (pole „Od” z Twojej domeny, „Odpowiedz do” = klient, 15 min)</td></tr>
+<tr><td><strong>Przycisk kręci się albo nic nie robi</strong></td><td data-l="Przyczyna">Błąd skryptu po aktualizacji, konflikt z narzędziem cookies, blokada reCAPTCHA lub nagłówka bezpieczeństwa</td><td data-l="Kto naprawia">Wykonawca strony, 1–3 h; zrzut konsoli skraca szukanie o połowę</td></tr>
+<tr><td><strong>Błąd 404 po wysłaniu</strong></td><td data-l="Przyczyna">Skasowana strona podziękowania; zmieniony adres w ustawieniach formularza</td><td data-l="Kto naprawia">Ktokolwiek z dostępem do panelu, 10 min</td></tr>
+<tr><td><strong>Zgłoszenia dochodzą, ale co trzecie jest bełkotem</strong></td><td data-l="Przyczyna">Brak lub zbyt słaba ochrona przed spamem</td><td data-l="Kto naprawia">Wykonawca: honeypot + prosty limit zgłoszeń lub Turnstile/reCAPTCHA, 1 h</td></tr>
+<tr><td><strong>Na komputerze działa, na telefonie nie</strong></td><td data-l="Przyczyna">Pole lub przycisk poza ekranem, element rozwijany nieobsługiwany dotykiem, formularz w ramce iframe</td><td data-l="Kto naprawia">Wykonawca strony, 1–2 h; zrzut z telefonu wystarczy jako zgłoszenie</td></tr>
+<tr><td><strong>Klient pisze, że „nie mógł wysłać”, a u Ciebie wszystko działa</strong></td><td data-l="Przyczyna">Ochrona przed spamem odrzuca część prawdziwych ludzi (VPN, stara przeglądarka, wyłączone cookies); filtr słów</td><td data-l="Kto naprawia">Wykonawca: obniżyć próg, dodać czytelny komunikat błędu i awaryjny kontakt (telefon, e-mail) obok formularza, 1 h</td></tr>
+</tbody>
+</table>
+
+<h2>Jak nie wrócić do tego za pół roku</h2>
+<ul>
+<li><strong>Zapisuj zgłoszenia na stronie, nie tylko w e-mailu.</strong> Większość wtyczek formularzy ma moduł zapisujący każde zgłoszenie w bazie strony. Gdy poczta zawiedzie, zgłoszenia nadal są – i masz dowód, od kiedy coś nie działa.</li>
+<li><strong>Wysyłaj z własnej domeny przez SMTP.</strong> Nadawcą powinien być adres w rodzaju <code>formularz@twojafirma.pl</code>, a adres klienta trafia do pola „Odpowiedz do”. Do tego rekordy SPF i DKIM dla domeny – ustawia się je raz, u dostawcy domeny lub poczty.</li>
+<li><strong>Dwóch odbiorców.</strong> Kopia na drugą skrzynkę (np. właściciela) kosztuje nic, a chroni przed scenariuszem „pracownik odszedł, formularz pisał do niego jeszcze rok”.</li>
+<li><strong>Kontakt awaryjny obok formularza.</strong> Numer telefonu jako link <code>tel:</code> i adres e-mail jako tekst. Jeśli formularz zawiedzie, klient ma drugą drogę, zamiast iść do konkurencji.</li>
+<li><strong>Test raz w miesiącu</strong> według listy powyżej. Dwie minuty. Wpisz w kalendarz.</li>
+</ul>
+
+<h2>Co sprawdzamy w Webskanie, a czego nie</h2>
+<p>Uczciwie: <strong>nie wysyłamy zgłoszeń przez Twój formularz</strong> – nie chcemy zaśmiecać skrzynek klientów testami. Nasz <a href="/#cena">audyt pogłębiony</a> sprawdza natomiast wszystko, co widać bez wysyłki: czy pola mają etykiety i czytelne komunikaty błędów, czy formularz działa na telefonie, czy ma ochronę przed spamem i informację o przetwarzaniu danych, czy strona podziękowania istnieje, czy w konsoli nie ma błędów i czy skrypty formularza w ogóle się ładują. Krok „wyślij test z telefonu” zostaje Tobie – zajmuje dwie minuty i jest w tabeli powyżej. Jeśli po wdrożeniu nowej strony chcesz przejść szerszą listę, mamy <a href="/blog/co-sprawdzic-po-wdrozeniu-nowej-strony/">checklistę 24 punktów</a>.</p>
+
+<section class="fullbox">
+<h2>Szybki obraz za darmo</h2>
+<p>Darmowy szybki skan Webskan sprawdza stronę tak, jak widzi ją telefon klienta: wydajność, podstawowe bezpieczeństwo i SEO. Bez e-maila, bez rejestracji, wynik w ok. 30 sekund.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="pl"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://twojafirma.pl" required maxlength="500" aria-label="Adres strony"><button class="btn" type="submit">Skanuj za darmo</button></form>
+<p class="note">Chcesz mieć formularze, linki, certyfikat i wydajność sprawdzone w jednym raporcie z listą dla wykonawcy? <a href="/#cena">Audyt pogłębiony Webskan</a> (249 zł) obejmuje ponowne sprawdzenie po poprawkach i 30 dni Webskan Monitora, który pilnuje, czy strona w ogóle odpowiada.</p>
+</section>
+
+<h2>Źródła i narzędzia</h2>
+<ul>
+<li>Google, <a href="https://support.google.com/a/answer/81126" rel="noopener">Wytyczne dla nadawców e-maili</a> – od 1 lutego 2024 każdy nadawca musi mieć SPF lub DKIM, a wysyłający ponad 5000 wiadomości dziennie: SPF, DKIM i DMARC; „nie podszywaj się pod inne domeny ani nadawców”</li>
+<li>Google, <a href="https://support.google.com/mail/answer/29436" rel="noopener">Jak wyświetlić nagłówki wiadomości („Pokaż oryginał”)</a></li>
+<li>Cloudflare, <a href="https://www.cloudflare.com/products/turnstile/" rel="noopener">Turnstile</a> – ochrona przed spamem bez zagadek dla użytkownika</li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a></footer>
+</div>
+</body>
+</html>

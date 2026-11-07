@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact form not working? How to check it in 10 minutes – Webskan</title>
+<meta name="description" content="The most common silent failure on a business website: the form says “sent” and the enquiries go nowhere. Eight causes, a 10-minute test step by step, and a symptom → cause → who fixes it table.">
+<link rel="canonical" href="https://webskan.com/en/blog/contact-form-not-working/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/contact-form-not-working/">
+<link rel="alternate" hreflang="pl" href="https://webskan.com/blog/formularz-kontaktowy-nie-dziala/">
+<meta property="og:title" content="Contact form not working? How to check it in 10 minutes">
+<meta property="og:description" content="Eight reasons enquiries vanish, a step-by-step test and a symptom → cause → who fixes it table.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/en/blog/contact-form-not-working/">
+<meta property="og:image" content="https://webskan.com/og-en.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Contact form not working? How to check it in 10 minutes","description":"Eight reasons enquiries vanish, a step-by-step test and a symptom → cause → who fixes it table.","datePublished":"2026-11-07","dateModified":"2026-11-07","inLanguage":"en","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/en/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/en/"},"mainEntityOfPage":"https://webskan.com/en/blog/contact-form-not-working/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a href="/en/blog/">Blog</a><a href="/en/#pricing">Pricing</a><a href="/blog/formularz-kontaktowy-nie-dziala/">PL</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 7 November 2026 · 7 min read</p>
+<h1>Contact form not working? How to check it in 10 minutes</h1>
+<p class="lead">It is the most common silent failure on a business website. The page loads, the padlock is green, the form says “Thank you, your message has been sent” – and the enquiries have been going nowhere for weeks. Nobody complains, because the customer assumes you are the one not replying, and moves on to a competitor. Below: eight reasons this happens, a test you can run yourself in 10 minutes, and a table that tells you who to ask for the fix.</p>
+
+<h2>Why forms break quietly</h2>
+<p>A form is a chain: the customer’s browser → a script on the page → your server → outgoing e-mail → the recipient’s mail server → a folder in your inbox. Every link can break on its own, and the “sent” message usually confirms only the first two.</p>
+<ol>
+<li><strong>Messages land in spam or are rejected.</strong> Many plugins send the e-mail “from the customer”, with the customer’s address in the From field. To a mail server that is impersonating someone else’s domain: Gmail and Outlook increasingly reject such messages or file them as spam. Add a missing SPF or DKIM record for your domain – Google requires at least one of them from every sender writing to Gmail (since February 2024), because without it the recipient has no way to check that the e-mail really came from your server.</li>
+<li><strong>The server stopped sending mail.</strong> After a hosting move, a PHP upgrade or a tightened provider policy, the mail function is sometimes switched off. The plugin gets no error, so it keeps saying “sent”.</li>
+<li><strong>An SMTP password or API key expired.</strong> If the form sends through an external service (Gmail, Brevo, SendGrid, Mailgun), a password change, an expired key or newly enabled two-factor authentication cuts delivery overnight.</li>
+<li><strong>The recipient changed.</strong> An employee left, the mailbox was deleted or is full, and the form settings still point at their address. The server sends, nobody reads.</li>
+<li><strong>Spam protection rejects humans.</strong> reCAPTCHA with too high a threshold, a honeypot that the browser’s autofill fills in, or a word filter that blocks “http” in the message – the customer sees a vague error, or no error at all.</li>
+<li><strong>The form does not work on a phone.</strong> A required field hidden under the keyboard, a button off-screen, a dropdown that will not open by touch. Most enquiries to local businesses come from phones, so a “mobile-only” bug is a bug for the majority.</li>
+<li><strong>A script broke after an update.</strong> A new version of the plugin, theme or cookie-consent tool can block the form’s script. The “Send” button spins forever or does nothing. There is a red error in the browser console that nobody sees.</li>
+<li><strong>The thank-you page is gone.</strong> The form redirects to “/thank-you”, which someone deleted during a clean-up. The customer sees a 404, sends again or gives up; your analytics stops counting enquiries at the same time.</li>
+</ol>
+
+<h2>The 10-minute test, step by step</h2>
+<ol>
+<li><strong>Send a test enquiry the way a customer would.</strong> From a phone, on mobile data (not the office Wi-Fi), from a personal address outside your company domain, e.g. Gmail. Put something easy to find in the message: “FORM TEST, 7 November, 14:05”. Note the time and what the page showed after you pressed “Send”.</li>
+<li><strong>Check every place it could have gone.</strong> Inbox, Spam/Junk, Promotions/Updates (Gmail splits mail into tabs), and if the plugin stores entries on the site, its entries list too. Give it 5 minutes; an e-mail that has not arrived in 5 minutes usually never will.</li>
+<li><strong>Look at the headers if it arrived.</strong> In Gmail: three dots → “Show original”. Look for the SPF, DKIM and DMARC lines – they should say <code>PASS</code>. A <code>FAIL</code> or <code>SOFTFAIL</code> means the message got through this time but is borderline; the next one may not. Check the From field too: it should be an address on your domain, with the customer’s address in Reply-To.</li>
+<li><strong>Submit an empty form on purpose.</strong> Press “Send” without filling anything in. A good form highlights the empty fields and says what to fix. A bad one does nothing, or shows “an error occurred”. While you are there, fill fields in wrongly (an e-mail without @, letters in the phone number) and check the messages make sense.</li>
+<li><strong>Open the console.</strong> On a computer, open the page with the form, press F12, choose the “Console” tab and press “Send” again. Red lines containing <code>403</code>, <code>500</code>, <code>blocked</code>, <code>Content Security Policy</code> or <code>recaptcha</code> are a ready-made hint for your developer – take a screenshot.</li>
+<li><strong>Check what the customer sees after sending.</strong> Does the thank-you page exist? Does the customer get an automatic confirmation (and does that confirmation stay out of spam)? Does it say when you will reply?</li>
+<li><strong>Check the formalities.</strong> Next to fields collecting personal data there should be a short note on who processes them and why, with a link to the privacy policy. It is a GDPR requirement, and to a customer it signals a business that has its act together.</li>
+<li><strong>Write down the result and repeat next month.</strong> A test done once protects you once. Put it in the calendar or hand it to someone on the team permanently – first day of the month, two minutes.</li>
+</ol>
+
+<h2>Symptom → cause → who fixes it</h2>
+<table class="vitals headers">
+<thead><tr><th>What you see</th><th>Most likely cause</th><th>Who fixes it and how much work</th></tr></thead>
+<tbody>
+<tr><td><strong>“Sent”, but nothing arrives, not even in spam</strong></td><td data-l="Cause">The server is not sending mail (mail function disabled, expired SMTP key) or the recipient rejects the message without telling the sender</td><td data-l="Who fixes it">Hosting provider or web developer: switch sending to SMTP from your own domain, 1–2 h</td></tr>
+<tr><td><strong>Arrives only in spam</strong></td><td data-l="Cause">The sender impersonates the customer’s address; no SPF/DKIM for the domain; sending from a server with a poor reputation</td><td data-l="Who fixes it">Domain administrator (DNS records, 30 min) + developer (From on your domain, Reply-To = customer, 15 min)</td></tr>
+<tr><td><strong>The button spins or does nothing</strong></td><td data-l="Cause">Script error after an update, conflict with the cookie tool, reCAPTCHA or security-header block</td><td data-l="Who fixes it">Web developer, 1–3 h; a console screenshot halves the search</td></tr>
+<tr><td><strong>404 after sending</strong></td><td data-l="Cause">Deleted thank-you page; changed address in the form settings</td><td data-l="Who fixes it">Anyone with access to the admin panel, 10 min</td></tr>
+<tr><td><strong>Enquiries arrive, but every third one is gibberish</strong></td><td data-l="Cause">No or too weak spam protection</td><td data-l="Who fixes it">Developer: honeypot + a simple rate limit, or Turnstile/reCAPTCHA, 1 h</td></tr>
+<tr><td><strong>Works on a computer, not on a phone</strong></td><td data-l="Cause">Field or button off-screen, dropdown not usable by touch, form inside an iframe</td><td data-l="Who fixes it">Web developer, 1–2 h; a phone screenshot is enough as a bug report</td></tr>
+<tr><td><strong>A customer says they “couldn’t send”, but it works for you</strong></td><td data-l="Cause">Spam protection rejects some real people (VPN, old browser, cookies disabled); word filter</td><td data-l="Who fixes it">Developer: lower the threshold, add a readable error message and a fallback contact (phone, e-mail) next to the form, 1 h</td></tr>
+</tbody>
+</table>
+
+<h2>How not to be back here in six months</h2>
+<ul>
+<li><strong>Store entries on the site, not only in e-mail.</strong> Most form plugins have a module that saves every submission in the site’s database. When mail fails, the entries are still there – and you have proof of when things stopped working.</li>
+<li><strong>Send from your own domain over SMTP.</strong> The sender should be something like <code>forms@yourcompany.com</code>, with the customer’s address in Reply-To. Add SPF and DKIM records for the domain – set up once, at your domain or mail provider.</li>
+<li><strong>Two recipients.</strong> A copy to a second mailbox (the owner’s, say) costs nothing and protects you from “the employee left and the form kept writing to them for a year”.</li>
+<li><strong>A fallback contact next to the form.</strong> A phone number as a <code>tel:</code> link and an e-mail address as plain text. If the form fails, the customer has a second route instead of a competitor.</li>
+<li><strong>Test once a month</strong> using the list above. Two minutes. Put it in the calendar.</li>
+</ul>
+
+<h2>What Webskan checks, and what it does not</h2>
+<p>Honestly: <strong>we do not submit your form</strong> – we do not want to fill customers’ inboxes with tests. Our <a href="/en/#pricing">in-depth audit</a> does check everything visible without sending: whether fields have labels and readable error messages, whether the form works on a phone, whether it has spam protection and a data-processing notice, whether the thank-you page exists, whether the console is free of errors and whether the form’s scripts load at all. The “send a test from your phone” step stays with you – it takes two minutes and is in the table above. If you have just launched a new site and want a broader list, we have a <a href="/en/blog/website-launch-checklist/">24-point launch checklist</a>.</p>
+
+<section class="fullbox">
+<h2>A quick picture, free</h2>
+<p>The free Webskan quick scan checks your site the way a customer’s phone sees it: performance, basic security and SEO. No e-mail, no sign-up, results in about 30 seconds.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="en"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://yourcompany.com" required maxlength="500" aria-label="Website address"><button class="btn" type="submit">Scan for free</button></form>
+<p class="note">Want forms, links, certificate and performance checked in one report with a to-do list for your developer? The <a href="/en/#pricing">Webskan in-depth audit</a> ($69) includes a recheck after the fixes and 30 days of Webskan Monitor, which watches whether the site responds at all.</p>
+</section>
+
+<h2>Sources and tools</h2>
+<ul>
+<li>Google, <a href="https://support.google.com/a/answer/81126" rel="noopener">Email sender guidelines</a> – since 1 February 2024 every sender needs SPF or DKIM, and senders of more than 5,000 messages a day need SPF, DKIM and DMARC; “Don't impersonate other domains or senders without permission”</li>
+<li>Google, <a href="https://support.google.com/mail/answer/29436" rel="noopener">Trace an email with its full headers (“Show original”)</a></li>
+<li>Cloudflare, <a href="https://www.cloudflare.com/products/turnstile/" rel="noopener">Turnstile</a> – spam protection without puzzles for the user</li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a></footer>
+</div>
+</body>
+</html>
