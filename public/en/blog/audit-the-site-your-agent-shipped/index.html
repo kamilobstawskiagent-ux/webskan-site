@@ -45,7 +45,7 @@
 <p>That is what the Webskan MCP server does. It is a remote <a href="https://modelcontextprotocol.io" rel="noopener">Model Context Protocol</a> server – nothing to install, no account for the free plan – that gives a coding agent four tools:</p>
 <ul>
 <li><code>scan_website</code> – a quick check of one page: HTTPS and redirects, security headers, server version leaks, mobile Lighthouse. About 30 seconds.</li>
-<li><code>audit_website</code> – a full audit of the deployed site, up to 30 pages: internal and external links with the pages they sit on, per-page SEO (title, description, H1, canonical, alt texts, Open Graph), Lighthouse mobile and desktop, WCAG checks with axe and CSS selectors, TLS and security headers, robots and sitemap, platform detection and the customer journeys (menu, search, forms, 404 page). Over 60 finding types, each with a concrete fix. Typically 1–5 minutes.</li>
+<li><code>audit_website</code> – an audit of the whole deployed site, up to 30 pages: internal and external links with the pages they sit on, per-page SEO (title, description, H1, canonical, alt texts, Open Graph), Lighthouse mobile and desktop, WCAG checks with axe and CSS selectors, TLS and security headers, robots and sitemap, platform detection and the customer journeys (menu, search, forms, 404 page). Over 60 finding types, each with a concrete fix. Typically 1–5 minutes.</li>
 <li><code>get_audit</code> – fetch the result, filtered by severity if you want.</li>
 <li><code>recheck_website</code> – run the audit again and get a diff: fixed, still open, new.</li>
 </ul>
@@ -67,14 +67,15 @@ url = "https://webskan.com/mcp"</code></pre>
 
 <h2>What the loop looks like in practice</h2>
 <p>After the deploy, one prompt is enough:</p>
-<blockquote><p>“The site is live at https://example.com. Run a full Webskan audit, fix everything high and medium in the repo, deploy, then recheck and show me what is still open.”</p></blockquote>
+<blockquote><p>“The site is live at https://example.com. Run a whole-site Webskan audit, fix everything high and medium in the repo, deploy, then recheck and show me what is still open.”</p></blockquote>
 <p>A typical first audit of a freshly shipped site comes back with a handful of medium findings and a longer tail of low ones. A finding looks like this (shortened):</p>
 <pre><code>{
   "id": "seo.title.duplicate",
   "severity": "medium",
   "title": "Same &lt;title&gt; on 6 pages",
-  "pages": ["/", "/pricing", "/about", "/blog", "/blog/hello", "/contact"],
-  "fix": "Give every page a unique title of 50–60 characters that describes that page; keep the brand at the end."
+  "area": "seo",
+  "detail": "“Example – Home” – search engines cannot tell which page to show. Give every page its own title.",
+  "pages": ["/", "/pricing", "/about", "/blog", "/blog/hello", "/contact"]
 }</code></pre>
 <p>Because the ids are stable, the agent can map a finding to a change in the repo, and <code>recheck_website</code> can say honestly which ids disappeared. Lighthouse scores vary a little between runs, so they are reported separately and never counted as “fixed” or “new” on their own. If a page could not be fetched during the recheck, the finding is listed as “could not verify”, not as fixed.</p>
 <p>Two things worth telling the agent explicitly:</p>
@@ -87,7 +88,7 @@ url = "https://webskan.com/mcp"</code></pre>
 <p>You do not need Webskan for any individual check. Lighthouse runs from the command line, <a href="https://github.com/dequelabs/axe-core" rel="noopener">axe-core</a> covers accessibility, <a href="https://github.com/JustinBeckwith/linkinator" rel="noopener">linkinator</a> finds broken links, and any security-headers checker will grade your headers. What a single tool over MCP adds is that the agent gets all of it in one call, with the pages crawled for it, the results in a shape it can act on, and a diff after the fix – without you installing a headless Chrome in the deploy pipeline or copying numbers between tabs.</p>
 
 <h2>Limits and what we store</h2>
-<p>The free plan needs no key: 2 full audits per IP per day, 1 per host per day (a repeat call for the same host returns the existing audit), quick scans 10 per hour. We store the audited address and the result for 30 days (7 for quick scans) so <code>get_audit</code> and <code>recheck_website</code> work; a one-way hash of the client IP for 24 hours for the rate limit; nothing else. Private hosts, localhost and IP ranges are refused – only public websites. Details are in the <a href="/en/privacy/">privacy policy</a>.</p>
+<p>The free plan needs no key: 2 whole-site audits per IP per day, 1 per host per day (a repeat call for the same host returns the existing audit), quick scans 10 per hour. We store the audited address and the result for 30 days (7 for quick scans) so <code>get_audit</code> and <code>recheck_website</code> work; a one-way hash of the client IP for 24 hours for the rate limit; nothing else. Private hosts, localhost and IP ranges are refused – only public websites. Details are in the <a href="/en/privacy/">privacy policy</a>.</p>
 
 <section class="fullbox">
 <h2>Give your agent the outside view</h2>
