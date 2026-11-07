@@ -76,6 +76,7 @@ async function handleOrder(request, env) {
     }
     const err = await r.text();
     await env.ORDERS.put(`error:${Date.now()}`, JSON.stringify({ ...record, status: r.status, err: err.slice(0, 2000) }), { expirationTtl: 60 * 60 * 24 * 30 });
+    if (r.status === 422 && /"customer_email"/.test(err)) return page(lang, ...t.badEmail); // Polar sprawdza też, czy domena przyjmuje pocztę
     return page(lang, ...t.fail);
   }
 
