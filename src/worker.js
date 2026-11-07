@@ -58,7 +58,7 @@ async function handleOrder(request, env) {
     const body = {
       products: [productId],
       customer_email: email,
-      metadata: { url, lang, product, competitors: competitors.join(","), source: "webskan" },
+      metadata: { url, lang, product, source: "webskan", ...(competitors.length ? { competitors: competitors.join(",") } : {}) }, // Polar odrzuca puste stringi w metadata (min. 1 znak)
       success_url: `${origin}${t.thanksPath}?checkout_id={CHECKOUT_ID}`,
       locale: lang === "pl" ? "pl-PL" : "en-US",
       customer_ip_address: ip || undefined,

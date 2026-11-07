@@ -23,7 +23,6 @@
   ],
   "vars": {
     "POLAR_API": "https://api.polar.sh",
-    "POLAR_ORG_ID": "4eb0c880-2ae5-4820-882d-0d5b22d489f4",
-    "SALES_MODE": "presale"
+    "POLAR_ORG_ID": "4eb0c880-2ae5-4820-882d-0d5b22d489f4"
   }
 }
