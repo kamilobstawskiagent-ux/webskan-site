@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to tell your website has been hacked: nine symptoms, a 10-minute check and what to do first – Webskan</title>
+<meta name="description" content="Most hacks of small-business websites do not look like hacks: the site works, but Google lists pages you never wrote, only phone visitors get redirected, and the spam is visible only to Google. Nine symptoms, a 10-minute check, first steps in the right order and how to get back into search results.">
+<link rel="canonical" href="https://webskan.com/en/blog/how-to-tell-your-website-was-hacked/">
+<link rel="alternate" hreflang="pl" href="https://webskan.com/blog/strona-zhakowana-jak-poznac/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/how-to-tell-your-website-was-hacked/">
+<meta property="og:title" content="How to tell your website has been hacked: nine symptoms, a 10-minute check and what to do first">
+<meta property="og:description" content="Nine symptoms an owner can spot alone, a 10-minute check (including how to see the site the way Google does), first steps in the right order and the Search Console review request.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/en/blog/how-to-tell-your-website-was-hacked/">
+<meta property="og:image" content="https://webskan.com/og-en.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"How to tell your website has been hacked: nine symptoms, a 10-minute check and what to do first","description":"Nine symptoms an owner can spot alone, a 10-minute check (including how to see the site the way Google does), first steps in the right order and the Search Console review request.","datePublished":"2026-11-07","dateModified":"2026-11-07","inLanguage":"en","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"mainEntityOfPage":"https://webskan.com/en/blog/how-to-tell-your-website-was-hacked/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a href="/en/blog/">Blog</a><a href="/en/#pricing">Pricing</a><a href="/blog/strona-zhakowana-jak-poznac/">PL</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 7 November 2026 · 9 min read</p>
+<h1>How to tell your website has been hacked: nine symptoms, a 10-minute check and what to do first</h1>
+<p class="lead">A hack of a small-business website rarely looks like the movies. Nobody replaces your home page with a skull. Instead the site works as usual, except that Google lists a few hundred pages about pills and casinos under your domain, phone visitors land in a counterfeit shop, and your contact form sends spam from your domain. The owner is the last to know – from a customer, from the host, or from a red screen in Chrome. Below: nine symptoms you can spot yourself, a 10-minute check (including how to see the site the way Google sees it), first steps in the right order, and how to get back into search results.</p>
+
+<h2>Nine symptoms you can see without logging in to the server</h2>
+<ol>
+<li><strong>Google lists pages you never created.</strong> Search for <code>site:yourcompany.com</code> – if the results include addresses in a foreign language, about pills, gambling, cheap shoes or “free codes”, someone has added them to your site. Google calls this URL injection: the hacker creates new pages “often containing spammy words or links”.</li>
+<li><strong>The site redirects elsewhere – but not always.</strong> Typically only on phones, only when arriving from Google, only the first time. The owner opens a bookmark on a desktop and everything works. Google describes redirects set up, among other ways, “by modifying your server's configuration file(s)”.</li>
+<li><strong>A red warning in the browser.</strong> For malware on the site, Chrome shows a “Dangerous” label in the address bar and an interstitial warning page before the visit; in search results the site can get a warning label. That is the moment traffic drops to zero overnight.</li>
+<li><strong>An e-mail from Search Console about security issues.</strong> If the site is verified in Search Console, Google notifies you and shows a report with example URLs. If it is not – nobody tells you; one more reason to set it up today.</li>
+<li><strong>Your host writes about spam or abuse, or disables the account.</strong> Hacked sites send mail, attack other servers or burn CPU. The host sees it before you do.</li>
+<li><strong>Traffic and rankings drop for no reason.</strong> Google demotes pages with spam and warnings; the chart shows a step, not a slow slide.</li>
+<li><strong>New administrator accounts, plugins or files.</strong> An “admin2” account in the CMS, a plugin nobody installed, files with a fresh modification date in folders nobody has touched in a year.</li>
+<li><strong>The site suddenly got slow.</strong> Google lists among malicious code “running cryptocurrency mining software on your browser while the page is open” – the customer's phone heats up and the performance score drops 30 points without any change on your part.</li>
+<li><strong>Only Google sees the spam.</strong> According to Google, “many hackers make changes that are visible only to Google machines”: links rendered only when the visitor comes from Google, hidden from the logged-in owner. This is called cloaking, and it is why “everything looks fine” means nothing.</li>
+</ol>
+
+<h2>The 10-minute check</h2>
+<ol>
+<li><strong><code>site:yourcompany.com</code> in an incognito window.</strong> Page through a few result pages. Then repeat with words that should not be on your site: <code>site:yourcompany.com viagra</code>, <code>site:yourcompany.com casino</code>, <code>site:yourcompany.com cheap</code>. Every hit is evidence.</li>
+<li><strong>Visit the site like a customer:</strong> on a phone, via a Google search, not from a bookmark. Check the home page and two subpages. Watch for a different address flashing before the page loads.</li>
+<li><strong>Search Console → “Security &amp; Manual Actions” → “Security issues”.</strong> The report distinguishes hacked content (malware, code injection, content injection, URL injection), malware and unwanted software, and social engineering (deceptive pages, harmful downloads). Each issue comes with example URLs.</li>
+<li><strong>See the page the way Google does.</strong> In Search Console paste the address into the URL Inspection tool and open the crawled page view – Google recommends it precisely to “view your page as Google sees it”. If the code contains links or text you cannot see in the browser, you have cloaking.</li>
+<li><strong>For technical people:</strong> fetch the page from the command line pretending to arrive from Google (Google's help points to cURL or Wget with a custom referrer and user-agent) and compare it with the “normal” version:
+<pre><code>curl -sL -A "Mozilla/5.0 (Linux; Android 14) Chrome/130 Mobile Safari/537.36" \
+  -e "https://www.google.com/" https://yourcompany.com/ | grep -i -c "casino\|viagra\|&lt;iframe"</code></pre>
+A result above zero on a site that has nothing to do with casinos means injected content.</li>
+<li><strong>Do not open suspicious pages in a normal browser.</strong> Google warns plainly that opening an infected page “may damage your computer”. Check the addresses from the report with the tool from step 4 or from the command line.</li>
+<li><strong>Look into the CMS dashboard:</strong> the user list (unknown accounts with administrator rights), the plugin and theme lists (unknown, outdated), the last-modified dates in the host's file manager.</li>
+<li><strong>Write down everything you found</strong> – addresses, screenshots, dates. Your host, your developer and the review request will need it.</li>
+</ol>
+
+<h2>What to do first – in this order</h2>
+<ol>
+<li><strong>Notify your host.</strong> Most hosts have a procedure: file scan, access logs, information on how they got in. Ask for a copy of the last 30 days of logs before they are overwritten.</li>
+<li><strong>Change every password from a clean computer:</strong> hosting panel, FTP/SFTP, CMS (all administrators), database, the e-mail account tied to the site. Turn on two-factor authentication wherever possible. If the passwords were reused elsewhere – there too.</li>
+<li><strong>Contain the damage.</strong> If the site spreads malware or redirects customers, switch on a maintenance page with status code 503 (it tells Google “come back later”, not “the site is gone”). If only spam was added, you can clean live – but quickly.</li>
+<li><strong>Restore a clean backup or clean by hand.</strong> Google says it plainly: “replace affected files with the last good backup” or remove the spammy content yourself. The backup must predate the hack – the date in the logs from step 1 tells you which one. Right after restoring, update the CMS, plugins, theme and PHP, because the old version has the same hole. Remove unknown accounts and plugins.</li>
+<li><strong>Fix the whole site, not just the examples.</strong> Google warns that fixing the issue on just some pages “will not earn you a partial return to search results”. The hacker's backdoor is often in several places: <code>.htaccess</code> files, the <code>uploads</code> folder, cron jobs, database accounts.</li>
+<li><strong>Check who has access to Search Console</strong> and to your Google Business Profile (users and owners). Hackers are sometimes smarter than owners and add themselves so they can come back after the clean-up.</li>
+<li><strong>Request a review.</strong> Only when all issues in the report are fixed on all pages, click “Request Review” in Search Console and describe what happened and what you did – Google wants the request to explain the exact issue, the steps taken to fix it and the outcome. Timing: “from a few days to a few weeks”. Do not resubmit before a decision – premature, repeated requests can get you flagged as a repeat offender and waiting longer.</li>
+</ol>
+
+<h2>Symptom → cause → who fixes it</h2>
+<table class="vitals headers">
+<thead><tr><th>What you see</th><th>Most common cause</th><th>Who fixes it and how much work</th></tr></thead>
+<tbody>
+<tr><td><strong>Hundreds of foreign pages in <code>site:</code></strong></td><td data-l="Cause">A hole in an outdated plugin/theme; injected URLs generated by a backdoor in server files</td><td data-l="Who fixes it">Developer + host: clean-up, updates, removal of the URLs from Google (report + time), 4–8 h</td></tr>
+<tr><td><strong>Redirect only on phones or from Google</strong></td><td data-l="Cause">Modified <code>.htaccess</code>/server config or a script in the theme conditioned on referrer and user-agent</td><td data-l="Who fixes it">Developer: compare with a clean copy, clean up, 2–4 h</td></tr>
+<tr><td><strong>“Dangerous” in Chrome, red screen</strong></td><td data-l="Cause">Malicious code or a download on the site (Hacked: Malware / Harmful downloads)</td><td data-l="Who fixes it">Developer: clean the whole site; then a review request in Search Console, days to weeks</td></tr>
+<tr><td><strong>Form sends spam, domain on blacklists</strong></td><td data-l="Cause">Unprotected form or a mailer script uploaded by the hacker</td><td data-l="Who fixes it">Developer: remove the script, rate limit, captcha; host: lift the block, 2–3 h</td></tr>
+<tr><td><strong>Unknown administrator account</strong></td><td data-l="Cause">Compromised password or a hole that allows creating accounts</td><td data-l="Who fixes it">Owner: delete the account, change passwords, 2FA, 30 min; developer: find the entry point, 1–2 h</td></tr>
+<tr><td><strong>Site suddenly slow, phones heat up</strong></td><td data-l="Cause">Injected script (e.g. a crypto miner) or spam traffic hitting the backdoor</td><td data-l="Who fixes it">Developer: clean-up, a CSP header blocking foreign scripts, 2 h</td></tr>
+<tr><td><strong>The hack comes back a week after clean-up</strong></td><td data-l="Cause">Backdoor elsewhere (uploads, cron, database, a second site on the same account), old passwords, the same hole</td><td data-l="Who fixes it">Developer: full comparison with a clean install, all sites on the account, 4–8 h</td></tr>
+</tbody>
+</table>
+
+<h2>How not to come back to this article</h2>
+<ul>
+<li><strong>Updates in the week of release</strong>, not “once a quarter”. Most hacks go through known plugin holes that have had a patch for weeks. For WordPress: <a href="/en/blog/wordpress-security-settings/">10 security settings in an hour</a>.</li>
+<li><strong>Backups off the server</strong>, daily, with at least 30 days of history – so there is something to go back to when you notice the hack three weeks later.</li>
+<li><strong>Separate, long passwords and 2FA</strong> for the CMS, the hosting and the mailbox. One administrator account per person; revoke access for former staff and agencies the same day.</li>
+<li><strong>Search Console with your e-mail address</strong> – a free notification about security issues and the tool for getting back. Without it, you learn from customers.</li>
+<li><strong>Security headers</strong>, especially Content-Security-Policy – they will not stop a server break-in, but they make running foreign scripts in your customers' browsers harder: <a href="/en/blog/http-security-headers-explained/">security headers explained</a>.</li>
+<li><strong>Someone outside who looks every day</strong> and compares the site with yesterday's: redirect, title, appearance. A hack noticed within a day costs hours; after a month it costs your Google rankings and your domain's reputation.</li>
+</ul>
+
+<h2>What Webskan checks</h2>
+<p>We do not scan files on your server or remove malicious code – that is the job of your host, your developer and security plugins. We look at the site from outside, like a customer and like Google. The <a href="/en/#pricing">in-depth audit</a> finds things that make a hack easier or are its trace: server headers revealing software versions, missing security headers (including Content-Security-Policy), forms submitted over an unencrypted connection, mixed content, a canonical address pointing to another domain, indexing blocks and error pages. <strong>Webskan Monitor</strong> checks uptime every minute and once a day compares the home page with the previous day, alerting you when the site starts redirecting to another host, loses its title or its canonical points to a foreign domain, returns almost no content, stops redirecting to https, or when its appearance changes significantly (more than a third of the pixels; the e-mail carries yesterday/today screenshots and the alert text explicitly tells you to check for a hack). What Monitor will not see: spam rendered only for Googlebot or pages that are not in the navigation – that is what steps 3 and 4 of the check above are for.</p>
+
+<section class="fullbox">
+<h2>A quick picture, free</h2>
+<p>The free Webskan quick scan checks your site the way a customer's phone sees it: certificate and https redirect, basic security headers, performance and SEO. No e-mail, no sign-up, result in about 30 seconds.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="en"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://yourcompany.com" required maxlength="500" aria-label="Website address"><button class="btn" type="submit">Scan for free</button></form>
+<p class="note">Want someone to compare your site with yesterday's every day and write when something changes? <a href="/en/#pricing">Webskan Monitor</a> ($15/month); 30 days of Monitor are included with the <a href="/en/#pricing">in-depth audit</a> ($69).</p>
+</section>
+
+<h2>Sources and tools</h2>
+<ul>
+<li>Google Search Console Help, <a href="https://support.google.com/webmasters/answer/9044101" rel="noopener">Security Issues report</a> – issue categories, descriptions of injected URLs/content/code, cloaking, viewing the page as Google (URL Inspection tool, cURL/Wget), the warning against opening infected pages, the review request and its timing</li>
+<li>Google, <a href="https://web.dev/articles/how-do-i-know-if-my-site-was-hacked" rel="noopener">How do I know if my site was hacked?</a> – the order: Search Console → example URLs → cloaking check (<code>site:</code>, URL Inspection tool)</li>
+<li>Google, <a href="https://transparencyreport.google.com/safe-browsing/search" rel="noopener">Transparency Report – Safe Browsing site status</a> – check whether Google flags a given address as dangerous</li>
+<li>Webskan, <a href="/en/blog/wordpress-security-settings/">WordPress: 10 security settings in an hour</a> and <a href="/en/blog/http-security-headers-explained/">HTTP security headers explained</a></li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a></footer>
+</div>
+</body>
+</html>

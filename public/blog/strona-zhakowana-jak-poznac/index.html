@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Strona zhakowana: jak to poznać, co sprawdzić w 10 minut i co zrobić najpierw – Webskan</title>
+<meta name="description" content="Większość włamań na firmowe strony nie wygląda jak włamanie: strona działa, a w Google pojawiają się obce podstrony, przekierowania widzą tylko klienci z telefonu, a spam widzi tylko Google. Dziewięć objawów, test w 10 minut, pierwsze kroki w dobrej kolejności i jak odzyskać miejsce w wynikach.">
+<link rel="canonical" href="https://webskan.com/blog/strona-zhakowana-jak-poznac/">
+<link rel="alternate" hreflang="pl" href="https://webskan.com/blog/strona-zhakowana-jak-poznac/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/how-to-tell-your-website-was-hacked/">
+<meta property="og:title" content="Strona zhakowana: jak to poznać, co sprawdzić w 10 minut i co zrobić najpierw">
+<meta property="og:description" content="Dziewięć objawów włamania, które właściciel widzi sam, test w 10 minut (w tym jak zobaczyć stronę oczami Google), pierwsze kroki w dobrej kolejności i prośba o ponowne sprawdzenie w Search Console.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/blog/strona-zhakowana-jak-poznac/">
+<meta property="og:image" content="https://webskan.com/og-pl.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Strona zhakowana: jak to poznać, co sprawdzić w 10 minut i co zrobić najpierw","description":"Dziewięć objawów włamania, które właściciel widzi sam, test w 10 minut (w tym jak zobaczyć stronę oczami Google), pierwsze kroki w dobrej kolejności i prośba o ponowne sprawdzenie w Search Console.","datePublished":"2026-11-07","dateModified":"2026-11-07","inLanguage":"pl","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"mainEntityOfPage":"https://webskan.com/blog/strona-zhakowana-jak-poznac/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a><a href="/en/blog/how-to-tell-your-website-was-hacked/">EN</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 7 listopada 2026 · 9 min czytania</p>
+<h1>Strona zhakowana: jak to poznać, co sprawdzić w 10 minut i co zrobić najpierw</h1>
+<p class="lead">Włamanie na firmową stronę rzadko wygląda jak w filmie. Nikt nie podmienia strony głównej na czaszkę. Zamiast tego strona działa jak zwykle, tylko w Google pojawia się kilkaset podstron o lekach i kasynach, klienci z telefonu lądują w sklepie z podróbkami, a formularz kontaktowy rozsyła spam z Twojej domeny. Właściciel dowiaduje się ostatni – od klienta, od hostingu albo z czerwonego ekranu w Chrome. Poniżej: dziewięć objawów, które możesz zauważyć sam, test w 10 minut (w tym jak zobaczyć stronę tak, jak widzi ją Google), pierwsze kroki w dobrej kolejności i jak wrócić do wyników wyszukiwania.</p>
+
+<h2>Dziewięć objawów, które widać bez logowania na serwer</h2>
+<ol>
+<li><strong>W Google są podstrony, których nie tworzyłeś.</strong> Wpisz <code>site:twojafirma.pl</code> – jeśli wśród wyników są adresy w obcym języku, o lekach, hazardzie, tanich butach albo „darmowych kodach”, ktoś dopisał je do Twojej strony. Google nazywa to wstrzykiwaniem adresów URL (<em>URL injection</em>): włamywacz tworzy nowe strony „często zawierające spamerskie słowa lub linki”.</li>
+<li><strong>Strona przekierowuje gdzie indziej – ale nie zawsze.</strong> Typowo: tylko z telefonu, tylko po wejściu z Google, tylko za pierwszym razem. Właściciel wchodzi z zakładki na komputerze i wszystko działa. Google opisuje przekierowania ustawiane m.in. „przez modyfikację plików konfiguracyjnych serwera”.</li>
+<li><strong>Czerwone ostrzeżenie w przeglądarce.</strong> Przy złośliwym oprogramowaniu na stronie Chrome pokazuje w pasku adresu etykietę „Niebezpieczna” i stronę ostrzegawczą przed wejściem; w wynikach wyszukiwania strona może dostać etykietę ostrzegawczą. To moment, w którym ruch spada do zera z dnia na dzień.</li>
+<li><strong>E-mail z Search Console o problemach dotyczących bezpieczeństwa.</strong> Jeśli strona jest zweryfikowana w Search Console, Google wysyła powiadomienie i pokazuje raport z przykładowymi adresami. Jeśli nie jest – nikt Ci nie powie; to jeden z powodów, by założyć konto dziś.</li>
+<li><strong>Hosting pisze o spamie, nadużyciu albo wyłącza konto.</strong> Zhakowane strony rozsyłają pocztę, atakują inne serwery albo obciążają procesor. Hosting widzi to wcześniej niż Ty.</li>
+<li><strong>Spadek ruchu i pozycji bez powodu.</strong> Google obniża strony ze spamem i ostrzeżeniami; w statystykach widać schodek, a nie powolny zjazd.</li>
+<li><strong>Nowe konta administratora, wtyczki lub pliki.</strong> W panelu CMS konto „admin2”, wtyczka, której nikt nie instalował, pliki ze świeżą datą zmiany w katalogach, których nikt nie ruszał od roku.</li>
+<li><strong>Strona nagle zwolniła.</strong> Google wymienia wśród złośliwego kodu „uruchamianie koparki kryptowalut w przeglądarce, gdy strona jest otwarta” – telefon klienta grzeje się, a wynik wydajności spada o 30 punktów bez żadnej Twojej zmiany.</li>
+<li><strong>Spam widzi tylko Google.</strong> Według Google „wielu hakerów wprowadza zmiany widoczne tylko dla maszyn Google”: linki renderowane tylko wtedy, gdy odwiedzający przychodzi z Google, ukryte przed zalogowanym właścicielem. To zwane jest maskowaniem (<em>cloaking</em>) i dlatego „wszystko wygląda dobrze” nic nie znaczy.</li>
+</ol>
+
+<h2>Test w 10 minut</h2>
+<ol>
+<li><strong><code>site:twojafirma.pl</code> w oknie incognito.</strong> Przejrzyj kilka stron wyników. Potem to samo z dopiskiem słów, których na Twojej stronie być nie powinno: <code>site:twojafirma.pl viagra</code>, <code>site:twojafirma.pl casino</code>, <code>site:twojafirma.pl cheap</code>. Każdy wynik to dowód.</li>
+<li><strong>Wejdź na stronę tak, jak klient:</strong> z telefonu, przez wyszukiwarkę Google, nie z zakładki. Sprawdź stronę główną i dwie podstrony. Zwróć uwagę na mignięcie innego adresu przed załadowaniem.</li>
+<li><strong>Search Console → „Bezpieczeństwo i ręczne działania” → „Problemy dotyczące bezpieczeństwa”.</strong> Raport rozróżnia treści zhakowane (złośliwe oprogramowanie, wstrzyknięty kod, wstrzyknięta treść, wstrzyknięte adresy URL), złośliwe i niechciane oprogramowanie oraz inżynierię społeczną (strony wprowadzające w błąd, szkodliwe pliki do pobrania). Przy każdym problemie są przykładowe adresy.</li>
+<li><strong>Zobacz stronę oczami Google.</strong> W Search Console wklej adres w narzędzie do sprawdzania adresów URL i otwórz podgląd zindeksowanej strony – Google zaleca je właśnie do tego, by „zobaczyć stronę tak, jak widzi ją Google”. Jeśli w kodzie są linki lub tekst, których nie widzisz w przeglądarce, masz maskowanie.</li>
+<li><strong>Dla osób technicznych:</strong> pobierz stronę z linii poleceń, udając wejście z Google (Google w swojej pomocy wskazuje cURL lub Wget z własnym nagłówkiem referrer i user-agent) i porównaj z wersją „zwykłą”:
+<pre><code>curl -sL -A "Mozilla/5.0 (Linux; Android 14) Chrome/130 Mobile Safari/537.36" \
+  -e "https://www.google.com/" https://twojafirma.pl/ | grep -i -c "casino\|viagra\|&lt;iframe"</code></pre>
+Wynik większy od zera przy stronie, która nie ma nic wspólnego z kasynami, oznacza wstrzykniętą treść.</li>
+<li><strong>Nie otwieraj podejrzanych podstron w zwykłej przeglądarce.</strong> Google ostrzega wprost, że otwarcie zainfekowanej strony „może uszkodzić komputer”. Adresy z raportu sprawdzaj narzędziem z punktu 4 albo z linii poleceń.</li>
+<li><strong>Zajrzyj do panelu CMS:</strong> lista użytkowników (nieznane konta z uprawnieniami administratora), lista wtyczek i motywów (nieznane, nieaktualne), data ostatniej zmiany plików w menedżerze plików hostingu.</li>
+<li><strong>Zapisz wszystko, co znalazłeś</strong> – adresy, zrzuty, daty. Przyda się hostingowi, wykonawcy i w prośbie o ponowne sprawdzenie.</li>
+</ol>
+
+<h2>Co zrobić najpierw – w tej kolejności</h2>
+<ol>
+<li><strong>Powiadom hosting.</strong> Większość hostingów ma procedurę: skan plików, logi dostępu, informacja, przez co weszli. Poproś o kopię logów z ostatnich 30 dni, zanim zostaną nadpisane.</li>
+<li><strong>Zmień wszystkie hasła z czystego komputera:</strong> panel hostingu, FTP/SFTP, panel CMS (wszyscy administratorzy), baza danych, konto e-mail powiązane ze stroną. Włącz weryfikację dwuetapową tam, gdzie się da. Jeśli hasła były używane gdzie indziej – tam też.</li>
+<li><strong>Odetnij szkody.</strong> Jeśli strona rozsyła złośliwe oprogramowanie lub przekierowuje klientów, włącz stronę konserwacyjną z kodem 503 (mówi Google „wróć później”, nie „strona zniknęła”). Jeśli tylko dopisano spam, możesz czyścić „na żywo”, ale szybko.</li>
+<li><strong>Przywróć czystą kopię albo wyczyść ręcznie.</strong> Google pisze wprost: „zastąp zainfekowane pliki ostatnią dobrą kopią zapasową” lub usuń spam samodzielnie. Kopia musi pochodzić sprzed włamania – data w logach z punktu 1 mówi, która. Po przywróceniu natychmiast zaktualizuj CMS, wtyczki, motyw i PHP, bo stara wersja ma tę samą dziurę. Usuń nieznane konta i wtyczki.</li>
+<li><strong>Napraw w całej witrynie, nie tylko na przykładach.</strong> Google ostrzega, że naprawa „tylko części stron nie da częściowego powrotu do wyników”. Zaplecze włamywacza bywa w kilku miejscach: pliki <code>.htaccess</code>, katalog <code>uploads</code>, zadania cron, konta w bazie.</li>
+<li><strong>Sprawdź, kto ma dostęp do Search Console</strong> i do profilu w Google (użytkownicy i właściciele). Włamywacze bywają sprytniejsi niż właściciele i dodają sobie dostęp, żeby po czyszczeniu wrócić.</li>
+<li><strong>Poproś o ponowne sprawdzenie.</strong> Dopiero gdy wszystkie problemy z raportu są naprawione na wszystkich stronach, kliknij w Search Console „Poproś o sprawdzenie” i opisz, co było i co zrobiłeś – Google chce w prośbie dokładnego opisu problemu, kroków naprawy i efektu. Czas: „od kilku dni do kilku tygodni”. Nie wysyłaj prośby ponownie przed decyzją – przedwczesne, powtarzane prośby mogą skończyć się statusem recydywisty i dłuższym czekaniem.</li>
+</ol>
+
+<h2>Objaw → przyczyna → kto naprawia</h2>
+<table class="vitals headers">
+<thead><tr><th>Co widzisz</th><th>Najczęstsza przyczyna</th><th>Kto naprawia i ile to pracy</th></tr></thead>
+<tbody>
+<tr><td><strong>Setki obcych podstron w <code>site:</code></strong></td><td data-l="Przyczyna">Dziura w nieaktualnej wtyczce/motywie; wstrzyknięte adresy URL generowane przez zaplecze w plikach serwera</td><td data-l="Kto naprawia">Wykonawca + hosting: czyszczenie, aktualizacje, usunięcie adresów z Google (raport + czas), 4–8 h</td></tr>
+<tr><td><strong>Przekierowanie tylko z telefonu lub z Google</strong></td><td data-l="Przyczyna">Zmieniony <code>.htaccess</code>/konfiguracja serwera lub skrypt w motywie z warunkiem na referrer i user-agent</td><td data-l="Kto naprawia">Wykonawca: porównanie z czystą kopią, czyszczenie, 2–4 h</td></tr>
+<tr><td><strong>„Niebezpieczna” w Chrome, czerwony ekran</strong></td><td data-l="Przyczyna">Złośliwy kod lub plik do pobrania na stronie (Hacked: Malware / Harmful downloads)</td><td data-l="Kto naprawia">Wykonawca: czyszczenie całej witryny; potem prośba o sprawdzenie w Search Console, dni–tygodnie</td></tr>
+<tr><td><strong>Formularz wysyła spam, domena na czarnych listach</strong></td><td data-l="Przyczyna">Formularz bez zabezpieczeń albo skrypt pocztowy wgrany przez włamywacza</td><td data-l="Kto naprawia">Wykonawca: usunięcie skryptu, limit wysyłki, captcha; hosting: zdjęcie blokady, 2–3 h</td></tr>
+<tr><td><strong>Nieznane konto administratora</strong></td><td data-l="Przyczyna">Przejęte hasło lub dziura pozwalająca tworzyć konta</td><td data-l="Kto naprawia">Właściciel: usunąć konto, zmienić hasła, 2FA, 30 min; wykonawca: znaleźć drogę wejścia, 1–2 h</td></tr>
+<tr><td><strong>Strona nagle wolna, telefon się grzeje</strong></td><td data-l="Przyczyna">Wstrzyknięty skrypt (np. koparka kryptowalut) lub spamerski ruch na zaplecze</td><td data-l="Kto naprawia">Wykonawca: czyszczenie, nagłówek CSP blokujący obce skrypty, 2 h</td></tr>
+<tr><td><strong>Po czyszczeniu włamanie wraca za tydzień</strong></td><td data-l="Przyczyna">Zaplecze w innym miejscu (uploads, cron, baza, drugi serwis na tym samym koncie), stare hasła, ta sama dziura</td><td data-l="Kto naprawia">Wykonawca: pełne porównanie z czystą instalacją, wszystkie serwisy na koncie, 4–8 h</td></tr>
+</tbody>
+</table>
+
+<h2>Jak nie wrócić do tego tekstu</h2>
+<ul>
+<li><strong>Aktualizacje w tygodniu wydania</strong>, nie „raz na kwartał”. Większość włamań idzie przez znane dziury w wtyczkach, na które poprawka była od tygodni. Dla WordPressa: <a href="/blog/wordpress-10-ustawien-bezpieczenstwa/">10 ustawień bezpieczeństwa na godzinę</a>.</li>
+<li><strong>Kopie zapasowe poza serwerem</strong>, codzienne, z co najmniej 30 dniami wstecz – żeby było do czego wrócić, gdy włamanie zauważysz po trzech tygodniach.</li>
+<li><strong>Osobne, długie hasła i 2FA</strong> do panelu, hostingu i poczty. Jedno konto administratora na osobę; byłym pracownikom i agencjom dostęp zabieraj tego samego dnia.</li>
+<li><strong>Search Console z Twoim adresem e-mail</strong> – darmowe powiadomienie o problemach z bezpieczeństwem i narzędzie do powrotu. Bez tego dowiadujesz się od klientów.</li>
+<li><strong>Nagłówki bezpieczeństwa</strong>, zwłaszcza Content-Security-Policy – nie zatrzymają włamania na serwer, ale utrudniają uruchomienie obcych skryptów u klientów: <a href="/blog/naglowki-bezpieczenstwa-http/">nagłówki po ludzku</a>.</li>
+<li><strong>Ktoś z zewnątrz, kto patrzy codziennie</strong> i porówna stronę z wczorajszą: przekierowanie, tytuł, wygląd. Włamanie, które widać w ciągu doby, kosztuje godziny; po miesiącu – pozycje w Google i reputację domeny.</li>
+</ul>
+
+<h2>Co sprawdzamy w Webskanie</h2>
+<p>Nie skanujemy plików na serwerze ani nie usuwamy złośliwego kodu – od tego jest hosting, wykonawca i wtyczki bezpieczeństwa. Patrzymy na stronę z zewnątrz, jak klient i jak Google. <a href="/#cena">Audyt pogłębiony</a> wykrywa rzeczy, które ułatwiają włamanie albo są jego śladem: nagłówki serwera zdradzające wersje oprogramowania, brakujące nagłówki bezpieczeństwa (w tym Content-Security-Policy), formularze wysyłane przez niezaszyfrowane połączenie, mixed content, adres kanoniczny wskazujący inną domenę, blokadę indeksowania i błędne strony. <strong>Webskan Monitor</strong> sprawdza dostępność co minutę, a raz dziennie porównuje stronę główną z poprzednim dniem i wysyła alert, gdy strona zaczyna przekierowywać na inny adres, traci tytuł albo adres kanoniczny wskazuje obcą domenę, zwraca prawie pustą treść, przestaje przekierowywać na https, albo gdy jej wygląd zmienił się znacząco (ponad jedna trzecia pikseli; w e-mailu są zrzuty wczoraj/dziś, a treść alertu wprost każe sprawdzić, czy to nie włamanie). Czego Monitor nie zobaczy: spamu renderowanego tylko dla Googlebota ani podstron, których nie ma w nawigacji – do tego służy punkt 3 i 4 testu wyżej.</p>
+
+<section class="fullbox">
+<h2>Szybki obraz za darmo</h2>
+<p>Darmowy szybki skan Webskan sprawdza stronę tak, jak widzi ją telefon klienta: certyfikat i przekierowanie na https, podstawowe nagłówki bezpieczeństwa, wydajność i SEO. Bez e-maila, bez rejestracji, wynik w ok. 30 sekund.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="pl"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://twojafirma.pl" required maxlength="500" aria-label="Adres strony"><button class="btn" type="submit">Skanuj za darmo</button></form>
+<p class="note">Chcesz, żeby ktoś codziennie porównywał stronę z wczorajszą i pisał, gdy coś się zmieni? <a href="/#cena">Webskan Monitor</a> (49 zł/mies.); 30 dni Monitora w cenie <a href="/#cena">audytu pogłębionego</a> (249 zł).</p>
+</section>
+
+<h2>Źródła i narzędzia</h2>
+<ul>
+<li>Google Search Console – Centrum pomocy, <a href="https://support.google.com/webmasters/answer/9044101" rel="noopener">Raport „Problemy dotyczące bezpieczeństwa”</a> – kategorie problemów, opisy wstrzykniętych adresów/treści/kodu, maskowanie, sprawdzanie strony oczami Google (narzędzie do sprawdzania adresów URL, cURL/Wget), ostrzeżenie przed otwieraniem zainfekowanych stron, prośba o sprawdzenie i jej czas</li>
+<li>Google, <a href="https://web.dev/articles/how-do-i-know-if-my-site-was-hacked" rel="noopener">How do I know if my site was hacked?</a> – kolejność: Search Console → przykładowe adresy → sprawdzenie maskowania (<code>site:</code>, narzędzie do sprawdzania adresów URL)</li>
+<li>Google, <a href="https://transparencyreport.google.com/safe-browsing/search" rel="noopener">Raport przejrzystości – stan Bezpiecznego przeglądania</a> – sprawdzenie, czy Google oznacza dany adres jako niebezpieczny</li>
+<li>Webskan, <a href="/blog/wordpress-10-ustawien-bezpieczenstwa/">WordPress: 10 ustawień bezpieczeństwa na godzinę</a> i <a href="/blog/naglowki-bezpieczenstwa-http/">Nagłówki bezpieczeństwa HTTP po ludzku</a></li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a></footer>
+</div>
+</body>
+</html>
