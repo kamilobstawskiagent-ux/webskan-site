@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your deploy just published .env: exposed .git, .env, SQL dumps and backups on live sites – and a 60-second check – Webskan</title>
+<meta name="description" content="A surprising share of live websites serve their .git directory, .env file, database dumps or backup archives to anyone who asks. How the leaks happen (especially with agent-driven deploys), what attackers do with them, a 60-second curl check with signature matching instead of trusting HTTP 200, and the nginx, Apache, Cloudflare and static-host fixes.">
+<link rel="canonical" href="https://webskan.com/en/blog/exposed-env-git-on-live-sites/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/exposed-env-git-on-live-sites/">
+<meta property="og:title" content="Your deploy just published .env: exposed .git, .env, SQL dumps and backups on live sites">
+<meta property="og:description" content="How secrets end up in the web root, what attackers do with them, a 60-second curl check that matches content signatures instead of trusting HTTP 200, and the server fixes.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/en/blog/exposed-env-git-on-live-sites/">
+<meta property="og:image" content="https://webskan.com/og-dev.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Your deploy just published .env: exposed .git, .env, SQL dumps and backups on live sites – and a 60-second check","description":"How secrets end up in the web root, what attackers do with them, a 60-second curl check that matches content signatures instead of trusting HTTP 200, and the server fixes.","datePublished":"2026-11-07","dateModified":"2026-11-07","inLanguage":"en","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/en/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/en/"},"mainEntityOfPage":"https://webskan.com/en/blog/exposed-env-git-on-live-sites/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a href="/en/blog/">Blog</a><a href="/developers/">For developers</a><a href="/en/#pricing">Pricing</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 7 November 2026 · 8 min read · for developers</p>
+<h1>Your deploy just published .env: exposed .git, .env, SQL dumps and backups on live sites – and a 60-second check</h1>
+<p class="lead">Nothing in a typical deploy pipeline stops a <code>.env</code>, a <code>.git</code> directory or last week's <code>backup.sql</code> from going live together with the site. The server happily serves them, HTTP 200, to anyone who guesses the path – and the guessing is automated. This post covers how the files get there (agent-driven deploys make one of the paths more common, not less), what attackers do with them, a 60-second check that does not trust HTTP 200, and the fixes for nginx, Apache, Cloudflare and static hosts.</p>
+
+<h2>How secrets end up in the web root</h2>
+<ul>
+<li><strong>Deploying the repository instead of the build.</strong> <code>git clone</code> or <code>git pull</code> directly into the document root puts <code>.git/</code> next to <code>index.html</code>. Every file ever committed – including the credentials someone removed in a later commit – is one <code>git-dumper</code> run away. The same happens with FTP uploads of a project folder and with “sync the whole directory” deploy actions.</li>
+<li><strong>The framework's public folder is the project folder.</strong> PHP projects served from the project root (instead of <code>public/</code>) expose <code>.env</code>, <code>composer.json</code> and <code>storage/</code>. A static site generator whose output directory accidentally contains the source tree does the same.</li>
+<li><strong>Backups and dumps made “just for a moment”.</strong> <code>wp-config.php.bak</code> before an edit, <code>dump.sql</code> exported by a migration script into the current directory, <code>site.zip</code> created by a hosting panel's backup tool inside <code>public_html</code>. Nobody deletes temporary files on a Friday.</li>
+<li><strong>Debug artefacts.</strong> <code>phpinfo.php</code> left after “checking the PHP version”, <code>wp-content/debug.log</code> with <code>WP_DEBUG_LOG</code> on in production, <code>adminer.php</code> uploaded to fix one row in the database.</li>
+<li><strong>Agent-driven deploys.</strong> A coding agent asked to “deploy this” will do the fastest thing that works. If that is <code>rsync -a ./ user@host:/var/www/site/</code>, the dotfiles go along. The agent does not know that <code>.env</code> is a secret unless the pipeline refuses to ship it. This is not an argument against agents; it is an argument for a post-deploy check that runs every time.</li>
+</ul>
+
+<h2>What is actually at stake</h2>
+<p>This is not a theoretical class of bug. In August 2024 Palo Alto Networks' Unit 42 described an extortion campaign built entirely on one request per domain – <code>http://&lt;target&gt;/.env</code>. The attackers “located these access keys by scanning and identifying exposed .env files hosted on unsecured web applications”, across “more than 230 million unique targets”. The result: “This campaign targeted 110,000 domains resulting in over 90,000 unique variables in the .env files.” Of those variables, Unit 42 writes, “7,000 belonged to organizations' cloud services” and 1,515 “were associated with social media platforms”; the files contained “hard-coded cloud provider access keys, software-as-a-service (SaaS) API keys and database login information”. The report stresses that this “did not result from vulnerabilities or misconfigurations in cloud providers' services” – the web servers simply served the file.</p>
+<p>The <code>.git</code> variant is older and just as common. In 2015 Internetwache scanned the Alexa top 1M and “found about 9700 public accessible Git repositories” – under 1 % of sites, which still means thousands of production code bases with “all previous revisions, but sometimes also configuration files with sensitive information”. They report “more than 100 projects” whose <code>.git/config</code> stored remote credentials as <code>protocol://user:password@host/repository</code>, and “a lot of AWS/Database/SMTP/FTP credentials in some repositories”. Tooling has only improved since: <a href="https://github.com/arthaud/git-dumper" rel="noopener">git-dumper</a> (“A tool to dump a git repository from a website”) reconstructs a working tree from an exposed <code>.git</code> even with directory listing off, and ends with <code>git checkout .</code>.</p>
+<p>The OWASP Web Security Testing Guide has had a dedicated test for this class of problem for years: WSTG-CONF-04, “Review Old Backup and Unreferenced Files for Sensitive Information”. Its summary is a precise description of the problem: “Web servers commonly accumulate unreferenced or forgotten files: renamed old versions, editor/manual backups” (<code>file~</code>, <code>file.old</code>, <code>.bak</code>, archives), and “they tend to be served as plain text/source rather than executed, exposing server-side code, credentials, and internal details”. Its extension table lists <code>.env</code> under “Credentials and secrets” as a file that “should generally never be publicly served”, and the remediation is blunt: “Data files, log files, configuration files, etc. should be stored in directories not accessible by the web server”.</p>
+
+<h2>The 60-second check (do not trust HTTP 200)</h2>
+<p>A naive scanner requests <code>/.env</code> and reports a leak when the status is 200. That produces false positives on every site with a “soft 404” (a catch-all route that returns the home page for unknown paths) – which is most single-page apps and many CMS setups. Check the <em>content</em>, not the status. Each file type has a cheap signature:</p>
+<table class="vitals headers">
+<thead><tr><th>Path</th><th>Signature that confirms a real leak</th><th>Severity</th></tr></thead>
+<tbody>
+<tr><td><code>/.git/HEAD</code></td><td data-l="Signature">Body starts with <code>ref: refs/</code> (or a 40-hex commit id)</td><td data-l="Severity">High – full source history</td></tr>
+<tr><td><code>/.git/config</code></td><td data-l="Signature">Contains a <code>[core]</code> section</td><td data-l="Severity">High – often remote URLs with tokens</td></tr>
+<tr><td><code>/.env</code></td><td data-l="Signature">Lines matching <code>^[A-Z][A-Z0-9_]+=</code> and no <code>&lt;html</code></td><td data-l="Severity">High – live credentials</td></tr>
+<tr><td><code>/wp-config.php.bak</code>, <code>.old</code>, <code>~</code>, <code>.save</code></td><td data-l="Signature">Contains <code>DB_PASSWORD</code> or <code>table_prefix</code> (the server does not execute <code>.bak</code>, so it serves the PHP source)</td><td data-l="Severity">High – database credentials</td></tr>
+<tr><td><code>/backup.sql</code>, <code>/dump.sql</code>, <code>/&lt;host&gt;.sql</code></td><td data-l="Signature">Contains <code>CREATE TABLE</code> or <code>INSERT INTO</code></td><td data-l="Severity">High – whole database, password hashes, customer data</td></tr>
+<tr><td><code>/backup.zip</code>, <code>/site.zip</code>, <code>/public_html.zip</code>, <code>.tar.gz</code></td><td data-l="Signature">First bytes <code>PK\x03\x04</code> (zip) or <code>\x1f\x8b</code> (gzip)</td><td data-l="Severity">High – everything above at once</td></tr>
+<tr><td><code>/phpinfo.php</code>, <code>/info.php</code></td><td data-l="Signature"><code>&lt;title&gt;phpinfo()&lt;/title&gt;</code></td><td data-l="Severity">Medium – paths, modules, environment variables</td></tr>
+<tr><td><code>/wp-content/debug.log</code>, <code>/error_log</code></td><td data-l="Signature"><code>PHP Warning</code> / <code>PHP Fatal error</code> lines</td><td data-l="Severity">Medium – file paths, plugin versions, sometimes data</td></tr>
+<tr><td><code>/adminer.php</code></td><td data-l="Signature">Login form with <code>name="auth[</code></td><td data-l="Severity">Medium – database login exposed to brute force</td></tr>
+<tr><td><code>/.DS_Store</code></td><td data-l="Signature">Bytes <code>\x00\x00\x00\x01Bud1</code></td><td data-l="Severity">Low – reveals file names in the directory</td></tr>
+</tbody>
+</table>
+<p>One shell loop covers the high-severity rows. It requests at most 64 KB per path and matches the signature:</p>
+<pre><code>H=https://example.com
+chk() { curl -s -m 8 -r 0-65535 "$H$1" | head -c 65536 | grep -a -q -E "$2" &amp;&amp; echo "EXPOSED $1"; }
+chk /.git/HEAD        '^(ref: refs/|[0-9a-f]{40})'
+chk /.git/config      '^\[core\]'
+chk /.env             '^[A-Z][A-Z0-9_]{2,}='
+chk /wp-config.php.bak 'DB_PASSWORD|table_prefix'
+chk /backup.sql       'CREATE TABLE|INSERT INTO'
+chk /dump.sql         'CREATE TABLE|INSERT INTO'
+for f in backup site www public_html; do chk /$f.zip '^PK'; done
+chk /phpinfo.php      'phpinfo\(\)'
+chk /wp-content/debug.log 'PHP (Warning|Fatal error|Notice)'</code></pre>
+<p>Silence means nothing matched. Run it against the site you just deployed and against the staging host – staging is where the <code>dump.sql</code> usually lives.</p>
+
+<h2>If something is exposed</h2>
+<ol>
+<li><strong>Remove the file or block the path first</strong> (configs below), then <strong>rotate every secret it contained</strong> – database passwords, API keys, app keys, SMTP credentials, cloud access keys. Deleting a file that has been downloadable for weeks does not un-download it.</li>
+<li>For an exposed <code>.git</code>, assume the <em>entire history</em> is public: secrets removed in a later commit are still in earlier ones. Rotate those too, and check whether the repository's remote URL in <code>.git/config</code> contains a token.</li>
+<li>For an exposed database dump: password hashes of your users were public. Force a password reset, and check what personal data was in the dump – in the EU this is likely a notifiable breach.</li>
+<li>Check access logs for the leaked paths to see whether anyone fetched them before you did.</li>
+</ol>
+
+<h2>Fixes that hold</h2>
+<p><strong>nginx</strong> – deny dotfiles except ACME challenges, and deny common backup/dump extensions:</p>
+<pre><code>location ~ /\.(?!well-known/) { deny all; return 404; }
+location ~* \.(sql|sql\.gz|bak|old|save|orig|log|zip|tar|tar\.gz|tgz|env)$ { deny all; return 404; }
+location ~* ^/(phpinfo|info|adminer)\.php$ { return 404; }</code></pre>
+<p><strong>Apache 2.4</strong> (in the vhost or <code>.htaccess</code> if <code>AllowOverride</code> permits):</p>
+<pre><code>&lt;FilesMatch "^\.|\.(sql|bak|old|save|orig|log|zip|tar|gz|tgz|env)$"&gt;
+  Require all denied
+&lt;/FilesMatch&gt;
+RedirectMatch 404 /\.git</code></pre>
+<p><strong>Cloudflare</strong> – a WAF custom rule that blocks <code>URI Path</code> containing <code>/.git</code>, <code>/.env</code> or ending in <code>.sql</code> / <code>.bak</code> stops the public download, but the file is still on the origin – fix the origin too.</p>
+<p><strong>Static hosts and framework hosting</strong> – the rule is “deploy the build output, never the project directory”. Keep secrets in the platform's environment variables, not in files under the output folder. Add a deploy step that fails if the output directory contains <code>.env</code>, <code>.git</code> or <code>*.sql</code>:</p>
+<pre><code>test -z "$(find dist -maxdepth 2 \( -name '.env*' -o -name '.git' -o -name '*.sql' -o -name '*.zip' \) -print -quit)" || { echo "secrets in build output"; exit 1; }</code></pre>
+<p><strong>Backups</strong> – write them outside the document root (<code>/var/backups/site/</code>, object storage), never into <code>public_html</code>. If a hosting panel insists on the web root, add the deny rules above before the first backup.</p>
+
+<h2>Put it in the pipeline</h2>
+<p>Everything above works once. The leak comes back with the next “quick fix on the server”. The durable version is a post-deploy check that runs every time and fails loudly. <a href="/developers/">Webskan's MCP server</a> does this from the outside: <code>audit_website</code> probes the 28 paths from the table with the same content signatures (so soft-404 sites do not produce noise), reports each hit as a <code>sec.exposed-file</code> finding with the content type and size, and <code>recheck_website</code> tells you whether it is gone after the fix. The free <code>scan_website</code> runs the same probe in about a second. If you would rather script it yourself, the loop above is the whole idea – the point is that it runs after every deploy, not that it is ours.</p>
+
+<section class="fullbox">
+<h2>Check a site now</h2>
+<p>The free Webskan quick scan runs the exposed-file probe, Lighthouse, security headers and the basic SEO checks on any public site. No sign-up; results in about 30 seconds.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="en"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://yourproject.com" required maxlength="500" aria-label="Website address"><button class="btn" type="submit">Scan for free</button></form>
+<p class="note">Shipping sites with a coding agent? Give it the <a href="/developers/">Webskan MCP server</a> – free for 2 whole-site audits a day, <a href="/developers/#teams">Developer plan</a> for 30.</p>
+</section>
+
+<h2>Sources and tools</h2>
+<ul>
+<li>Palo Alto Networks Unit 42, <a href="https://unit42.paloaltonetworks.com/large-scale-cloud-extortion-operation/" rel="noopener">Leaked Environment Variables Allow Large-Scale Extortion Operation in Cloud Environments</a> (15 August 2024) – 230 M targets scanned, 110,000 domains, 90,000 variables, 7,000 cloud keys; Unit 42 notes it “did not assess the validity of these credentials”</li>
+<li>Internetwache, <a href="https://en.internetwache.org/dont-publicly-expose-git-or-how-we-downloaded-your-websites-sourcecode-an-analysis-of-alexas-1m-28-07-2015/" rel="noopener">Don't publicly expose .git or how we downloaded your website's sourcecode – an analysis of Alexa's 1M</a> (28 July 2015) – about 9,700 exposed repositories, credentials in <code>.git/config</code>, nginx/Apache rules</li>
+<li>OWASP Web Security Testing Guide, <a href="https://wstg.owasp.org/latest/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management/04-Review_Old_Backup_and_Unreferenced_Files_for_Sensitive_Information" rel="noopener">WSTG-CONF-04: Review Old Backup and Unreferenced Files for Sensitive Information</a> – threats, extension table, remediation (its Apache example still uses the 2.2 <code>Deny from all</code> syntax; use <code>Require all denied</code> on 2.4)</li>
+<li>nginx, <a href="https://nginx.org/en/docs/http/ngx_http_core_module.html#location" rel="noopener">location</a> (regex modifiers <code>~</code> / <code>~*</code>) and <a href="https://nginx.org/en/docs/http/ngx_http_access_module.html" rel="noopener">ngx_http_access_module</a> (<code>deny all</code>); Apache, <a href="https://httpd.apache.org/docs/2.4/mod/core.html#filesmatch" rel="noopener">FilesMatch</a> and <a href="https://httpd.apache.org/docs/2.4/mod/mod_authz_core.html#require" rel="noopener">Require all denied</a> (“Access is denied unconditionally”)</li>
+<li><a href="https://github.com/arthaud/git-dumper" rel="noopener">arthaud/git-dumper</a> – what an attacker runs against an exposed <code>.git</code>; GitHub, <a href="https://docs.github.com/en/code-security/secret-scanning/introduction/about-secret-scanning" rel="noopener">About secret scanning</a> – scans repositories, not your live web server, so it does not catch a deployed <code>.env</code></li>
+<li>Webskan, <a href="/developers/">MCP server for developers</a> and <a href="/en/blog/audit-the-site-your-agent-shipped/">Audit the site your agent just shipped</a></li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a></footer>
+</div>
+</body>
+</html>

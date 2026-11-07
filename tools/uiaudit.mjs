@@ -154,7 +154,7 @@ print('\\n'.join(out))`;
 }
 
 // Kontrola treści: nieaktualne ceny i nazwy produktów w całym public/ i src/ (wpadka 06.11: blog reklamował „pełny audyt 99 zł” przez 9 h po zmianie cennika).
-const STALE = [/99\s?zł/, /\$\s?29\b/, /[Pp]ełny audyt/, /[Ff]ull audit/, /zwrot(?:y|ów)? bez (?:pytań|podania przyczyny)/i, /no[- ]questions[- ]asked/i];
+const STALE = [/99\s?zł/, /\$\s?29\b(?!\s*(?:\/month|\/mo\b| a month))/, /[Pp]ełny audyt/, /[Ff]ull audit/, /zwrot(?:y|ów)? bez (?:pytań|podania przyczyny)/i, /no[- ]questions[- ]asked/i];
 function contentCheck() {
   const SITE = path.resolve(new URL('..', import.meta.url).pathname);
   const roots = [path.join(SITE, 'public'), path.join(SITE, 'src')];
