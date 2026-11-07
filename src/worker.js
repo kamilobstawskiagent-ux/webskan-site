@@ -117,6 +117,14 @@ async function route(request, env, pathname, ctx) {
     if (pathname === "/api/mcp/stats") return mcpStatsApi(request, env); // licznik użycia MCP (x-scan-key)
     if (pathname === "/api/audit/next") return nextAudits(request, env);
     if (pathname === "/api/audit/result" && request.method === "POST") return auditResult(request, env);
+    if (pathname === "/api/developer/checkout") { // plan Developer (MCP): checkout Polar w USD niezależnie od IP; klucz licencyjny pokazuje strona potwierdzenia Polar
+      if (!env.POLAR_TOKEN || !env.POLAR_PRODUCT_DEVELOPER) return Response.redirect("https://buy.polar.sh/polar_cl_RMFoXX3b2OZdyFTRd7Y4iaSYgL769CDQOrA413aqatO", 302);
+      const ip = request.headers.get("cf-connecting-ip") || "";
+      const r = await fetch(`${env.POLAR_API}/v1/checkouts/`, { method: "POST", headers: { authorization: `Bearer ${env.POLAR_TOKEN}`, "content-type": "application/json" },
+        body: JSON.stringify({ products: [env.POLAR_PRODUCT_DEVELOPER], currency: "usd", locale: "en-US", customer_ip_address: ip || undefined, allow_discount_codes: true, metadata: { product: "developer", source: "webskan" } }) });
+      if (r.ok) { const c = await r.json(); return Response.redirect(c.url, 303); }
+      return Response.redirect("https://buy.polar.sh/polar_cl_RMFoXX3b2OZdyFTRd7Y4iaSYgL769CDQOrA413aqatO", 302); // awaryjnie: link Polar (waluta po IP)
+    }
     if (pathname === "/api/order") {
       if (request.method !== "POST") return new Response("Method not allowed", { status: 405 });
       try { return await handleOrder(request, env); }
