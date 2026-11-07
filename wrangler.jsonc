@@ -24,8 +24,6 @@
   "vars": {
     "POLAR_API": "https://api.polar.sh",
     "POLAR_ORG_ID": "4eb0c880-2ae5-4820-882d-0d5b22d489f4",
-    "SALES_MODE": "presale",
-    "PRICE_PL": "99 zł",
-    "PRICE_EN": "$29"
+    "SALES_MODE": "presale"
   }
 }

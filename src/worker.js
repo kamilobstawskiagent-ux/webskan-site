@@ -3,6 +3,7 @@ import { startScan, nextScans, scanResult, scanPage, nextAudits, auditResult, Sc
 import { MonitorHub, monitorCron, monitorApi, statusPage } from "./monitor.js";
 import { recheckApi, recheckPage } from "./recheck.js";
 import { handleMcp, mcpStatsApi } from "./mcp.js";
+import { polarApi } from "./polar.js";
 import { normalizeUrl } from "./url.js";
 export { ScanQueue, MonitorHub };
 
@@ -127,11 +128,12 @@ async function route(request, env, pathname, ctx) {
     { const m = pathname.match(/^\/en\/scan\/([0-9a-f]+)\/?$/); if (m) return scanPage(request, env, "en", m[1]); }
     if (pathname.startsWith("/api/monitor")) return monitorApi(request, env, pathname, normalizeUrl);
     if (pathname.startsWith("/api/recheck")) return recheckApi(request, env, pathname);
+    if (pathname.startsWith("/api/polar/")) return polarApi(request, env, pathname); // webhook Polar + odbiór przez poller (src/polar.js)
     { const m = pathname.match(/^\/recheck\/([0-9a-f]{32})\/?$/); if (m) return recheckPage(request, env, "pl", m[1]); }
     { const m = pathname.match(/^\/en\/recheck\/([0-9a-f]{32})\/?$/); if (m) return recheckPage(request, env, "en", m[1]); }
     { const m = pathname.match(/^\/status\/([0-9a-f]{32})\/?$/); if (m) return statusPage(env, "pl", m[1]); }
     { const m = pathname.match(/^\/en\/status\/([0-9a-f]{32})\/?$/); if (m) return statusPage(env, "en", m[1]); }
-    if (pathname === "/api/health") return Response.json({ ok: true, polar: Boolean(env.POLAR_TOKEN && env.POLAR_PRODUCT_PL), mode: env.SALES_MODE || "live" });
+    if (pathname === "/api/health") return Response.json({ ok: true, polar: Boolean(env.POLAR_TOKEN && env.POLAR_PRODUCT_PL), webhook: Boolean(env.POLAR_WEBHOOK_SECRET), mode: env.SALES_MODE || "live" });
     const res = await env.ASSETS.fetch(request);
     if (env.SALES_MODE === "presale" && (pathname === "/" || pathname === "/en/")) return presaleRewrite(res, pathname === "/en/" ? "en" : "pl");
     if (res.status === 404 && request.method === "GET" && (request.headers.get("accept") || "").includes("text/html")) return notFound(pathname.startsWith("/en/") ? "en" : "pl");
