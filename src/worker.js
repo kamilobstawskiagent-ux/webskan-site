@@ -2,7 +2,7 @@
 import { startScan, nextScans, scanResult, scanPage, nextAudits, auditResult, ScanQueue, layout } from "./scan.js";
 import { MonitorHub, monitorCron, monitorApi, statusPage } from "./monitor.js";
 import { recheckApi, recheckPage } from "./recheck.js";
-import { handleMcp } from "./mcp.js";
+import { handleMcp, mcpStatsApi } from "./mcp.js";
 import { normalizeUrl } from "./url.js";
 export { ScanQueue, MonitorHub };
 
@@ -99,19 +99,20 @@ function secure(res) {
 const CANONICAL_HOST = "webskan.com";
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const u = new URL(request.url);
     if (u.protocol === "http:") { u.protocol = "https:"; return Response.redirect(u.toString(), 301); }
     // Jeden kanoniczny host: www i stary adres workers.dev przekierowują na webskan.com (API bez przekierowania, żeby nie psuć pollera i formularzy POST).
     if (u.hostname !== CANONICAL_HOST && !u.pathname.startsWith("/api/")) { u.hostname = CANONICAL_HOST; return Response.redirect(u.toString(), 301); }
-    return secure(await route(request, env, u.pathname));
+    return secure(await route(request, env, u.pathname, ctx));
   },
   async scheduled(event, env, ctx) { ctx.waitUntil(monitorCron(env)); }, // co minutę: kontrola dostępności monitorowanych stron
 };
 
-async function route(request, env, pathname) {
+async function route(request, env, pathname, ctx) {
   {
-    if (pathname === "/mcp") return handleMcp(request, env); // serwer MCP (Streamable HTTP) dla agentów kodujących – przed assets
+    if (pathname === "/mcp") return handleMcp(request, env, ctx); // serwer MCP (Streamable HTTP) dla agentów kodujących – przed assets
+    if (pathname === "/api/mcp/stats") return mcpStatsApi(request, env); // licznik użycia MCP (x-scan-key)
     if (pathname === "/api/audit/next") return nextAudits(request, env);
     if (pathname === "/api/audit/result" && request.method === "POST") return auditResult(request, env);
     if (pathname === "/api/order") {

@@ -5,7 +5,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { WebStandardStreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js';
 import { CfWorkerJsonSchemaValidator } from '@modelcontextprotocol/sdk/validation/cfworker';
 import { z } from 'zod';
-import { ISSUE_TEXT_EN, SCAN_STALE_MS, scanStore } from './scan.js';
+import { ISSUE_TEXT_EN, SCAN_STALE_MS, scanStore, authed } from './scan.js';
 import { normalizeUrl, hostOf } from './url.js';
 
 const SITE = 'https://webskan.com';
@@ -278,16 +278,47 @@ function buildServer(ctx) {
 const CORS = { 'access-control-allow-origin': '*', 'access-control-allow-methods': 'POST, GET, DELETE, OPTIONS', 'access-control-allow-headers': 'content-type, authorization, accept, mcp-protocol-version, mcp-session-id, last-event-id', 'access-control-expose-headers': 'mcp-session-id, mcp-protocol-version', 'access-control-max-age': '86400' };
 const withCors = (res) => { const h = new Headers(res.headers); for (const [k, v] of Object.entries(CORS)) h.set(k, v); return new Response(res.body, { status: res.status, statusText: res.statusText, headers: h }); };
 
+// --- Licznik użycia (kryterium zakładu nr 2: ≥ 20 unikalnych klientów w 14 dni) --------------------------------
+// Z treści JSON-RPC bierzemy tylko nazwę metody/narzędzia; klient = sha256(IP + dzień + SCAN_KEY)[0..16], liczony w DO poza ścieżką odpowiedzi.
+const MCP_TOOLS = new Set(['scan_website', 'audit_website', 'get_audit', 'recheck_website']);
+const MCP_SINCE = '2026-11-07';
+async function countMcpUsage(request, env, ctx, ip) {
+  try {
+    const body = await request.clone().json();
+    const tools = [];
+    for (const m of Array.isArray(body) ? body : [body]) {
+      if (m?.method === 'initialize') tools.push('initialize');
+      else if (m?.method === 'tools/call') tools.push(MCP_TOOLS.has(m.params?.name) ? m.params.name : 'other');
+    }
+    if (!tools.length) return;
+    const day = new Date().toISOString().slice(0, 10);
+    const hash = await sha256(`${ip}|${day}|${env.SCAN_KEY || ''}`, 8);
+    const db = scanStore(env);
+    const run = (async () => { for (const tool of tools) await db.mcpHit({ day, hash, tool }); })().catch(() => {});
+    if (ctx?.waitUntil) ctx.waitUntil(run);
+  } catch {}
+}
+// GET /api/mcp/stats?days=14  (x-scan-key)
+export async function mcpStatsApi(request, env) {
+  if (!authed(request, env)) return new Response('unauthorized', { status: 401 });
+  const days = Math.min(90, Math.max(1, Number(new URL(request.url).searchParams.get('days')) || 14));
+  const rows = (await scanStore(env).mcpStats(days)).reverse();
+  const out = rows.map(({ day, uniques, uniquesTools, calls }) => { const { initialize: sessions = 0, ...tools } = calls; return { day, uniques, uniquesTools, sessions, calls: tools }; });
+  // uniques = każdy klient (także crawlery robiące samo `initialize`); uniquesTools = klienci z ≥ 1 wywołaniem narzędzia (miara kanału)
+  return Response.json({ days: out, totalUniquesApprox: out.reduce((n, d) => n + d.uniques, 0), totalUniquesToolsApprox: out.reduce((n, d) => n + d.uniquesTools, 0), since: MCP_SINCE });
+}
+
 // POST/GET/DELETE/OPTIONS /mcp
-export async function handleMcp(request, env) {
+export async function handleMcp(request, env, ctx) {
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: CORS });
   if (request.method === 'GET') { // bezstanowo nie ma osobnego strumienia SSE; człowiekowi w przeglądarce pokazujemy, co to jest
     return withCors(new Response(`Webskan MCP server (Streamable HTTP, stateless). Connect with an MCP client: POST ${SITE}/mcp\nTools: scan_website, audit_website, get_audit, recheck_website. Docs: ${SITE}/developers/\n`, { status: 405, headers: { 'content-type': 'text/plain; charset=utf-8', allow: 'POST, OPTIONS' } }));
   }
   if (request.method !== 'POST' && request.method !== 'DELETE') return withCors(new Response('Method not allowed', { status: 405, headers: { allow: 'POST, OPTIONS' } }));
   const ip = request.headers.get('cf-connecting-ip') || 'x';
-  const ctx = { env, request, ipHash: await sha256(ip, 8), plan: await resolvePlan(request, env) };
-  const server = buildServer(ctx);
+  const plan = await resolvePlan(request, env);
+  if (request.method === 'POST' && !plan.internal) await countMcpUsage(request, env, ctx, ip); // nasze testy (Bearer SCAN_KEY) nie liczą się jako klienci
+  const server = buildServer({ env, request, ipHash: await sha256(ip, 8), plan });
   const transport = new WebStandardStreamableHTTPServerTransport({ sessionIdGenerator: undefined, enableJsonResponse: false });
   await server.connect(transport);
   const res = await transport.handleRequest(request);

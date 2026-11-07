@@ -115,7 +115,32 @@ export class ScanQueue extends DurableObject {
       CREATE INDEX IF NOT EXISTS scans_host ON scans(host, finished); CREATE INDEX IF NOT EXISTS scans_status ON scans(status, at);
       CREATE TABLE IF NOT EXISTS counters(key TEXT PRIMARY KEY, n INTEGER, exp INTEGER);
       CREATE TABLE IF NOT EXISTS audits(id TEXT PRIMARY KEY, host TEXT, url TEXT, pages INTEGER, parent TEXT, status TEXT, at INTEGER, started INTEGER, finished INTEGER, data TEXT, error TEXT, key_hash TEXT, ip_hash TEXT);
-      CREATE INDEX IF NOT EXISTS audits_host ON audits(host, at); CREATE INDEX IF NOT EXISTS audits_status ON audits(status, at)`);
+      CREATE INDEX IF NOT EXISTS audits_host ON audits(host, at); CREATE INDEX IF NOT EXISTS audits_status ON audits(status, at);
+      CREATE TABLE IF NOT EXISTS mcp_clients(day TEXT, hash TEXT, tools INTEGER DEFAULT 0, PRIMARY KEY(day, hash));
+      CREATE TABLE IF NOT EXISTS mcp_daily(day TEXT PRIMARY KEY, uniques INTEGER, calls TEXT, uniques_tools INTEGER DEFAULT 0)`);
+    // migracja z pierwszej wersji licznika (07.11 rano): kolumny z liczbą wywołań narzędzi
+    try { this.sql.exec('ALTER TABLE mcp_clients ADD COLUMN tools INTEGER DEFAULT 0'); } catch {}
+    try { this.sql.exec('ALTER TABLE mcp_daily ADD COLUMN uniques_tools INTEGER DEFAULT 0'); } catch {}
+  }
+  // --- Licznik użycia MCP (kryterium zakładu nr 2: unikalni klienci / dzień) ---
+  // hash = skrót IP+dzień+sól (bez surowego IP); wiersze per klient żyją ≤ 48 h, agregaty dzienne 90 dni.
+  // uniques = klienci, którzy zrobili cokolwiek (także same `initialize` – crawlery i walidatory rejestrów);
+  // uniques_tools = klienci z ≥ 1 wywołaniem narzędzia – to jest miara kanału (07.11 05:35: 20 uniques, 0 wywołań narzędzi).
+  mcpHit({ day, hash, tool }) {
+    this.sql.exec('INSERT OR IGNORE INTO mcp_clients(day,hash,tools) VALUES(?,?,0)', day, hash);
+    if (tool !== 'initialize') this.sql.exec('UPDATE mcp_clients SET tools=tools+1 WHERE day=? AND hash=?', day, hash);
+    const uniques = this.sql.exec('SELECT COUNT(*) n FROM mcp_clients WHERE day=?', day).toArray()[0].n;
+    const uniquesTools = this.sql.exec('SELECT COUNT(*) n FROM mcp_clients WHERE day=? AND tools>0', day).toArray()[0].n;
+    const row = this.sql.exec('SELECT calls FROM mcp_daily WHERE day=?', day).toArray()[0];
+    let calls = {}; try { calls = row ? JSON.parse(row.calls) : {}; } catch {}
+    calls[tool] = (calls[tool] || 0) + 1;
+    this.sql.exec('INSERT OR REPLACE INTO mcp_daily(day,uniques,calls,uniques_tools) VALUES(?,?,?,?)', day, uniques, JSON.stringify(calls), uniquesTools);
+    const dayAgo = (n) => new Date(Date.now() - n * 86400000).toISOString().slice(0, 10);
+    this.sql.exec('DELETE FROM mcp_clients WHERE day < ?', dayAgo(2));
+    this.sql.exec('DELETE FROM mcp_daily WHERE day < ?', dayAgo(90));
+  }
+  mcpStats(days) {
+    return this.sql.exec('SELECT day,uniques,calls,uniques_tools FROM mcp_daily ORDER BY day DESC LIMIT ?', days).toArray().map((r) => { let calls = {}; try { calls = JSON.parse(r.calls); } catch {} return { day: r.day, uniques: r.uniques, uniquesTools: r.uniques_tools || 0, calls }; });
   }
   // --- Pełne audyty (MCP: audit_website / recheck_website) ---
   auditCreate(a) {
@@ -243,7 +268,7 @@ export async function scanResult(request, env) {
   return Response.json({ ok: true, status: job.status });
 }
 
-function authed(request, env) {
+export function authed(request, env) {
   const k = request.headers.get('x-scan-key') || '';
   return Boolean(env.SCAN_KEY) && k.length === env.SCAN_KEY.length && k === env.SCAN_KEY;
 }
