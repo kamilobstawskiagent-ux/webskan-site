@@ -117,12 +117,40 @@ export async function monitorApi(request, env, pathname, normalizeUrl) {
 
 // --- Strona stanu dla klienta ---
 const S = {
-  pl: { title: (h) => `Stan strony ${h}`, up: 'Działa', down: 'Awaria', unknown: 'Sprawdzamy…', paused: 'Monitoring wstrzymany', since: 'od', lastCheck: 'Ostatnia kontrola', resp: 'czas odpowiedzi', uptime: 'Dostępność', d1: 'ostatnie 24 h', d7: 'ostatnie 7 dni', d30: 'ostatnie 30 dni', avg: 'Średni czas odpowiedzi', incidents: 'Awarie (30 dni)', none: 'Brak awarii w tym okresie.', downAt: 'awaria', upAt: 'przywrócono', dur: 'czas trwania', min: 'min', how: 'Sprawdzamy stronę co minutę z sieci Cloudflare. Awarię ogłaszamy po dwóch kolejnych nieudanych próbach i wysyłamy e-mail; drugi e-mail, gdy strona wróci.', footer: 'Webskan Monitor', checks: 'kontroli', ago: 'temu', s: 's', nodata: 'brak danych' },
-  en: { title: (h) => `Status of ${h}`, up: 'Up', down: 'Down', unknown: 'Checking…', paused: 'Monitoring paused', since: 'since', lastCheck: 'Last check', resp: 'response time', uptime: 'Uptime', d1: 'last 24 h', d7: 'last 7 days', d30: 'last 30 days', avg: 'Average response time', incidents: 'Incidents (30 days)', none: 'No incidents in this period.', downAt: 'down', upAt: 'recovered', dur: 'duration', min: 'min', how: 'We check the site every minute from the Cloudflare network. An outage is declared after two consecutive failed checks and you get an e-mail; a second e-mail when the site is back.', footer: 'Webskan Monitor', checks: 'checks', ago: 'ago', s: 's', nodata: 'no data' },
+  pl: { last30: 'Ostatnie 30 dni', dayUp: 'dostępność', checksN: (n) => `${n} kontroli`, noChecks: 'brak kontroli', respDaily: 'Średni czas odpowiedzi dziennie', maxMs: (v) => `skala: 0–${v} ms`, respSoon: 'Wykres średniego czasu odpowiedzi pojawi się po trzech dniach kontroli.', legendGood: '≥ 99,9 %', legendWarn: '99–99,9 %', legendBad: '< 99 %', legendNone: 'brak danych', title: (h) => `Stan strony ${h}`, up: 'Działa', down: 'Awaria', unknown: 'Sprawdzamy…', paused: 'Monitoring wstrzymany', since: 'od', lastCheck: 'Ostatnia kontrola', resp: 'czas odpowiedzi', uptime: 'Dostępność', d1: 'ostatnie 24 h', d7: 'ostatnie 7 dni', d30: 'ostatnie 30 dni', avg: 'Średni czas odpowiedzi', incidents: 'Awarie (30 dni)', none: 'Brak awarii w tym okresie.', downAt: 'awaria', upAt: 'przywrócono', dur: 'czas trwania', min: 'min', how: 'Sprawdzamy stronę co minutę z sieci Cloudflare. Awarię ogłaszamy po dwóch kolejnych nieudanych próbach i wysyłamy e-mail; drugi e-mail, gdy strona wróci.', footer: 'Webskan Monitor', checks: 'kontroli', ago: 'temu', s: 's', nodata: 'brak danych' },
+  en: { last30: 'Last 30 days', dayUp: 'uptime', checksN: (n) => `${n} checks`, noChecks: 'no checks', respDaily: 'Average daily response time', maxMs: (v) => `scale: 0–${v} ms`, respSoon: 'The average response time chart appears after three days of checks.', legendGood: '≥ 99.9 %', legendWarn: '99–99.9 %', legendBad: '< 99 %', legendNone: 'no data', title: (h) => `Status of ${h}`, up: 'Up', down: 'Down', unknown: 'Checking…', paused: 'Monitoring paused', since: 'since', lastCheck: 'Last check', resp: 'response time', uptime: 'Uptime', d1: 'last 24 h', d7: 'last 7 days', d30: 'last 30 days', avg: 'Average response time', incidents: 'Incidents (30 days)', none: 'No incidents in this period.', downAt: 'down', upAt: 'recovered', dur: 'duration', min: 'min', how: 'We check the site every minute from the Cloudflare network. An outage is declared after two consecutive failed checks and you get an e-mail; a second e-mail when the site is back.', footer: 'Webskan Monitor', checks: 'checks', ago: 'ago', s: 's', nodata: 'no data' },
 };
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const fmtDate = (ts, lang) => new Date(ts).toLocaleString(lang === 'en' ? 'en-GB' : 'pl-PL', { timeZone: 'Europe/Warsaw', dateStyle: 'short', timeStyle: 'short' });
 const fmtDur = (s, t) => s < 3600 ? `${Math.max(1, Math.round(s / 60))} ${t.min}` : `${Math.floor(s / 3600)} h ${Math.round((s % 3600) / 60)} ${t.min}`;
+
+// Wykres 30 dni (inline SVG, bez skryptów – CSP): pasek dostępności dzień po dniu + linia średniego czasu odpowiedzi. Kolory stanu zawsze z etykietą (legenda + title).
+function dailyCharts(byDay, lang, t) {
+  const map = new Map(byDay.map((r) => [r.d, r]));
+  const days = [];
+  for (let i = 29; i >= 0; i--) { const d = new Date(Date.now() - i * 86400000).toISOString().slice(0, 10); days.push({ d, ...(map.get(d) || { n: 0, oks: 0, avg_ms: null }) }); }
+  const loc = lang === 'en' ? 'en-GB' : 'pl-PL';
+  const label = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString(loc, { day: 'numeric', month: 'short' });
+  const col = (r) => !r.n ? '#e5e7eb' : (r.oks / r.n >= 0.999 ? '#1a7f37' : r.oks / r.n >= 0.99 ? '#b45309' : '#b42318');
+  const W = 600, bw = 16, gap = 4, H = 36;
+  const bars = days.map((r, i) => `<rect x="${i * (bw + gap)}" y="0" width="${bw}" height="${H}" rx="4" fill="${col(r)}"><title>${label(r.d)}: ${r.n ? `${(100 * r.oks / r.n).toLocaleString(loc, { maximumFractionDigits: 2 })} % ${t.dayUp}, ${t.checksN(r.n)}` : t.noChecks}</title></rect>`).join('');
+  const strip = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" preserveAspectRatio="none" role="img" aria-label="${t.last30}" style="display:block">${bars}</svg>
+<div style="display:flex;justify-content:space-between;color:#6b7280;font-size:.8rem;margin-top:.3rem"><span>${label(days[0].d)}</span><span>${label(days[29].d)}</span></div>
+<p style="display:flex;flex-wrap:wrap;gap:.4rem 1rem;color:#6b7280;font-size:.8rem;margin:.5rem 0 0"><span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#1a7f37;vertical-align:-1px"></span> ${t.legendGood}</span><span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#b45309;vertical-align:-1px"></span> ${t.legendWarn}</span><span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#b42318;vertical-align:-1px"></span> ${t.legendBad}</span><span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#e5e7eb;vertical-align:-1px"></span> ${t.legendNone}</span></p>`;
+  const pts = days.map((r, i) => r.avg_ms != null ? { i, v: Math.round(r.avg_ms), d: r.d } : null).filter(Boolean);
+  if (pts.length < 3) return strip + `<p style="color:#6b7280;font-size:.9rem;margin:1rem 0 0">${t.respSoon}</p>`;
+  const max = Math.max(100, ...pts.map((p) => p.v)); const LH = 100, LW = 600;
+  const x = (i) => i * (LW / 29), y = (v) => LH - (v / max) * LH;
+  const path = pts.map((p, k) => `${k ? 'L' : 'M'}${x(p.i).toFixed(1)},${y(p.v).toFixed(1)}`).join(' ');
+  const cols = days.map((r, i) => r.avg_ms != null ? `<rect x="${(x(i) - LW / 58).toFixed(1)}" y="0" width="${(LW / 29).toFixed(1)}" height="${LH}" fill="transparent"><title>${label(r.d)}: ${Math.round(r.avg_ms)} ms</title></rect>` : '').join('');
+  const line = `<h3 style="font-size:1rem;margin:1.25rem 0 .25rem">${t.respDaily}</h3>
+<div style="display:flex;justify-content:flex-end;color:#6b7280;font-size:.8rem"><span>${t.maxMs(max)}</span></div>
+<svg viewBox="0 0 ${LW} ${LH}" width="100%" height="110" preserveAspectRatio="none" role="img" aria-label="${t.respDaily}" style="display:block;overflow:visible;margin:4px 0">
+<line x1="0" y1="0" x2="${LW}" y2="0" stroke="#e5e7eb" stroke-dasharray="3 3" vector-effect="non-scaling-stroke"/><line x1="0" y1="${LH}" x2="${LW}" y2="${LH}" stroke="#e5e7eb" vector-effect="non-scaling-stroke"/>
+<path d="${path}" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>${cols}</svg>
+<div style="display:flex;justify-content:space-between;color:#6b7280;font-size:.8rem"><span>${label(days[0].d)}</span><span>${label(days[29].d)}</span></div>`;
+  return strip + line;
+}
 export async function statusPage(env, lang, token) {
   const t = S[lang], h = hub(env);
   const m = await h.byToken(token);
@@ -147,6 +175,7 @@ export async function statusPage(env, lang, token) {
 <div class="grid3" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem">
   ${[[t.d1, s1], [t.d7, s7], [t.d30, s30]].map(([l, s]) => `<div style="border:1px solid #e5e7eb;border-radius:12px;padding:.9rem .8rem"><p style="margin:0;color:#6b7280;font-size:.85rem">${l}</p><p style="margin:.2rem 0 0;font-size:1.5rem;font-weight:700">${pct(s)}</p><p style="margin:0;color:#6b7280;font-size:.85rem">${s.checks} ${t.checks}${s.avg_ms ? ` · ${t.avg.toLowerCase()} ${s.avg_ms} ms` : ''}</p></div>`).join('')}
 </div></section>
+<section><h2>${t.last30}</h2>${dailyCharts(s30.byDay, lang, t)}</section>
 <section><h2>${t.incidents}</h2>
 ${incidents.length ? `<ul style="list-style:none;padding:0;margin:0">${incidents.map((i) => `<li style="border-top:1px solid #e5e7eb;padding:.6rem 0;display:flex;flex-wrap:wrap;gap:.25rem 1.25rem"><span style="color:#b42318;font-weight:600">${t.downAt} ${fmtDate(i.down, lang)}</span><span>${i.up ? `${t.upAt} ${fmtDate(i.up, lang)}` : '…'}</span><span style="color:#6b7280">${t.dur}: ${fmtDur(i.dur, t)}</span></li>`).join('')}</ul>` : `<p>${t.none}</p>`}
 </section>
