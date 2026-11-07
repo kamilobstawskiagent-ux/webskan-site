@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your SSL certificate is expiring: what customers see, how to check the date and how to never repeat it – Webskan</title>
+<meta name="description" content="An expired certificate turns your business website into a full-screen red warning. What customers see, eight reasons renewal fails, how to check the expiry date in 60 seconds, and a plan for the era of 200-day – soon 47-day – certificates.">
+<link rel="canonical" href="https://webskan.com/en/blog/ssl-certificate-expired/">
+<link rel="alternate" hreflang="pl" href="https://webskan.com/blog/certyfikat-ssl-wygasa/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/ssl-certificate-expired/">
+<meta property="og:title" content="Your SSL certificate is expiring: what customers see, how to check the date and how to never repeat it">
+<meta property="og:description" content="What customers see after a certificate expires, eight reasons renewal fails, a 60-second expiry check and a plan so it never happens again.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/en/blog/ssl-certificate-expired/">
+<meta property="og:image" content="https://webskan.com/og-en.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Your SSL certificate is expiring: what customers see, how to check the date and how to never repeat it","description":"What customers see after a certificate expires, eight reasons renewal fails, a 60-second expiry check and a plan so it never happens again.","datePublished":"2026-11-07","dateModified":"2026-11-07","inLanguage":"en","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"mainEntityOfPage":"https://webskan.com/en/blog/ssl-certificate-expired/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a href="/en/blog/">Blog</a><a href="/en/#pricing">Pricing</a><a href="/blog/certyfikat-ssl-wygasa/">PL</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 7 November 2026 · 8 min read</p>
+<h1>Your SSL certificate is expiring: what customers see, how to check the date and how to never repeat it</h1>
+<p class="lead">At midnight the certificate expires and a website that has worked for three years turns into a full-screen red warning. The server is still running, the hosting dashboard is green, and customers bounce off the door because their browser tells them this place is dangerous. Below: exactly what they see, why automatic renewal fails, how to check the expiry date in a minute, and what to do so this article never applies to you again – especially now that certificates have started living shorter lives.</p>
+
+<h2>What happens one minute after expiry</h2>
+<ul>
+<li><strong>Customers see a warning instead of your site.</strong> Chrome shows “Your connection is not private” with the code <code>NET::ERR_CERT_DATE_INVALID</code>; Firefox and Safari have their own, equally red versions. The “proceed anyway” link is hidden under “Advanced”, and on a phone it can be impossible to find. Most people do what the browser tells them: they leave.</li>
+<li><strong>Nothing else looks broken.</strong> The site responds, the server has spare capacity, and simple uptime checkers often only ask “does the server answer” without looking at the certificate. The outage lasts for days, until a customer calls.</li>
+<li><strong>Integrations stop without a message.</strong> The payment gateway, the booking widget, the mobile app, the courier polling your API – programs have no “proceed anyway” button. They simply refuse to connect, and the error lands in a log nobody reads.</li>
+<li><strong>E-mail can stop too.</strong> If your mail server (<code>mail.yourcompany.com</code>) uses the same certificate, mail clients start asking about trust or stop sending.</li>
+<li><strong>Google does not drop the site immediately</strong>, but its crawler cannot fetch it. The longer the outage, the more pages fall out of the index, and recovery takes longer than the fix itself.</li>
+</ul>
+
+<h2>Why renewal fails: eight reasons</h2>
+<ol>
+<li><strong>The automation broke quietly after a DNS, hosting or CDN change.</strong> Renewal requires the issuer to confirm you control the domain. After a move, the old server keeps dutifully renewing a certificate nobody uses, while the new one never received its own.</li>
+<li><strong>The certificate was bought manually by an agency that no longer looks after you.</strong> Expiry reminders go to an inbox nobody reads, and the login to the issuer's panel left with the contact.</li>
+<li><strong>An expired card or an unpaid invoice</strong> at the issuer or the host. The “SSL” service disappears quietly along with the payment.</li>
+<li><strong>A redirect or a firewall blocks validation.</strong> A forced redirect to https, a “coming soon” page, geo-blocking or a web application firewall cuts off <code>/.well-known/acme-challenge/</code>, the address the issuer uses to verify the domain. The panel records “challenge failed” and nobody sees it.</li>
+<li><strong>A CAA record in DNS only allows a different issuer.</strong> Someone added it years ago for a previous provider, and today's provider cannot get past it.</li>
+<li><strong>One domain, several certificates.</strong> <code>www</code> and the bare domain, <code>shop.</code>, <code>api.</code>, <code>portal.</code>, <code>mail.</code> – each can have its own certificate with its own date. A wildcard certificate for all subdomains renews through a DNS API key that someone rotated.</li>
+<li><strong>The reminder e-mails no longer arrive.</strong> Let's Encrypt, the most popular free issuer, <strong>ended expiration notification e-mails on 4 June 2025</strong>, citing among other things that most subscribers now have automated renewal and that keeping millions of e-mail addresses conflicts with its privacy goals. If your site relied on that e-mail, nobody has warned you for a year and a half.</li>
+<li><strong>Lifetimes are shrinking and “once a year” no longer exists.</strong> The industry body of browsers and issuers (the CA/Browser Forum) adopted a schedule: the maximum certificate lifetime dropped from 398 days to <strong>200 days from 15 March 2026</strong>, falls to <strong>100 days from 15 March 2027</strong>, and to <strong>47 days from 15 March 2029</strong>. Let's Encrypt certificates are valid for 90 days (renewal every 60 recommended), and six-day certificates are available on request. The conclusion is simple: whoever renews by hand from a calendar will lose to the calendar within two years.</li>
+</ol>
+
+<h2>How to check the expiry date in 60 seconds</h2>
+<ol>
+<li><strong>In a desktop browser.</strong> Click the icon next to the address (padlock or site settings), then “Connection is secure” and “Certificate is valid” (Chrome), or “More information” → “View certificate” (Firefox). You are looking for two dates, “Valid from” and “Valid to”, and the issuer's name.</li>
+<li><strong>Read “Valid from”, not only “Valid to”.</strong> If the issuer is Let's Encrypt, ZeroSSL or your host's “auto SSL”, the certificate lives 90 days and should be renewed after 60. A “from” date 80 days ago means the automation has already failed – you have a few days before customers notice.</li>
+<li><strong>Check every name, not just the homepage.</strong> With and without <code>www</code>, the shop, the blog, the customer portal, the API, and the mail server's address. Type each one separately – the browser shows the certificate of that specific name.</li>
+<li><strong>On a phone, or for someone on your team:</strong> the free SSL Labs test (<code>ssllabs.com/ssltest</code>) shows the dates, the issuer, the chain and whether the certificate matches the name. It takes a minute or two.</li>
+<li><strong>For technical people:</strong> one terminal command prints the dates and the issuer:
+<pre><code>echo | openssl s_client -servername yourcompany.com -connect yourcompany.com:443 2>/dev/null \
+  | openssl x509 -noout -dates -issuer</code></pre>
+The <code>notAfter</code> line is the expiry date.</li>
+<li><strong>Write the result down with date and issuer</strong> in one place for all names. That is your inventory – you will need it at every hosting or contractor change.</li>
+</ol>
+
+<h2>Symptom → cause → who fixes it</h2>
+<table class="vitals headers">
+<thead><tr><th>What you see</th><th>Most common cause</th><th>Who fixes it and how much work</th></tr></thead>
+<tbody>
+<tr><td><strong>Full-page red “certificate has expired” warning</strong></td><td data-l="Cause">The certificate expired and automatic renewal did not run (reasons 1–5 above)</td><td data-l="Who fixes it">Host or developer: renew manually, 15 min; then repair the automation, up to 1 h – skip the second step and you are back here in 90 days</td></tr>
+<tr><td><strong>Warning only on <code>www</code> or only on the bare domain</strong></td><td data-l="Cause">Certificate issued for one of the two names</td><td data-l="Who fixes it">Host: add the second name to the certificate and redirect to one version, 30 min</td></tr>
+<tr><td><strong>“Certificate does not match the name” after moving the site</strong></td><td data-l="Cause">The new server serves its default certificate because yours has not been issued yet</td><td data-l="Who fixes it">Host or developer: issue the certificate on the new server, 30 min; next time, certificate first, DNS change second</td></tr>
+<tr><td><strong>Works on your computer, warns on a phone or an older laptop</strong></td><td data-l="Cause">Incomplete certificate chain (missing intermediate) – modern browsers fetch it themselves, older ones do not</td><td data-l="Who fixes it">Host: install the full chain (“fullchain”), 30 min; SSL Labs shows this as “chain issues”</td></tr>
+<tr><td><strong>The site opens, but payments or bookings stopped working</strong></td><td data-l="Cause">The integration rejects your certificate (expired or incomplete chain) even though the browser still tolerates it</td><td data-l="Who fixes it">Developer + integration provider: fix the certificate, replay the suspended notifications, 1–2 h</td></tr>
+<tr><td><strong>Certificate is fine, yet no padlock or “not secure”</strong></td><td data-l="Cause">Mixed content: images or scripts loaded over http, or no redirect to https</td><td data-l="Who fixes it">Developer, 1 h; details in <a href="/en/blog/https-is-not-enough/">HTTPS is not enough</a></td></tr>
+<tr><td><strong>Hosting panel says “renewal failed”</strong></td><td data-l="Cause">A redirect, firewall or CAA record blocks domain validation</td><td data-l="Who fixes it">Developer: exception for <code>/.well-known/acme-challenge/</code>, CAA record fix, 30 min</td></tr>
+</tbody>
+</table>
+
+<h2>How to never repeat it</h2>
+<ul>
+<li><strong>Automation instead of a calendar.</strong> Choose hosting with automatic certificates (Let's Encrypt or its own “auto SSL”), or put the site behind a service like Cloudflare that manages certificates itself. With 200-day – soon 100- and 47-day – lifetimes, manual renewal is not a saving, it is a postponed outage.</li>
+<li><strong>An independent early warning.</strong> A reminder from your host does not help when the host is the problem. You need something external that looks at the certificate every day and writes to you 14 and 7 days before the end. Let's Encrypt suggests, for example, the free Red Sift Certificates Lite plan; Webskan Monitor does it too (below).</li>
+<li><strong>An inventory of names.</strong> A list of every address with a certificate – including mail and admin panels – with date and issuer. One sheet, updated at every change.</li>
+<li><strong>Two notification addresses</strong> at the issuer and the host: yours and someone who will stay with the company. Not the former agency's.</li>
+<li><strong>A test renewal after every change</strong> to DNS, hosting, CDN or firewall. Most tools have a dry-run mode (<code>--dry-run</code>) that checks whether validation would pass without issuing a certificate.</li>
+<li><strong>When moving: certificate on the new server first, DNS change second.</strong> The other order gives you a few hours of red screen.</li>
+</ul>
+
+<h2>What Webskan checks</h2>
+<p>The <a href="/en/#pricing">in-depth audit</a> checks the certificate on the audited addresses: validity, name match, the redirect from http to https and mixed content, and if less than 21 days of validity remain you get it as a separate finding with a recommendation. <strong>Webskan Monitor</strong> looks at the certificate every day and e-mails you 14, 7, 3 and 1 day before expiry, and immediately when the certificate becomes invalid; it also watches the expiry date of the domain itself (30, 14 and 7 days ahead). What we do not do: we do not renew certificates for you – that is your host's or developer's job, and our e-mail tells you where to look.</p>
+
+<section class="fullbox">
+<h2>A quick picture, free</h2>
+<p>The free Webskan quick scan checks your site the way a customer's phone sees it: certificate and https redirect, basic security headers, performance and SEO. No e-mail, no sign-up, result in about 30 seconds.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="en"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://yourcompany.com" required maxlength="500" aria-label="Website address"><button class="btn" type="submit">Scan for free</button></form>
+<p class="note">Want someone to watch the certificate, the domain and uptime for you? <a href="/en/#pricing">Webskan Monitor</a> ($15/month) checks the site every minute and the certificate and domain every day. 30 days of Monitor are included with the <a href="/en/#pricing">in-depth audit</a> ($69).</p>
+</section>
+
+<h2>Sources and tools</h2>
+<ul>
+<li>CA/Browser Forum, <a href="https://cabforum.org/2025/04/11/ballot-sc081v3-introduce-schedule-of-reducing-validity-and-data-reuse-periods/" rel="noopener">Ballot SC-081v3</a> – the schedule reducing certificate lifetimes from 398 to 47 days (March 2026 – March 2029); the 200- and 100-day steps per <a href="https://www.digicert.com/blog/tls-certificate-lifetimes-will-officially-reduce-to-47-days" rel="noopener">DigiCert's summary</a></li>
+<li>Let's Encrypt, <a href="https://letsencrypt.org/2025/01/22/ending-expiration-emails/" rel="noopener">Ending Support for Expiration Notification Emails</a> – end of notifications on 4 June 2025 and the reasons</li>
+<li>Let's Encrypt, <a href="https://letsencrypt.org/docs/faq/" rel="noopener">FAQ</a> – 90-day certificates, renewal every 60 days recommended; six-day certificates on request</li>
+<li>Qualys, <a href="https://www.ssllabs.com/ssltest/" rel="noopener">SSL Server Test</a> – free test of certificate, chain and configuration</li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a></footer>
+</div>
+</body>
+</html>

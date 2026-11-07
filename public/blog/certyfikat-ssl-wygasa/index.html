@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Certyfikat SSL wygasa: co zobaczą klienci, jak sprawdzić datę i jak to się nie powtórzy – Webskan</title>
+<meta name="description" content="Wygasły certyfikat zamienia firmową stronę w czerwone ostrzeżenie na cały ekran. Co widzą klienci, osiem powodów, dla których odnowienie zawodzi, sprawdzenie daty w 60 sekund i plan na czasy, gdy certyfikaty są ważne 200, a wkrótce 47 dni.">
+<link rel="canonical" href="https://webskan.com/blog/certyfikat-ssl-wygasa/">
+<link rel="alternate" hreflang="pl" href="https://webskan.com/blog/certyfikat-ssl-wygasa/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/ssl-certificate-expired/">
+<meta property="og:title" content="Certyfikat SSL wygasa: co zobaczą klienci, jak sprawdzić datę i jak to się nie powtórzy">
+<meta property="og:description" content="Co widzą klienci po wygaśnięciu certyfikatu, osiem powodów, dla których odnowienie zawodzi, sprawdzenie daty w 60 sekund i plan, żeby to się nie powtórzyło.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/blog/certyfikat-ssl-wygasa/">
+<meta property="og:image" content="https://webskan.com/og-pl.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Certyfikat SSL wygasa: co zobaczą klienci, jak sprawdzić datę i jak to się nie powtórzy","description":"Co widzą klienci po wygaśnięciu certyfikatu, osiem powodów, dla których odnowienie zawodzi, sprawdzenie daty w 60 sekund i plan, żeby to się nie powtórzyło.","datePublished":"2026-11-07","dateModified":"2026-11-07","inLanguage":"pl","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"mainEntityOfPage":"https://webskan.com/blog/certyfikat-ssl-wygasa/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a><a href="/en/blog/ssl-certificate-expired/">EN</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 7 listopada 2026 · 8 min czytania</p>
+<h1>Certyfikat SSL wygasa: co zobaczą klienci, jak sprawdzić datę i jak to się nie powtórzy</h1>
+<p class="lead">O północy certyfikat traci ważność i strona, która działała przez trzy lata, zamienia się w czerwone ostrzeżenie na cały ekran. Serwer dalej chodzi, panel hostingu świeci na zielono, a klienci odbijają się od drzwi, bo przeglądarka mówi im, że to miejsce jest niebezpieczne. Poniżej: co dokładnie widzą, dlaczego automatyczne odnawianie zawodzi, jak w minutę sprawdzić datę ważności i co zrobić, żeby ten tekst już nigdy Cię nie dotyczył – zwłaszcza że certyfikaty właśnie zaczęły być ważne coraz krócej.</p>
+
+<h2>Co się dzieje minutę po wygaśnięciu</h2>
+<ul>
+<li><strong>Klient widzi ostrzeżenie zamiast strony.</strong> Chrome pokazuje „Twoje połączenie nie jest prywatne” z kodem <code>NET::ERR_CERT_DATE_INVALID</code>, Firefox i Safari mają własne, równie czerwone wersje. Przycisk „przejdź mimo to” jest schowany pod „Zaawansowane”, a na telefonie bywa, że nie da się go znaleźć wcale. Większość ludzi robi to, co każe przeglądarka: wychodzi.</li>
+<li><strong>Nic innego nie wygląda na zepsute.</strong> Strona odpowiada, serwer ma wolne zasoby, a proste narzędzia do sprawdzania dostępności często pytają tylko „czy serwer odpowiada” i wcale nie patrzą na certyfikat. Awaria trwa dniami, dopóki nie zadzwoni klient.</li>
+<li><strong>Integracje przestają działać bez komunikatu.</strong> Bramka płatności, widżet rezerwacji, aplikacja mobilna, kurier, który odpytuje Twoje API – programy nie mają przycisku „przejdź mimo to”. Po prostu odmawiają połączenia, a błąd ląduje w logu, którego nikt nie czyta.</li>
+<li><strong>Poczta też może stanąć.</strong> Jeśli serwer pocztowy (<code>mail.twojafirma.pl</code>) używa tego samego certyfikatu, programy pocztowe zaczynają pytać o zaufanie albo przestają wysyłać.</li>
+<li><strong>Google nie kasuje strony od razu</strong>, ale robot nie może jej pobrać. Im dłużej trwa awaria, tym więcej podstron wypada z indeksu, a odbudowa trwa dłużej niż sama naprawa.</li>
+</ul>
+
+<h2>Dlaczego odnowienie zawodzi: osiem powodów</h2>
+<ol>
+<li><strong>Automat przestał działać po zmianie DNS, hostingu albo CDN.</strong> Odnowienie wymaga, by wystawca mógł potwierdzić, że kontrolujesz domenę. Po przenosinach stary serwer dalej dzielnie odnawia certyfikat, którego nikt nie używa, a nowy nie dostał jeszcze żadnego.</li>
+<li><strong>Certyfikat kupiła ręcznie agencja, która już się Tobą nie opiekuje.</strong> Przypomnienia o końcu ważności idą na adres, którego nikt nie czyta, a login do panelu wystawcy odszedł razem z kontaktem.</li>
+<li><strong>Wygasła karta albo nieopłacona faktura</strong> u wystawcy lub hostingu. Usługa „SSL” znika po cichu razem z płatnością.</li>
+<li><strong>Przekierowanie lub zapora blokuje weryfikację.</strong> Wymuszone przekierowanie na https, strona „w budowie”, blokada ruchu spoza Polski albo zapora aplikacyjna odcinają adres <code>/.well-known/acme-challenge/</code>, przez który wystawca sprawdza domenę. W panelu zostaje wpis „challenge failed”, którego nikt nie widzi.</li>
+<li><strong>Rekord CAA w DNS pozwala wystawiać certyfikaty tylko innej firmie.</strong> Ktoś dodał go lata temu przy poprzednim dostawcy, a dzisiejszy nie może przez niego przejść.</li>
+<li><strong>Jedna domena, kilka certyfikatów.</strong> <code>www</code> i adres bez <code>www</code>, <code>sklep.</code>, <code>api.</code>, <code>panel.</code>, <code>mail.</code> – każdy może mieć osobny certyfikat z osobną datą. Certyfikat „z gwiazdką” na wszystkie subdomeny odnawia się przez klucz do DNS, który ktoś wymienił.</li>
+<li><strong>Przypomnienia e-mailem już nie przychodzą.</strong> Let's Encrypt, najpopularniejszy darmowy wystawca, <strong>zakończył wysyłkę powiadomień o wygasaniu 4 czerwca 2025</strong> – uzasadniając to m.in. tym, że większość użytkowników ma już automatyczne odnawianie, a przechowywanie milionów adresów e-mail kłóci się z ochroną prywatności. Jeśli Twoja strona polegała na tym mailu, od półtora roku nikt Cię nie ostrzega.</li>
+<li><strong>Terminy się skracają i „raz w roku” przestało istnieć.</strong> Branżowe forum przeglądarek i wystawców (CA/Browser Forum) przyjęło harmonogram: maksymalna ważność certyfikatu spadła z 398 dni do <strong>200 dni od 15 marca 2026</strong>, od 15 marca 2027 będzie to <strong>100 dni</strong>, a od 15 marca 2029 – <strong>47 dni</strong>. Certyfikaty Let's Encrypt są ważne 90 dni (zalecane odnawianie co 60), a na życzenie wystawiane są nawet sześciodniowe. Wniosek jest prosty: kto odnawia ręcznie z kalendarza, w ciągu dwóch lat przegra z kalendarzem.</li>
+</ol>
+
+<h2>Jak sprawdzić datę ważności w 60 sekund</h2>
+<ol>
+<li><strong>W przeglądarce na komputerze.</strong> Kliknij ikonę przy adresie strony (kłódka lub ikona ustawień), potem „Połączenie jest bezpieczne” i „Certyfikat jest ważny” (Chrome) albo „Więcej informacji” → „Wyświetl certyfikat” (Firefox). Szukasz dwóch dat: „Ważny od” i „Ważny do”, oraz nazwy wystawcy.</li>
+<li><strong>Przeczytaj „Ważny od”, nie tylko „Ważny do”.</strong> Jeśli wystawcą jest Let's Encrypt, ZeroSSL albo „auto SSL” hostingu, certyfikat żyje 90 dni i powinien być odnawiany po 60. Data „od” sprzed 80 dni oznacza, że automat już nie zadziałał – masz kilka dni, zanim klienci to zobaczą.</li>
+<li><strong>Sprawdź wszystkie nazwy, nie tylko stronę główną.</strong> Adres z <code>www</code> i bez, sklep, blog, panel klienta, API, a także adres serwera poczty. Każdy wpisz osobno – przeglądarka pokaże certyfikat tej konkretnej nazwy.</li>
+<li><strong>Na telefonie albo dla kogoś z zespołu:</strong> bezpłatny test SSL Labs (<code>ssllabs.com/ssltest</code>) pokazuje daty, wystawcę, łańcuch i to, czy certyfikat pasuje do nazwy. Trwa minutę lub dwie.</li>
+<li><strong>Dla osób technicznych:</strong> jedno polecenie w terminalu wypisze daty i wystawcę:
+<pre><code>echo | openssl s_client -servername twojafirma.pl -connect twojafirma.pl:443 2>/dev/null \
+  | openssl x509 -noout -dates -issuer</code></pre>
+Linia <code>notAfter</code> to data wygaśnięcia.</li>
+<li><strong>Zapisz wynik z datą i wystawcą</strong> w jednym miejscu dla wszystkich nazw. To Twój inwentarz – przyda się przy każdej zmianie hostingu albo wykonawcy.</li>
+</ol>
+
+<h2>Objaw → przyczyna → kto naprawia</h2>
+<table class="vitals headers">
+<thead><tr><th>Co widzisz</th><th>Najczęstsza przyczyna</th><th>Kto naprawia i ile to pracy</th></tr></thead>
+<tbody>
+<tr><td><strong>Czerwone ostrzeżenie „certyfikat wygasł” na całej stronie</strong></td><td data-l="Przyczyna">Certyfikat wygasł, automatyczne odnowienie nie zadziałało (powody 1–5 powyżej)</td><td data-l="Kto naprawia">Hosting lub wykonawca: odnowić ręcznie, 15 min; potem naprawić automat, do 1 h – bez drugiego kroku wrócisz tu za 90 dni</td></tr>
+<tr><td><strong>Ostrzeżenie tylko z <code>www</code> albo tylko bez <code>www</code></strong></td><td data-l="Przyczyna">Certyfikat wystawiony na jedną z dwóch nazw</td><td data-l="Kto naprawia">Hosting: dodać drugą nazwę do certyfikatu i przekierowanie na jedną wersję, 30 min</td></tr>
+<tr><td><strong>„Certyfikat nie pasuje do nazwy” po przenosinach strony</strong></td><td data-l="Przyczyna">Nowy serwer podaje swój domyślny certyfikat, bo własny nie został jeszcze wystawiony</td><td data-l="Kto naprawia">Hosting lub wykonawca: wystawić certyfikat na nowym serwerze, 30 min; przy następnych przenosinach – najpierw certyfikat, potem zmiana DNS</td></tr>
+<tr><td><strong>Na komputerze działa, telefon lub starszy laptop ostrzega</strong></td><td data-l="Przyczyna">Niepełny łańcuch certyfikatów (brak certyfikatu pośredniego) – nowoczesne przeglądarki go dobierają, starsze nie</td><td data-l="Kto naprawia">Hosting: zainstalować pełny łańcuch („fullchain”), 30 min; SSL Labs pokazuje to jako „chain issues”</td></tr>
+<tr><td><strong>Strona się otwiera, ale płatności lub rezerwacje przestały działać</strong></td><td data-l="Przyczyna">Integracja odrzuca Twój certyfikat (wygasły albo niepełny łańcuch), choć przeglądarka jeszcze go toleruje</td><td data-l="Kto naprawia">Wykonawca + dostawca integracji: naprawić certyfikat, ponowić zawieszone powiadomienia, 1–2 h</td></tr>
+<tr><td><strong>Certyfikat w porządku, a mimo to brak kłódki lub „niebezpieczna”</strong></td><td data-l="Przyczyna">Mixed content: obrazy lub skrypty ładowane przez http, albo brak przekierowania na https</td><td data-l="Kto naprawia">Wykonawca, 1 h; szczegóły w tekście <a href="/blog/https-to-nie-wszystko/">HTTPS to nie wszystko</a></td></tr>
+<tr><td><strong>W panelu hostingu „odnowienie nie powiodło się”</strong></td><td data-l="Przyczyna">Przekierowanie, zapora lub rekord CAA blokuje weryfikację domeny</td><td data-l="Kto naprawia">Wykonawca: wyjątek dla <code>/.well-known/acme-challenge/</code>, poprawka rekordu CAA, 30 min</td></tr>
+</tbody>
+</table>
+
+<h2>Jak to się już nie powtórzy</h2>
+<ul>
+<li><strong>Automat zamiast kalendarza.</strong> Wybierz hosting z automatycznym certyfikatem (Let's Encrypt lub własny „auto SSL”) albo postaw stronę za usługą typu Cloudflare, która sama pilnuje certyfikatów. Przy ważności 200, a wkrótce 100 i 47 dni ręczne odnawianie to nie oszczędność, tylko odroczona awaria.</li>
+<li><strong>Niezależne ostrzeżenie z wyprzedzeniem.</strong> Przypomnienie od hostingu nie pomoże, gdy to hosting jest problemem. Potrzebujesz czegoś z zewnątrz, co codziennie patrzy na certyfikat i pisze do Ciebie 14 i 7 dni przed końcem. Let's Encrypt poleca w tej roli np. darmowy plan Red Sift Certificates Lite; robi to też Webskan Monitor (niżej).</li>
+<li><strong>Inwentarz nazw.</strong> Lista wszystkich adresów z certyfikatami – łącznie z pocztą i panelami – z datą i wystawcą. Jedna kartka, aktualizowana przy każdej zmianie.</li>
+<li><strong>Dwa adresy do powiadomień</strong> u wystawcy i hostingu: Twój i kogoś, kto zostanie w firmie. Nie adres byłej agencji.</li>
+<li><strong>Próbne odnowienie po każdej zmianie</strong> DNS, hostingu, CDN lub zapory. Większość narzędzi ma tryb „na sucho” (<code>--dry-run</code>), który sprawdza, czy weryfikacja przejdzie, bez wystawiania certyfikatu.</li>
+<li><strong>Przy przenosinach: najpierw certyfikat na nowym serwerze, potem zmiana DNS.</strong> Odwrotna kolejność daje kilka godzin czerwonego ekranu.</li>
+</ul>
+
+<h2>Co sprawdzamy w Webskanie</h2>
+<p><a href="/#cena">Audyt pogłębiony</a> sprawdza certyfikat na audytowanych adresach: ważność, zgodność z nazwą, przekierowanie z http na https i mixed content, a jeśli do końca ważności zostało mniej niż 21 dni, dostajesz to jako osobne ustalenie z zaleceniem. <strong>Webskan Monitor</strong> patrzy na certyfikat codziennie i wysyła e-mail 14, 7, 3 i 1 dzień przed końcem ważności oraz natychmiast, gdy certyfikat stanie się nieprawidłowy; przy okazji pilnuje też daty wygaśnięcia samej domeny (30, 14 i 7 dni przed). Czego nie robimy: nie odnawiamy certyfikatów za Ciebie – od tego jest hosting albo wykonawca, a nasz e-mail mówi, gdzie zajrzeć.</p>
+
+<section class="fullbox">
+<h2>Szybki obraz za darmo</h2>
+<p>Darmowy szybki skan Webskan sprawdza stronę tak, jak widzi ją telefon klienta: certyfikat i przekierowanie na https, podstawowe nagłówki bezpieczeństwa, wydajność i SEO. Bez e-maila, bez rejestracji, wynik w ok. 30 sekund.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="pl"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://twojafirma.pl" required maxlength="500" aria-label="Adres strony"><button class="btn" type="submit">Skanuj za darmo</button></form>
+<p class="note">Chcesz, żeby ktoś pilnował certyfikatu, domeny i dostępności za Ciebie? <a href="/#cena">Webskan Monitor</a> (49 zł/mies.) sprawdza stronę co minutę, a certyfikat i domenę codziennie. 30 dni Monitora dostajesz w cenie <a href="/#cena">audytu pogłębionego</a> (249 zł).</p>
+</section>
+
+<h2>Źródła i narzędzia</h2>
+<ul>
+<li>CA/Browser Forum, <a href="https://cabforum.org/2025/04/11/ballot-sc081v3-introduce-schedule-of-reducing-validity-and-data-reuse-periods/" rel="noopener">Ballot SC-081v3</a> – harmonogram skracania ważności certyfikatów z 398 do 47 dni (marzec 2026 – marzec 2029); etapy 200 i 100 dni za <a href="https://www.digicert.com/blog/tls-certificate-lifetimes-will-officially-reduce-to-47-days" rel="noopener">omówieniem DigiCert</a></li>
+<li>Let's Encrypt, <a href="https://letsencrypt.org/2025/01/22/ending-expiration-emails/" rel="noopener">Ending Support for Expiration Notification Emails</a> – koniec powiadomień 4 czerwca 2025 i powody</li>
+<li>Let's Encrypt, <a href="https://letsencrypt.org/docs/faq/" rel="noopener">FAQ</a> – certyfikaty ważne 90 dni, zalecane odnawianie co 60; certyfikaty sześciodniowe na życzenie</li>
+<li>Qualys, <a href="https://www.ssllabs.com/ssltest/" rel="noopener">SSL Server Test</a> – bezpłatny test certyfikatu, łańcucha i konfiguracji</li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a></footer>
+</div>
+</body>
+</html>
