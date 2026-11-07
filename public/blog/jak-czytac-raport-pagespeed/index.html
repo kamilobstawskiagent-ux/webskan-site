@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jak czytać raport PageSpeed Insights (bez programisty) – Webskan</title>
+<meta name="description" content="Czerwony wynik i czterdzieści linijek po angielsku: co w raporcie PageSpeed Insights naprawdę się liczy, które liczby pochodzą od Twoich klientów, a które z laboratorium, co znaczą najczęstsze komunikaty i jak zamienić raport w listę zadań dla webmastera.">
+<link rel="canonical" href="https://webskan.com/blog/jak-czytac-raport-pagespeed/">
+<link rel="alternate" hreflang="pl" href="https://webskan.com/blog/jak-czytac-raport-pagespeed/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/how-to-read-pagespeed-insights/">
+<meta property="og:title" content="Jak czytać raport PageSpeed Insights (bez programisty)">
+<meta property="og:description" content="Co w raporcie PageSpeed naprawdę się liczy, co znaczą najczęstsze komunikaty i jak zamienić go w listę zadań dla webmastera.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/blog/jak-czytac-raport-pagespeed/">
+<meta property="og:image" content="https://webskan.com/og-pl.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Jak czytać raport PageSpeed Insights (bez programisty)","description":"Co w raporcie PageSpeed naprawdę się liczy, co znaczą najczęstsze komunikaty i jak zamienić go w listę zadań dla webmastera.","datePublished":"2026-11-07","dateModified":"2026-11-07","inLanguage":"pl","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"mainEntityOfPage":"https://webskan.com/blog/jak-czytac-raport-pagespeed/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a><a href="/en/blog/how-to-read-pagespeed-insights/">EN</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 7 listopada 2026 · 9 min czytania</p>
+<h1>Jak czytać raport PageSpeed Insights (bez&nbsp;programisty)</h1>
+<p class="lead">Wkleiłeś adres swojej strony w <a href="https://pagespeed.web.dev/" rel="noopener">pagespeed.web.dev</a>, zobaczyłeś czerwone 38 i czterdzieści linijek technicznych komunikatów. Ten tekst mówi, co w tym raporcie czytać, w jakiej kolejności i co spokojnie pominąć – tak, żebyś po dziesięciu minutach wiedział, czy masz problem, jak duży i komu go zlecić.</p>
+
+<h2>To są dwa raporty w jednym</h2>
+<p>Najważniejsza rzecz, której PageSpeed nie tłumaczy wprost: na jednej stronie dostajesz <strong>dwa różne pomiary</strong>, które potrafią sobie przeczyć.</p>
+<table class="vitals headers">
+<thead><tr><th>Sekcja</th><th>Skąd dane</th><th>Do czego służy</th><th>Kiedy jej nie ma</th></tr></thead>
+<tbody>
+<tr><td><strong>„Co odczuwają prawdziwi użytkownicy”</strong> (u góry)</td><td data-l="Skąd dane">Z przeglądarek Chrome Twoich odwiedzających z ostatnich <strong>28 dni</strong> (raport Chrome UX). Pokazywany jest wynik <strong>75. percentyla</strong>, czyli taki, że trzy czwarte wizyt było szybszych</td><td data-l="Do czego">To jest prawda o Twojej stronie i to te liczby bierze pod uwagę Google. Werdykt „Zaliczono / Nie zaliczono” ocenę Core Web Vitals dotyczy właśnie tej sekcji</td><td data-l="Kiedy brak">Gdy strona ma za mało ruchu – wtedy widzisz tylko komunikat o braku danych albo dane dla całej domeny zamiast tej jednej podstrony</td></tr>
+<tr><td><strong>„Zdiagnozuj problemy z wydajnością”</strong> (niżej, z wynikiem 0–100)</td><td data-l="Skąd dane">Jedno uruchomienie narzędzia Lighthouse na serwerze Google: symulowany telefon ze średniej półki i wolniejsza sieć komórkowa</td><td data-l="Do czego">Do diagnozy: mówi <em>dlaczego</em> jest wolno i <em>co</em> poprawić. Daje listę plików i zaleceń dla wykonawcy</td><td data-l="Kiedy brak">Zawsze jest – ale to pomiar laboratoryjny, nie doświadczenie klientów</td></tr>
+</tbody>
+</table>
+<p>Dlatego zdarza się, że klienci „zaliczają” Core Web Vitals, a wynik laboratoryjny jest pomarańczowy – albo odwrotnie. Google sam pisze, że dane terenowe to historia z realnych urządzeń i sieci, a laboratorium to kontrolowany, jednorazowy test. <strong>Dla decyzji biznesowej liczy się góra, dla listy zadań – dół.</strong></p>
+
+<h2>Patrz na „Telefon”, nie na „Komputer”</h2>
+<p>Zakładki na górze raportu przełączają urządzenie. Wynik na komputerze jest prawie zawsze lepszy i prawie zawsze nieistotny: większość ruchu firmowych stron idzie z telefonów, Google indeksuje wersję mobilną, a pomiar laboratoryjny symuluje słaby telefon celowo. Jeśli chcesz zapamiętać jedną liczbę z raportu, niech to będzie <strong>wynik mobilny</strong>. Dlaczego telefon tak bardzo różni się od laptopa, opisaliśmy w tekście <a href="/blog/dlaczego-strona-jest-wolna-na-telefonie/">o wolnej stronie na telefonie</a>.</p>
+
+<h2>Co znaczy wynik 0–100</h2>
+<p>Duża liczba w kółku to średnia ważona pięciu pomiarów laboratoryjnych. Według dokumentacji Lighthouse (wersja 10 i nowsze) wagi są takie:</p>
+<table class="vitals headers">
+<thead><tr><th>Pomiar</th><th>Waga</th><th>Co czuje użytkownik</th></tr></thead>
+<tbody>
+<tr><td><strong>Total Blocking Time</strong> (TBT)</td><td data-l="Waga">30 %</td><td data-l="Co czuje">Strona „wisi”: widać ją, ale nie da się kliknąć, bo telefon przetwarza skrypty</td></tr>
+<tr><td><strong>Largest Contentful Paint</strong> (LCP)</td><td data-l="Waga">25 %</td><td data-l="Co czuje">Jak długo czeka na największy element – zwykle zdjęcie w nagłówku albo główny tytuł</td></tr>
+<tr><td><strong>Cumulative Layout Shift</strong> (CLS)</td><td data-l="Waga">25 %</td><td data-l="Co czuje">Treść skacze w trakcie ładowania: chciał kliknąć „Zadzwoń”, trafił w baner</td></tr>
+<tr><td><strong>First Contentful Paint</strong> (FCP)</td><td data-l="Waga">10 %</td><td data-l="Co czuje">Jak długo patrzy na pusty ekran, zanim pojawi się cokolwiek</td></tr>
+<tr><td><strong>Speed Index</strong></td><td data-l="Waga">10 %</td><td data-l="Co czuje">Jak szybko wypełnia się widoczna część ekranu</td></tr>
+</tbody>
+</table>
+<p>Przedziały są trzy: <strong>0–49 czerwony</strong> (słabo), <strong>50–89 pomarańczowy</strong> (do poprawy), <strong>90–100 zielony</strong> (dobrze). Dwie rzeczy, które oszczędzą Ci nerwów: po pierwsze, <strong>ten sam adres uruchomiony dwa razy może dać wynik różniący się o kilka punktów</strong> – to normalne, serwer Google i Twój serwer mają lepsze i gorsze chwile; nie reaguj na różnicę 72 → 68. Po drugie, wynik 100 jest zarezerwowany dla stron prawie bez skryptów; dla firmowej strony z formularzem, mapą i analityką realnym celem jest zielony zakres, nie setka.</p>
+
+<h2>Trzy liczby, które decydują o werdykcie Google</h2>
+<p>W sekcji z danymi prawdziwych użytkowników trzy pomiary są oznaczone jako Core Web Vitals. Progi „dobry” są takie same dla wszystkich stron na świecie:</p>
+<ul>
+<li><strong>LCP do 2,5 s</strong> – największy element widoczny w ciągu dwóch i pół sekundy.</li>
+<li><strong>INP do 200 ms</strong> – strona reaguje na dotknięcie w jedną piątą sekundy (ten pomiar istnieje tylko w danych terenowych, laboratorium pokazuje zamiast niego TBT).</li>
+<li><strong>CLS do 0,1</strong> – treść prawie nie skacze.</li>
+</ul>
+<p>Werdykt „Zaliczono” wymaga, żeby <strong>wszystkie trzy</strong> były w zieleni na poziomie 75. percentyla. Jedna pomarańczowa i całość nie przechodzi. Więcej o tym, skąd biorą się złe wyniki każdej z trzech liczb, w tekście <a href="/blog/core-web-vitals-po-ludzku/">Core Web Vitals po ludzku</a>.</p>
+
+<h2>Lista zaleceń: co znaczą najczęstsze komunikaty</h2>
+<p>Pod wynikiem jest lista komunikatów (w zależności od wersji nazwana „Diagnostyka” albo „Statystyki”), każdy z rozwijaną listą plików. Dokładne brzmienie zmienia się między wersjami, ale na firmowych stronach wciąż wracają te same pozycje. Tłumaczenie na ludzki i kto to zwykle naprawia:</p>
+<table class="vitals headers">
+<thead><tr><th>Komunikat</th><th>Co to znaczy</th><th>Kto naprawia i ile pracy</th></tr></thead>
+<tbody>
+<tr><td><strong>Wyświetlaj obrazy w formatach nowej generacji / Odpowiednio dobieraj rozmiar obrazów</strong></td><td data-l="Co to znaczy">Zdjęcia są za duże – wgrane prosto z aparatu albo w starym formacie. Najczęstsza przyczyna złego LCP</td><td data-l="Kto">Często Ty sam (wtyczka do kompresji, ponowne wgranie) albo godzina pracy webmastera</td></tr>
+<tr><td><strong>Zmniejsz czas wykonywania JavaScript / Zminimalizuj pracę w wątku głównym</strong></td><td data-l="Co to znaczy">Za dużo skryptów: wtyczki, slider, czat, kilka systemów analityki. Główna przyczyna złego TBT i INP</td><td data-l="Kto">Webmaster: przegląd wtyczek i widżetów, usunięcie nieużywanych, opóźnione ładowanie reszty. Pół dnia do dnia</td></tr>
+<tr><td><strong>Wyeliminuj zasoby blokujące renderowanie</strong></td><td data-l="Co to znaczy">Pliki stylów i skryptów, które przeglądarka musi pobrać w całości, zanim cokolwiek pokaże. Wpływa na FCP i LCP</td><td data-l="Kto">Webmaster; często załatwia to dobrze skonfigurowana wtyczka optymalizacyjna. Kilka godzin</td></tr>
+<tr><td><strong>Skróć czas początkowej odpowiedzi serwera</strong></td><td data-l="Co to znaczy">Serwer długo „myśli”, zanim wyśle pierwszy bajt – słaby hosting, brak pamięci podręcznej, ciężki motyw. Wszystko inne czeka na to</td><td data-l="Kto">Hosting (zmiana pakietu lub firmy) albo webmaster (cache po stronie serwera). Od godziny do przenosin</td></tr>
+<tr><td><strong>Użyj wydajnych zasad pamięci podręcznej</strong></td><td data-l="Co to znaczy">Przeglądarka klienta pobiera te same pliki przy każdej wizycie zamiast je zapamiętać. Nie boli przy pierwszej wizycie, boli przy każdej następnej</td><td data-l="Kto">Webmaster lub hosting, zwykle kilka linijek konfiguracji. Godzina</td></tr>
+<tr><td><strong>Unikaj dużych przesunięć układu</strong></td><td data-l="Co to znaczy">Elementy bez zarezerwowanego miejsca (obrazy bez wymiarów, baner cookies, reklamy, czcionki) przesuwają treść. To jest CLS</td><td data-l="Kto">Webmaster; zwykle drobne poprawki w szablonie. Godzina lub dwie</td></tr>
+<tr><td><strong>Zmniejsz wpływ kodu firm zewnętrznych</strong></td><td data-l="Co to znaczy">Czat, mapa, piksele reklamowe, osadzone wideo – kod, którego nie kontrolujesz, ale który Twój klient musi pobrać</td><td data-l="Kto">Decyzja biznesowa (co naprawdę potrzebne) plus webmaster (ładowanie dopiero po interakcji). Godzina</td></tr>
+<tr><td><strong>Obraz LCP nie został wczytany z priorytetem / Wstępnie wczytaj obraz LCP</strong></td><td data-l="Co to znaczy">Największe zdjęcie ładuje się na końcu kolejki, choć powinno na początku</td><td data-l="Kto">Webmaster, jedna zmiana w kodzie strony. Pół godziny</td></tr>
+</tbody>
+</table>
+
+<h2>Co możesz pominąć</h2>
+<ul>
+<li><strong>„Szacowane oszczędności” nie sumują się.</strong> Jeśli przy pięciu zaleceniach widzisz 1,2 s + 0,8 s + 0,6 s…, nie znaczy to, że po wszystkich poprawkach strona będzie szybsza o 3 s. Zalecenia nakładają się na siebie; traktuj te liczby jako kolejność, nie jako obietnicę.</li>
+<li><strong>Pozostałe trzy kółka</strong> (ułatwienia dostępu, sprawdzone metody, SEO) to przydatne, ale płytkie testy automatyczne jednej strony. Zielone SEO w PageSpeed nie znaczy, że strona jest dobrze widoczna w Google – znaczy, że ma tytuł, opis i da się ją zaindeksować.</li>
+<li><strong>Pojedyncze pliki w rozwijanych listach</strong>, jeśli nie jesteś webmasterem. Ty masz wiedzieć, <em>które</em> zalecenia są na górze; co zrobić z plikiem <code>jquery.min.js</code>, niech wie wykonawca.</li>
+<li><strong>Strona główna jako jedyny test.</strong> Sprawdź też stronę z ofertą, cennikiem i kontaktem – to tam klienci podejmują decyzję, a tam często jest gorzej (galerie, mapy, formularze).</li>
+</ul>
+
+<h2>Jak zamienić raport w listę zadań</h2>
+<ol>
+<li><strong>Zapisz punkt wyjścia.</strong> Zrzut ekranu górnej sekcji (prawdziwi użytkownicy) i wyniku mobilnego, z datą. Bez tego nie sprawdzisz, czy ktoś coś poprawił.</li>
+<li><strong>Zapisz, które z trzech liczb Core Web Vitals są poza zielenią.</strong> To definiuje problem: złe LCP to zwykle obrazy i serwer, złe INP to skrypty, złe CLS to szablon.</li>
+<li><strong>Z listy zaleceń przepisz pięć górnych</strong> w kolejności, w jakiej je pokazuje raport. Do każdego dopisz, kto to robi, z tabeli wyżej.</li>
+<li><strong>Zacznij od serwera i obrazów, skończ na skryptach.</strong> Serwer, bo czeka na niego wszystko inne; obrazy, bo to najtańsza i najpewniejsza poprawa; skrypty na końcu, bo wymagają decyzji, z czego rezygnujesz.</li>
+<li><strong>Odbierz pracę pomiarem, nie zapewnieniem.</strong> Pomiar laboratoryjny od razu po poprawkach, dane prawdziwych użytkowników po 28 dniach. Jeśli wykonawca mówi „zrobione”, a wynik mobilny się nie ruszył – nie jest zrobione.</li>
+</ol>
+
+<section class="fullbox">
+<h2>Ten sam pomiar plus to, czego PageSpeed nie sprawdza</h2>
+<p>Darmowy szybki skan Webskan uruchamia pomiar mobilny Lighthouse dla Twojej strony i obok niego sprawdza przekierowanie na https, certyfikat, nagłówki bezpieczeństwa i podstawy SEO. Bez e-maila, bez rejestracji, wynik w ok. 30 sekund.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="pl"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://twojafirma.pl" required maxlength="500" aria-label="Adres strony"><button class="btn" type="submit">Skanuj za darmo</button></form>
+<p class="note">Chcesz dostać gotową listę zadań zamiast ją przepisywać? <a href="/#cena">Audyt pogłębiony Webskan</a> (249 zł) mierzy wydajność na telefonie i komputerze dla wielu podstron naraz, tłumaczy zalecenia na konkretne pliki i priorytety, a do tego sprawdza SEO techniczne, bezpieczeństwo, dostępność i zepsute linki. W cenie ponowne sprawdzenie po poprawkach i 30 dni Webskan Monitora.</p>
+</section>
+
+<h2>Źródła</h2>
+<ul>
+<li>Google, <a href="https://developers.google.com/speed/docs/insights/v5/about" rel="noopener">About PageSpeed Insights</a> – dane terenowe vs laboratoryjne, 28 dni, 75. percentyl, ocena Core Web Vitals</li>
+<li>Chrome for Developers, <a href="https://developer.chrome.com/docs/lighthouse/performance/performance-scoring" rel="noopener">Lighthouse performance scoring</a> – wagi pomiarów i przedziały wyniku</li>
+<li>Google Search Central, <a href="https://developers.google.com/search/docs/appearance/core-web-vitals" rel="noopener">Core Web Vitals a wyniki wyszukiwania</a> – progi LCP/INP/CLS</li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a></footer>
+</div>
+</body>
+</html>

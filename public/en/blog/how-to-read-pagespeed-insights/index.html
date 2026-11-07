@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to read a PageSpeed Insights report (without a developer) – Webskan</title>
+<meta name="description" content="A red score and forty lines of jargon: what in a PageSpeed Insights report actually matters, which numbers come from your customers and which from a lab, what the most common messages mean, and how to turn the report into a to-do list for your webmaster.">
+<link rel="canonical" href="https://webskan.com/en/blog/how-to-read-pagespeed-insights/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/how-to-read-pagespeed-insights/">
+<link rel="alternate" hreflang="pl" href="https://webskan.com/blog/jak-czytac-raport-pagespeed/">
+<meta property="og:title" content="How to read a PageSpeed Insights report (without a developer)">
+<meta property="og:description" content="What in a PageSpeed report actually matters, what the common messages mean, and how to turn it into a to-do list for your webmaster.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/en/blog/how-to-read-pagespeed-insights/">
+<meta property="og:image" content="https://webskan.com/og-en.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"How to read a PageSpeed Insights report (without a developer)","description":"What in a PageSpeed report actually matters, what the common messages mean, and how to turn it into a to-do list for your webmaster.","datePublished":"2026-11-07","dateModified":"2026-11-07","inLanguage":"en","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/en/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/en/"},"mainEntityOfPage":"https://webskan.com/en/blog/how-to-read-pagespeed-insights/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a href="/en/blog/">Blog</a><a href="/en/#pricing">Pricing</a><a href="/blog/jak-czytac-raport-pagespeed/">PL</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 7 November 2026 · 9 min read</p>
+<h1>How to read a PageSpeed Insights report (without&nbsp;a&nbsp;developer)</h1>
+<p class="lead">You pasted your address into <a href="https://pagespeed.web.dev/" rel="noopener">pagespeed.web.dev</a>, saw a red 38 and forty lines of technical messages. This article tells you what to read in that report, in what order, and what to skip – so that after ten minutes you know whether you have a problem, how big it is and whom to give it to.</p>
+
+<h2>It is two reports in one</h2>
+<p>The most important thing PageSpeed does not spell out: on one page you get <strong>two different measurements</strong>, and they can contradict each other.</p>
+<table class="vitals headers">
+<thead><tr><th>Section</th><th>Where the data comes from</th><th>What it is for</th><th>When it is missing</th></tr></thead>
+<tbody>
+<tr><td><strong>“Discover what your real users are experiencing”</strong> (at the top)</td><td data-l="Data">From the Chrome browsers of your own visitors over the last <strong>28 days</strong> (Chrome UX Report). The value shown is the <strong>75th percentile</strong>, meaning three quarters of visits were faster</td><td data-l="For">This is the truth about your site and these are the numbers Google looks at. The “Passed / Failed” Core Web Vitals assessment refers to this section</td><td data-l="Missing">When the site has too little traffic – then you see a “no data” message, or data for the whole domain instead of this one page</td></tr>
+<tr><td><strong>“Diagnose performance issues”</strong> (below, with the 0–100 score)</td><td data-l="Data">One run of the Lighthouse tool on a Google server: a simulated mid-range phone on a slower mobile connection</td><td data-l="For">Diagnosis: it says <em>why</em> the page is slow and <em>what</em> to fix. It gives a list of files and recommendations for your developer</td><td data-l="Missing">Always present – but it is a lab measurement, not your customers' experience</td></tr>
+</tbody>
+</table>
+<p>That is why customers can “pass” Core Web Vitals while the lab score is orange – or the other way round. Google itself says field data is a history from real devices and networks, while the lab is a controlled one-off test. <strong>For the business decision, read the top; for the to-do list, read the bottom.</strong></p>
+
+<h2>Look at “Mobile”, not “Desktop”</h2>
+<p>The tabs at the top switch the device. The desktop score is almost always better and almost always irrelevant: most traffic to small-business sites comes from phones, Google indexes the mobile version, and the lab test simulates a weak phone on purpose. If you remember one number from the report, make it the <strong>mobile score</strong>. Why a phone differs so much from a laptop is explained in our post <a href="/en/blog/why-your-website-is-slow-on-mobile/">on slow mobile sites</a>.</p>
+
+<h2>What the 0–100 score means</h2>
+<p>The big number in the circle is a weighted average of five lab measurements. According to the Lighthouse documentation (version 10 and later) the weights are:</p>
+<table class="vitals headers">
+<thead><tr><th>Metric</th><th>Weight</th><th>What the user feels</th></tr></thead>
+<tbody>
+<tr><td><strong>Total Blocking Time</strong> (TBT)</td><td data-l="Weight">30%</td><td data-l="Feels">The page “hangs”: you can see it but cannot tap anything because the phone is busy running scripts</td></tr>
+<tr><td><strong>Largest Contentful Paint</strong> (LCP)</td><td data-l="Weight">25%</td><td data-l="Feels">How long they wait for the biggest element – usually the header photo or the main heading</td></tr>
+<tr><td><strong>Cumulative Layout Shift</strong> (CLS)</td><td data-l="Weight">25%</td><td data-l="Feels">Content jumps while loading: they meant to tap “Call”, they hit a banner</td></tr>
+<tr><td><strong>First Contentful Paint</strong> (FCP)</td><td data-l="Weight">10%</td><td data-l="Feels">How long they stare at a blank screen before anything appears</td></tr>
+<tr><td><strong>Speed Index</strong></td><td data-l="Weight">10%</td><td data-l="Feels">How quickly the visible part of the screen fills in</td></tr>
+</tbody>
+</table>
+<p>There are three ranges: <strong>0–49 red</strong> (poor), <strong>50–89 orange</strong> (needs improvement), <strong>90–100 green</strong> (good). Two things that will save your nerves: first, <strong>the same address run twice can give a score a few points apart</strong> – that is normal, Google's server and yours both have better and worse moments; do not react to 72 → 68. Second, a score of 100 is reserved for pages with almost no scripts; for a business site with a form, a map and analytics the realistic goal is the green range, not a perfect score.</p>
+
+<h2>The three numbers that decide Google's verdict</h2>
+<p>In the real-user section, three metrics are marked as Core Web Vitals. The “good” thresholds are the same for every site in the world:</p>
+<ul>
+<li><strong>LCP within 2.5 s</strong> – the largest element visible within two and a half seconds.</li>
+<li><strong>INP under 200 ms</strong> – the page reacts to a tap within a fifth of a second (this metric exists only in field data; the lab shows TBT instead).</li>
+<li><strong>CLS under 0.1</strong> – content barely moves.</li>
+</ul>
+<p>A “Passed” verdict requires <strong>all three</strong> to be green at the 75th percentile. One orange and the whole thing fails. More on where bad values of each number come from in <a href="/en/blog/core-web-vitals-explained/">Core Web Vitals in plain English</a>.</p>
+
+<h2>The recommendations: what the common messages mean</h2>
+<p>Below the score is a list of messages (called “Diagnostics” or “Insights” depending on the version), each with an expandable list of files. The exact wording changes between versions, but on small-business sites the same items keep coming back. In plain language, and who usually fixes them:</p>
+<table class="vitals headers">
+<thead><tr><th>Message</th><th>What it means</th><th>Who fixes it and how much work</th></tr></thead>
+<tbody>
+<tr><td><strong>Serve images in next-gen formats / Properly size images</strong></td><td data-l="Meaning">Photos are too big – uploaded straight from the camera or in an old format. The most common cause of bad LCP</td><td data-l="Who">Often you (a compression plugin, re-uploading) or an hour of a webmaster's time</td></tr>
+<tr><td><strong>Reduce JavaScript execution time / Minimize main-thread work</strong></td><td data-l="Meaning">Too many scripts: plugins, slider, chat, several analytics systems. The main cause of bad TBT and INP</td><td data-l="Who">Webmaster: review plugins and widgets, remove unused ones, delay-load the rest. Half a day to a day</td></tr>
+<tr><td><strong>Eliminate render-blocking resources</strong></td><td data-l="Meaning">Style and script files the browser must fully download before showing anything. Affects FCP and LCP</td><td data-l="Who">Webmaster; a well-configured optimisation plugin often handles it. A few hours</td></tr>
+<tr><td><strong>Reduce initial server response time</strong></td><td data-l="Meaning">The server “thinks” for a long time before sending the first byte – weak hosting, no caching, a heavy theme. Everything else waits for this</td><td data-l="Who">Hosting (upgrade or move) or webmaster (server-side cache). From an hour to a migration</td></tr>
+<tr><td><strong>Serve static assets with an efficient cache policy</strong></td><td data-l="Meaning">The customer's browser downloads the same files on every visit instead of remembering them. Painless on the first visit, painful on every next one</td><td data-l="Who">Webmaster or hosting, usually a few lines of configuration. An hour</td></tr>
+<tr><td><strong>Avoid large layout shifts</strong></td><td data-l="Meaning">Elements without reserved space (images without dimensions, cookie banner, ads, fonts) push content around. This is CLS</td><td data-l="Who">Webmaster; usually small template fixes. An hour or two</td></tr>
+<tr><td><strong>Reduce the impact of third-party code</strong></td><td data-l="Meaning">Chat, map, ad pixels, embedded video – code you do not control but your customer has to download</td><td data-l="Who">A business decision (what is really needed) plus webmaster (load after interaction). An hour</td></tr>
+<tr><td><strong>LCP image was not loaded with priority / Preload LCP image</strong></td><td data-l="Meaning">The biggest photo loads at the end of the queue although it should go first</td><td data-l="Who">Webmaster, one change in the page code. Half an hour</td></tr>
+</tbody>
+</table>
+
+<h2>What you can skip</h2>
+<ul>
+<li><strong>“Estimated savings” do not add up.</strong> If five recommendations show 1.2 s + 0.8 s + 0.6 s…, it does not mean the page will be 3 s faster after all of them. Recommendations overlap; treat the numbers as an order of priority, not a promise.</li>
+<li><strong>The other three circles</strong> (accessibility, best practices, SEO) are useful but shallow automated checks of a single page. A green SEO score in PageSpeed does not mean the site ranks well – it means it has a title, a description and can be indexed.</li>
+<li><strong>Individual files in the expandable lists</strong>, unless you are the webmaster. Your job is to know <em>which</em> recommendations are at the top; what to do with <code>jquery.min.js</code> is the developer's job.</li>
+<li><strong>The home page as the only test.</strong> Also check the offer, pricing and contact pages – that is where customers decide, and it is often worse there (galleries, maps, forms).</li>
+</ul>
+
+<h2>How to turn the report into a to-do list</h2>
+<ol>
+<li><strong>Record the starting point.</strong> A screenshot of the top section (real users) and the mobile score, with the date. Without it you cannot tell whether anyone improved anything.</li>
+<li><strong>Note which of the three Core Web Vitals are outside green.</strong> That defines the problem: bad LCP is usually images and server, bad INP is scripts, bad CLS is the template.</li>
+<li><strong>Copy the top five recommendations</strong> in the order the report shows them. Next to each, write who does it, from the table above.</li>
+<li><strong>Start with the server and images, finish with scripts.</strong> Server, because everything else waits for it; images, because that is the cheapest and surest gain; scripts last, because they require deciding what to give up.</li>
+<li><strong>Accept the work with a measurement, not a reassurance.</strong> Lab measurement right after the fixes, real-user data after 28 days. If the developer says “done” and the mobile score has not moved, it is not done.</li>
+</ol>
+
+<section class="fullbox">
+<h2>The same measurement, plus what PageSpeed does not check</h2>
+<p>The free Webskan quick scan runs the mobile Lighthouse measurement for your page and, alongside it, checks the https redirect, certificate, security headers and SEO basics. No e-mail, no sign-up, results in about 30 seconds.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="en"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://yourcompany.com" required maxlength="500" aria-label="Website address"><button class="btn" type="submit">Scan for free</button></form>
+<p class="note">Want a ready-made task list instead of copying one out? The <a href="/en/#pricing">in-depth Webskan audit</a> ($69) measures mobile and desktop performance across many pages at once, translates recommendations into specific files and priorities, and also checks technical SEO, security, accessibility and broken links. A re-check after your fixes and 30 days of Webskan Monitor are included.</p>
+</section>
+
+<h2>Sources</h2>
+<ul>
+<li>Google, <a href="https://developers.google.com/speed/docs/insights/v5/about" rel="noopener">About PageSpeed Insights</a> – field vs lab data, 28 days, 75th percentile, Core Web Vitals assessment</li>
+<li>Chrome for Developers, <a href="https://developer.chrome.com/docs/lighthouse/performance/performance-scoring" rel="noopener">Lighthouse performance scoring</a> – metric weights and score ranges</li>
+<li>Google Search Central, <a href="https://developers.google.com/search/docs/appearance/core-web-vitals" rel="noopener">Understanding Core Web Vitals and Google search results</a> – LCP/INP/CLS thresholds</li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a> · <a href="/developers/">For developers</a></footer>
+</div>
+</body>
+</html>
