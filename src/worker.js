@@ -61,6 +61,7 @@ async function handleOrder(request, env) {
       metadata: { url, lang, product, source: "webskan", ...(competitors.length ? { competitors: competitors.join(",") } : {}) }, // Polar odrzuca puste stringi w metadata (min. 1 znak)
       success_url: `${origin}${t.thanksPath}?checkout_id={CHECKOUT_ID}`,
       locale: lang === "pl" ? "pl-PL" : "en-US",
+      currency: lang === "pl" ? "pln" : "usd", // bez tego Polar wybiera walutę po IP, a dla krajów bez własnej ceny bierze domyślną organizacji (PLN) – strona EN obiecuje dolary
       customer_ip_address: ip || undefined,
     };
     const r = await fetch(`${env.POLAR_API}/v1/checkouts/`, {
