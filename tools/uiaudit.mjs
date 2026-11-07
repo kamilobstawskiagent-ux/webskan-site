@@ -33,6 +33,7 @@ const PAGES = {
   status_pl: async () => `/status/${await statusToken()}`, status_en: async () => `/en/status/${await statusToken()}`,
   recheck_pl: '/recheck/00000000000000000000000000000000', recheck_en: '/en/recheck/00000000000000000000000000000000',
   scan_pl: async () => scanPath('pl'), scan_en: async () => scanPath('en'),
+  developers: '/developers/',
   notfound: '/nie-ma-takiej-strony/',
 };
 const PROFILES = {
