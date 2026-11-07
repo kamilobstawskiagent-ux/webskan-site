@@ -119,15 +119,15 @@
 url = "https://webskan.com/mcp"</code></pre>
 
   <h3>Windsurf and other clients</h3>
-  <p class="small muted">Most clients accept a standard <code>mcpServers</code> entry with the URL (Windsurf: <code>~/.codeium/windsurf/mcp_config.json</code>, key <code>serverUrl</code> instead of <code>url</code>):</p>
+  <p class="small muted">Most clients accept a standard <code>mcpServers</code> entry with just the URL:</p>
   <pre><code>{
   "mcpServers": {
     "webskan": {
-      "type": "http",
       "url": "https://webskan.com/mcp"
     }
   }
 }</code></pre>
+  <p class="small muted">Windsurf: the file is <code>~/.codeium/windsurf/mcp_config.json</code>. Older builds expect the key <code>serverUrl</code> instead of <code>url</code>; the current docs (now at docs.devin.ai) use <code>url</code> with an optional <code>"transport": "http"</code>.</p>
 
   <h3>Try it without a client</h3>
   <p class="small muted">The endpoint speaks plain JSON-RPC over HTTP, so you can list the tools with curl:</p>
