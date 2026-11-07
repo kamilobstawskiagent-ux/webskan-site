@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Strona po zmianie wykonawcy: lista dostępów, które musisz mieć (i jak sprawdzić, czy je masz) – Webskan</title>
+<meta name="description" content="Domena na wykonawcę, hosting na jego kartę, hasło admina tylko w jego głowie – tak wygląda większość firmowych stron w dniu, gdy współpraca się kończy. Dziewięć warstw dostępu od domeny po Profil Firmy w Google, jak sprawdzić w 15 minut, co naprawdę jest Twoje, co mówi prawo autorskie o „własności” strony i jak przejąć dostępy bez wojny.">
+<link rel="canonical" href="https://webskan.com/blog/strona-po-zmianie-wykonawcy-lista-dostepow/">
+<meta property="og:title" content="Strona po zmianie wykonawcy: lista dostępów, które musisz mieć">
+<meta property="og:description" content="Dziewięć warstw dostępu od domeny po Profil Firmy w Google, test na 15 minut, co mówi prawo autorskie o „własności” strony i jak przejąć dostępy bez wojny.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/blog/strona-po-zmianie-wykonawcy-lista-dostepow/">
+<meta property="og:image" content="https://webskan.com/og-pl.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Strona po zmianie wykonawcy: lista dostępów, które musisz mieć (i jak sprawdzić, czy je masz)","description":"Dziewięć warstw dostępu od domeny po Profil Firmy w Google, test na 15 minut, co mówi prawo autorskie o „własności” strony i jak przejąć dostępy bez wojny.","datePublished":"2026-11-07","dateModified":"2026-11-07","inLanguage":"pl","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com"},"mainEntityOfPage":"https://webskan.com/blog/strona-po-zmianie-wykonawcy-lista-dostepow/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 7 listopada 2026 · 10 min czytania</p>
+<h1>Strona po zmianie wykonawcy: lista dostępów, które musisz mieć (i jak sprawdzić, czy je masz)</h1>
+<p class="lead">Scenariusz powtarza się co tydzień: agencja podnosi cenę albo przestaje odbierać telefon, freelancer wyjeżdża, wspólnik odchodzi z firmy – i nagle okazuje się, że domena jest zarejestrowana na jego nazwisko, hosting opłacany z jego karty, a hasło administratora zna tylko on. Strona „jest Twoja”, bo za nią zapłaciłeś, ale nie masz do niej żadnego klucza. Ten tekst to lista kluczy: dziewięć warstw dostępu, które musisz mieć niezależnie od tego, kto stronę robi i utrzymuje, test na 15 minut, który pokazuje, których brakuje, i procedura przejęcia, gdy współpraca się kończy.</p>
+<p class="note">To nie jest porada prawna. Fragment o prawie autorskim opisuje stan prawny na listopad 2026 r. w uproszczeniu; w sporze z wykonawcą skonsultuj się z prawnikiem.</p>
+
+<h2>Mieć stronę a mieć dostęp do strony</h2>
+<p>Strona firmowa to nie jedna rzecz, tylko stos usług od różnych dostawców, z których każda ma własne konto, własne hasło i własnego „właściciela” w systemie. Kiedy wszystko działa, tego nie widać. Widać dopiero wtedy, gdy trzeba coś zmienić bez udziału osoby, która to konfigurowała. Zasada, która porządkuje całą resztę: <strong>każde konto, od którego zależy strona, powinno być założone na adres e-mail Twojej firmy i opłacane z Twojego konta</strong>. Wykonawca dostaje do niego dostęp – jako użytkownik, manager, współpracownik – a nie odwrotnie. Jeżeli dziś jest odwrotnie, to nie znaczy, że wykonawca jest nieuczciwy. Znaczy tylko, że przy rozstaniu każda z tych usług będzie wymagała jego dobrej woli.</p>
+
+<h2>Dziewięć warstw dostępu</h2>
+<table class="vitals headers">
+<thead><tr><th>Warstwa</th><th>Co powinno być Twoje</th><th>Jak sprawdzić</th></tr></thead>
+<tbody>
+<tr><td><strong>1. Domena</strong></td><td data-l="Co powinno być Twoje">Firma jako abonent w rejestrze; konto u rejestratora na firmowy e-mail; wiesz, gdzie i kiedy się odnawia</td><td data-l="Jak sprawdzić">WHOIS rejestru (dla .pl: dns.pl) pokazuje rejestratora i daty; dane abonenta sprawdzisz w panelu rejestratora lub pytając go wprost</td></tr>
+<tr><td><strong>2. DNS</strong></td><td data-l="Co powinno być Twoje">Dostęp do panelu, w którym są rekordy (u rejestratora, w hostingu albo w Cloudflare)</td><td data-l="Jak sprawdzić">Rekordy NS domeny mówią, kto obsługuje DNS; zaloguj się tam i sprawdź, czy możesz edytować rekordy</td></tr>
+<tr><td><strong>3. Hosting / serwer</strong></td><td data-l="Co powinno być Twoje">Umowa i faktury na firmę, login do panelu, dane FTP/SSH i do bazy danych</td><td data-l="Jak sprawdzić">Ostatnia faktura za hosting – kto jest nabywcą? Czy znasz adres panelu i potrafisz się zalogować?</td></tr>
+<tr><td><strong>4. CMS (WordPress itp.)</strong></td><td data-l="Co powinno być Twoje">Własne konto administratora na firmowy e-mail, z dwuskładnikowym logowaniem; znasz listę wszystkich użytkowników</td><td data-l="Jak sprawdzić">Panel → Użytkownicy: ile kont administratora, czyje e-maile; czy Twoje konto to na pewno „Administrator”, nie „Redaktor”</td></tr>
+<tr><td><strong>5. Kod, pliki, licencje</strong></td><td data-l="Co powinno być Twoje">Kopia plików i bazy (lub dostęp do repozytorium); licencje płatnych motywów i wtyczek na Twoje konto</td><td data-l="Jak sprawdzić">Panel → Wtyczki/Motywy: które są płatne i na czyje konto zarejestrowane; czy masz <a href="/blog/kopia-zapasowa-strony/">kopię, którą ktoś przywrócił</a></td></tr>
+<tr><td><strong>6. Poczta w domenie</strong></td><td data-l="Co powinno być Twoje">Dostęp administracyjny do usługi pocztowej (hosting, Google Workspace, Microsoft 365)</td><td data-l="Jak sprawdzić">Rekordy MX mówią, gdzie jest poczta; czy możesz tam założyć nową skrzynkę bez niczyjej pomocy?</td></tr>
+<tr><td><strong>7. Google</strong></td><td data-l="Co powinno być Twoje">Search Console (właściciel), Analytics (administrator), Profil Firmy (właściciel główny), Tag Manager – wszystko na konto firmy</td><td data-l="Jak sprawdzić">W każdej usłudze lista użytkowników/właścicieli; w Profilu Firmy – kto jest „właścicielem głównym”</td></tr>
+<tr><td><strong>8. Konta zewnętrzne</strong></td><td data-l="Co powinno być Twoje">Płatności, newsletter, rezerwacje, czat, CDN/Cloudflare, strona i piksel w Meta – konto firmy, wykonawca jako współpracownik</td><td data-l="Jak sprawdzić">Dla każdej usługi: na czyj e-mail jest konto i kto jest „właścicielem”/„administratorem”</td></tr>
+<tr><td><strong>9. Dokument</strong></td><td data-l="Co powinno być Twoje">Jedna lista wszystkich powyższych z adresami paneli, loginami (nie hasłami – te w menedżerze haseł) i datami odnowień</td><td data-l="Jak sprawdzić">Czy taka lista istnieje i czy ktoś poza wykonawcą ją ma</td></tr>
+</tbody>
+</table>
+
+<h2>Domena: jedyna warstwa, której nie da się odbudować</h2>
+<p>Hosting można zmienić w dzień, CMS zainstalować od nowa, konto Google założyć w pięć minut. Domeny nie da się „założyć od nowa” – jeśli abonentem jest ktoś inny, to on decyduje, dokąd prowadzi adres z Twoich wizytówek, i on dostaje przypomnienia o odnowieniu. Dlatego to pierwsza rzecz do sprawdzenia.</p>
+<ul>
+<li><strong>Abonent to ten, kto jest wpisany w rejestrze</strong>, nie ten, kto płaci faktury. Dla domen .pl rejestr prowadzi NASK i – jak pisze na swojej stronie – zmiany dotyczące domeny wykonuje się wyłącznie na wniosek abonenta. Przeniesienie obsługi do innego rejestratora wymaga kodu <strong>authinfo</strong>, który abonent pobiera od obecnego rejestratora, i potwierdzenia linkiem z e-maila wysłanego do abonenta; sam transfer nie zmienia abonenta, zmienia tylko firmę obsługującą domenę. Jeśli abonentem jest wykonawca, bez jego udziału nie ruszysz ani obsługi, ani danych abonenta.</li>
+<li><strong>Konto u rejestratora</strong> powinno być na e-mail firmowy, do którego masz dostęp niezależnie od tej domeny (rejestrator pisze tam o wygasaniu; jeśli skrzynka jest w tej samej domenie, po jej wygaśnięciu nie dostaniesz nawet ostrzeżenia).</li>
+<li><strong>Po zmianie abonenta domeny globalnej</strong> (.com, .net i inne objęte polityką ICANN) rejestrator musi nałożyć 60-dniową blokadę przeniesienia do innego rejestratora (może pozwolić z niej zrezygnować, ale tylko przed zmianą). ICANN przyjął w czerwcu 2026 r. zmiany, które mają tę blokadę znieść, ale nie mają jeszcze daty wdrożenia – na dziś planuj kolejność: najpierw zmiana abonenta, potem ewentualna przeprowadzka, albo odwrotnie, ale z dwumiesięcznym odstępem.</li>
+<li><strong>Data wygaśnięcia</strong> jest publiczna (WHOIS). Wpisz ją do kalendarza firmowego, nie tylko w pamięć wykonawcy. Nasz <a href="/#cena">Monitor</a> sprawdza ją codziennie i pisze 30, 14 i 7 dni przed końcem.</li>
+</ul>
+
+<h2>CMS: jedno konto administratora to za mało, dwa obce to za dużo</h2>
+<p>W WordPressie i większości systemów administrator może wszystko: tworzyć innych administratorów, zmieniać im e-maile i hasła, instalować wtyczki, usuwać treści. To znaczy dwie rzeczy. Po pierwsze, <strong>musisz mieć własne konto administratora</strong> – na firmowy e-mail, z włączonym logowaniem dwuskładnikowym – a nie „konto, do którego wykonawca da Ci hasło”. Po drugie, <strong>musisz znać listę pozostałych administratorów</strong>, bo każdy z nich może Ci to konto odebrać. Lista użytkowników z kontami byłych pracowników agencji, praktykantów i „test” to norma na stronach utrzymywanych od kilku lat; przy przejęciu zostawiasz swoje konto i konto aktualnego opiekuna, resztę degradujesz lub usuwasz.</p>
+<p>Osobny temat to <strong>licencje płatnych wtyczek i motywów</strong>. Agencje często kupują licencję deweloperską „na wiele stron” i rejestrują na swoje konto. Strona działa, ale aktualizacje bezpieczeństwa przychodzą tylko tak długo, jak długo agencja opłaca licencję i strona jest na jej liście. Po rozstaniu wtyczka zostaje – bez aktualizacji. Sprawdź w panelu, które składniki są płatne, i albo przepisz licencje na siebie, albo zaplanuj ich wykup.</p>
+
+<h2>Google: kto jest właścicielem, a kto tylko użytkownikiem</h2>
+<p>W Search Console właścicielem jest każdy, kto zweryfikował stronę – tagiem w kodzie, rekordem DNS albo plikiem na serwerze – i może dodawać innych. Google pisze to wprost: żeby usunąć zweryfikowanego właściciela, trzeba usunąć jego znacznik ze strony – inaczej „usunięty właściciel będzie mógł ponownie zweryfikować własność”. Listę użytkowników i nieużywane znaczniki znajdziesz w Ustawieniach, w sekcji „Użytkownicy i uprawnienia” (widzą ją tylko właściciele); jeśli weryfikacja szła przez Analytics lub Tag Managera, trzeba odebrać uprawnienia także tam. W Profilu Firmy w Google (wizytówka w Mapach) są właściciele i menedżerowie: menedżer robi prawie wszystko, ale nie może dodawać ani usuwać użytkowników, a usuwać innych właścicieli mogą tylko właściciele. Profil ma dokładnie jednego właściciela głównego, który może przekazać tę rolę dalej – upewnij się, że to konto firmy, nie agencji marketingowej sprzed trzech lat. Analytics i Tag Manager mają własne listy użytkowników z rolą administratora; przejrzyj je przy okazji. Jak sprawdzić, czy wizytówka i strona mówią to samo, opisaliśmy <a href="/blog/profil-firmy-w-google-a-strona/">osobno</a>.</p>
+
+<h2>Czyja to właściwie strona? Prawo autorskie w trzech zdaniach</h2>
+<p>Zapłacenie faktury za „wykonanie strony” nie przenosi automatycznie praw autorskich do projektu graficznego, kodu motywu czy tekstów. Ustawa o prawie autorskim wymaga, by umowa o przeniesienie autorskich praw majątkowych była zawarta <strong>na piśmie pod rygorem nieważności</strong> i wymieniała <strong>pola eksploatacji</strong>, których dotyczy; jeśli z umowy nie wynika wyraźnie, że prawa przechodzą, przyjmuje się, że wykonawca udzielił jedynie <strong>licencji</strong> – a licencja, w której nie postanowiono inaczej, uprawnia do korzystania z utworu przez pięć lat. W praktyce: bez pisemnego zapisu o przeniesieniu praw możesz używać strony, ale jej przerobienie przez kogoś innego, przeniesienie na nowy motyw z zachowaniem grafik czy użycie projektu w innym miejscu może wymagać zgody byłego wykonawcy. Do tego dochodzą <strong>zdjęcia stockowe i czcionki</strong> – licencje bywają kupione na konto agencji i obejmują „jej klientów” tylko na czas współpracy. Przy nowej umowie wpisz przeniesienie praw (albo szeroką licencję) do kodu i grafik, przekazanie plików źródłowych i listę licencji zewnętrznych. Przy starej – zapytaj, co dokładnie jest w umowie, zanim zaczniesz przebudowę.</p>
+
+<h2>Jak przejąć dostępy bez wojny</h2>
+<ol>
+<li><strong>Zrób listę z tabeli powyżej</strong>, zanim powiesz wykonawcy o rozstaniu. Wypełnij to, co wiesz; resztę oznacz jako „do przekazania”.</li>
+<li><strong>Poproś o przekazanie, nie o hasła.</strong> Do każdej usługi niech wykonawca doda Twoje firmowe konto z najwyższą rolą (właściciel / administrator / abonent). Przekazywanie haseł e-mailem to zły pomysł z obu stron: Ty nie wiesz, kto jeszcze je zna, on nie ma dowodu, że je oddał.</li>
+<li><strong>Zmień to, co trzeba było przekazać hasłem</strong> (FTP, baza, panel hostingu bez kont wielu użytkowników) natychmiast po przejęciu i zapisz w menedżerze haseł firmy.</li>
+<li><strong>Odbierz uprawnienia</strong> dopiero wtedy, gdy nowy opiekun potwierdzi, że wszystko działa – kolejność „najpierw dostęp dla nowego, potem odebranie staremu” oszczędza tygodnia przestoju. Przy okazji usuń konta, których nikt nie rozpoznaje.</li>
+<li><strong>Zakończ dokumentem</strong>: lista przekazanych dostępów z datą, potwierdzenie przekazania kopii plików i bazy, lista licencji i co się z nimi dzieje. Jedna strona A4, podpisana przez obie strony, załatwia 90 % późniejszych sporów.</li>
+</ol>
+<p>Gdy wykonawca nie współpracuje, kolejność działań wynika z warstw: jeśli domena jest Twoja, masz w ręku najważniejszy klucz – możesz przekierować ją na nowy hosting, odzyskać dostęp do kont Google przez e-mail w domenie i odbudować resztę. Jeśli domena jest na niego, zacznij od pisemnego wezwania do zmiany abonenta (umowa, faktury i korespondencja pokazujące, że domena była kupowana dla Twojej firmy, są tu dowodem) i rozmowy z rejestratorem o procedurze sporu. Hosting i CMS odtworzysz z kopii – o ile ją masz; dlatego punkt 5 tabeli nie jest opcjonalny.</p>
+
+<h2>Test na 15 minut</h2>
+<ul>
+<li>Sprawdź WHOIS swojej domeny: rejestrator, data wygaśnięcia. Zaloguj się do panelu rejestratora. Jeśli nie wiesz, gdzie – to już jest wynik testu.</li>
+<li>Otwórz ostatnią fakturę za hosting. Kto jest nabywcą? Czy znasz adres panelu?</li>
+<li>Zaloguj się do CMS i otwórz listę użytkowników. Ilu administratorów? Czyje e-maile? Czy Twoje konto ma rolę administratora?</li>
+<li>Otwórz Search Console → Ustawienia → Użytkownicy i uprawnienia oraz Profil Firmy → Użytkownicy. Kto jest właścicielem?</li>
+<li>Policz, ile z dziewięciu warstw zależy wyłącznie od jednej osoby spoza firmy. Każda taka warstwa to zadanie na ten miesiąc.</li>
+</ul>
+
+<h2>Co sprawdzamy w Webskanie</h2>
+<p>Dostępów do kont nie widać z zewnątrz, więc nie sprawdzimy, czy je masz. Widzimy za to skutki ich braku. <a href="/#cena">Audyt pogłębiony</a> rozpoznaje platformę i wersje oprogramowania widoczne w nagłówkach (nieaktualizowany CMS po odejściu opiekuna to typowy obraz), sprawdza certyfikat TLS i jego wystawcę, nagłówki bezpieczeństwa, przekierowania domeny i to, czy pod adresem strony nie leżą publicznie dostępne kopie, zrzuty bazy i pliki konfiguracyjne pozostawione przy przeprowadzce. <a href="/#cena">Webskan Monitor</a> codziennie sprawdza datę wygaśnięcia domeny i certyfikatu, pisze 30, 14 i 7 dni przed końcem domeny, alarmuje, gdy strona zacznie przekierowywać w inne miejsce lub przestanie odpowiadać – czyli dokładnie wtedy, gdy po rozstaniu z wykonawcą coś cicho wygasło.</p>
+
+<section class="fullbox">
+<h2>Szybki obraz za darmo</h2>
+<p>Darmowy szybki skan Webskan sprawdza stronę tak, jak widzi ją telefon klienta: certyfikat i przekierowanie na https, podstawowe nagłówki bezpieczeństwa, wydajność i SEO. Bez e-maila, bez rejestracji, wynik w ok. 30 sekund.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="pl"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://twojafirma.pl" required maxlength="500" aria-label="Adres strony"><button class="btn" type="submit">Skanuj za darmo</button></form>
+<p class="note">Chcesz, żeby ktoś codziennie porównywał stronę z wczorajszą i pisał, gdy coś się zmieni? <a href="/#cena">Webskan Monitor</a> (49 zł/mies.); 30 dni Monitora w cenie <a href="/#cena">audytu pogłębionego</a> (249 zł).</p>
+</section>
+
+<h2>Źródła</h2>
+<ul>
+<li>Ustawa z 4 lutego 1994 r. o prawie autorskim i prawach pokrewnych (t.j. Dz.U. 2025 poz. 24), <a href="https://api.sejm.gov.pl/eli/acts/DU/2025/24" rel="noopener">tekst w systemie ELI Sejmu</a> – art. 41 ust. 2 (pola eksploatacji), art. 53 (forma pisemna pod rygorem nieważności), art. 65 (domniemanie licencji), art. 66 ust. 1 (pięć lat)</li>
+<li>NASK, <a href="https://dns.pl/transfer_domeny_pl" rel="noopener">Transfer domeny .pl</a> – kod authinfo od obecnego rejestratora, potwierdzenie przez abonenta, transfer nie zmienia abonenta</li>
+<li>ICANN, <a href="https://www.icann.org/resources/pages/transfer-policy-2016-06-01-en" rel="noopener">Transfer Policy</a> (wersja z 21 lutego 2024 r., sekcja II.C.2: 60-dniowa blokada po zmianie abonenta) oraz <a href="https://www.icann.org/en/board-activities-and-meetings/materials/approved-resolutions-regular-meeting-of-the-icann-board-07-06-2026-en" rel="noopener">uchwała Zarządu ICANN z 7 czerwca 2026 r.</a> przyjmująca rekomendacje przeglądu polityki transferów</li>
+<li>Google Search Console – Centrum pomocy, <a href="https://support.google.com/webmasters/answer/7687615" rel="noopener">Zarządzanie właścicielami, użytkownikami i uprawnieniami</a> – usuwanie właściciela wymaga usunięcia znacznika weryfikacyjnego</li>
+<li>Profil Firmy w Google – Centrum pomocy, <a href="https://support.google.com/business/answer/3403100" rel="noopener">Dodawanie i usuwanie właścicieli i menedżerów</a> – jeden właściciel główny, uprawnienia menedżera</li>
+<li>WordPress, <a href="https://wordpress.org/documentation/article/roles-and-capabilities/" rel="noopener">Roles and Capabilities</a> – administrator: create_users, edit_users, promote_users, install_plugins</li>
+<li>Webskan: <a href="/blog/kopia-zapasowa-strony/">Kopia zapasowa strony: co naprawdę masz</a>, <a href="/blog/certyfikat-ssl-wygasa/">Certyfikat SSL wygasa</a>, <a href="/blog/profil-firmy-w-google-a-strona/">Profil Firmy w Google a Twoja strona</a>, <a href="/blog/co-sprawdzic-po-wdrozeniu-nowej-strony/">Co sprawdzić po wdrożeniu nowej strony</a></li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a></footer>
+</div>
+</body>
+</html>
