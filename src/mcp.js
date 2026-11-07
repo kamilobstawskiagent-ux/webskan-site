@@ -158,7 +158,7 @@ async function enqueueAudit(ctx, { url, pages, parent }) {
   const ok = plan === 'developer' ? await db.bump(`audit:key:${keyHash}`, AUDIT_PAID_PER_KEY, DAY_MS) : await db.bump(`audit:ip:${ctx.ipHash}`, AUDIT_FREE_PER_IP, DAY_MS);
   if (!ok) return errResult(plan === 'developer' ? `Rate limit: ${AUDIT_PAID_PER_KEY} audits per 24 h for this license key.` : `Rate limit: the free plan allows ${AUDIT_FREE_PER_IP} whole-site audits (audit_website + recheck_website) per IP per 24 h. A Webskan Developer key raises this to ${AUDIT_PAID_PER_KEY}/day – see ${SITE}/developers/ . scan_website is still available.`, { code: 'rate_limit', plan });
   const id = newId();
-  const a = await db.auditCreate({ id, host, url, pages, parent, keyHash: null, ipHash: null // limity liczą liczniki w DO; w rekordzie audytu nie trzymamy skrótów IP ani klucza (polityka prywatności) });
+  const a = await db.auditCreate({ id, host, url, pages, parent, keyHash: null, ipHash: null }); // limity liczą liczniki w DO; w rekordzie audytu nie trzymamy skrótów IP ani klucza (polityka prywatności)
   const ahead = await db.auditQueuedAhead(new Date(a.at).getTime());
   const s = queuedStructured(a, ahead, planNotes);
   return okResult(queuedMarkdown(s, parent ? 'Re-check of' : 'Queued whole-site audit of'), s);
