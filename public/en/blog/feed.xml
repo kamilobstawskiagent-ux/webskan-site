@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+<title>Webskan – blog</title>
+<link>https://webskan.com/en/blog/</link>
+<atom:link href="https://webskan.com/en/blog/feed.xml" rel="self" type="application/rss+xml"/>
+<description>Website health for small businesses and the developers who ship for them: speed, security, SEO, accessibility.</description>
+<language>en</language>
+<lastBuildDate>Sun, 08 Nov 2026 07:00:00 GMT</lastBuildDate>
+<item>
+<title>Make your coding agent verify every deploy: a CLAUDE.md block, a CI step and a definition of done</title>
+<link>https://webskan.com/en/blog/make-your-agent-verify-every-deploy/</link>
+<guid isPermaLink="true">https://webskan.com/en/blog/make-your-agent-verify-every-deploy/</guid>
+<pubDate>Sun, 08 Nov 2026 07:00:00 GMT</pubDate>
+<description>A CLAUDE.md block, a CI step that fails on high-severity findings, and a definition of done for a live site – with the finding ids behind each line.</description>
+</item>
+<item>
+<title>Your deploy just published .env: exposed .git, .env, SQL dumps and backups on live sites – and a 60-second check</title>
+<link>https://webskan.com/en/blog/exposed-env-git-on-live-sites/</link>
+<guid isPermaLink="true">https://webskan.com/en/blog/exposed-env-git-on-live-sites/</guid>
+<pubDate>Sat, 07 Nov 2026 07:00:00 GMT</pubDate>
+<description>How secrets end up in the web root, what attackers do with them, a 60-second curl check that matches content signatures instead of trusting HTTP 200, and the server fixes.</description>
+</item>
+<item>
+<title>Website backup: what you really have, what you don't, and a 15-minute check</title>
+<link>https://webskan.com/en/blog/website-backup-what-you-really-have/</link>
+<guid isPermaLink="true">https://webskan.com/en/blog/website-backup-what-you-really-have/</guid>
+<pubDate>Sat, 07 Nov 2026 07:00:00 GMT</pubDate>
+<description>What a website backup must contain, what hosts actually promise, the 3-2-1 rule in plain words and a 15-minute check that tells you whether you can recover after a hack or a broken update.</description>
+</item>
+<item>
+<title>How to tell your website has been hacked: nine symptoms, a 10-minute check and what to do first</title>
+<link>https://webskan.com/en/blog/how-to-tell-your-website-was-hacked/</link>
+<guid isPermaLink="true">https://webskan.com/en/blog/how-to-tell-your-website-was-hacked/</guid>
+<pubDate>Sat, 07 Nov 2026 07:00:00 GMT</pubDate>
+<description>Nine symptoms an owner can spot alone, a 10-minute check (including how to see the site the way Google does), first steps in the right order and the Search Console review request.</description>
+</item>
+<item>
+<title>Google Business Profile vs your website: what has to match and how to check it in 15 minutes</title>
+<link>https://webskan.com/en/blog/google-business-profile-and-your-website/</link>
+<guid isPermaLink="true">https://webskan.com/en/blog/google-business-profile-and-your-website/</guid>
+<pubDate>Sat, 07 Nov 2026 07:00:00 GMT</pubDate>
+<description>Ten places where your Google listing and your business website must say the same thing, a 15-minute test from your phone, and a symptom → cause → who fixes it table.</description>
+</item>
+<item>
+<title>Your SSL certificate is expiring: what customers see, how to check the date and how to never repeat it</title>
+<link>https://webskan.com/en/blog/ssl-certificate-expired/</link>
+<guid isPermaLink="true">https://webskan.com/en/blog/ssl-certificate-expired/</guid>
+<pubDate>Sat, 07 Nov 2026 07:00:00 GMT</pubDate>
+<description>What customers see after a certificate expires, eight reasons renewal fails, a 60-second expiry check and a plan so it never happens again.</description>
+</item>
+<item>
+<title>Contact form not working? How to check it in 10 minutes</title>
+<link>https://webskan.com/en/blog/contact-form-not-working/</link>
+<guid isPermaLink="true">https://webskan.com/en/blog/contact-form-not-working/</guid>
+<pubDate>Sat, 07 Nov 2026 07:00:00 GMT</pubDate>
+<description>Eight reasons enquiries vanish, a step-by-step test and a symptom → cause → who fixes it table.</description>
+</item>
+<item>
+<title>How to read a PageSpeed Insights report (without a developer)</title>
+<link>https://webskan.com/en/blog/how-to-read-pagespeed-insights/</link>
+<guid isPermaLink="true">https://webskan.com/en/blog/how-to-read-pagespeed-insights/</guid>
+<pubDate>Sat, 07 Nov 2026 07:00:00 GMT</pubDate>
+<description>What in a PageSpeed report actually matters, what the common messages mean, and how to turn it into a to-do list for your webmaster.</description>
+</item>
+<item>
+<title>What a slow website costs you: the numbers to know before you pay for optimisation</title>
+<link>https://webskan.com/en/blog/what-a-slow-website-costs/</link>
+<guid isPermaLink="true">https://webskan.com/en/blog/what-a-slow-website-costs/</guid>
+<pubDate>Sat, 07 Nov 2026 07:00:00 GMT</pubDate>
+<description>Four studies with real numbers, four ways a slow site loses money, and a five-minute calculation for your own business.</description>
+</item>
+<item>
+<title>Audit the website your coding agent just shipped</title>
+<link>https://webskan.com/en/blog/audit-the-site-your-agent-shipped/</link>
+<guid isPermaLink="true">https://webskan.com/en/blog/audit-the-site-your-agent-shipped/</guid>
+<pubDate>Sat, 07 Nov 2026 07:00:00 GMT</pubDate>
+<description>Coding agents ship sites fast and skip the outside view. The checks that catch what they miss, and how to give the agent a build, deploy, audit, fix, recheck loop.</description>
+</item>
+<item>
+<title>WordPress security: 10 settings you can fix in an hour</title>
+<link>https://webskan.com/en/blog/wordpress-security-settings/</link>
+<guid isPermaLink="true">https://webskan.com/en/blog/wordpress-security-settings/</guid>
+<pubDate>Fri, 06 Nov 2026 07:00:00 GMT</pubDate>
+<description>Ten WordPress settings that close the most common ways into a small-business website. No developer needed, one hour of work.</description>
+</item>
+<item>
+<title>HTTPS is not enough: 7 things that break behind the padlock</title>
+<link>https://webskan.com/en/blog/https-is-not-enough/</link>
+<guid isPermaLink="true">https://webskan.com/en/blog/https-is-not-enough/</guid>
+<pubDate>Fri, 06 Nov 2026 07:00:00 GMT</pubDate>
+<description>A padlock in the browser does not mean your site is set up correctly. Seven common certificate and redirect problems, how to spot and fix them.</description>
+</item>
+<item>
+<title>Website launch checklist: 24 things to check after your new site goes live</title>
+<link>https://webskan.com/en/blog/website-launch-checklist/</link>
+<guid isPermaLink="true">https://webskan.com/en/blog/website-launch-checklist/</guid>
+<pubDate>Fri, 06 Nov 2026 07:00:00 GMT</pubDate>
+<description>The things that most often break when a new website launches, and how to check each one in a minute.</description>
+</item>
+<item>
+<title>The European Accessibility Act and your website: who must comply, who is exempt, what to do</title>
+<link>https://webskan.com/en/blog/european-accessibility-act-websites/</link>
+<guid isPermaLink="true">https://webskan.com/en/blog/european-accessibility-act-websites/</guid>
+<pubDate>Fri, 06 Nov 2026 07:00:00 GMT</pubDate>
+<description>Who the EAA covers, the microenterprise exemption, what WCAG 2.1 AA means in practice, the penalties, and a one-week plan.</description>
+</item>
+<item>
+<title>Why your website is slow on mobile (and what to do about it)</title>
+<link>https://webskan.com/en/blog/why-your-website-is-slow-on-mobile/</link>
+<guid isPermaLink="true">https://webskan.com/en/blog/why-your-website-is-slow-on-mobile/</guid>
+<pubDate>Thu, 05 Nov 2026 07:00:00 GMT</pubDate>
+<description>The five most common causes of a slow mobile site, how to spot them in PageSpeed and the order to fix them in.</description>
+</item>
+<item>
+<title>HTTP security headers in plain English</title>
+<link>https://webskan.com/en/blog/http-security-headers-explained/</link>
+<guid isPermaLink="true">https://webskan.com/en/blog/http-security-headers-explained/</guid>
+<pubDate>Thu, 05 Nov 2026 07:00:00 GMT</pubDate>
+<description>The six HTTP headers every scanner flags: what they do, what they protect against and how to enable them without breaking your site.</description>
+</item>
+<item>
+<title>Core Web Vitals in plain English: LCP, INP and CLS</title>
+<link>https://webskan.com/en/blog/core-web-vitals-explained/</link>
+<guid isPermaLink="true">https://webskan.com/en/blog/core-web-vitals-explained/</guid>
+<pubDate>Thu, 05 Nov 2026 07:00:00 GMT</pubDate>
+<description>What Core Web Vitals are, which thresholds Google uses and what to fix first.</description>
+</item>
+</channel>
+</rss>

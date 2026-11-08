@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+<title>Webskan – blog</title>
+<link>https://webskan.com/blog/</link>
+<atom:link href="https://webskan.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
+<description>Zdrowie strony WWW małej firmy po ludzku: szybkość, bezpieczeństwo, SEO, dostępność, prawo.</description>
+<language>pl</language>
+<lastBuildDate>Sat, 07 Nov 2026 07:00:00 GMT</lastBuildDate>
+<item>
+<title>Strona po zmianie wykonawcy: lista dostępów, które musisz mieć (i jak sprawdzić, czy je masz)</title>
+<link>https://webskan.com/blog/strona-po-zmianie-wykonawcy-lista-dostepow/</link>
+<guid isPermaLink="true">https://webskan.com/blog/strona-po-zmianie-wykonawcy-lista-dostepow/</guid>
+<pubDate>Sat, 07 Nov 2026 07:00:00 GMT</pubDate>
+<description>Dziewięć warstw dostępu od domeny po Profil Firmy w Google, test na 15 minut, co mówi prawo autorskie o „własności” strony i jak przejąć dostępy bez wojny.</description>
+</item>
+<item>
+<title>RODO na stronie firmowej: 7 rzeczy do sprawdzenia, zanim zrobi to UODO</title>
+<link>https://webskan.com/blog/rodo-na-stronie-firmowej/</link>
+<guid isPermaLink="true">https://webskan.com/blog/rodo-na-stronie-firmowej/</guid>
+<pubDate>Sat, 07 Nov 2026 07:00:00 GMT</pubDate>
+<description>Polityka prywatności, baner cookies po PKE, formularz kontaktowy, Analytics i Fonts, umowy powierzenia, bezpieczeństwo, 72 godziny na zgłoszenie – z prawdziwymi karami UODO i testem na 15 minut.</description>
+</item>
+<item>
+<title>Kopia zapasowa strony: co naprawdę masz, a czego nie – i jak to sprawdzić w 15 minut</title>
+<link>https://webskan.com/blog/kopia-zapasowa-strony/</link>
+<guid isPermaLink="true">https://webskan.com/blog/kopia-zapasowa-strony/</guid>
+<pubDate>Sat, 07 Nov 2026 07:00:00 GMT</pubDate>
+<description>Co musi zawierać kopia strony, co faktycznie obiecują hostingi, zasada 3-2-1 po ludzku i test w 15 minut, który pokazuje, czy po awarii masz do czego wrócić.</description>
+</item>
+<item>
+<title>Strona zhakowana: jak to poznać, co sprawdzić w 10 minut i co zrobić najpierw</title>
+<link>https://webskan.com/blog/strona-zhakowana-jak-poznac/</link>
+<guid isPermaLink="true">https://webskan.com/blog/strona-zhakowana-jak-poznac/</guid>
+<pubDate>Sat, 07 Nov 2026 07:00:00 GMT</pubDate>
+<description>Dziewięć objawów włamania, które właściciel widzi sam, test w 10 minut (w tym jak zobaczyć stronę oczami Google), pierwsze kroki w dobrej kolejności i prośba o ponowne sprawdzenie w Search Console.</description>
+</item>
+<item>
+<title>Profil Firmy w Google a Twoja strona: co musi się zgadzać i jak to sprawdzić w 15 minut</title>
+<link>https://webskan.com/blog/profil-firmy-w-google-a-strona/</link>
+<guid isPermaLink="true">https://webskan.com/blog/profil-firmy-w-google-a-strona/</guid>
+<pubDate>Sat, 07 Nov 2026 07:00:00 GMT</pubDate>
+<description>Dziesięć miejsc, w których wizytówka Google i firmowa strona muszą mówić to samo, test w 15 minut z telefonu i tabela objaw → przyczyna → kto naprawia.</description>
+</item>
+<item>
+<title>Certyfikat SSL wygasa: co zobaczą klienci, jak sprawdzić datę i jak to się nie powtórzy</title>
+<link>https://webskan.com/blog/certyfikat-ssl-wygasa/</link>
+<guid isPermaLink="true">https://webskan.com/blog/certyfikat-ssl-wygasa/</guid>
+<pubDate>Sat, 07 Nov 2026 07:00:00 GMT</pubDate>
+<description>Co widzą klienci po wygaśnięciu certyfikatu, osiem powodów, dla których odnowienie zawodzi, sprawdzenie daty w 60 sekund i plan, żeby to się nie powtórzyło.</description>
+</item>
+<item>
+<title>Formularz kontaktowy nie działa? Jak to sprawdzić w 10 minut</title>
+<link>https://webskan.com/blog/formularz-kontaktowy-nie-dziala/</link>
+<guid isPermaLink="true">https://webskan.com/blog/formularz-kontaktowy-nie-dziala/</guid>
+<pubDate>Sat, 07 Nov 2026 07:00:00 GMT</pubDate>
+<description>Osiem powodów, dla których zapytania ze strony znikają, test krok po kroku i tabela objaw → przyczyna → kto naprawia.</description>
+</item>
+<item>
+<title>Jak czytać raport PageSpeed Insights (bez programisty)</title>
+<link>https://webskan.com/blog/jak-czytac-raport-pagespeed/</link>
+<guid isPermaLink="true">https://webskan.com/blog/jak-czytac-raport-pagespeed/</guid>
+<pubDate>Sat, 07 Nov 2026 07:00:00 GMT</pubDate>
+<description>Co w raporcie PageSpeed naprawdę się liczy, co znaczą najczęstsze komunikaty i jak zamienić go w listę zadań dla webmastera.</description>
+</item>
+<item>
+<title>Ile kosztuje wolna strona? Liczby, które warto znać przed zleceniem optymalizacji</title>
+<link>https://webskan.com/blog/ile-kosztuje-wolna-strona/</link>
+<guid isPermaLink="true">https://webskan.com/blog/ile-kosztuje-wolna-strona/</guid>
+<pubDate>Sat, 07 Nov 2026 07:00:00 GMT</pubDate>
+<description>Cztery badania z liczbami, cztery mechanizmy strat i prosty rachunek dla Twojej strony.</description>
+</item>
+<item>
+<title>WordPress: 10 ustawień bezpieczeństwa na godzinę</title>
+<link>https://webskan.com/blog/wordpress-10-ustawien-bezpieczenstwa/</link>
+<guid isPermaLink="true">https://webskan.com/blog/wordpress-10-ustawien-bezpieczenstwa/</guid>
+<pubDate>Fri, 06 Nov 2026 07:00:00 GMT</pubDate>
+<description>Dziesięć ustawień WordPressa, które zamykają najczęstsze drogi włamania na firmową stronę. Bez programisty, w godzinę.</description>
+</item>
+<item>
+<title>HTTPS to nie wszystko: 7 rzeczy, które psują się mimo kłódki</title>
+<link>https://webskan.com/blog/https-to-nie-wszystko/</link>
+<guid isPermaLink="true">https://webskan.com/blog/https-to-nie-wszystko/</guid>
+<pubDate>Fri, 06 Nov 2026 07:00:00 GMT</pubDate>
+<description>Kłódka w przeglądarce nie znaczy, że strona jest poprawnie zabezpieczona. Siedem typowych problemów z certyfikatem i przekierowaniami, jak je rozpoznać i naprawić.</description>
+</item>
+<item>
+<title>Co sprawdzić po wdrożeniu nowej strony: checklista 24 punktów</title>
+<link>https://webskan.com/blog/co-sprawdzic-po-wdrozeniu-nowej-strony/</link>
+<guid isPermaLink="true">https://webskan.com/blog/co-sprawdzic-po-wdrozeniu-nowej-strony/</guid>
+<pubDate>Fri, 06 Nov 2026 07:00:00 GMT</pubDate>
+<description>Rzeczy, które najczęściej psują się przy wdrożeniu nowej strony, i jak sprawdzić każdą z nich w minutę.</description>
+</item>
+<item>
+<title>Dostępność strony a prawo: czy Polski Akt o Dostępności (EAA) dotyczy Twojej firmy</title>
+<link>https://webskan.com/blog/dostepnosc-strony-a-prawo-eaa/</link>
+<guid isPermaLink="true">https://webskan.com/blog/dostepnosc-strony-a-prawo-eaa/</guid>
+<pubDate>Fri, 06 Nov 2026 07:00:00 GMT</pubDate>
+<description>Komu nowe przepisy każą mieć dostępną stronę i sklep, kogo zwalniają, co znaczy WCAG 2.1 AA w praktyce, co grozi za brak i od czego zacząć.</description>
+</item>
+<item>
+<title>Dlaczego strona jest wolna na telefonie (i co z tym zrobić)</title>
+<link>https://webskan.com/blog/dlaczego-strona-jest-wolna-na-telefonie/</link>
+<guid isPermaLink="true">https://webskan.com/blog/dlaczego-strona-jest-wolna-na-telefonie/</guid>
+<pubDate>Thu, 05 Nov 2026 07:00:00 GMT</pubDate>
+<description>Pięć najczęstszych przyczyn wolnej strony na telefonie, jak je rozpoznać w PageSpeed i w jakiej kolejności naprawiać.</description>
+</item>
+<item>
+<title>Nagłówki bezpieczeństwa HTTP po ludzku</title>
+<link>https://webskan.com/blog/naglowki-bezpieczenstwa-http/</link>
+<guid isPermaLink="true">https://webskan.com/blog/naglowki-bezpieczenstwa-http/</guid>
+<pubDate>Thu, 05 Nov 2026 07:00:00 GMT</pubDate>
+<description>Sześć nagłówków HTTP, których brak wytyka każdy skaner: co robią, przed czym chronią i jak je włączyć bez psucia strony.</description>
+</item>
+<item>
+<title>Core Web Vitals po ludzku: LCP, INP i CLS</title>
+<link>https://webskan.com/blog/core-web-vitals-po-ludzku/</link>
+<guid isPermaLink="true">https://webskan.com/blog/core-web-vitals-po-ludzku/</guid>
+<pubDate>Thu, 05 Nov 2026 07:00:00 GMT</pubDate>
+<description>Czym są Core Web Vitals, jakie progi liczą się dla Google i co naprawić najpierw.</description>
+</item>
+</channel>
+</rss>
