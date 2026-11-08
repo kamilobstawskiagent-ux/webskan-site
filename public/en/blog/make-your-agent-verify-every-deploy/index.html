@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Make your coding agent verify every deploy: a CLAUDE.md block, a CI step and a definition of done – Webskan</title>
+<meta name="description" content="A deploy pipeline proves the files went up, not that the site works. Three copy-paste pieces that make an agent check the live site every time: a CLAUDE.md / AGENTS.md block, a 40-line CI script that fails on high-severity findings (curl + jq, no SDK), and a definition of done with the finding ids behind each line.">
+<link rel="canonical" href="https://webskan.com/en/blog/make-your-agent-verify-every-deploy/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/make-your-agent-verify-every-deploy/">
+<meta property="og:title" content="Make your coding agent verify every deploy">
+<meta property="og:description" content="A CLAUDE.md block, a CI step that fails on high-severity findings, and a definition of done for a live site – with the finding ids behind each line.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/en/blog/make-your-agent-verify-every-deploy/">
+<meta property="og:image" content="https://webskan.com/og-dev.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Make your coding agent verify every deploy: a CLAUDE.md block, a CI step and a definition of done","description":"A CLAUDE.md block, a CI step that fails on high-severity findings, and a definition of done for a live site – with the finding ids behind each line.","datePublished":"2026-11-08","dateModified":"2026-11-08","inLanguage":"en","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/en/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/en/"},"mainEntityOfPage":"https://webskan.com/en/blog/make-your-agent-verify-every-deploy/"}</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a href="/en/blog/">Blog</a><a href="/developers/">For developers</a><a href="/en/#pricing">Pricing</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 8 November 2026 · 8 min read · for developers</p>
+<h1>Make your coding agent verify every deploy: a CLAUDE.md block, a CI step and a definition of done</h1>
+<p class="lead">A green deploy proves that the files went up. It says nothing about whether the site works for a visitor on a phone, whether Google is allowed to index it, or whether <code>.env</code> went up with the files. Agents are good at finishing the task they were given, and “deploy” ends when the upload ends. This post gives you three pieces to paste so that the task ends one step later: after the live site has been checked. Everything below runs against the public URL only – no SDK, no repository access, and the free plan needs no account.</p>
+
+<h2>Why “deployed” is not “done”</h2>
+<p>The tests ran against a local build. The deploy ran against a server. The visitor and the crawler see a third thing: the live site behind a CDN, with the production config, the production robots file and whatever the hosting panel added on top. The failures that slip through are boring and expensive – and they are the same ones every time: a <code>noindex</code> left over from staging, a title that still says “Vite App”, a form whose fields have no labels, a 404 page with no link out, a cart that cannot reach the checkout, a missing <code>Content-Security-Policy</code>, a <code>.git</code> directory served to the world. <a href="/en/blog/audit-the-site-your-agent-shipped/">The earlier post</a> explains why agent-built sites break in exactly these places. This one is about making the check automatic.</p>
+
+<h2>A definition of done for a live site</h2>
+<p>An agent follows a definition of done far more reliably than a wish like “make sure it works”. The table below is the one we use. Each line maps to finding ids that the <a href="/developers/">Webskan audit</a> returns, so the agent can verify a line by id instead of by opinion. The severity is what the audit assigns; the gate in the CI step below is “no <code>high</code>”.</p>
+<table class="vitals headers">
+<thead><tr><th>Done means</th><th>Finding ids that say it is not</th><th>Severity</th></tr></thead>
+<tbody>
+<tr><td>Every crawled page answers 200 and the 404 page is a real 404 with a way out</td><td data-l="Finding ids"><code>seo.page.error</code>, <code>journey.404.blank</code>, <code>journey.404.server_error</code>, <code>journey.404.soft404</code>, <code>journey.404.no_way_out</code></td><td data-l="Severity">high / medium</td></tr>
+<tr><td>Google may index the site: no stray <code>noindex</code>, robots does not block everything, sitemap exists</td><td data-l="Finding ids"><code>seo.noindex</code>, <code>seo.robots.blocks-all</code>, <code>seo.sitemap.missing</code>, <code>seo.sitemap.error</code></td><td data-l="Severity">high (robots) / medium</td></tr>
+<tr><td>Every page has its own title and description, one H1, a canonical, a language and a viewport</td><td data-l="Finding ids"><code>seo.title.missing</code>, <code>seo.title.duplicate</code>, <code>seo.desc.missing</code>, <code>seo.h1.missing</code>, <code>seo.canonical.missing</code>, <code>seo.lang.missing</code>, <code>seo.viewport.missing</code></td><td data-l="Severity">high (title, viewport) / medium / low</td></tr>
+<tr><td>HTTPS end to end: http redirects, no mixed content, forms post to https, certificate valid for more than 21 days</td><td data-l="Finding ids"><code>sec.https.no-redirect</code>, <code>sec.mixed-content</code>, <code>sec.form.insecure-action</code>, <code>sec.tls.invalid</code>, <code>sec.tls.expiring</code></td><td data-l="Severity">high</td></tr>
+<tr><td>Security headers set: CSP, HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy</td><td data-l="Finding ids"><code>sec.header.csp</code>, <code>sec.header.hsts</code>, <code>sec.header.xcto</code>, <code>sec.header.xfo</code>, <code>sec.header.referrer</code>, <code>sec.header.permissions</code></td><td data-l="Severity">low / medium</td></tr>
+<tr><td>Nothing from the repository or the server is publicly downloadable: no <code>.git</code>, <code>.env</code>, dumps, backups, <code>phpinfo</code></td><td data-l="Finding ids"><code>sec.exposed-file</code>, <code>sec.leak</code></td><td data-l="Severity">high / medium by file type</td></tr>
+<tr><td>Forms are usable: labelled fields, a required marker, spam protection, consent where personal data is collected</td><td data-l="Finding ids"><code>ux.form.unlabelled_fields</code>, <code>ux.form.no_required</code>, <code>ux.form.no_spam_protection</code>, <code>ux.form.no_consent</code></td><td data-l="Severity">medium / low</td></tr>
+<tr><td>The phone view works: no horizontal overflow, no tiny text, menu opens, cookie banner does not cover the content and has a reject option</td><td data-l="Finding ids"><code>ux.overflow</code>, <code>ux.small-text</code>, <code>journey.nav.fail</code>, <code>ux.cookie.blocking</code>, <code>ux.cookie.no-reject</code></td><td data-l="Severity">high (nav) / medium / low</td></tr>
+<tr><td>No broken links, no JavaScript errors, no failed requests on the key pages</td><td data-l="Finding ids"><code>links.broken</code>, <code>ux.js-errors</code>, <code>ux.failed-requests</code></td><td data-l="Severity">medium / low</td></tr>
+<tr><td>Accessibility: no critical axe-core violations, mobile accessibility score at least 90</td><td data-l="Finding ids"><code>a11y.rule</code> (one id per rule and page), <code>a11y.score.mobile</code></td><td data-l="Severity">high (critical) / medium / low</td></tr>
+<tr><td>Mobile performance within Core Web Vitals: LCP under 2.5 s, CLS under 0.1, TBT under 300 ms</td><td data-l="Finding ids"><code>perf.lcp.mobile</code>, <code>perf.cls.mobile</code>, <code>perf.tbt.mobile</code>, <code>perf.score.mobile</code>, plus the causes: <code>perf.images.oversized</code>, <code>perf.blocking-scripts</code>, <code>perf.compression.none</code></td><td data-l="Severity">high past the “poor” threshold, otherwise medium</td></tr>
+<tr><td>A visitor can reach you: a contact route exists, phone and e-mail are clickable</td><td data-l="Finding ids"><code>ux.no-contact</code>, <code>ux.contact.form-missing</code>, <code>ux.phone.not-clickable</code>, <code>ux.email.not-clickable</code></td><td data-l="Severity">high (no contact) / low</td></tr>
+</tbody>
+</table>
+<p>Page-specific findings carry the page in the id after <code>@</code>, for example <code>ux.form.unlabelled_fields@/contact/</code> or <code>seo.title.missing@/</code>. That is what makes a re-check exact: the same id either comes back or it does not.</p>
+
+<h2>Piece 1: the CLAUDE.md block</h2>
+<p>Put this in the project's <code>CLAUDE.md</code> (Claude Code), <code>AGENTS.md</code> (Codex and most other agents) or a Cursor rule. It assumes the Webskan MCP server is connected – one command: <code>claude mcp add --transport http webskan https://webskan.com/mcp</code>, or the <a href="/developers/#install">equivalent config</a> for your client. The block does three things: it moves the finish line after the audit, it tells the agent what to gate on, and it forbids the two mistakes agents make with audits (chasing a score, and re-running in a loop when a limit is hit).</p>
+<pre><code>## After every deploy
+
+- When the site is live, run the Webskan audit before reporting the task as done:
+  `audit_website` with the production (or public preview) URL and `pages: 10`,
+  then `get_audit` every 30 s until `status` is `done`. Public URLs only –
+  never localhost, a private IP or a tunnel that needs a header.
+- Definition of done: `summary.high` is 0. Fix `medium` findings in the same
+  change when they touch files you changed; otherwise list them in the hand-off
+  note with their ids.
+- Fix by id, not by score. Each finding has `id`, `pages` and `detail`. Map the id
+  to the template or config in this repo, change it, and keep a list
+  `id -&gt; what changed`. Do not "fix" `perf.*` findings by chasing the Lighthouse
+  score; fix the concrete cause named in `detail` (image size, blocking script,
+  server response time).
+- After the fix is deployed, call `recheck_website` with the first `auditId`,
+  poll `get_audit` with the new id, and report `diff.fixed`, `diff.open`,
+  `diff.new` and `diff.unverified`. Lighthouse differences of up to 5 points
+  are noise – never report them as a fix or a regression.
+- Never start a second audit of the same host while one is running. If a limit
+  error comes back, say when to retry instead of retrying.
+- Put the `auditId` in the hand-off note.</code></pre>
+<p>If you install the <a href="https://github.com/kamilobstawskiagent-ux/webskan-claude-plugin" rel="noopener">Claude Code plugin</a> instead, the <code>/webskan:site-check</code> skill carries a longer version of the same rules; the block above is still worth having in the repo, because it is the project saying “this is part of done”, not a tool saying “I exist”.</p>
+
+<h2>Piece 2: the CI step (curl and jq, no SDK)</h2>
+<p>The MCP endpoint is plain JSON-RPC over HTTP, so a CI job does not need an MCP client. The script below starts an audit, polls until it is finished, prints the high and medium findings with their ids, and exits with <code>1</code> when there is any high-severity finding (so the job fails) or <code>2</code> when the audit itself could not run (unreachable site, limit hit, timeout – which you probably want to see, but not to confuse with a failing site). Lines that start with <code>data:</code> are the server's Streamable HTTP framing; the <code>sed</code> strips it.</p>
+<pre><code>#!/usr/bin/env bash
+# Post-deploy audit with Webskan over plain HTTP (JSON-RPC).
+# Usage: webskan-audit.sh https://example.com [pages]
+# Optional: WEBSKAN_KEY (Developer plan key) for CI runners that share IP addresses.
+set -euo pipefail
+URL="$1"; PAGES="${2:-10}"; MCP="https://webskan.com/mcp"
+
+call() {  # call &lt;tool&gt; &lt;json-arguments&gt;  -&gt; structuredContent of the tool result
+  curl -sS "$MCP" ${WEBSKAN_KEY:+-H "Authorization: Bearer $WEBSKAN_KEY"} \
+    -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' \
+    -d "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"name\":\"$1\",\"arguments\":$2}}" \
+    | sed -n 's/^data: //p; /^{/p' | jq -s '.[0].result.structuredContent'
+}
+
+START=$(call audit_website "{\"url\":\"$URL\",\"pages\":$PAGES}")
+if [ "$(jq -r '.error // empty' &lt;&lt;&lt;"$START")" ]; then
+  echo "webskan: $(jq -r .error &lt;&lt;&lt;"$START")" &gt;&amp;2; exit 2
+fi
+ID=$(jq -r .auditId &lt;&lt;&lt;"$START"); echo "audit $ID queued for $URL ($PAGES pages)"
+
+for _ in $(seq 1 40); do                      # up to 20 minutes
+  sleep 30
+  RES=$(call get_audit "{\"auditId\":\"$ID\"}")
+  STATUS=$(jq -r .status &lt;&lt;&lt;"$RES")
+  case "$STATUS" in
+    done)  break ;;
+    error) echo "webskan: audit failed: $(jq -r '.error // .message // "unknown"' &lt;&lt;&lt;"$RES")" &gt;&amp;2; exit 2 ;;
+    *)     echo "  $STATUS (eta $(jq -r '.etaSeconds // "?"' &lt;&lt;&lt;"$RES") s)" ;;
+  esac
+done
+[ "${STATUS:-}" = done ] || { echo "webskan: timed out" &gt;&amp;2; exit 2; }
+
+jq -r '"pages: \(.pagesCrawled)  high: \(.summary.high)  medium: \(.summary.medium)  low: \(.summary.low)  perf(mobile): \(.lighthouse.mobile.scores.performance // "-")"' &lt;&lt;&lt;"$RES"
+jq -r '.findings[] | select(.severity=="high" or .severity=="medium") | "[\(.severity)] \(.id): \(.title)"' &lt;&lt;&lt;"$RES"
+echo "auditId: $ID (keep it for recheck_website)"
+[ "$(jq -r .summary.high &lt;&lt;&lt;"$RES")" = 0 ]</code></pre>
+<p>Wire it in after the deploy step. With GitHub Actions:</p>
+<pre><code>  audit:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Post-deploy audit (fails on high-severity findings)
+        env:
+          WEBSKAN_KEY: ${{ secrets.WEBSKAN_KEY }}   # optional, see "Limits"
+        run: bash scripts/webskan-audit.sh https://www.example.com 10</code></pre>
+<p>The output of a run against a small site looks like this (our own sample site, three pages):</p>
+<pre><code>audit c03ce1221fea1e55 queued for https://kamilobstawski.com (3 pages)
+  running (eta 48 s)
+  running (eta 48 s)
+pages: 3  high: 0  medium: 3  low: 5  perf(mobile): 87
+[medium] perf.score.mobile: Mobile performance score: 87/100
+[medium] perf.tbt.mobile: Page is slow to respond to taps (TBT 497 ms)
+[medium] ux.form.unlabelled_fields@/pl/kontakt/: Form fields without labels: /pl/kontakt/
+auditId: c03ce1221fea1e55 (keep it for recheck_website)</code></pre>
+<p>Three medium findings, no high: the job passes and the ids go into the issue tracker. If you want the diff after the fix as well, store the <code>auditId</code> as a job output and call <code>recheck_website</code> with it in the next run – the result then carries <code>diff.fixed</code>, <code>diff.open</code>, <code>diff.new</code> and <code>diff.unverified</code>, which reads well as a pull-request comment.</p>
+
+<h2>What to gate on, and what not to</h2>
+<ul>
+<li><strong>Gate on <code>high</code> findings.</strong> They are the ones a visitor or a crawler is hitting right now: a page that errors, a site that blocks all robots, a missing title on the home page, mixed content, a certificate about to expire, a broken mobile menu. Zero is a reasonable bar for a production deploy.</li>
+<li><strong>Do not gate on the Lighthouse score.</strong> It moves by a few points between runs on the same site, more between environments. Gate on the concrete metric findings (<code>perf.lcp.mobile</code> above 4 s is <code>high</code>; between 2.5 and 4 s it is <code>medium</code>) and let the score be information.</li>
+<li><strong>Treat <code>medium</code> as the sprint's backlog, not the deploy's blocker.</strong> Unlabelled form fields and a missing CSP should be fixed, but failing the deploy for them trains people to disable the check.</li>
+<li><strong>Treat <code>unverified</code> honestly.</strong> In a re-check, findings from a page that did not respond land in <code>diff.unverified</code>. They are not fixed; they are unknown. Say so in the report.</li>
+<li><strong>Do not loop on limits.</strong> If the tool returns <code>isError: true</code> with a limit message, the right move is to wait or to use a key, not to retry every minute. An agent that retries will burn the next window too.</li>
+</ul>
+
+<h2>Limits, previews and shared IP addresses</h2>
+<p>The free plan is counted per IP address and per website host: 2 whole-site audits per IP per 24 hours, 1 audit per host per 24 hours, re-checks included; <code>scan_website</code> is 10 per hour per IP. That is fine for a developer's machine. It is not fine for a hosted CI runner, because hosted runners come out of shared address pools – the two free audits for “your” IP may already have been used by somebody else's job, and a second audit of the same host within 24 hours returns the existing <code>auditId</code> instead of a fresh run. For CI, use a <a href="/developers/#teams">Developer plan</a> key: 30 audits per 24 hours per key and no one-audit-per-host window, passed as a bearer header (the script above picks it up from <code>WEBSKAN_KEY</code>).</p>
+<p>The audit runs from our machines, so the URL has to be public. Localhost, private ranges and <code>.local</code> names are rejected; a preview behind a login or a header-authenticated tunnel will be audited as a login page. Deploy a public preview, or audit production immediately after the deploy – which is what the CI job above does.</p>
+<p>What we store: audit results for 30 days and scan results for 7, under the <code>auditId</code>. We never see the repository; every change is the agent's to make and to explain.</p>
+
+<section class="fullbox">
+<h2>Check a site now</h2>
+<p>The free Webskan quick scan runs the exposed-file probe, Lighthouse, security headers and the basic SEO checks on any public site. No sign-up; results in about 30 seconds.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="en"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://yourproject.com" required maxlength="500" aria-label="Website address"><button class="btn" type="submit">Scan for free</button></form>
+<p class="note">Shipping sites with a coding agent? Give it the <a href="/developers/">Webskan MCP server</a> – free for 2 whole-site audits a day, <a href="/developers/#teams">Developer plan</a> for 30.</p>
+</section>
+
+<h2>Sources and tools</h2>
+<ul>
+<li>Model Context Protocol, <a href="https://modelcontextprotocol.io/specification/2025-06-18/basic/transports" rel="noopener">Transports – Streamable HTTP</a> – why a plain <code>curl</code> with <code>Accept: application/json, text/event-stream</code> works and where the <code>data:</code> lines come from</li>
+<li>Claude Code, <a href="https://code.claude.com/docs/en/memory" rel="noopener">Manage Claude's memory (CLAUDE.md)</a>; <a href="https://agents.md/" rel="noopener">AGENTS.md</a> – the equivalent file read by Codex and other agents</li>
+<li>GitHub Docs, <a href="https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions" rel="noopener">Using secrets in GitHub Actions</a> – where <code>WEBSKAN_KEY</code> goes</li>
+<li>Webskan, <a href="/developers/">MCP server for developers</a> (tools, limits, client configs), <a href="/en/blog/audit-the-site-your-agent-shipped/">Audit the site your agent just shipped</a> and <a href="/en/blog/exposed-env-git-on-live-sites/">Exposed .git, .env, SQL dumps and backups on live sites</a></li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a></footer>
+</div>
+</body>
+</html>
