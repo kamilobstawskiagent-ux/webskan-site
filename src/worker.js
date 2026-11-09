@@ -1,5 +1,5 @@
 // Webskan – Worker: statyczne pliki z public/ + /api/order (checkout Polar albo kolejka przedsprzedażowa w KV) + darmowy szybki skan (src/scan.js).
-import { startScan, nextScans, scanResult, scanPage, nextAudits, auditResult, ScanQueue, layout } from "./scan.js";
+import { startScan, nextScans, scanResult, scanPage, nextAudits, auditResult, ScanQueue, layout, scanLead, leadsNext, leadsDone, leadStats, leadUnsub } from "./scan.js";
 import { MonitorHub, monitorCron, monitorApi, statusPage } from "./monitor.js";
 import { recheckApi, recheckPage } from "./recheck.js";
 import { handleMcp, mcpStatsApi } from "./mcp.js";
@@ -134,6 +134,11 @@ async function route(request, env, pathname, ctx) {
     if (pathname === "/api/scan" && request.method === "POST") return startScan(request, env, normalizeUrl);
     if (pathname === "/api/scan/next") return nextScans(request, env);
     if (pathname === "/api/scan/result" && request.method === "POST") return scanResult(request, env);
+    if (pathname === "/api/scan/lead" && request.method === "POST") return scanLead(request, env); // e-mail z wynikiem za zgodą (lead)
+    if (pathname === "/api/scan/leads/next") return leadsNext(request, env);
+    if (pathname === "/api/scan/leads/done" && request.method === "POST") return leadsDone(request, env);
+    if (pathname === "/api/scan/leads/stats") return leadStats(request, env);
+    if (pathname === "/api/scan/lead/unsub") return leadUnsub(request, env);
     { const m = pathname.match(/^\/skan\/([0-9a-f]+)\/?$/); if (m) return scanPage(request, env, "pl", m[1]); }
     { const m = pathname.match(/^\/en\/scan\/([0-9a-f]+)\/?$/); if (m) return scanPage(request, env, "en", m[1]); }
     if (pathname.startsWith("/api/monitor")) return monitorApi(request, env, pathname, normalizeUrl);

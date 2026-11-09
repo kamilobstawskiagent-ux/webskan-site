@@ -119,7 +119,8 @@ export class ScanQueue extends DurableObject {
       CREATE TABLE IF NOT EXISTS audits(id TEXT PRIMARY KEY, host TEXT, url TEXT, pages INTEGER, parent TEXT, status TEXT, at INTEGER, started INTEGER, finished INTEGER, data TEXT, error TEXT, key_hash TEXT, ip_hash TEXT);
       CREATE INDEX IF NOT EXISTS audits_host ON audits(host, at); CREATE INDEX IF NOT EXISTS audits_status ON audits(status, at);
       CREATE TABLE IF NOT EXISTS mcp_clients(day TEXT, hash TEXT, tools INTEGER DEFAULT 0, PRIMARY KEY(day, hash));
-      CREATE TABLE IF NOT EXISTS mcp_daily(day TEXT PRIMARY KEY, uniques INTEGER, calls TEXT, uniques_tools INTEGER DEFAULT 0)`);
+      CREATE TABLE IF NOT EXISTS mcp_daily(day TEXT PRIMARY KEY, uniques INTEGER, calls TEXT, uniques_tools INTEGER DEFAULT 0);
+      CREATE TABLE IF NOT EXISTS leads(id TEXT PRIMARY KEY, scan_id TEXT, host TEXT, email TEXT, lang TEXT, at INTEGER, status TEXT, next_at INTEGER, ip_hash TEXT)`);
     // migracja z pierwszej wersji licznika (07.11 rano): kolumny z liczbą wywołań narzędzi
     try { this.sql.exec('ALTER TABLE mcp_clients ADD COLUMN tools INTEGER DEFAULT 0'); } catch {}
     try { this.sql.exec('ALTER TABLE mcp_daily ADD COLUMN uniques_tools INTEGER DEFAULT 0'); } catch {}
@@ -197,6 +198,21 @@ export class ScanQueue extends DurableObject {
     this.sql.exec('UPDATE scans SET status=?, finished=?, data=?, error=? WHERE id=?', status, Date.now(), data ? JSON.stringify(data) : null, error || null, id);
     return this.get(id);
   }
+  // Leady z darmowego skanu (09.11): e-mail za zgodą → poller wysyła wynik od razu i jedną wiadomość z ofertą po 48 h.
+  leadAdd(l) {
+    const dup = this.sql.exec('SELECT id FROM leads WHERE email=? AND host=? AND at > ?', l.email, l.host, Date.now() - 30 * 86400000).toArray()[0];
+    if (dup) return { id: dup.id, existed: true };
+    this.sql.exec('INSERT INTO leads(id,scan_id,host,email,lang,at,status,next_at,ip_hash) VALUES(?,?,?,?,?,?,?,?,?)', l.id, l.scanId, l.host, l.email, l.lang, Date.now(), 'new', null, l.ipHash || null);
+    this.sql.exec('DELETE FROM leads WHERE at < ?', Date.now() - 180 * 86400000);
+    return { id: l.id, existed: false };
+  }
+  leadsNext(limit = 10) {
+    const now = Date.now();
+    return this.sql.exec("SELECT l.*, s.url AS scan_url, s.data AS scan_data, s.finished AS scan_finished FROM leads l LEFT JOIN scans s ON s.id=l.scan_id WHERE l.status='new' OR (l.status='result_sent' AND l.next_at IS NOT NULL AND l.next_at <= ?) ORDER BY l.at LIMIT ?", now, limit).toArray();
+  }
+  leadSet(id, status, nextAt) { this.sql.exec('UPDATE leads SET status=?, next_at=? WHERE id=?', status, nextAt ?? null, id); return this.sql.exec('SELECT id,status FROM leads WHERE id=?', id).toArray()[0]; }
+  leadGet(id) { return this.sql.exec('SELECT id,email,lang,host,status FROM leads WHERE id=?', id).toArray()[0] || null; }
+  leadStats() { return this.sql.exec("SELECT status, COUNT(*) n FROM leads GROUP BY status").toArray(); }
   bump(key, limit, ttlMs) {
     const now = Date.now();
     const r = this.sql.exec('SELECT n,exp FROM counters WHERE key=?', key).toArray()[0];
@@ -297,6 +313,103 @@ export async function auditResult(request, env) {
   return Response.json({ ok: true, status: job.status });
 }
 
+const LEAD = {
+  pl: {
+    h: 'Wyślij mi ten wynik na e-mail', p: 'Dostaniesz link do wyniku i trzy najważniejsze rzeczy do poprawy. Dwa dni później – jedną wiadomość z propozycją audytu pogłębionego tej strony. Nic więcej, bez newslettera.',
+    consent: 'Zgadzam się na otrzymanie wyniku skanu i jednej wiadomości z ofertą Webskan na podany adres (<a href="/prywatnosc/">polityka prywatności</a>). Zgodę można cofnąć linkiem w każdym e-mailu.',
+    btn: 'Wyślij wynik', ok: 'Wysłane – wynik pojawi się w skrzynce w ciągu kilku minut (sprawdź też spam).', dup: 'Ten adres dostał już wynik dla tej strony w ciągu ostatnich 30 dni.', bad: 'Nieprawidłowy adres e-mail albo brak zgody.', limit: 'Za dużo zgłoszeń z tego adresu IP – spróbuj za godzinę.',
+    unsubT: 'Wypisano', unsubB: 'Nie wyślemy już żadnej wiadomości na ten adres w związku z tym skanem.', unsubBad: 'Ten link jest nieprawidłowy albo już użyty.',
+  },
+  en: {
+    h: 'E-mail me this result', p: 'You get a link to the result and the three most important things to fix. Two days later – one message with an offer of an in-depth audit of this site. Nothing else, no newsletter.',
+    consent: 'I agree to receive the scan result and one message with a Webskan offer at this address (<a href="/en/privacy/">privacy policy</a>). You can withdraw consent with the link in every e-mail.',
+    btn: 'Send the result', ok: 'Sent – the result will arrive within a few minutes (check spam too).', dup: 'This address already received the result for this site in the last 30 days.', bad: 'Invalid e-mail address or consent not given.', limit: 'Too many requests from this IP address – try again in an hour.',
+    unsubT: 'Unsubscribed', unsubB: 'We will not send any further e-mails to this address about this scan.', unsubBad: 'This link is invalid or already used.',
+  },
+};
+async function sha16(s) { const h = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return [...new Uint8Array(h)].slice(0, 8).map((b) => b.toString(16).padStart(2, '0')).join(''); }
+const leadSig = (id, env) => sha16(`lead:${id}:${env.SCAN_KEY || ''}`);
+// Lista problemów skanu w języku strony (używana przez stronę wyniku i e-mail z wynikiem).
+function issueList(r, lang) {
+  const t = T[lang];
+  const dec = (x) => (lang === 'pl' ? x.replace(/(\d)\.(\d)/g, '$1,$2') : x);
+  const order = { high: 0, medium: 1, low: 2 };
+  return (r.issues || []).map((i) => { const d = t.issue[i.code]; return d ? { code: i.code, sev: i.sev, title: dec(fill(d[0], i)), why: dec(fill(d[1], i)) } : null; }).filter(Boolean).sort((a, b) => (order[a.sev] ?? 3) - (order[b.sev] ?? 3));
+}
+
+// POST /api/scan/lead (form: scan_id, email, lang, consent, website=honeypot)
+export async function scanLead(request, env) {
+  let form;
+  try { form = await request.formData(); } catch { return new Response('Bad request', { status: 400 }); }
+  const lang = form.get('lang') === 'en' ? 'en' : 'pl';
+  const t = T[lang];
+  const scanId = String(form.get('scan_id') || '');
+  if (!/^[0-9a-f]{16}$/.test(scanId)) return new Response('bad id', { status: 400 });
+  const back = (q) => Response.redirect(new URL(`${t.path(scanId)}?lead=${q}#lead`, request.url).toString(), 303);
+  if (form.get('website')) return back('ok'); // honeypot – udajemy sukces
+  const email = String(form.get('email') || '').trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email) || email.length > 254 || !form.get('consent')) return back('bad');
+  const db = store(env);
+  const job = await db.get(scanId);
+  if (!job || job.status !== 'done') return back('bad');
+  const ip = request.headers.get('cf-connecting-ip') || '';
+  const ipHash = await sha16(`lead-ip:${ip}`);
+  if (!(await db.bump(`lead:${ipHash}`, 5, 3600000))) return back('limit');
+  const a = new Uint8Array(8); crypto.getRandomValues(a);
+  const id = [...a].map((b) => b.toString(16).padStart(2, '0')).join('');
+  const r = await db.leadAdd({ id, scanId, host: job.host, email, lang, ipHash });
+  return back(r.existed ? 'dup' : 'ok');
+}
+// GET /api/scan/leads/next (x-scan-key) → leady do wysyłki: status new (wynik) albo result_sent po terminie (oferta)
+export async function leadsNext(request, env) {
+  if (!authed(request, env)) return new Response('unauthorized', { status: 401 });
+  const rows = await store(env).leadsNext(10);
+  const origin = new URL(request.url).origin;
+  const leads = [];
+  for (const l of rows) {
+    const result = l.scan_data ? JSON.parse(l.scan_data) : null;
+    leads.push({
+      id: l.id, scanId: l.scan_id, host: l.host, url: l.scan_url || `https://${l.host}/`, email: l.email, lang: l.lang, status: l.status, at: new Date(l.at).toISOString(),
+      link: `${origin}${T[l.lang].path(l.scan_id)}`, unsub: `${origin}/api/scan/lead/unsub?id=${l.id}&k=${await leadSig(l.id, env)}`,
+      scores: result?.lighthouse?.scores || null, metrics: result?.lighthouse?.metrics || null, issues: result ? issueList(result, l.lang) : [], scanFinished: l.scan_finished ? new Date(l.scan_finished).toISOString() : null,
+    });
+  }
+  return Response.json({ leads });
+}
+// POST /api/scan/leads/done {id, status}  – result_sent planuje ofertę za 48 h
+export async function leadsDone(request, env) {
+  if (!authed(request, env)) return new Response('unauthorized', { status: 401 });
+  let b; try { b = await request.json(); } catch { return new Response('bad json', { status: 400 }); }
+  if (!/^[0-9a-f]{16}$/.test(b.id || '') || !['result_sent', 'followup_sent', 'failed'].includes(b.status)) return new Response('bad request', { status: 400 });
+  const nextAt = b.status === 'result_sent' ? Date.now() + (Number(b.followupMs) || 48 * 3600000) : null;
+  return Response.json({ ok: true, lead: await store(env).leadSet(b.id, b.status, nextAt) });
+}
+export async function leadStats(request, env) {
+  if (!authed(request, env)) return new Response('unauthorized', { status: 401 });
+  return Response.json({ leads: await store(env).leadStats() });
+}
+// GET /api/scan/lead/unsub?id=&k=
+export async function leadUnsub(request, env) {
+  const u = new URL(request.url);
+  const id = u.searchParams.get('id') || '', k = u.searchParams.get('k') || '';
+  const db = store(env);
+  const l = /^[0-9a-f]{16}$/.test(id) ? await db.leadGet(id) : null;
+  const lang = l?.lang === 'en' ? 'en' : (u.searchParams.get('lang') === 'en' ? 'en' : 'pl');
+  const L = LEAD[lang];
+  if (!l || k !== await leadSig(id, env)) return layout(lang, L.unsubT, `<section class="hero"><h1>${L.unsubT}</h1><p>${L.unsubBad}</p></section>`);
+  if (l.status !== 'unsubscribed') await db.leadSet(id, 'unsubscribed', null);
+  return layout(lang, L.unsubT, `<section class="hero"><h1>${L.unsubT}</h1><p>${L.unsubB}</p></section>`);
+}
+function leadBox(lang, job, u) {
+  const L = LEAD[lang];
+  const q = u.searchParams.get('lead');
+  const msg = q === 'ok' ? `<p class="note" role="status">${L.ok}</p>` : q === 'dup' ? `<p class="note">${L.dup}</p>` : q === 'bad' ? `<p class="note">${L.bad}</p>` : q === 'limit' ? `<p class="note">${L.limit}</p>` : '';
+  if (q === 'ok' || q === 'dup') return `<section class="leadbox" id="lead"><h2>${L.h}</h2>${msg}</section>`;
+  return `<section class="leadbox" id="lead"><h2>${L.h}</h2><p>${L.p}</p>${msg}
+  <form class="scanform lead" id="lead-form-${job.id}" action="/api/scan/lead" method="post"><input type="hidden" name="lang" value="${lang}"><input type="hidden" name="scan_id" value="${job.id}"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="email" name="email" placeholder="${lang === 'en' ? 'you@yourcompany.com' : 'ty@twojafirma.pl'}" required maxlength="254" aria-label="E-mail"><button class="btn" type="submit">${L.btn}</button></form>
+  <label class="consent"><input type="checkbox" name="consent" value="1" form="lead-form-${job.id}" required> ${L.consent}</label></section>`;
+}
+
 // GET /skan/<id> | /en/scan/<id>
 export async function scanPage(request, env, lang, id) {
   const t = T[lang];
@@ -373,6 +486,7 @@ function renderResult(job, lang, env, u) {
   ${row(t.weight, m.totalBytes ? fmtBytes(m.totalBytes) : '–', '')}${row(t.requests, m.requests ?? '–', '')}</table></section>
   <section><h2>${t.issues(issues.length)}</h2>${issues.length ? `<ul class="issues">${issues.map((i) => `<li class="${i.sev}"><span class="badge ${i.sev === 'high' ? 'poor' : i.sev === 'medium' ? 'needs' : 'good'}">${t.sev[i.sev]}</span><b>${i.title}</b><p>${i.why}</p>${i.detail ? `<p class="muted small">${i.detail}</p>` : ''}</li>`).join('')}</ul>` : `<p>${t.noIssues}</p>`}
   ${oks.length ? `<h3>${t.okList}</h3><p class="oks">${oks.map((o) => `<span class="chip">✓ ${esc(o)}</span>`).join(' ')}</p>` : ''}</section>
+  ${leadBox(lang, job, u)}
   ${orderBox(lang, env, job.url, t)}
   <section><p class="muted small">${t.share} <a class="share" href="${esc(link)}">${esc(link)}</a></p>${scanForm(lang, '')}<p class="muted small">${lang === 'pl' ? '↑ ' + t.again : '↑ ' + t.again}</p></section>`;
 }
