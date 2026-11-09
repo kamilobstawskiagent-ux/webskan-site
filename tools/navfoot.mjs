@@ -49,7 +49,7 @@ function nav(lang, rel, oldNav) {
   if (lang === 'pl') {
     return `<nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a>${sample ? '<a href="/#zamow">Zamów</a>' : '<a href="/#faq">FAQ</a>'}<a href="${alt}" hreflang="en">EN</a></nav>`;
   }
-  return `<nav><a href="/en/blog/">Blog</a>${devPost ? '<a href="/developers/">For developers</a>' : ''}<a href="/en/#pricing">Pricing</a>${sample ? '<a href="/en/#order">Order</a>' : devPost ? '' : '<a href="/en/#faq">FAQ</a>'}<a href="${alt}" hreflang="pl">PL</a></nav>`;
+  return `<nav><a href="/en/blog/">Blog</a>${devPost ? '<a class="m-hide" href="/developers/">For developers</a>' : ''}<a href="/en/#pricing">Pricing</a>${sample ? '<a href="/en/#order">Order</a>' : devPost ? '' : '<a href="/en/#faq">FAQ</a>'}<a href="${alt}" hreflang="pl">PL</a></nav>`;
 }
 
 let changed = 0;
