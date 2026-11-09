@@ -154,9 +154,9 @@ async function route(request, env, pathname, ctx) {
 // Strona 404 (zamiast pustej odpowiedzi): po polsku lub angielsku zależnie od prefiksu ścieżki.
 function notFound(lang) {
   const t = lang === "en"
-    ? { title: "Page not found", lead: "This link is broken, expired or mistyped.", links: [["/en/", "Home page"], ["/en/#pricing", "Pricing"], ["/en/sample/", "Sample audit"], ["/en/blog/", "Blog"]], mail: "If you arrived here from one of our e-mails, write to" }
-    : { title: "Nie ma takiej strony", lead: "Ten link jest zepsuty, wygasł albo wkradła się literówka.", links: [["/", "Strona główna"], ["/#cena", "Cennik"], ["/przyklad/", "Przykładowy audyt"], ["/blog/", "Blog"]], mail: "Jeśli trafiłeś tu z naszego e-maila, napisz na" };
-  const body = `<section class="hero"><p class="eyebrow">404</p><h1>${t.title}</h1><p class="lead">${t.lead}</p><p>${t.links.map(([h, l]) => `<a class="btn sec" href="${h}" style="margin:0 8px 8px 0">${l}</a>`).join("")}</p><p class="note">${t.mail} <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a>.</p></section>`;
+    ? { title: "Page not found", lead: "This link is broken, expired or mistyped.", cta: ["/en/#scan", "Check your website for free"], links: [["/en/", "Home page"], ["/en/#pricing", "Pricing"], ["/en/sample/", "Sample audit"], ["/en/blog/", "Blog"]], mail: "If you arrived here from one of our e-mails, write to" }
+    : { title: "Nie ma takiej strony", lead: "Ten link jest zepsuty, wygasł albo wkradła się literówka.", cta: ["/#skan", "Sprawdź swoją stronę za darmo"], links: [["/", "Strona główna"], ["/#cena", "Cennik"], ["/przyklad/", "Przykładowy audyt"], ["/blog/", "Blog"]], mail: "Jeśli ten link pochodzi z naszego e-maila, napisz na" };
+  const body = `<section class="hero"><p class="eyebrow">404</p><h1>${t.title}</h1><p class="lead">${t.lead}</p><p><a class="btn" href="${t.cta[0]}">${t.cta[1]}</a></p><p>${t.links.map(([h, l]) => `<a href="${h}">${l}</a>`).join(" · ")}</p><p class="note">${t.mail} <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a>.</p></section>`;
   const r = layout(lang, t.title, body);
   return new Response(r.body, { status: 404, headers: r.headers });
 }

@@ -53,7 +53,7 @@ export async function recheckApi(request, env, pathname) {
 
 const T = {
   pl: {
-    title: 'Ponowne sprawdzenie strony', notFound: 'Nie znamy tego linku. Sprawdź, czy skopiowałeś go w całości z raportu, albo odpisz na e-mail z raportem.', expired: (d) => `Ten link wygasł ${d}. Ponowne sprawdzenie jest dostępne przez 30 dni od audytu. Jeśli potrzebujesz kolejnego, odpisz na e-mail z raportem – ustalimy, co dalej.`,
+    title: 'Ponowne sprawdzenie strony', notFound: 'Nie znamy tego linku. Sprawdź, czy link z raportu jest skopiowany w całości, albo odpisz na e-mail z raportem.', expired: (d) => `Ten link wygasł ${d}. Ponowne sprawdzenie jest dostępne przez 30 dni od audytu. Jeśli potrzebujesz kolejnego, odpisz na e-mail z raportem – ustalimy, co dalej.`,
     done: (d) => `Ponowne sprawdzenie zostało już wykonane ${d}, a wynik wysłaliśmy e-mailem na adres z zamówienia. Każdy link działa raz; jeśli potrzebujesz kolejnej powtórki, odpisz na e-mail z raportem.`,
     queued: 'Ponowne sprawdzenie jest już w kolejce. Wynik przyjdzie e-mailem na adres z zamówienia, zwykle w ciągu godziny, najpóźniej w 24 h.',
     confirm: (url) => `<p>Uruchomimy jeszcze raz pełne badanie strony <strong>${esc(url)}</strong> (podstrony, linki, dostępność, wydajność, formularze) i porównamy je z raportem z audytu.</p><p>Wynik przyjdzie e-mailem na adres z zamówienia jako lista: <strong>naprawione</strong>, <strong>nadal otwarte</strong>, <strong>nowe</strong>. Link działa raz, więc kliknij, gdy poprawki są już wdrożone.</p>`,

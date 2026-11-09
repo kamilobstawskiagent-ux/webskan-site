@@ -21,7 +21,7 @@
 </head>
 <body>
 <div class="wrap">
-<header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a><a href="/en/blog/how-to-tell-your-website-was-hacked/">EN</a></nav></header>
+<header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a><a href="/#faq">FAQ</a><a href="/en/blog/how-to-tell-your-website-was-hacked/" hreflang="en">EN</a></nav></header>
 <main class="post">
 <article>
 <p class="eyebrow">Blog · 7 listopada 2026 · 9 min czytania</p>
@@ -30,7 +30,7 @@
 
 <h2>Dziewięć objawów, które widać bez logowania na serwer</h2>
 <ol>
-<li><strong>W Google są podstrony, których nie tworzyłeś.</strong> Wpisz <code>site:twojafirma.pl</code> – jeśli wśród wyników są adresy w obcym języku, o lekach, hazardzie, tanich butach albo „darmowych kodach”, ktoś dopisał je do Twojej strony. Google nazywa to wstrzykiwaniem adresów URL (<em>URL injection</em>): włamywacz tworzy nowe strony „często zawierające spamerskie słowa lub linki”.</li>
+<li><strong>W Google są podstrony, których nikt u Ciebie nie tworzył.</strong> Wpisz <code>site:twojafirma.pl</code> – jeśli wśród wyników są adresy w obcym języku, o lekach, hazardzie, tanich butach albo „darmowych kodach”, ktoś dopisał je do Twojej strony. Google nazywa to wstrzykiwaniem adresów URL (<em>URL injection</em>): włamywacz tworzy nowe strony „często zawierające spamerskie słowa lub linki”.</li>
 <li><strong>Strona przekierowuje gdzie indziej – ale nie zawsze.</strong> Typowo: tylko z telefonu, tylko po wejściu z Google, tylko za pierwszym razem. Właściciel wchodzi z zakładki na komputerze i wszystko działa. Google opisuje przekierowania ustawiane m.in. „przez modyfikację plików konfiguracyjnych serwera”.</li>
 <li><strong>Czerwone ostrzeżenie w przeglądarce.</strong> Przy złośliwym oprogramowaniu na stronie Chrome pokazuje w pasku adresu etykietę „Niebezpieczna” i stronę ostrzegawczą przed wejściem; w wynikach wyszukiwania strona może dostać etykietę ostrzegawczą. To moment, w którym ruch spada do zera z dnia na dzień.</li>
 <li><strong>E-mail z Search Console o problemach dotyczących bezpieczeństwa.</strong> Jeśli strona jest zweryfikowana w Search Console, Google wysyła powiadomienie i pokazuje raport z przykładowymi adresami. Jeśli nie jest – nikt Ci nie powie; to jeden z powodów, by założyć konto dziś.</li>
@@ -53,7 +53,7 @@
 Wynik większy od zera przy stronie, która nie ma nic wspólnego z kasynami, oznacza wstrzykniętą treść.</li>
 <li><strong>Nie otwieraj podejrzanych podstron w zwykłej przeglądarce.</strong> Google ostrzega wprost, że otwarcie zainfekowanej strony „może uszkodzić komputer”. Adresy z raportu sprawdzaj narzędziem z punktu 4 albo z linii poleceń.</li>
 <li><strong>Zajrzyj do panelu CMS:</strong> lista użytkowników (nieznane konta z uprawnieniami administratora), lista wtyczek i motywów (nieznane, nieaktualne), data ostatniej zmiany plików w menedżerze plików hostingu.</li>
-<li><strong>Zapisz wszystko, co znalazłeś</strong> – adresy, zrzuty, daty. Przyda się hostingowi, wykonawcy i w prośbie o ponowne sprawdzenie.</li>
+<li><strong>Zapisz wszystkie znaleziska</strong> – adresy, zrzuty, daty. Przyda się hostingowi, wykonawcy i w prośbie o ponowne sprawdzenie.</li>
 </ol>
 
 <h2>Co zrobić najpierw – w tej kolejności</h2>
@@ -64,7 +64,7 @@ Wynik większy od zera przy stronie, która nie ma nic wspólnego z kasynami, oz
 <li><strong>Przywróć czystą kopię albo wyczyść ręcznie.</strong> Google pisze wprost: „zastąp zainfekowane pliki ostatnią dobrą kopią zapasową” lub usuń spam samodzielnie. Kopia musi pochodzić sprzed włamania – data w logach z punktu 1 mówi, która. Po przywróceniu natychmiast zaktualizuj CMS, wtyczki, motyw i PHP, bo stara wersja ma tę samą dziurę. Usuń nieznane konta i wtyczki.</li>
 <li><strong>Napraw w całej witrynie, nie tylko na przykładach.</strong> Google ostrzega, że naprawa „tylko części stron nie da częściowego powrotu do wyników”. Zaplecze włamywacza bywa w kilku miejscach: pliki <code>.htaccess</code>, katalog <code>uploads</code>, zadania cron, konta w bazie.</li>
 <li><strong>Sprawdź, kto ma dostęp do Search Console</strong> i do profilu w Google (użytkownicy i właściciele). Włamywacze bywają sprytniejsi niż właściciele i dodają sobie dostęp, żeby po czyszczeniu wrócić.</li>
-<li><strong>Poproś o ponowne sprawdzenie.</strong> Dopiero gdy wszystkie problemy z raportu są naprawione na wszystkich stronach, kliknij w Search Console „Poproś o sprawdzenie” i opisz, co było i co zrobiłeś – Google chce w prośbie dokładnego opisu problemu, kroków naprawy i efektu. Czas: „od kilku dni do kilku tygodni”. Nie wysyłaj prośby ponownie przed decyzją – przedwczesne, powtarzane prośby mogą skończyć się statusem recydywisty i dłuższym czekaniem.</li>
+<li><strong>Poproś o ponowne sprawdzenie.</strong> Dopiero gdy wszystkie problemy z raportu są naprawione na wszystkich stronach, kliknij w Search Console „Poproś o sprawdzenie” i opisz, co było i co zostało zrobione – Google chce w prośbie dokładnego opisu problemu, kroków naprawy i efektu. Czas: „od kilku dni do kilku tygodni”. Nie wysyłaj prośby ponownie przed decyzją – przedwczesne, powtarzane prośby mogą skończyć się statusem recydywisty i dłuższym czekaniem.</li>
 </ol>
 
 <h2>Objaw → przyczyna → kto naprawia</h2>
@@ -110,7 +110,7 @@ Wynik większy od zera przy stronie, która nie ma nic wspólnego z kasynami, oz
 </ul>
 </article>
 </main>
-<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a></footer>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/blog/feed.xml">RSS</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a> · <a href="/developers/" hreflang="en">Dla programistów (EN)</a> · kontakt: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer>
 </div>
 </body>
 </html>

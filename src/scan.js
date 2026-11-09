@@ -218,7 +218,7 @@ const newId = () => { const a = new Uint8Array(8); crypto.getRandomValues(a); re
 
 export function layout(lang, title, body, head = '') {
   const t = T[lang];
-  return new Response(`<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)} – Webskan</title><meta name="robots" content="noindex"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/style.css">${head}</head><body><div class="wrap"><header><a class="logo" href="${t.home}">web<span>skan</span></a><nav><a href="${t.home}">${lang === 'pl' ? 'Strona główna' : 'Home'}</a><a href="${lang === 'pl' ? '/en/' : '/'}">${lang === 'pl' ? 'EN' : 'PL'}</a></nav></header><main class="scan">${body}</main><footer>© 2026 Webskan · <a href="${lang === 'pl' ? '/regulamin/' : '/en/terms/'}">${lang === 'pl' ? 'Regulamin' : 'Terms'}</a> · <a href="${lang === 'pl' ? '/prywatnosc/' : '/en/privacy/'}">${lang === 'pl' ? 'Polityka prywatności' : 'Privacy'}</a></footer></div></body></html>`,
+  return new Response(`<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)} – Webskan</title><meta name="robots" content="noindex"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/style.css">${head}</head><body><div class="wrap"><header><a class="logo" href="${t.home}">web<span>skan</span></a><nav>${lang === 'pl' ? '<a href="/blog/">Blog</a><a href="/#cena">Cennik</a><a href="/#faq">FAQ</a><a href="/en/" hreflang="en">EN</a>' : '<a href="/en/blog/">Blog</a><a href="/en/#pricing">Pricing</a><a href="/en/#faq">FAQ</a><a href="/" hreflang="pl">PL</a>'}</nav></header><main class="scan">${body}</main><footer>${lang === 'pl' ? '© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a> · <a href="/developers/" hreflang="en">Dla programistów (EN)</a> · kontakt: ' : '© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a> · <a href="/developers/">For developers</a> · contact: '}<a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer></div></body></html>`,
     { headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' } });
 }
 
@@ -363,7 +363,7 @@ function renderResult(job, lang, env, u) {
   if (seo.canonical) oks.push(t.ok.canonical);
   if (seo.openGraph?.count >= 2) oks.push(t.ok.og);
   if (seo.lang) oks.push(t.ok.lang);
-  const date = new Date(job.finishedAt).toLocaleDateString(lang === 'pl' ? 'pl-PL' : 'en-GB');
+  const date = new Date(job.finishedAt).toLocaleDateString(lang === 'pl' ? 'pl-PL' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Warsaw' });
   const link = `${u.origin}${t.path(job.id)}`;
   return `<section class="hero"><h1>${esc(t.title(job.host))}</h1><p class="muted">${esc(r.http?.finalUrl || job.url)} · ${date}</p>
   <div class="scores big">${[['performance', t.perf], ['accessibility', t.a11y], ['best-practices', t.bp], ['seo', t.seo]].map(([k, l]) => `<div class="score ${cls(s[k])}"><b>${s[k] ?? '–'}</b><small>${l}</small></div>`).join('')}</div>
