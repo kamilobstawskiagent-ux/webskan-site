@@ -331,7 +331,7 @@ function orderBox(lang, env, url, t) {
   <h3>${t.orderH}</h3>
   <form class="order" action="/api/order" method="post"><input type="hidden" name="lang" value="${lang}"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
   <label>URL<br><input type="text" name="url" inputmode="url" value="${esc(url)}" required maxlength="500"></label>
-  <label>${t.email}<br><input type="email" name="email" required maxlength="254"></label>
+  <label>${t.email}<br><input type="email" name="email" placeholder="${lang === "en" ? "you@yourcompany.com" : "ty@twojafirma.pl"}" required maxlength="254"></label>
   <label class="consent"><input type="checkbox" name="consent" required> ${t.consent}</label>
   <button class="btn" type="submit">${presale ? t.btnPresale : t.btnLive}</button></form>
   ${presale ? `<p class="note">${t.presaleNote}</p>` : ''}
