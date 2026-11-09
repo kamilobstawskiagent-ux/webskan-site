@@ -407,7 +407,7 @@ function leadBox(lang, job, u) {
   if (q === 'ok' || q === 'dup') return `<section class="leadbox" id="lead"><h2>${L.h}</h2>${msg}</section>`;
   return `<section class="leadbox" id="lead"><h2>${L.h}</h2><p>${L.p}</p>${msg}
   <form class="scanform lead" id="lead-form-${job.id}" action="/api/scan/lead" method="post"><input type="hidden" name="lang" value="${lang}"><input type="hidden" name="scan_id" value="${job.id}"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="email" name="email" placeholder="${lang === 'en' ? 'you@yourcompany.com' : 'ty@twojafirma.pl'}" required maxlength="254" aria-label="E-mail"><button class="btn" type="submit">${L.btn}</button></form>
-  <label class="consent"><input type="checkbox" name="consent" value="1" form="lead-form-${job.id}" required> ${L.consent}</label></section>`;
+  <label class="consent"><input type="checkbox" name="consent" value="1" form="lead-form-${job.id}" required> <span>${L.consent}</span></label></section>`;
 }
 
 // GET /skan/<id> | /en/scan/<id>
