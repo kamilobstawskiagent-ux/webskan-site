@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Webskan finding ids – reference for audit_website, recheck_website and CI gates</title>
+<meta name="description" content="Every finding Webskan can return, by id: what triggers it, its severity rule and the usual fix. For agents and CI jobs that gate on finding ids instead of free text. Security, performance, SEO, accessibility, UX, customer journeys, links.">
+<link rel="canonical" href="https://webskan.com/developers/findings/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/developers/findings/">
+<link rel="alternate" hreflang="x-default" href="https://webskan.com/developers/findings/">
+<meta property="og:title" content="Webskan finding ids – reference">
+<meta property="og:description" content="Every finding id the Webskan audit can return: trigger, severity rule, usual fix. Built for agents and CI gates.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://webskan.com/developers/findings/">
+<meta property="og:image" content="https://webskan.com/og-dev.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a href="/developers/">Developers</a><a class="m-hide" href="#security">Security</a><a class="m-hide" href="#performance">Performance</a><a class="m-hide" href="#seo">SEO</a><a href="#journeys">Journeys</a></nav></header>
+<main class="dev ref">
+
+<section class="hero">
+  <p class="eyebrow">Webskan for developers · reference</p>
+  <h1>Finding ids</h1>
+  <p class="lead">Everything <code>audit_website</code>, <code>recheck_website</code> and the PDF audit can report, by id. Use this page to decide what a CI job fails on, to tell an agent which findings are its job and which are the hosting provider's, and to look up what a <code>fixed</code> / <code>new</code> line in a re-check actually means.</p>
+</section>
+
+<section id="how">
+  <h2>How ids work</h2>
+  <ul>
+    <li><strong>Shape.</strong> <code>area.rule</code>, optionally followed by <code>@target</code>: <code>sec.header.hsts</code> is site-wide, <code>seo.h1.missing@/pricing/</code> is about one page, <code>links.broken@https://…/file.zip</code> about one link, <code>a11y.color-contrast@/#dark</code> about one axe rule on one page in one colour scheme. The part before <code>@</code> is listed below; the target is whatever the finding is about.</li>
+    <li><strong>Stable.</strong> The same problem produces the same id in every run, which is what makes the re-check diff (<code>fixed</code> / <code>open</code> / <code>new</code> / <code>unverified</code>) and the weekly Monitor comparison possible. Titles and details are human text and may change; ids do not.</li>
+    <li><strong>Severity</strong> is one of <code>high</code>, <code>medium</code>, <code>low</code>, <code>info</code>. Some rules have a fixed severity, others pick it from a threshold (listed below). <code>info</code> is context, never a defect.</li>
+    <li><strong>Areas:</strong> <code>sec</code> security · <code>perf</code> performance · <code>seo</code> technical SEO · <code>a11y</code> accessibility · <code>ux</code> usability · <code>journey</code> customer journeys in a real mobile browser · <code>links</code> broken links.</li>
+    <li><strong>Unverified</strong> in a re-check means the target could not be checked this time (link blocked or timed out, page returned an error), so it is reported neither as fixed nor as new.</li>
+    <li><strong>Performance ids</strong> (<code>perf.*</code>) move with network conditions. Gate on them with a threshold you accept, not on their mere presence; the Monitor's weekly diff excludes them for the same reason.</li>
+  </ul>
+</section>
+
+<section id="security">
+  <h2>Security – <code>sec.*</code></h2>
+  <table class="limits">
+    <thead><tr><th>Id</th><th>Severity</th><th>Fires when</th><th>Usual fix</th></tr></thead>
+    <tbody>
+      <tr><td data-l="Id"><code>sec.tls.invalid</code></td><td data-l="Severity">high</td><td data-l="Fires when">The TLS handshake fails or the certificate does not match the host.</td><td data-l="Usual fix">Issue or renew the certificate for every name the site answers to (apex and www); check the chain.</td></tr>
+      <tr><td data-l="Id"><code>sec.tls.expiring</code></td><td data-l="Severity">high &lt; 7 days, else medium (fires under 21 days)</td><td data-l="Fires when">The certificate expires soon.</td><td data-l="Usual fix">Fix automatic renewal (certbot timer, host panel, CDN) – do not just renew by hand.</td></tr>
+      <tr><td data-l="Id"><code>sec.https.no-redirect</code></td><td data-l="Severity">high</td><td data-l="Fires when"><code>http://</code> does not redirect to <code>https://</code>.</td><td data-l="Usual fix">301 from port 80 to https at the server or CDN level.</td></tr>
+      <tr><td data-l="Id"><code>sec.www.no-redirect</code></td><td data-l="Severity">medium</td><td data-l="Fires when">The www or non-www variant serves the site instead of redirecting.</td><td data-l="Usual fix">Pick one canonical host, 301 the other.</td></tr>
+      <tr><td data-l="Id"><code>sec.exposed-file@/path</code></td><td data-l="Severity">high for <code>.git</code>, <code>.env</code>, SQL dumps, backup archives, <code>wp-config</code> copies; medium for phpinfo, logs, Adminer; low for <code>.DS_Store</code></td><td data-l="Fires when">A well-known sensitive path returns 200 <em>and</em> the body matches the expected content signature (a “200 for everything” site does not trigger it).</td><td data-l="Usual fix">Delete the file from the web root, keep backups outside it, and deny these paths in the server or CDN config. Rotate any credential that was inside.</td></tr>
+      <tr><td data-l="Id"><code>sec.header.hsts</code></td><td data-l="Severity">medium</td><td data-l="Fires when">No <code>Strict-Transport-Security</code> on the https response.</td><td data-l="Usual fix"><code>Strict-Transport-Security: max-age=31536000; includeSubDomains</code> once https is stable everywhere.</td></tr>
+      <tr><td data-l="Id"><code>sec.header.xfo</code></td><td data-l="Severity">medium</td><td data-l="Fires when">Neither <code>X-Frame-Options</code> nor CSP <code>frame-ancestors</code> is set.</td><td data-l="Usual fix"><code>X-Frame-Options: SAMEORIGIN</code> or <code>Content-Security-Policy: frame-ancestors 'self'</code>.</td></tr>
+      <tr><td data-l="Id"><code>sec.header.xcto</code></td><td data-l="Severity">low</td><td data-l="Fires when">No <code>X-Content-Type-Options: nosniff</code>.</td><td data-l="Usual fix">Add the header; one line, no side effects.</td></tr>
+      <tr><td data-l="Id"><code>sec.header.referrer</code></td><td data-l="Severity">low</td><td data-l="Fires when">No <code>Referrer-Policy</code>.</td><td data-l="Usual fix"><code>Referrer-Policy: strict-origin-when-cross-origin</code>.</td></tr>
+      <tr><td data-l="Id"><code>sec.header.csp</code></td><td data-l="Severity">low</td><td data-l="Fires when">No <code>Content-Security-Policy</code>.</td><td data-l="Usual fix">Start in <code>Content-Security-Policy-Report-Only</code>, tighten, then enforce. Matters most with logins, payments and user content.</td></tr>
+      <tr><td data-l="Id"><code>sec.header.permissions</code></td><td data-l="Severity">low</td><td data-l="Fires when">No <code>Permissions-Policy</code>.</td><td data-l="Usual fix"><code>Permissions-Policy: camera=(), microphone=(), geolocation=()</code> unless you use them.</td></tr>
+      <tr><td data-l="Id"><code>sec.leak.&lt;header&gt;</code></td><td data-l="Severity">low</td><td data-l="Fires when"><code>Server</code>, <code>X-Powered-By</code> or similar reveals a software version.</td><td data-l="Usual fix"><code>server_tokens off</code> (nginx), <code>ServerTokens Prod</code> (Apache), <code>expose_php = Off</code>, strip <code>X-Powered-By</code>.</td></tr>
+      <tr><td data-l="Id"><code>sec.mixed-content@/page</code></td><td data-l="Severity">high</td><td data-l="Fires when">An https page loads scripts, styles, images or frames over <code>http://</code>.</td><td data-l="Usual fix">Use protocol-relative or https URLs; in a CMS, search-and-replace the old http origin in content and theme settings.</td></tr>
+      <tr><td data-l="Id"><code>sec.form.insecure-action@/page</code></td><td data-l="Severity">high</td><td data-l="Fires when">A form's <code>action</code> points to an <code>http://</code> URL.</td><td data-l="Usual fix">Change the action to https (or a relative path).</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="performance">
+  <h2>Performance – <code>perf.*</code></h2>
+  <p>Measured with Lighthouse on an emulated mid-range phone over simulated 4G, from the audit location. Values vary between runs; gate with a margin.</p>
+  <table class="limits">
+    <thead><tr><th>Id</th><th>Severity</th><th>Fires when</th><th>Usual fix</th></tr></thead>
+    <tbody>
+      <tr><td data-l="Id"><code>perf.lighthouse.incomplete</code></td><td data-l="Severity">info</td><td data-l="Fires when">The page did not finish loading within 45 s. No other <code>perf.*</code> finding is produced from that run, because its metrics would be inflated.</td><td data-l="Usual fix">Find the resource that never resolves from outside your network (third-party script, blocked geo); check the page in PageSpeed Insights.</td></tr>
+      <tr><td data-l="Id"><code>perf.score.mobile</code></td><td data-l="Severity">high &lt; 50, medium 50–89</td><td data-l="Fires when">Lighthouse mobile performance score below 90.</td><td data-l="Usual fix">Work the specific <code>perf.*</code> findings below; the score follows.</td></tr>
+      <tr><td data-l="Id"><code>perf.lcp.mobile</code></td><td data-l="Severity">high &gt; 4 s, medium &gt; 2.5 s</td><td data-l="Fires when">Largest Contentful Paint above the Google threshold.</td><td data-l="Usual fix">Preload the hero image or font, serve it in a modern format and the right size, cut render-blocking CSS/JS, fix slow TTFB.</td></tr>
+      <tr><td data-l="Id"><code>perf.cls.mobile</code></td><td data-l="Severity">high &gt; 0.25, medium &gt; 0.1</td><td data-l="Fires when">Cumulative Layout Shift above threshold.</td><td data-l="Usual fix">Width/height on images and embeds, reserve space for banners and ads, <code>font-display: optional</code> or matching fallback fonts.</td></tr>
+      <tr><td data-l="Id"><code>perf.tbt.mobile</code></td><td data-l="Severity">high &gt; 600 ms, medium &gt; 300 ms</td><td data-l="Fires when">Total Blocking Time above threshold (the lab proxy for INP).</td><td data-l="Usual fix">Defer or remove heavy scripts, split long tasks, load tag managers and chat widgets after interaction.</td></tr>
+      <tr><td data-l="Id"><code>perf.weight.mobile</code></td><td data-l="Severity">medium</td><td data-l="Fires when">Total transferred bytes above 3 MB.</td><td data-l="Usual fix">Compress and resize images, drop unused scripts and fonts.</td></tr>
+      <tr><td data-l="Id"><code>perf.heavy-script@file.js</code></td><td data-l="Severity">info</td><td data-l="Fires when">TBT is above 300 ms; names the single script with the most main-thread time.</td><td data-l="Usual fix">Profile that file; it is usually the first thing to defer or remove.</td></tr>
+      <tr><td data-l="Id"><code>perf.blocking-scripts</code></td><td data-l="Severity">medium ≥ 3 scripts, else low</td><td data-l="Fires when">Synchronous scripts in <code>&lt;head&gt;</code> without <code>defer</code>/<code>async</code>.</td><td data-l="Usual fix">Add <code>defer</code>, or move the script to the end of <code>&lt;body&gt;</code>.</td></tr>
+      <tr><td data-l="Id"><code>perf.opp.&lt;lighthouse-audit&gt;</code></td><td data-l="Severity">medium ≥ 1.5 s saving, else low</td><td data-l="Fires when">A Lighthouse opportunity estimates ≥ 0.5 s or ≥ 50 KB of savings (e.g. <code>perf.opp.render-blocking-resources</code>, <code>perf.opp.uses-responsive-images</code>).</td><td data-l="Usual fix">Follow the Lighthouse audit of that name.</td></tr>
+      <tr><td data-l="Id"><code>perf.images.oversized@/page</code></td><td data-l="Severity">low</td><td data-l="Fires when">Images have several times more pixels than their rendered size on a phone.</td><td data-l="Usual fix"><code>srcset</code>/<code>sizes</code> or an image CDN; export at the displayed size.</td></tr>
+      <tr><td data-l="Id"><code>perf.images.no-dims@/page</code></td><td data-l="Severity">low</td><td data-l="Fires when">Three or more images without <code>width</code>/<code>height</code> on a page whose CLS is above 0.1.</td><td data-l="Usual fix">Add the attributes or <code>aspect-ratio</code> in CSS.</td></tr>
+      <tr><td data-l="Id"><code>perf.slow-response@/page</code></td><td data-l="Severity">medium &gt; 5 s, low &gt; 2.5 s</td><td data-l="Fires when">Time to first byte of the HTML above threshold during the crawl.</td><td data-l="Usual fix">Page cache, object cache, fewer plugins, better hosting, a CDN in front.</td></tr>
+      <tr><td data-l="Id"><code>perf.compression.none</code></td><td data-l="Severity">medium</td><td data-l="Fires when">The HTML response is not gzip/brotli compressed.</td><td data-l="Usual fix">Enable compression at the server or CDN.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="seo">
+  <h2>Technical SEO – <code>seo.*</code></h2>
+  <table class="limits">
+    <thead><tr><th>Id</th><th>Severity</th><th>Fires when</th><th>Usual fix</th></tr></thead>
+    <tbody>
+      <tr><td data-l="Id"><code>seo.title.missing@/page</code></td><td data-l="Severity">high on the home page, medium elsewhere</td><td data-l="Fires when">Empty or missing <code>&lt;title&gt;</code>.</td><td data-l="Usual fix">A unique title per page; in a CMS fix the template.</td></tr>
+      <tr><td data-l="Id"><code>seo.title.long</code></td><td data-l="Severity">low</td><td data-l="Fires when">Titles longer than 70 characters on one or more pages (one finding listing them all).</td><td data-l="Usual fix">Shorten the title template; stop appending the site name to long post titles.</td></tr>
+      <tr><td data-l="Id"><code>seo.title.duplicate@&lt;title&gt;</code></td><td data-l="Severity">medium</td><td data-l="Fires when">Several crawled pages share one title.</td><td data-l="Usual fix">Unique titles; check paginated and filtered pages.</td></tr>
+      <tr><td data-l="Id"><code>seo.desc.missing@/page</code></td><td data-l="Severity">medium on the home page, low elsewhere (blog/tag/category/pagination pages are skipped)</td><td data-l="Fires when">No meta description.</td><td data-l="Usual fix">Write one per commercial page; let Google pick for the rest.</td></tr>
+      <tr><td data-l="Id"><code>seo.desc.long</code></td><td data-l="Severity">info</td><td data-l="Fires when">Descriptions longer than 170 characters (one finding listing them all).</td><td data-l="Usual fix">Cosmetic – trim if convenient.</td></tr>
+      <tr><td data-l="Id"><code>seo.desc.duplicate@&lt;text&gt;</code></td><td data-l="Severity">low</td><td data-l="Fires when">Several pages share one description.</td><td data-l="Usual fix">Per-page descriptions.</td></tr>
+      <tr><td data-l="Id"><code>seo.h1.missing@/page</code></td><td data-l="Severity">low</td><td data-l="Fires when">No <code>&lt;h1&gt;</code>.</td><td data-l="Usual fix">One H1 per page naming what the page is.</td></tr>
+      <tr><td data-l="Id"><code>seo.h1.multiple@/page</code></td><td data-l="Severity">info</td><td data-l="Fires when">More than one <code>&lt;h1&gt;</code>.</td><td data-l="Usual fix">Demote the extra ones (logo in H1 is the usual culprit).</td></tr>
+      <tr><td data-l="Id"><code>seo.noindex@/page</code></td><td data-l="Severity">medium</td><td data-l="Fires when">A crawled page carries <code>noindex</code>.</td><td data-l="Usual fix">Fine if intentional (thank-you pages). After a launch, check it is not a staging leftover.</td></tr>
+      <tr><td data-l="Id"><code>seo.robots.blocks-all</code></td><td data-l="Severity">high</td><td data-l="Fires when"><code>robots.txt</code> has <code>Disallow: /</code> for all agents.</td><td data-l="Usual fix">Remove it; this is the classic staging-to-production leftover.</td></tr>
+      <tr><td data-l="Id"><code>seo.robots.missing</code></td><td data-l="Severity">info</td><td data-l="Fires when">No <code>robots.txt</code>.</td><td data-l="Usual fix">Optional; add one pointing to the sitemap.</td></tr>
+      <tr><td data-l="Id"><code>seo.sitemap.missing</code></td><td data-l="Severity">low (medium when more than 10 pages were crawled)</td><td data-l="Fires when">No sitemap found at the usual locations or in <code>robots.txt</code>.</td><td data-l="Usual fix">Generate one and reference it in <code>robots.txt</code>.</td></tr>
+      <tr><td data-l="Id"><code>seo.sitemap.error</code></td><td data-l="Severity">medium</td><td data-l="Fires when">The declared sitemap returns an error or no URLs.</td><td data-l="Usual fix">Fix the generator or the path; check it is not blocked by a bot rule.</td></tr>
+      <tr><td data-l="Id"><code>seo.canonical.missing</code></td><td data-l="Severity">low</td><td data-l="Fires when">The home page has no <code>rel="canonical"</code>.</td><td data-l="Usual fix">Self-referencing canonical on every page.</td></tr>
+      <tr><td data-l="Id"><code>seo.canonical.mismatch@/page</code></td><td data-l="Severity">medium</td><td data-l="Fires when">A page's canonical points to a different URL.</td><td data-l="Usual fix">Intentional for duplicates; otherwise a staging domain or http canonical left in the template.</td></tr>
+      <tr><td data-l="Id"><code>seo.og.missing</code></td><td data-l="Severity">low</td><td data-l="Fires when">Fewer than two Open Graph tags on the home page.</td><td data-l="Usual fix"><code>og:title</code>, <code>og:description</code>, <code>og:image</code> (1200×630).</td></tr>
+      <tr><td data-l="Id"><code>seo.sd.missing</code></td><td data-l="Severity">info</td><td data-l="Fires when">No JSON-LD structured data on the home page.</td><td data-l="Usual fix">Optional: <code>Organization</code>/<code>LocalBusiness</code>, <code>Product</code>, <code>Article</code>.</td></tr>
+      <tr><td data-l="Id"><code>seo.sd.invalid@/page</code></td><td data-l="Severity">low</td><td data-l="Fires when">A <code>ld+json</code> block is not valid JSON.</td><td data-l="Usual fix">Fix the JSON; validate with the Rich Results Test.</td></tr>
+      <tr><td data-l="Id"><code>seo.lang.missing</code></td><td data-l="Severity">low</td><td data-l="Fires when">No <code>lang</code> attribute on <code>&lt;html&gt;</code>.</td><td data-l="Usual fix"><code>&lt;html lang="en"&gt;</code>.</td></tr>
+      <tr><td data-l="Id"><code>seo.viewport.missing</code></td><td data-l="Severity">high</td><td data-l="Fires when">No <code>meta viewport</code>.</td><td data-l="Usual fix"><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code>.</td></tr>
+      <tr><td data-l="Id"><code>seo.viewport.no-zoom</code></td><td data-l="Severity">medium</td><td data-l="Fires when"><code>user-scalable=no</code> or <code>maximum-scale=1</code>.</td><td data-l="Usual fix">Remove them; zoom is a WCAG requirement.</td></tr>
+      <tr><td data-l="Id"><code>seo.img.alt@/page</code></td><td data-l="Severity">low</td><td data-l="Fires when">Images without an <code>alt</code> attribute.</td><td data-l="Usual fix">Describe meaningful images; <code>alt=""</code> for decorative ones.</td></tr>
+      <tr><td data-l="Id"><code>seo.page.error@/page</code></td><td data-l="Severity">high for 5xx or no response, medium for 4xx</td><td data-l="Fires when">An internal link leads to a page that returns an error.</td><td data-l="Usual fix">Fix the page or the link; add a redirect if the URL changed.</td></tr>
+      <tr><td data-l="Id"><code>seo.lighthouse.&lt;audit&gt;</code></td><td data-l="Severity">low</td><td data-l="Fires when">A Lighthouse SEO audit fails that is not already covered above (e.g. <code>seo.lighthouse.link-text</code>, <code>seo.lighthouse.crawlable-anchors</code>).</td><td data-l="Usual fix">Follow the Lighthouse audit of that name.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="a11y">
+  <h2>Accessibility – <code>a11y.*</code></h2>
+  <table class="limits">
+    <thead><tr><th>Id</th><th>Severity</th><th>Fires when</th><th>Usual fix</th></tr></thead>
+    <tbody>
+      <tr><td data-l="Id"><code>a11y.&lt;axe-rule&gt;@/page</code> (the home page is tested in both colour schemes, so its ids end in <code>#light</code> or <code>#dark</code>)</td><td data-l="Severity">high for axe impact <em>critical</em>, medium for <em>serious</em>, low for <em>moderate</em> and <em>minor</em></td><td data-l="Fires when">axe-core reports a WCAG 2.1 AA violation on a crawled page, e.g. <code>a11y.color-contrast@/#dark</code>, <code>a11y.label@/contact/</code>, <code>a11y.link-name@/</code>, <code>a11y.image-alt@/about/</code>. The finding carries the axe <code>helpUrl</code> and sample nodes.</td><td data-l="Usual fix">Follow the axe rule page linked in <code>helpUrl</code>; contrast, form labels and link names cover most of the volume.</td></tr>
+      <tr><td data-l="Id"><code>a11y.score.mobile</code></td><td data-l="Severity">high &lt; 70, medium 70–89</td><td data-l="Fires when">Lighthouse accessibility score below 90.</td><td data-l="Usual fix">Work the <code>a11y.*</code> rule findings; automated tests find roughly a third of barriers, so a 100 is not “accessible”.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="ux">
+  <h2>Usability – <code>ux.*</code></h2>
+  <p>Measured in a real mobile browser (390 px) on the crawled pages.</p>
+  <table class="limits">
+    <thead><tr><th>Id</th><th>Severity</th><th>Fires when</th><th>Usual fix</th></tr></thead>
+    <tbody>
+      <tr><td data-l="Id"><code>ux.overflow@/page</code></td><td data-l="Severity">medium</td><td data-l="Fires when">The page is more than 8 px wider than the phone screen (horizontal scrollbar).</td><td data-l="Usual fix">Find the element with a fixed width or a non-wrapping table/code block; <code>max-width: 100%</code>, <code>overflow-wrap</code>.</td></tr>
+      <tr><td data-l="Id"><code>ux.small-text@/page</code></td><td data-l="Severity">low</td><td data-l="Fires when">Paragraph text under 13 px, or more than 30 % of the text is small.</td><td data-l="Usual fix">Body text ≥ 16 px on mobile.</td></tr>
+      <tr><td data-l="Id"><code>ux.js-errors@/page</code></td><td data-l="Severity">medium ≥ 3 errors, else low</td><td data-l="Fires when">Uncaught errors in the console while loading.</td><td data-l="Usual fix">Open the console on a phone-sized window; the first error usually explains the rest.</td></tr>
+      <tr><td data-l="Id"><code>ux.failed-requests@/page</code></td><td data-l="Severity">medium ≥ 3, else low</td><td data-l="Fires when">Resources fail to load (404 images, blocked scripts, missing fonts).</td><td data-l="Usual fix">Fix or remove the references.</td></tr>
+      <tr><td data-l="Id"><code>ux.cookie.blocking</code></td><td data-l="Severity">medium</td><td data-l="Fires when">A consent dialog covers most of the first screen on mobile.</td><td data-l="Usual fix">A bottom bar instead of a full-screen modal.</td></tr>
+      <tr><td data-l="Id"><code>ux.cookie.no-reject</code></td><td data-l="Severity">medium</td><td data-l="Fires when">The consent dialog has no reject option at the same level as accept.</td><td data-l="Usual fix">“Reject” or “Necessary only” next to “Accept” (EDPB guidance).</td></tr>
+      <tr><td data-l="Id"><code>ux.phone.not-clickable@/page</code></td><td data-l="Severity">medium</td><td data-l="Fires when">A phone number appears as text and the page has no <code>tel:</code> link.</td><td data-l="Usual fix"><code>&lt;a href="tel:+48…"&gt;</code>.</td></tr>
+      <tr><td data-l="Id"><code>ux.email.not-clickable@/page</code></td><td data-l="Severity">medium on the contact page, low elsewhere</td><td data-l="Fires when">An e-mail address appears as text without a <code>mailto:</code> link.</td><td data-l="Usual fix"><code>&lt;a href="mailto:…"&gt;</code> or a form.</td></tr>
+      <tr><td data-l="Id"><code>ux.no-contact</code></td><td data-l="Severity">high</td><td data-l="Fires when">No contact form and no clickable phone or e-mail on the key pages.</td><td data-l="Usual fix">A contact page with a short form and a <code>tel:</code>/<code>mailto:</code> link.</td></tr>
+      <tr><td data-l="Id"><code>ux.contact.form-missing</code></td><td data-l="Severity">low</td><td data-l="Fires when">Contact is only an e-mail address written as text.</td><td data-l="Usual fix">A <code>mailto:</code> link or a three-field form.</td></tr>
+      <tr><td data-l="Id"><code>ux.form.unlabelled_fields@/page</code></td><td data-l="Severity">medium</td><td data-l="Fires when">Form fields without an associated <code>&lt;label&gt;</code> (placeholder only).</td><td data-l="Usual fix"><code>&lt;label for&gt;</code> or <code>aria-label</code> on every field.</td></tr>
+      <tr><td data-l="Id"><code>ux.form.too_many_fields@/page</code></td><td data-l="Severity">medium</td><td data-l="Fires when">The contact form has more than 6 fields.</td><td data-l="Usual fix">Name, e-mail or phone, message; everything else optional or removed.</td></tr>
+      <tr><td data-l="Id"><code>ux.form.no_required@/page</code></td><td data-l="Severity">low</td><td data-l="Fires when">No field is marked required.</td><td data-l="Usual fix"><code>required</code> on the fields you need.</td></tr>
+      <tr><td data-l="Id"><code>ux.form.no_spam_protection@/page</code></td><td data-l="Severity">low</td><td data-l="Fires when">No CAPTCHA, Turnstile or honeypot detected.</td><td data-l="Usual fix">A honeypot field first; Turnstile if spam continues.</td></tr>
+      <tr><td data-l="Id"><code>ux.form.no_consent@/page</code></td><td data-l="Severity">low</td><td data-l="Fires when">A form collecting e-mail has no privacy notice or consent checkbox.</td><td data-l="Usual fix">One sentence with a link to the privacy policy under the submit button.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="journeys">
+  <h2>Customer journeys – <code>journey.*</code></h2>
+  <p>The audit walks the site like a customer on a phone: opens the menu, searches for a word from the page, finds the contact form, adds a product to the cart and reaches checkout (nothing is submitted or paid), and requests a non-existent address. Each finding carries a screenshot.</p>
+  <table class="limits">
+    <thead><tr><th>Id</th><th>Severity</th><th>Fires when</th><th>Usual fix</th></tr></thead>
+    <tbody>
+      <tr><td data-l="Id"><code>journey.nav.fail</code></td><td data-l="Severity">high</td><td data-l="Fires when">Tapping the mobile menu button reveals no links.</td><td data-l="Usual fix">Usually a JavaScript error or a CSS breakpoint mismatch; see <code>ux.js-errors</code>.</td></tr>
+      <tr><td data-l="Id"><code>journey.nav.not_found</code></td><td data-l="Severity">medium</td><td data-l="Fires when">No menu or menu button is visible on the first mobile screen.</td><td data-l="Usual fix">A visible hamburger button or inline links above the fold.</td></tr>
+      <tr><td data-l="Id"><code>journey.search.fail</code></td><td data-l="Severity">medium</td><td data-l="Fires when">Site search ends on an error page.</td><td data-l="Usual fix">Fix the search endpoint; test with a plain word.</td></tr>
+      <tr><td data-l="Id"><code>journey.search.warn</code></td><td data-l="Severity">low</td><td data-l="Fires when">Searching for a word taken from the page's own heading returns nothing.</td><td data-l="Usual fix">Reindex, or check the search ignores accents and word forms.</td></tr>
+      <tr><td data-l="Id"><code>journey.404.soft404</code></td><td data-l="Severity">medium</td><td data-l="Fires when">A random address returns 200.</td><td data-l="Usual fix">Return a real 404 status with the error page.</td></tr>
+      <tr><td data-l="Id"><code>journey.404.blank</code></td><td data-l="Severity">high</td><td data-l="Fires when">The error page is empty.</td><td data-l="Usual fix">A 404 page with menu, search and a link home.</td></tr>
+      <tr><td data-l="Id"><code>journey.404.no_way_out</code></td><td data-l="Severity">medium</td><td data-l="Fires when">The error page has no navigation.</td><td data-l="Usual fix">Same as above.</td></tr>
+      <tr><td data-l="Id"><code>journey.404.server_error</code></td><td data-l="Severity">high</td><td data-l="Fires when">A non-existent address returns 5xx.</td><td data-l="Usual fix">Fix the router or rewrite rule that crashes on unknown paths.</td></tr>
+      <tr><td data-l="Id"><code>journey.shop.fail</code></td><td data-l="Severity">high</td><td data-l="Fires when">Product → cart → checkout does not reach the checkout page; the reason is in the title.</td><td data-l="Usual fix">Reproduce on a phone with a fresh session.</td></tr>
+      <tr><td data-l="Id"><code>journey.shop.login_required</code></td><td data-l="Severity">high</td><td data-l="Fires when">Checkout demands an account.</td><td data-l="Usual fix">Enable guest checkout.</td></tr>
+      <tr><td data-l="Id"><code>journey.shop.no_payment_methods_visible</code></td><td data-l="Severity">medium</td><td data-l="Fires when">The checkout page shows no payment methods.</td><td data-l="Usual fix">Show accepted methods before the customer types anything.</td></tr>
+      <tr><td data-l="Id"><code>journey.shop.many_fields</code></td><td data-l="Severity">medium</td><td data-l="Fires when">Checkout has more than 14 fields.</td><td data-l="Usual fix">Hide optional fields, enable autofill, drop the account-creation block.</td></tr>
+      <tr><td data-l="Id"><code>journey.shop.add_button_disabled_(out_of_stock_or_variant)</code></td><td data-l="Severity">low</td><td data-l="Fires when">The tested product could not be added (out of stock or variant required).</td><td data-l="Usual fix">Check the customer gets a clear message; not a defect by itself.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="links">
+  <h2>Links – <code>links.*</code></h2>
+  <table class="limits">
+    <thead><tr><th>Id</th><th>Severity</th><th>Fires when</th><th>Usual fix</th></tr></thead>
+    <tbody>
+      <tr><td data-l="Id"><code>links.broken@&lt;url&gt;</code></td><td data-l="Severity">medium</td><td data-l="Fires when">A link found on the crawled pages (internal or external, up to 500 checked, up to 40 reported) returns 4xx/5xx or no response after a retry. The finding lists the pages it was found on. Links that answer 401/403/429/503 to automated clients are reported as <em>blocked</em>, not broken, and count as <em>unverified</em> in a re-check.</td><td data-l="Usual fix">Fix or remove the link; redirect if the target moved.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="gating">
+  <h2>What to gate on</h2>
+  <ul>
+    <li><strong>Always fail:</strong> any <code>high</code>. They are deterministic (redirects, exposed files, mixed content, robots, viewport, broken journeys) or far past a threshold.</li>
+    <li><strong>Fail on <code>new</code> medium findings in a re-check</strong>, not on all medium findings – legacy debt should not block today's deploy, regressions should.</li>
+    <li><strong>Do not gate on</strong> <code>info</code>, on <code>perf.*</code> without a margin, or on <code>links.broken@</code> for external hosts you do not control (watch them in the Monitor instead).</li>
+    <li>The CI script and the <code>CLAUDE.md</code> block that implement this are in <a href="/en/blog/make-your-agent-verify-every-deploy/">Make your coding agent verify every deploy</a>.</li>
+  </ul>
+</section>
+
+<section class="fullbox">
+  <h2>Run it on your site</h2>
+  <pre><code>claude mcp add --transport http webskan https://webskan.com/mcp</code></pre>
+  <p>Then ask the agent to <em>audit https://your-site and fix every high finding</em>. Free: 2 whole-site audits per IP per day. <a href="/developers/">Tools, limits and client configs</a> · <a href="/developers/#teams">Developer plan</a> for 30 audits a day and re-checks without the per-host window.</p>
+</section>
+
+</main>
+<footer>© 2026 Webskan · <a href="/developers/">For developers</a> · <a href="/en/blog/">Blog</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a></footer>
+</div>
+</body>
+</html>

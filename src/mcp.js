@@ -262,7 +262,7 @@ function buildServer(ctx) {
   }, guard(auditWebsite));
   server.registerTool('get_audit', {
     title: 'Get audit status / result',
-    description: 'Returns the status (queued / running with ETA) or the finished result of an audit started with audit_website or recheck_website: summary counts by severity, Lighthouse mobile+desktop scores, findings sorted high → medium → low → info (each with id, area, severity, title, detail and the pages it was found on), pagesCrawled, finalUrl, platform. For a re-check it also returns diff: fixed / open / new / unverified findings and Lighthouse before/after. Poll every 20-30 s while status is queued or running.',
+    description: 'Returns the status (queued / running with ETA) or the finished result of an audit started with audit_website or recheck_website: summary counts by severity, Lighthouse mobile+desktop scores, findings sorted high → medium → low → info (each with id, area, severity, title, detail and the pages it was found on; every id is documented at https://webskan.com/developers/findings/), pagesCrawled, finalUrl, platform. For a re-check it also returns diff: fixed / open / new / unverified findings and Lighthouse before/after. Poll every 20-30 s while status is queued or running.',
     inputSchema: { auditId: z.string().regex(/^[0-9a-f]{16}$/).describe('auditId returned by audit_website or recheck_website (16 hex characters).') },
     annotations: { readOnlyHint: true },
   }, guard(getAudit));
