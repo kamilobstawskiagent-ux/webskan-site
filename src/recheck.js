@@ -5,6 +5,9 @@
 import { layout } from './scan.js';
 
 const key = (t) => `rtoken:${t}`;
+// Limit darmowego KV: 1000 list/dzień – kolejkowanie ustawia flagę `rtoken-dirty`, a /next listuje tylko, gdy flaga różni się od `rtoken-seen` (albo `?full=1`).
+const DIRTY = 'rtoken-dirty', SEEN = 'rtoken-seen';
+const markDirty = (env) => env.ORDERS.put(DIRTY, `${Date.now()}-${crypto.randomUUID().slice(0, 8)}`);
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const fmtDate = (iso, lang) => new Date(iso).toLocaleString(lang === 'en' ? 'en-GB' : 'pl-PL', { timeZone: 'Europe/Warsaw', dateStyle: 'long' });
 function authed(request, env) { const k = request.headers.get('x-scan-key') || ''; return Boolean(env.SCAN_KEY) && k.length === env.SCAN_KEY.length && k === env.SCAN_KEY; }
@@ -20,20 +23,28 @@ export async function recheckApi(request, env, pathname) {
     return Response.json({ ok: true, token: body.token, ...rec });
   }
   if (pathname === '/api/recheck/next') {
+    const full = new URL(request.url).searchParams.get('full') === '1';
+    const dirty = await env.ORDERS.get(DIRTY);
+    if (!full) { const seen = await env.ORDERS.get(SEEN); if (!dirty || dirty === seen) return Response.json([]); }
     const out = [];
     let cursor;
-    do {
-      const page = await env.ORDERS.list({ prefix: 'rtoken:', cursor });
-      for (const k of page.keys) { const rec = JSON.parse((await env.ORDERS.get(k.name)) || 'null'); if (rec && rec.status === 'queued') out.push({ token: k.name.slice(7), ...rec }); }
-      cursor = page.list_complete ? null : page.cursor;
-    } while (cursor);
+    try {
+      do {
+        const page = await env.ORDERS.list({ prefix: 'rtoken:', cursor });
+        for (const k of page.keys) { const rec = JSON.parse((await env.ORDERS.get(k.name)) || 'null'); if (rec && rec.status === 'queued') out.push({ token: k.name.slice(7), ...rec }); }
+        cursor = page.list_complete ? null : page.cursor;
+      } while (cursor);
+    } catch (e) { return Response.json({ error: `KV list: ${String(e.message || e).slice(0, 200)}` }, { status: 503 }); }
     for (const r of out) await env.ORDERS.put(key(r.token), JSON.stringify({ ...r, token: undefined, status: 'running', started_at: new Date().toISOString() }));
+    // Flaga bywa widoczna wcześniej niż sam wpis na liście (list KV spójny po 10–60 s) – przy pustym wyniku uznajemy flagę za obsłużoną dopiero po 3 min.
+    if (dirty && (out.length || Date.now() - (Number(String(dirty).split('-')[0]) || 0) > 3 * 60 * 1000)) await env.ORDERS.put(SEEN, dirty);
     return Response.json(out);
   }
   if (pathname === '/api/recheck/done' && request.method === 'POST') {
     const rec = JSON.parse((await env.ORDERS.get(key(body.token || ''))) || 'null');
     if (!rec) return new Response('Not found', { status: 404 });
     const status = body.status === 'failed' ? 'queued' : 'done'; // nieudane wraca do kolejki (poller spróbuje ponownie w następnym cyklu, max 3 razy po swojej stronie)
+    if (status === 'queued') await markDirty(env);
     await env.ORDERS.put(key(body.token), JSON.stringify({ ...rec, status: body.status === 'failed' && (rec.attempts || 0) >= 2 ? 'failed' : status, attempts: (rec.attempts || 0) + 1, done_at: status === 'done' ? new Date().toISOString() : rec.done_at, summary: body.summary || rec.summary || null }));
     return Response.json({ ok: true });
   }
@@ -67,6 +78,7 @@ export async function recheckPage(request, env, lang, token) {
   if (new Date(rec.expires) < Date.now()) return page(`<p>${t.expired(fmtDate(rec.expires, lang))}</p>`);
   if (request.method === 'POST') {
     await env.ORDERS.put(key(token), JSON.stringify({ ...rec, status: 'queued', requested_at: new Date().toISOString(), ip: request.headers.get('cf-connecting-ip') || '' }));
+    await markDirty(env);
     return page(`<p>${t.thanks}</p>`);
   }
   return page(`${t.confirm(rec.url)}<form method="post" action="${lang === 'en' ? '/en' : ''}/recheck/${esc(token)}"><button class="btn" type="submit">${t.button}</button></form>`);

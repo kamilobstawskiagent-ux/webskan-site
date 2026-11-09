@@ -4,9 +4,13 @@
 // GET  /api/polar/pending   (x-scan-key) – lista nieodebranych zdarzeń [{key, type, data, received_at}].
 // POST /api/polar/ack       (x-scan-key) {keys:[…]} – usunięcie odebranych.
 // Poller (orders/poll.mjs) pyta /pending co minutę i kolejkuje zamówienie z payloadu – nie czeka na pełny odczyt /v1/orders.
+// Limit darmowego KV: 1000 operacji list/dzień (09.11 e-mail CF „KV requests are temporarily blocked”). Dlatego webhook ustawia flagę `pw-dirty` (znacznik czasu),
+//   a /pending czyta tylko flagę (get – 100 k/dzień) i listuje dopiero, gdy flaga różni się od `pw-seen`; `?full=1` wymusza listowanie (poller robi to co 30 min kontrolnie).
 
 const TTL = 7 * 24 * 3600;
 const PREFIX = 'pw:';
+const DIRTY = 'pw-dirty', SEEN = 'pw-seen'; // poza prefiksem, żeby list ich nie zwracał
+const markDirty = (env) => env.ORDERS.put(DIRTY, `${Date.now()}-${crypto.randomUUID().slice(0, 8)}`);
 
 function authed(request, env) { const k = request.headers.get('x-scan-key') || ''; return Boolean(env.SCAN_KEY) && k.length === env.SCAN_KEY.length && k === env.SCAN_KEY; }
 
@@ -47,17 +51,25 @@ export async function polarApi(request, env, pathname) {
     else if (type.startsWith('subscription.') && data.id) await env.ORDERS.put(`${PREFIX}sub:${data.id}`, rec, { expirationTtl: TTL });
     else if (type === 'order.created' || type === 'order.updated' || type === 'checkout.created' || type === 'checkout.updated') { /* bez akcji – zamówienie trafia przez order.paid */ }
     else await env.ORDERS.put(`${PREFIX}other:${v.id}`, rec, { expirationTtl: 3 * 24 * 3600 });
+    await markDirty(env);
     return new Response('', { status: 202 });
   }
   if (!authed(request, env)) return new Response('Unauthorized', { status: 401 });
   if (pathname === '/api/polar/pending' && request.method === 'GET') {
+    const full = new URL(request.url).searchParams.get('full') === '1';
+    const dirty = await env.ORDERS.get(DIRTY);
+    if (!full) { const seen = await env.ORDERS.get(SEEN); if (!dirty || dirty === seen) return Response.json([]); }
     const out = [];
     let cursor;
-    do {
-      const l = await env.ORDERS.list({ prefix: PREFIX, cursor, limit: 100 });
-      for (const k of l.keys) { const v = await env.ORDERS.get(k.name); if (v) { try { out.push({ key: k.name, ...JSON.parse(v) }); } catch { /* pomiń */ } } }
-      cursor = l.list_complete ? undefined : l.cursor;
-    } while (cursor);
+    try {
+      do {
+        const l = await env.ORDERS.list({ prefix: PREFIX, cursor, limit: 100 });
+        for (const k of l.keys) { const v = await env.ORDERS.get(k.name); if (v) { try { out.push({ key: k.name, ...JSON.parse(v) }); } catch { /* pomiń */ } } }
+        cursor = l.list_complete ? undefined : l.cursor;
+      } while (cursor);
+    } catch (e) { return Response.json({ error: `KV list: ${String(e.message || e).slice(0, 200)}` }, { status: 503 }); }
+    // Flaga bywa widoczna wcześniej niż sam wpis na liście (list KV spójny po 10–60 s) – przy pustym wyniku uznajemy flagę za obsłużoną dopiero po 3 min.
+    if (dirty && (out.length || Date.now() - (Number(String(dirty).split('-')[0]) || 0) > 3 * 60 * 1000)) await env.ORDERS.put(SEEN, dirty);
     return Response.json(out);
   }
   if (pathname === '/api/polar/ack' && request.method === 'POST') {
