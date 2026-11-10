@@ -102,7 +102,7 @@ function scanMarkdown(s) {
     `LCP ${fmtS(m.lcpMs)} · CLS ${m.cls == null ? '–' : m.cls.toFixed(3)} · TBT ${m.tbtMs == null ? '–' : Math.round(m.tbtMs) + ' ms'} · weight ${fmtKB(m.weightBytes)} · ${m.requests ?? '–'} requests`, ''];
   if (s.issues.length) { lines.push(`Issues (${s.issues.length}):`); for (const i of s.issues) lines.push(`- [${i.severity}] ${i.title}${i.detail ? ` — ${i.detail}` : ''}`); }
   else lines.push('Basic checks: no issues found.');
-  if (s.accessibilityFailures.length) lines.push('', `Lighthouse accessibility audits failing: ${s.accessibilityFailures.join('; ')}.`);
+  if (s.accessibilityFailures.length) lines.push('', `Lighthouse accessibility audits failing: ${s.accessibilityFailures.map((x) => String(x).replace(/[.\s]+$/, '')).join('; ')}.`);
   lines.push('', `Full result page: ${s.resultUrl}`, 'Scores vary by a few points between runs. For the whole site (broken links, per-page SEO, WCAG, journeys) call audit_website.');
   return lines.join('\n');
 }

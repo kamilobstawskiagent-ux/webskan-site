@@ -55,6 +55,26 @@
     <h3><code>scan_website</code> – quick scan, result in about 30 seconds</h3>
     <p><b>Input:</b> <code>url</code>. <b>Returns:</b> mobile Lighthouse <code>scores</code>, <code>metrics</code> (LCP, CLS, TBT, weight, requests), a list of basic <code>issues</code> with codes, and a <code>resultUrl</code> you can open in a browser. Results for the same host are cached for 24 hours (<code>cached: true</code>). If the scan takes longer than 90 seconds the tool returns <code>status: "pending"</code> and a <code>scanId</code>; call it again in 30 seconds.</p>
     <p class="prompt">“Scan https://mysite.com and tell me the mobile Lighthouse scores and the biggest issue.”</p>
+    <details><summary>Example response (real run against example.com, free plan)</summary>
+<pre><code># Quick scan: example.com
+Lighthouse (mobile): Performance 100 · Accessibility 96 · Best practices 100 · SEO 80
+LCP 0.8 s · CLS 0.000 · TBT 12 ms · weight 2 KB · 2 requests
+
+Issues (7):
+- [high] No http → https redirect — Visitors typing the address without “s” stay on the unencrypted version. Google and browsers penalise that.
+- [medium] Missing HSTS header — The browser is not told to always use https. One line of server config.
+- [medium] 5 security headers missing — content-security-policy, x-content-type-options, x-frame-options, referrer-policy, permissions-policy. They protect visitors from content tampering and script injection.
+- [medium] Missing meta description — Google picks its own snippet; usually worse than yours.
+- [medium] No H1 heading — The main heading tells Google and screen readers what the page is about.
+- [low] Missing canonical URL — Risk of duplicates in Google (www / non-www, URL parameters).
+- [low] Missing Open Graph tags — Links shared on Facebook or LinkedIn get no image preview.
+
+Lighthouse accessibility audits failing: Document does not have a main landmark.
+
+Full result page: https://webskan.com/en/scan/2c77f15c83aa7b73
+Scores vary by a few points between runs. For the whole site (broken links, per-page SEO, WCAG, journeys) call audit_website.</code></pre>
+    <p class="small muted">The same data comes back as <code>structuredContent</code> (<code>scores</code>, <code>metrics</code>, <code>issues[].code/severity/title/detail</code>, <code>resultUrl</code>, <code>plan</code>), so a script can gate on it without parsing the text.</p>
+    </details>
   </div>
 
   <div class="tool">
@@ -161,6 +181,7 @@ url = "https://webskan.com/mcp"</code></pre>
     <li><strong>No one-audit-per-host-per-day window</strong> – re-audit the same site five minutes after the fix and get a fresh result, not the cached one.</li>
     <li>The same four tools, the same report, the same 30-page maximum. <code>scan_website</code> keeps its 10-per-hour limit (it is cached per host anyway).</li>
   </ul>
+  <p><strong>Start on the free plan first.</strong> Everything above works today without a key or an account – <a href="#install">add the server</a>, run <code>scan_website</code> and one <code>audit_website</code> on your own site, and look at the result. You only need a key when two audits a day, or one audit per host per day, gets in the way of your deploy loop. If it does:</p>
   <p><a class="btn" href="/api/developer/checkout" rel="noopener">Get a key – $29/month</a></p>
   <p class="small muted">Billed by Polar (merchant of record; VAT handled at checkout), cancel any time in the customer portal, no minimum term.</p>
   <h3 id="key">After purchase</h3>
