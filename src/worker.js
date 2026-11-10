@@ -1,5 +1,5 @@
 // Webskan – Worker: statyczne pliki z public/ + /api/order (checkout Polar albo kolejka przedsprzedażowa w KV) + darmowy szybki skan (src/scan.js).
-import { startScan, nextScans, scanResult, scanPage, nextAudits, auditResult, ScanQueue, layout, scanLead, leadsNext, leadsDone, leadStats, leadUnsub } from "./scan.js";
+import { startScan, nextScans, scanResult, scanRequeue, scanPage, nextAudits, auditResult, ScanQueue, layout, scanLead, leadsNext, leadsDone, leadStats, leadUnsub } from "./scan.js";
 import { MonitorHub, monitorCron, monitorApi, statusPage } from "./monitor.js";
 import { recheckApi, recheckPage } from "./recheck.js";
 import { handleMcp, mcpStatsApi } from "./mcp.js";
@@ -134,6 +134,7 @@ async function route(request, env, pathname, ctx) {
     if (pathname === "/api/scan" && request.method === "POST") return startScan(request, env, normalizeUrl);
     if (pathname === "/api/scan/next") return nextScans(request, env);
     if (pathname === "/api/scan/result" && request.method === "POST") return scanResult(request, env);
+    if (pathname === "/api/scan/requeue" && request.method === "POST") return scanRequeue(request, env); // ponowny skan pod tym samym linkiem (x-scan-key)
     if (pathname === "/api/scan/lead" && request.method === "POST") return scanLead(request, env); // e-mail z wynikiem za zgodą (lead)
     if (pathname === "/api/scan/leads/next") return leadsNext(request, env);
     if (pathname === "/api/scan/leads/done" && request.method === "POST") return leadsDone(request, env);

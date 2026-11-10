@@ -14,6 +14,7 @@ const T = {
     failed: 'Nie udało się przeskanować tej strony', failedBody: (e) => `Powód: ${e}. Najczęściej strona blokuje boty, jest niedostępna albo bardzo wolna. Spróbuj ponownie za chwilę albo zamów audyt pogłębiony – jeśli i on się nie uda, zwracamy pieniądze.`,
     notFound: 'Nie ma takiego skanu', notFoundBody: 'Wyniki trzymamy 7 dni. Uruchom nowy skan ze strony głównej.',
     mobileNote: 'Ocena Lighthouse, symulowany telefon z łączem 4G. Wynik laboratoryjny – u realnych użytkowników może się różnić.',
+    lhFail: 'Lighthouse nie zdołał zmierzyć tej strony', lhFailWhy: { INTERSTITIAL: 'Serwer pokazał naszej przeglądarce stronę błędu lub „maintenance” zamiast sklepu – najczęściej to blokada botów albo zapory. Realni klienci mogą widzieć stronę normalnie, ale tak samo widzą ją roboty Google.', NO_FCP: 'W symulowanym telefonie z łączem 4G przez 90 s nie pojawiła się żadna treść. To zwykle znaczy, że strona ładuje się bardzo długo albo blokuje wyświetlanie do czasu pobrania ciężkich skryptów.', UNKNOWN: 'Przeglądarka pomiarowa przerwała ładowanie przed zebraniem danych.' }, lhFailTail: 'Pozostałe sprawdzenia (HTTPS, nagłówki bezpieczeństwa, SEO) poniżej pochodzą z bezpośredniego pobrania strony i są aktualne. Audyt pogłębiony mierzy stronę w prawdziwej przeglądarce i dłużej.',
     perf: 'Wydajność', a11y: 'Dostępność', bp: 'Dobre praktyki', seo: 'SEO',
     metrics: 'Kluczowe pomiary (telefon)', metric: 'Pomiar', value: 'Wartość', rating: 'Ocena', good: 'dobrze', needs: 'do poprawy', poor: 'słabo',
     lcp: 'Największy element treści (LCP)', cls: 'Przeskoki układu (CLS)', tbt: 'Czas blokowania (TBT)', weight: 'Waga strony', requests: 'Liczba żądań',
@@ -59,6 +60,7 @@ const T = {
     failed: 'We could not scan this site', failedBody: (e) => `Reason: ${e}. Usually the site blocks bots, is down, or is very slow. Try again in a moment, or order an in-depth audit – if that fails too, we refund.`,
     notFound: 'No such scan', notFoundBody: 'Results are kept for 7 days. Start a new scan from the homepage.',
     mobileNote: 'Lighthouse scores, simulated phone on 4G. Lab data – real users may see different numbers.',
+    lhFail: 'Lighthouse could not measure this page', lhFailWhy: { INTERSTITIAL: 'The server showed our browser an error or “maintenance” page instead of the site – usually a bot or firewall block. Real visitors may see the site fine, but Google’s crawlers see what we saw.', NO_FCP: 'On a simulated 4G phone nothing was painted within 90 s. That usually means the page loads very slowly or blocks rendering until heavy scripts arrive.', UNKNOWN: 'The measuring browser aborted the load before collecting data.' }, lhFailTail: 'The remaining checks below (HTTPS, security headers, SEO) come from a direct fetch of the page and are current. The in-depth audit measures the site in a real browser and for longer.',
     perf: 'Performance', a11y: 'Accessibility', bp: 'Best practices', seo: 'SEO',
     metrics: 'Key measurements (mobile)', metric: 'Metric', value: 'Value', rating: 'Rating', good: 'good', needs: 'needs work', poor: 'poor',
     lcp: 'Largest Contentful Paint (LCP)', cls: 'Layout shift (CLS)', tbt: 'Total Blocking Time (TBT)', weight: 'Page weight', requests: 'Requests',
@@ -198,6 +200,11 @@ export class ScanQueue extends DurableObject {
     this.sql.exec('UPDATE scans SET status=?, finished=?, data=?, error=? WHERE id=?', status, Date.now(), data ? JSON.stringify(data) : null, error || null, id);
     return this.get(id);
   }
+  // Ponowny skan pod tym samym id/linkiem (np. link już wysłany, a Lighthouse nie zdążył) – status z powrotem 'queued'.
+  requeue(id) {
+    this.sql.exec("UPDATE scans SET status='queued', at=?, started=NULL, finished=NULL, data=NULL, error=NULL WHERE id=?", Date.now(), id);
+    return this.get(id);
+  }
   // Leady z darmowego skanu (09.11): e-mail za zgodą → poller wysyła wynik od razu i jedną wiadomość z ofertą po 48 h.
   leadAdd(l) {
     const dup = this.sql.exec('SELECT id FROM leads WHERE email=? AND host=? AND at > ?', l.email, l.host, Date.now() - 30 * 86400000).toArray()[0];
@@ -283,6 +290,17 @@ export async function scanResult(request, env) {
   if (!(await db.get(id))) return new Response('not found', { status: 404 });
   const ok = result && result.lighthouse && !result.fatal;
   const job = await db.finish(id, ok ? 'done' : 'error', ok ? result : null, ok ? null : String(error || result?.fatal || result?.errors?.[0]?.error || 'unknown').slice(0, 300));
+  return Response.json({ ok: true, status: job.status });
+}
+
+// POST /api/scan/requeue {id}  (x-scan-key) – ponowny skan pod tym samym linkiem
+export async function scanRequeue(request, env) {
+  if (!authed(request, env)) return new Response('unauthorized', { status: 401 });
+  let body; try { body = await request.json(); } catch { return new Response('bad json', { status: 400 }); }
+  if (!/^[0-9a-f]{16}$/.test(body.id || '')) return new Response('bad id', { status: 400 });
+  const db = store(env);
+  if (!(await db.get(body.id))) return new Response('not found', { status: 404 });
+  const job = await db.requeue(body.id);
   return Response.json({ ok: true, status: job.status });
 }
 
@@ -433,8 +451,9 @@ function scanForm(lang, url) {
 function ogHead(job, lang, u) {
   const s = job.result?.lighthouse?.scores || {};
   const t = T[lang];
-  const title = lang === 'pl' ? `${job.host}: wydajność ${s.performance}/100 na telefonie – Szybki skan Webskan` : `${job.host}: mobile performance ${s.performance}/100 – Webskan quick scan`;
-  const desc = `${t.perf} ${s.performance} · ${t.a11y} ${s.accessibility} · ${t.bp} ${s['best-practices']} · ${t.seo} ${s.seo}`;
+  const noLh = s.performance == null;
+  const title = noLh ? (lang === 'pl' ? `${job.host} – Szybki skan Webskan` : `${job.host} – Webskan quick scan`) : lang === 'pl' ? `${job.host}: wydajność ${s.performance}/100 na telefonie – Szybki skan Webskan` : `${job.host}: mobile performance ${s.performance}/100 – Webskan quick scan`;
+  const desc = noLh ? t.lhFail : `${t.perf} ${s.performance} · ${t.a11y} ${s.accessibility} · ${t.bp} ${s['best-practices']} · ${t.seo} ${s.seo}`;
   return `<meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}"><meta property="og:type" content="website"><meta property="og:url" content="${esc(u.origin + t.path(job.id))}"><meta property="og:image" content="${u.origin}/og-${lang}.png"><meta name="twitter:card" content="summary_large_image">`;
 }
 
@@ -479,12 +498,17 @@ function renderResult(job, lang, env, u) {
   if (seo.lang) oks.push(t.ok.lang);
   const date = new Date(job.finishedAt).toLocaleDateString(lang === 'pl' ? 'pl-PL' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Warsaw' });
   const link = `${u.origin}${t.path(job.id)}`;
-  return `<section class="hero"><h1>${esc(t.title(job.host))}</h1><p class="muted">${esc(r.http?.finalUrl || job.url)} · ${date}</p>
-  <div class="scores big">${[['performance', t.perf], ['accessibility', t.a11y], ['best-practices', t.bp], ['seo', t.seo]].map(([k, l]) => `<div class="score ${cls(s[k])}"><b>${s[k] ?? '–'}</b><small>${l}</small></div>`).join('')}</div>
-  <p class="muted small">${t.mobileNote}</p></section>
-  <section><h2>${t.metrics}</h2><table><tr><th>${t.metric}</th><th>${t.value}</th><th>${t.rating}</th></tr>
+  const noLh = s.performance == null; // Lighthouse bez ocen (interstitial / NO_FCP) – zamiast kresek wyjaśnienie (10.11)
+  const lhBlock = noLh
+    ? `<div class="lhfail"><h2>${t.lhFail}</h2><p>${t.lhFailWhy[lh.reason] || t.lhFailWhy.UNKNOWN}</p><p class="muted small">${t.lhFailTail}</p></div>`
+    : `<div class="scores big">${[['performance', t.perf], ['accessibility', t.a11y], ['best-practices', t.bp], ['seo', t.seo]].map(([k, l]) => `<div class="score ${cls(s[k])}"><b>${s[k] ?? '–'}</b><small>${l}</small></div>`).join('')}</div>
+  <p class="muted small">${t.mobileNote}</p>`;
+  const metricsBlock = noLh ? '' : `<section><h2>${t.metrics}</h2><table><tr><th>${t.metric}</th><th>${t.value}</th><th>${t.rating}</th></tr>
   ${row(t.lcp, fmtS(m.LCP), cL)}${row(t.cls, m.CLS == null ? '–' : dp(m.CLS.toFixed(3)), cC)}${row(t.tbt, m.TBT == null ? '–' : Math.round(m.TBT) + ' ms', cT)}
-  ${row(t.weight, m.totalBytes ? dp(fmtBytes(m.totalBytes)) : '–', '')}${row(t.requests, m.requests ?? '–', '')}</table></section>
+  ${row(t.weight, m.totalBytes ? dp(fmtBytes(m.totalBytes)) : '–', '')}${row(t.requests, m.requests ?? '–', '')}</table></section>`;
+  return `<section class="hero"><h1>${esc(t.title(job.host))}</h1><p class="muted">${esc(r.http?.finalUrl || job.url)} · ${date}</p>
+  ${lhBlock}</section>
+  ${metricsBlock}
   <section><h2>${t.issues(issues.length)}</h2>${issues.length ? `<ul class="issues">${issues.map((i) => `<li class="${i.sev}"><span class="badge ${i.sev === 'high' ? 'poor' : i.sev === 'medium' ? 'needs' : 'good'}">${t.sev[i.sev]}</span><b>${i.title}</b><p>${i.why}</p>${i.detail ? `<p class="muted small">${i.detail}</p>` : ''}</li>`).join('')}</ul>` : `<p>${t.noIssues}</p>`}
   ${oks.length ? `<h3>${t.okList}</h3><p class="oks">${oks.map((o) => `<span class="chip">✓ ${esc(o)}</span>`).join(' ')}</p>` : ''}</section>
   ${leadBox(lang, job, u)}
