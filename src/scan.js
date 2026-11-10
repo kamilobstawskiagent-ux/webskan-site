@@ -450,8 +450,8 @@ function errorText(e, lang) {
   const pl = lang === 'pl';
   if (m) {
     const c = Number(m[1]);
-    if (c === 429) return pl ? 'serwer odpowiedział kodem 429 (za dużo zapytań) – najczęściej blokada automatów' : 'the server answered 429 (too many requests) – usually a bot block';
-    if (c === 403 || c === 401) return pl ? `serwer odpowiedział kodem ${c} (dostęp zabroniony) – najczęściej blokada automatów` : `the server answered ${c} (forbidden) – usually a bot block`;
+    if (c === 429) return pl ? 'serwer odpowiedział kodem 429 (za dużo zapytań)' : 'the server answered 429 (too many requests)';
+    if (c === 403 || c === 401) return pl ? `serwer odpowiedział kodem ${c} (dostęp zabroniony)` : `the server answered ${c} (forbidden)`;
     if (c === 404 || c === 410) return pl ? `serwer odpowiedział kodem ${c} (strona nie istnieje)` : `the server answered ${c} (page does not exist)`;
     if (c >= 500) return pl ? `serwer odpowiedział kodem ${c} (błąd po stronie serwera)` : `the server answered ${c} (server-side error)`;
     return pl ? `serwer odpowiedział kodem ${c}` : `the server answered ${c}`;
