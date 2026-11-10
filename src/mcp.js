@@ -288,7 +288,7 @@ async function countMcpUsage(request, env, ctx, ip) {
     const tools = [];
     for (const m of Array.isArray(body) ? body : [body]) {
       if (m?.method === 'initialize') tools.push('initialize');
-      else if (m?.method === 'tools/call') tools.push(MCP_TOOLS.has(m.params?.name) ? m.params.name : 'other');
+      else if (m?.method === 'tools/call') tools.push(MCP_TOOLS.has(m.params?.name) ? m.params.name : 'other:' + String(m.params?.name ?? '').replace(/[^\w.-]/g, '').slice(0, 24));
     }
     if (!tools.length) return;
     const day = new Date().toISOString().slice(0, 10);

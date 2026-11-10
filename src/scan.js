@@ -457,7 +457,8 @@ function renderResult(job, lang, env, u) {
   const rate = (v, th) => (v == null ? ['', '–'] : [v <= th[0] ? 'good' : v <= th[1] ? 'needs' : 'poor']);
   const row = (label, val, c) => `<tr><td>${label}</td><td>${val}</td><td class="${c}">${c ? t[c] : ''}</td></tr>`;
   const [cL] = rate(m.LCP, [2500, 4000]), [cC] = rate(m.CLS, [0.1, 0.25]), [cT] = rate(m.TBT, [200, 600]);
-  const fmtS = (v) => (v == null ? '–' : (v / 1000).toFixed(1) + ' s');
+  const dp = (x) => (lang === 'pl' ? String(x).replace('.', ',') : String(x));
+  const fmtS = (v) => (v == null ? '–' : dp((v / 1000).toFixed(1)) + ' s');
   const fa = (lh.failed?.accessibility || []).map((x) => A11Y[lang][x.id] || x.title).filter(Boolean);
   const issues = (r.issues || []).map((i) => { const d = t.issue[i.code]; const dec = (x) => (lang === 'pl' ? x.replace(/(\d)\.(\d)/g, '$1,$2') : x); return d ? { ...i, title: dec(fill(d[0], i)), why: dec(fill(d[1], i)), detail: i.code === 'a11y_low' && fa.length ? `${A11Y_FOUND[lang]}: ${esc(fa.join(', '))}.` : '' } : null; }).filter(Boolean);
   const codes = new Set(issues.map((i) => i.code));
@@ -482,8 +483,8 @@ function renderResult(job, lang, env, u) {
   <div class="scores big">${[['performance', t.perf], ['accessibility', t.a11y], ['best-practices', t.bp], ['seo', t.seo]].map(([k, l]) => `<div class="score ${cls(s[k])}"><b>${s[k] ?? '–'}</b><small>${l}</small></div>`).join('')}</div>
   <p class="muted small">${t.mobileNote}</p></section>
   <section><h2>${t.metrics}</h2><table><tr><th>${t.metric}</th><th>${t.value}</th><th>${t.rating}</th></tr>
-  ${row(t.lcp, fmtS(m.LCP), cL)}${row(t.cls, m.CLS == null ? '–' : m.CLS.toFixed(3), cC)}${row(t.tbt, m.TBT == null ? '–' : Math.round(m.TBT) + ' ms', cT)}
-  ${row(t.weight, m.totalBytes ? fmtBytes(m.totalBytes) : '–', '')}${row(t.requests, m.requests ?? '–', '')}</table></section>
+  ${row(t.lcp, fmtS(m.LCP), cL)}${row(t.cls, m.CLS == null ? '–' : dp(m.CLS.toFixed(3)), cC)}${row(t.tbt, m.TBT == null ? '–' : Math.round(m.TBT) + ' ms', cT)}
+  ${row(t.weight, m.totalBytes ? dp(fmtBytes(m.totalBytes)) : '–', '')}${row(t.requests, m.requests ?? '–', '')}</table></section>
   <section><h2>${t.issues(issues.length)}</h2>${issues.length ? `<ul class="issues">${issues.map((i) => `<li class="${i.sev}"><span class="badge ${i.sev === 'high' ? 'poor' : i.sev === 'medium' ? 'needs' : 'good'}">${t.sev[i.sev]}</span><b>${i.title}</b><p>${i.why}</p>${i.detail ? `<p class="muted small">${i.detail}</p>` : ''}</li>`).join('')}</ul>` : `<p>${t.noIssues}</p>`}
   ${oks.length ? `<h3>${t.okList}</h3><p class="oks">${oks.map((o) => `<span class="chip">✓ ${esc(o)}</span>`).join(' ')}</p>` : ''}</section>
   ${leadBox(lang, job, u)}
