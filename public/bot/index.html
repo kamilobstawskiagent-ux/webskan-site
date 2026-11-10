@@ -1,0 +1,58 @@
+<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Skaner Webskan – jak go rozpoznać i dodać wyjątek w zaporze – Webskan</title>
+<meta name="description" content="Jak rozpoznać skaner Webskan (User-Agent, adres IP), ile żądań wysyła, jak dodać wyjątek w zaporze lub go zablokować. Scanner identification and allow-listing (EN below)."><link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/style.css"></head><body><div class="wrap"><header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a><a href="/#faq">FAQ</a><a href="#en" hreflang="en">EN</a></nav></header>
+<main><section class="legal"><h1>Skaner Webskan</h1>
+<p>Ta strona jest dla administratorów i właścicieli stron: jak rozpoznać nasz skaner, co dokładnie robi i jak dodać dla niego wyjątek w zaporze (albo go zablokować). <a href="#en">English version below.</a></p>
+<h2>Kiedy odwiedzamy stronę</h2>
+<p>Skaner uruchamia się wyłącznie na czyjeś zlecenie: darmowy szybki skan ze strony webskan.com, zamówiony audyt pogłębiony, ponowne sprawdzenie po poprawkach, abonament Webskan Monitor albo wywołanie z narzędzia dla programistów (serwer MCP). Nie przeszukujemy internetu samodzielnie.</p>
+<h2>Jak nas rozpoznać</h2>
+<ul>
+<li><strong>User-Agent</strong> żądań HTTP zawiera token <code>Webskan/1.0 (+https://webskan.com/bot)</code>, np.<br><code>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Webskan/1.0 (+https://webskan.com/bot)</code></li>
+<li><strong>Adres IP</strong>: obecnie <code>89.68.68.69</code> (pomiary Lighthouse i przeglądarkowe wychodzą z tego samego adresu, ze zwykłym User-Agentem Chrome, bo udawanie innej przeglądarki zafałszowałoby wynik).</li>
+<li><strong>Kontrole Monitora</strong> (co kilka minut, jedno żądanie HTTP) wychodzą z sieci Cloudflare Workers z tym samym tokenem w User-Agencie.</li>
+</ul>
+<h2>Ile żądań wysyłamy</h2>
+<ul>
+<li>Szybki skan: strona główna, <code>robots.txt</code>, kilka adresów kontrolnych i jeden pomiar Lighthouse – łącznie zwykle 50–150 żądań w ciągu minuty (większość to zasoby strony głównej: obrazy, skrypty, czcionki).</li>
+<li>Audyt pogłębiony: do 30 podstron, do 500 linków (metodą HEAD/GET), otwarcie do 8 kluczowych stron w przeglądarce mobilnej, test dostępności i dwa pomiary Lighthouse – łącznie kilkaset do ok. 2 000 żądań w ciągu 5–15 minut, maksymalnie 4–8 równoległych połączeń.</li>
+<li>Niczego nie wysyłamy ani nie zmieniamy: formularzy nie wysyłamy, w sklepie zatrzymujemy się na stronie kasy. Szanujemy <code>robots.txt</code> przy crawlu podstron (strona główna i adresy kontrolne są pobierane zawsze, bo tego dotyczy zlecenie).</li>
+</ul>
+<h2>Zapora blokuje skaner – co zrobić</h2>
+<p>Zapory platform sklepowych i hostingu (np. limity żądań, ochrona przed botami, Cloudflare „Bot Fight Mode”) czasem odcinają nasz skaner po kilkudziesięciu żądaniach: odpowiadają kodem 403/429 albo stroną „Zostałeś zablokowany”. Audyt takiej strony wstrzymujemy i informujemy zamawiającego e-mailem – zamiast wysyłać raport z dziurami. Żeby audyt się udał, dodaj wyjątek dla skanera:</p>
+<ul>
+<li><strong>Najprościej po User-Agencie:</strong> reguła „zezwól, gdy User-Agent zawiera <code>Webskan</code>”.</li>
+<li><strong>Albo po adresie IP:</strong> <code>89.68.68.69</code> (gdyby adres się zmienił, zaktualizujemy tę stronę).</li>
+<li>Gdy ustawienia zapory są u operatora platformy lub hostingu, wystarczy przekazać mu ten tekst: <em>„Proszę o dodanie wyjątku w zaporze/WAF na czas audytu strony: User-Agent zawierający „Webskan” lub adres IP 89.68.68.69, szczegóły: https://webskan.com/bot”</em>.</li>
+</ul>
+<p>Po dodaniu wyjątku nic więcej nie trzeba robić: zamówiony audyt ponawiamy automatycznie co 6 godzin przez 7 dni. Można też odpisać na naszego e-maila – sprawdzimy od razu. Jeśli wyjątku nie da się dodać, zwracamy pełną kwotę zamówienia (<a href="/regulamin/">regulamin</a>, pkt 6).</p>
+<h2>Nie chcesz, żebyśmy skanowali Twoją stronę?</h2>
+<p>Napisz na <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a> – dodamy domenę do listy wykluczeń. Możesz też zablokować token <code>Webskan</code> w zaporze; skaner nie próbuje obchodzić blokad.</p>
+
+<h1 id="en">Webskan scanner</h1>
+<p>For administrators and site owners: how to recognise our scanner, what exactly it does and how to allow-list it (or block it).</p>
+<h2>When we visit a site</h2>
+<p>The scanner runs only on request: a free quick scan started on webskan.com, an ordered in-depth audit, a re-check after fixes, a Webskan Monitor subscription, or a call from the developer tool (the MCP server). We do not crawl the web on our own.</p>
+<h2>How to recognise us</h2>
+<ul>
+<li><strong>User-Agent</strong> of HTTP requests contains the token <code>Webskan/1.0 (+https://webskan.com/bot)</code>, e.g.<br><code>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Webskan/1.0 (+https://webskan.com/bot)</code></li>
+<li><strong>IP address</strong>: currently <code>89.68.68.69</code> (Lighthouse and browser-based checks come from the same address with a plain Chrome User-Agent, because pretending to be a different browser would distort the measurement).</li>
+<li><strong>Monitor checks</strong> (one HTTP request every few minutes) come from the Cloudflare Workers network with the same User-Agent token.</li>
+</ul>
+<h2>How many requests we send</h2>
+<ul>
+<li>Quick scan: the home page, <code>robots.txt</code>, a few control URLs and one Lighthouse run – usually 50–150 requests within a minute (mostly the home page’s own assets: images, scripts, fonts).</li>
+<li>In-depth audit: up to 30 pages, up to 500 links (HEAD/GET), up to 8 key pages opened in a mobile browser, an accessibility test and two Lighthouse runs – a few hundred to about 2,000 requests over 5–15 minutes, at most 4–8 parallel connections.</li>
+<li>We submit and change nothing: forms are not sent, in shops we stop on the checkout page. We respect <code>robots.txt</code> when crawling subpages (the home page and control URLs are always fetched, as that is what the order is about).</li>
+</ul>
+<h2>Your firewall blocks the scanner – what to do</h2>
+<p>Shop-platform and hosting firewalls (rate limits, bot protection, Cloudflare “Bot Fight Mode”) sometimes cut the scanner off after a few dozen requests: they answer 403/429 or a “You have been blocked” page. We pause the audit of such a site and e-mail the person who ordered it – instead of sending a report with gaps. To let the audit through, add an exception for the scanner:</p>
+<ul>
+<li><strong>Easiest by User-Agent:</strong> a rule “allow when User-Agent contains <code>Webskan</code>”.</li>
+<li><strong>Or by IP address:</strong> <code>89.68.68.69</code> (if the address changes, we will update this page).</li>
+<li>If the firewall is managed by your platform or hosting provider, forward them this: <em>“Please add a firewall/WAF exception for the duration of a website audit: User-Agent containing “Webskan” or IP address 89.68.68.69, details: https://webskan.com/bot”</em>.</li>
+</ul>
+<p>Once the exception is in place nothing else is needed: we retry an ordered audit automatically every 6 hours for 7 days. You can also reply to our e-mail and we will check right away. If an exception is not possible, we refund the order in full (<a href="/en/terms/">terms</a>, section 6).</p>
+<h2>Do not want us to scan your site?</h2>
+<p>Write to <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a> and we will add the domain to our exclusion list. You can also block the <code>Webskan</code> token in your firewall; the scanner does not try to work around blocks.</p>
+</section></main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a> · <a href="/developers/" hreflang="en">Dla programistów (EN)</a> · kontakt: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer></div></body></html>

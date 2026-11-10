@@ -190,6 +190,8 @@ export class ScanQueue extends DurableObject {
     if (Math.random() < 0.05) { this.sql.exec('DELETE FROM scans WHERE at < ?', Date.now() - SCAN_TTL * 1000); this.sql.exec('DELETE FROM counters WHERE exp < ?', Date.now()); }
   }
   get(id) { const r = this.sql.exec('SELECT * FROM scans WHERE id=?', id).toArray()[0]; return r ? rowToJob(r) : null; }
+  // Ostatni zakończony skan hosta z 24 h (done albo error) – formularz zamówienia ostrzega, gdy ostatni skan skończył się blokadą zapory.
+  latestFinished(host) { const r = this.sql.exec('SELECT status, error, finished FROM scans WHERE host=? AND status IN (?,?) AND finished > ? ORDER BY finished DESC LIMIT 1', host, 'done', 'error', Date.now() - HOST_CACHE_TTL * 1000).toArray()[0]; return r ? { status: r.status, error: r.error || null, finished: r.finished } : null; }
   latestDone(host) { const r = this.sql.exec('SELECT * FROM scans WHERE host=? AND status=? AND finished > ? ORDER BY finished DESC LIMIT 1', host, 'done', Date.now() - HOST_CACHE_TTL * 1000).toArray()[0]; return r ? rowToJob(r) : null; }
   next(limit) {
     const rows = this.sql.exec('SELECT id,url,lang FROM scans WHERE status=? ORDER BY at LIMIT ?', 'queued', limit).toArray();
@@ -234,6 +236,23 @@ const AUDIT_COLS = 'id,host,url,pages,parent,status,at,started,finished,error,ke
 const rowToAudit = (r) => ({ id: r.id, host: r.host, url: r.url, pages: r.pages, parent: r.parent, status: r.status, at: new Date(r.at).toISOString(), startedAt: r.started ? new Date(r.started).toISOString() : null, finishedAt: r.finished ? new Date(r.finished).toISOString() : null, result: r.data ? JSON.parse(r.data) : null, error: r.error, keyHash: r.key_hash, ipHash: r.ip_hash });
 const store = (env) => env.SCAN_QUEUE.get(env.SCAN_QUEUE.idFromName('main'));
 export const scanStore = store;
+
+// Czy strona blokuje nasz skaner? Dwa sygnały: (1) ostatni darmowy skan hosta (z naszego IP) skończył się 403/429/stroną blokady,
+// (2) szybkie pobranie strony głównej z Workera z tokenem Webskan w User-Agencie daje 403/429 albo stronę blokady.
+// Zwraca krótki powód albo null; każdy błąd własny = null (nie blokujemy sprzedaży przez własną awarię).
+export const SCANNER_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Webskan/1.0 (+https://webskan.com/bot)';
+export async function blockedPreflight(env, url) {
+  const host = (() => { try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return null; } })();
+  if (!host) return null;
+  const [last, live] = await Promise.all([
+    store(env).latestFinished(host).catch(() => null),
+    fetch(url, { headers: { 'user-agent': SCANNER_UA, accept: 'text/html,*/*' }, redirect: 'follow', signal: AbortSignal.timeout(8000) }).then(async (r) => { const body = r.status === 200 ? (await r.text()).slice(0, 4000) : ''; return { status: r.status, body }; }).catch(() => null),
+  ]);
+  if (live && (live.status === 403 || live.status === 429)) return `HTTP ${live.status}`;
+  if (live && live.status === 200 && live.body.length < 2500 && /blocked|zablokowan|access denied|captcha|bot detection|just a moment|attention required|cf-chl/i.test(live.body)) return 'BLOCKED';
+  if (last && last.status === 'error' && /BLOCKED|HTTP (403|429)/.test(last.error || '')) return `ostatni skan: ${/BLOCKED/.test(last.error) ? 'strona blokady' : last.error.match(/HTTP (403|429)/)[0]}`;
+  return null;
+}
 
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const fill = (s, v) => s.replace(/\{(\w+)\}/g, (_, k) => esc(Array.isArray(v[k]) ? v[k].join(', ') : v[k] ?? ''));
