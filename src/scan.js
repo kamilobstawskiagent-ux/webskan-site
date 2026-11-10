@@ -456,6 +456,7 @@ function errorText(e, lang) {
     if (c >= 500) return pl ? `serwer odpowiedział kodem ${c} (błąd po stronie serwera)` : `the server answered ${c} (server-side error)`;
     return pl ? `serwer odpowiedział kodem ${c}` : `the server answered ${c}`;
   }
+  if (/quick exit null|exit null/i.test(raw)) return pl ? 'pomiar przekroczył limit czasu (strona ładowała się zbyt długo)' : 'the measurement timed out (the page took too long to load)';
   if (/fetch failed|ETIMEDOUT|ECONNREFUSED|ECONNRESET|timeout/i.test(raw)) return pl ? 'serwer nie przyjął połączenia (brak odpowiedzi albo odrzucone połączenie)' : 'the server did not accept the connection (no response or connection refused)';
   if (/ENOTFOUND|getaddrinfo|DNS/i.test(raw)) return pl ? 'nie udało się ustalić adresu serwera (DNS)' : 'the server address could not be resolved (DNS)';
   return raw;
