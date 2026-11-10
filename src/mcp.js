@@ -33,7 +33,8 @@ const text = (s) => ({ type: 'text', text: s });
 const errResult = (msg, extra = {}) => ({ content: [text(msg)], structuredContent: { error: msg, ...extra }, isError: true });
 const okResult = (md, structured) => ({ content: [text(md)], structuredContent: structured });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const fill = (s, v) => s.replace(/\{(\w+)\}/g, (_, k) => (Array.isArray(v[k]) ? v[k].join(', ') : v[k] ?? ''));
+const pick = (n, f) => f.length === 2 ? (n === 1 ? f[0] : f[1]) : (n === 1 ? f[0] : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? f[1] : f[2]);
+const fill = (s, v) => s.replace(/\{(\w+)((?:\|[^}|]*)+)?\}/g, (_, k, f) => f ? pick(Number(v[k]), f.slice(1).split('|')) : (Array.isArray(v[k]) ? v[k].join(', ') : v[k] ?? ''));
 const newId = () => [...crypto.getRandomValues(new Uint8Array(8))].map((b) => b.toString(16).padStart(2, '0')).join('');
 async function sha256(s, bytes = 32) { return [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)))].slice(0, bytes).map((b) => b.toString(16).padStart(2, '0')).join(''); }
 const fmtKB = (b) => (b == null ? '–' : b >= 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.round(b / 1024) + ' KB');

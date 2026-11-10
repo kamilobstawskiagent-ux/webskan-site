@@ -37,13 +37,13 @@ const T = {
       no_hsts: ['Brak nagłówka HSTS', 'Przeglądarka nie wie, że ma zawsze używać https. To jedna linijka w konfiguracji serwera.'],
       security_headers: ['Brakuje {v} nagłówków bezpieczeństwa', '{list}. Chronią użytkowników przed podmianą treści i wstrzyknięciem skryptów.'],
       no_title: ['Brak tytułu strony', 'Tytuł to pierwsza rzecz, którą widać w wynikach Google.'],
-      title_long: ['Tytuł strony ma {v} znaków', 'Google ucina tytuły powyżej ok. 60 znaków.'],
+      title_long: ['Tytuł strony ma {v} {v|znak|znaki|znaków}', 'Google ucina tytuły powyżej ok. 60 znaków.'],
       no_meta_desc: ['Brak opisu strony (meta description)', 'Google sam wybiera fragment tekstu pod linkiem; zwykle gorszy niż Twój.'],
       no_h1: ['Brak nagłówka H1', 'Główny nagłówek mówi Google i czytnikom ekranu, o czym jest strona.'],
-      multi_h1: ['{v} nagłówków H1 na stronie', 'Powinien być jeden główny nagłówek.'],
+      multi_h1: ['{v} {v|nagłówek|nagłówki|nagłówków} H1 na stronie', 'Powinien być jeden główny nagłówek.'],
       img_alt: ['{v} z {total} obrazków bez opisu alternatywnego', 'Osoby niewidome i Google Grafika nie wiedzą, co przedstawiają.'],
       no_viewport: ['Brak meta viewport', 'Strona nie skaluje się na telefonach. Google indeksuje najpierw wersję mobilną.'],
-      mixed_content: ['{v} elementów ładowanych po http na stronie https', 'Przeglądarki blokują je albo pokazują ostrzeżenie.'],
+      mixed_content: ['{v} {v|element ładowany|elementy ładowane|elementów ładowanych} po http na stronie https', 'Przeglądarki blokują je albo pokazują ostrzeżenie.'],
       no_canonical: ['Brak adresu kanonicznego', 'Ryzyko duplikatów w Google (www / bez www, parametry w adresie).'],
       no_og: ['Brak znaczników Open Graph', 'Link udostępniony na Facebooku lub LinkedIn nie ma podglądu z obrazkiem.'],
       no_lang: ['Brak atrybutu języka (lang)', 'Czytniki ekranu i Google nie wiedzą, w jakim języku jest strona.'],
@@ -89,7 +89,7 @@ const T = {
       multi_h1: ['{v} H1 headings on the page', 'There should be one main heading.'],
       img_alt: ['{v} of {total} images without alt text', 'Blind visitors and Google Images cannot tell what they show.'],
       no_viewport: ['Missing viewport meta tag', 'The page does not scale on phones. Google indexes the mobile version first.'],
-      mixed_content: ['{v} elements loaded over http on an https page', 'Browsers block them or show a warning.'],
+      mixed_content: ['{v} {v|element|elements} loaded over http on an https page', 'Browsers block them or show a warning.'],
       no_canonical: ['Missing canonical URL', 'Risk of duplicates in Google (www / non-www, URL parameters).'],
       no_og: ['Missing Open Graph tags', 'Links shared on Facebook or LinkedIn get no image preview.'],
       no_lang: ['Missing language attribute (lang)', 'Screen readers and Google cannot tell the page language.'],
@@ -255,7 +255,8 @@ export async function blockedPreflight(env, url) {
 }
 
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const fill = (s, v) => s.replace(/\{(\w+)\}/g, (_, k) => esc(Array.isArray(v[k]) ? v[k].join(', ') : v[k] ?? ''));
+const pick = (n, f) => f.length === 2 ? (n === 1 ? f[0] : f[1]) : (n === 1 ? f[0] : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? f[1] : f[2]);
+const fill = (s, v) => s.replace(/\{(\w+)((?:\|[^}|]*)+)?\}/g, (_, k, f) => f ? esc(pick(Number(v[k]), f.slice(1).split('|'))) : esc(Array.isArray(v[k]) ? v[k].join(', ') : v[k] ?? ''));
 const newId = () => { const a = new Uint8Array(8); crypto.getRandomValues(a); return [...a].map((b) => b.toString(16).padStart(2, '0')).join(''); };
 
 export function layout(lang, title, body, head = '') {
