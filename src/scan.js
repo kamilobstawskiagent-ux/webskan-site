@@ -440,8 +440,25 @@ export async function scanPage(request, env, lang, id) {
     if (age > STALE_MS) return layout(lang, t.failed, `<section class="hero"><h1>${t.failed}</h1><p>${t.failedBody(lang === 'pl' ? 'przekroczony czas' : 'timeout')}</p>${scanForm(lang, job.url)}</section>`);
     return layout(lang, t.scanning(host), `<section class="hero"><h1>${esc(t.scanning(host))}</h1><p class="lead">${t.scanningBody}</p><div class="progress"><div></div></div>${age > 60000 ? `<p class="note">${t.queuedLong}</p>` : ''}</section>`, '<meta http-equiv="refresh" content="4">');
   }
-  if (job.status === 'error') return layout(lang, t.failed, `<section class="hero"><h1>${t.failed}: ${esc(host)}</h1><p>${t.failedBody(esc(job.error))}</p>${scanForm(lang, '')}${orderBox(lang, env, job.url, t)}</section>`);
+  if (job.status === 'error') return layout(lang, t.failed, `<section class="hero"><h1>${t.failed}: ${esc(host)}</h1><p>${t.failedBody(esc(errorText(job.error, lang)))}</p>${scanForm(lang, '')}${orderBox(lang, env, job.url, t)}</section>`);
   return layout(lang, t.title(host), renderResult(job, lang, env, new URL(request.url)), ogHead(job, lang, new URL(request.url)));
+}
+
+// Powód niepowodzenia po ludzku (surowy błąd pollera: 'HTTP 429', 'fetch failed', 'quick exit 1: …').
+function errorText(e, lang) {
+  const raw = String(e || ''), m = raw.match(/^HTTP (\d{3})/);
+  const pl = lang === 'pl';
+  if (m) {
+    const c = Number(m[1]);
+    if (c === 429) return pl ? 'serwer odpowiedział kodem 429 (za dużo zapytań) – najczęściej blokada automatów' : 'the server answered 429 (too many requests) – usually a bot block';
+    if (c === 403 || c === 401) return pl ? `serwer odpowiedział kodem ${c} (dostęp zabroniony) – najczęściej blokada automatów` : `the server answered ${c} (forbidden) – usually a bot block`;
+    if (c === 404 || c === 410) return pl ? `serwer odpowiedział kodem ${c} (strona nie istnieje)` : `the server answered ${c} (page does not exist)`;
+    if (c >= 500) return pl ? `serwer odpowiedział kodem ${c} (błąd po stronie serwera)` : `the server answered ${c} (server-side error)`;
+    return pl ? `serwer odpowiedział kodem ${c}` : `the server answered ${c}`;
+  }
+  if (/fetch failed|ETIMEDOUT|ECONNREFUSED|ECONNRESET|timeout/i.test(raw)) return pl ? 'serwer nie przyjął połączenia (brak odpowiedzi albo odrzucone połączenie)' : 'the server did not accept the connection (no response or connection refused)';
+  if (/ENOTFOUND|getaddrinfo|DNS/i.test(raw)) return pl ? 'nie udało się ustalić adresu serwera (DNS)' : 'the server address could not be resolved (DNS)';
+  return raw;
 }
 
 function scanForm(lang, url) {
@@ -500,7 +517,7 @@ function renderResult(job, lang, env, u) {
   const link = `${u.origin}${t.path(job.id)}`;
   const noLh = s.performance == null; // Lighthouse bez ocen (interstitial / NO_FCP) – zamiast kresek wyjaśnienie (10.11)
   const lhBlock = noLh
-    ? `<div class="lhfail"><h2>${t.lhFail}</h2><p>${t.lhFailWhy[lh.reason] || t.lhFailWhy.UNKNOWN}</p><p class="muted small">${t.lhFailTail}</p></div>`
+    ? `<div class="lhfail"><h2>${t.lhFail}</h2><p>${t.lhFailWhy[lh.reason] || t.lhFailWhy.UNKNOWN}</p>${lh.runtimeCode ? `<p class="muted small">Lighthouse: ${esc(lh.runtimeCode)}</p>` : ''}<p class="muted small">${t.lhFailTail}</p></div>`
     : `<div class="scores big">${[['performance', t.perf], ['accessibility', t.a11y], ['best-practices', t.bp], ['seo', t.seo]].map(([k, l]) => `<div class="score ${cls(s[k])}"><b>${s[k] ?? '–'}</b><small>${l}</small></div>`).join('')}</div>
   <p class="muted small">${t.mobileNote}</p>`;
   const metricsBlock = noLh ? '' : `<section><h2>${t.metrics}</h2><table><tr><th>${t.metric}</th><th>${t.value}</th><th>${t.rating}</th></tr>
