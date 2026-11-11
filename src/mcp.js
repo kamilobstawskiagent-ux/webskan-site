@@ -41,7 +41,7 @@ const fmtKB = (b) => (b == null ? '–' : b >= 1048576 ? (b / 1048576).toFixed(1
 const fmtS = (ms) => (ms == null ? '–' : (ms / 1000).toFixed(1) + ' s');
 const sortFindings = (fs) => [...fs].sort((a, b) => (SEV_ORDER[a.severity] ?? 9) - (SEV_ORDER[b.severity] ?? 9));
 const summarize = (fs) => fs.reduce((acc, f) => { acc.total++; acc[f.severity] = (acc[f.severity] || 0) + 1; return acc; }, { total: 0, high: 0, medium: 0, low: 0, info: 0 });
-const etaFor = (pages, ahead) => 30 + pages * 6 + ahead * 120;
+const etaFor = (pages, ahead) => 30 + pages * 6 + Math.ceil(ahead / 2) * 120; // poller audytów ma 2 wątki
 const BAD_URL = 'Invalid URL: give a public website address such as https://example.com (no localhost, private IPs, .local/.internal hosts or credentials in the URL).';
 
 // --- Plan (Polar license key) ---------------------------------------------------------------------------------
