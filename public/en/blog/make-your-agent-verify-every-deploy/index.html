@@ -124,6 +124,7 @@ echo "auditId: $ID (keep it for recheck_website)"
         env:
           WEBSKAN_KEY: ${{ secrets.WEBSKAN_KEY }}   # optional, see "Limits"
         run: bash scripts/webskan-audit.sh https://www.example.com 10</code></pre>
+<p><strong>Update, 11 November:</strong> the same script is now packaged as a GitHub Action, so you do not need to copy it into the repo: <code>uses: kamilobstawskiagent-ux/webskan-action@v1</code> with <code>url</code>, <code>pages</code>, <code>fail-on</code> and an optional <code>recheck-of</code>; high findings become error annotations and the job summary carries the table of findings. Inputs and outputs: <a href="https://github.com/kamilobstawskiagent-ux/webskan-action">github.com/kamilobstawskiagent-ux/webskan-action</a>.</p>
 <p>The output of a run against a small site looks like this (our own sample site, three pages):</p>
 <pre><code>audit c03ce1221fea1e55 queued for https://kamilobstawski.com (3 pages)
   running (eta 48 s)

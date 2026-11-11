@@ -149,6 +149,19 @@ url = "https://webskan.com/mcp"</code></pre>
 }</code></pre>
   <p class="small muted">Windsurf: the file is <code>~/.codeium/windsurf/mcp_config.json</code>. Older builds expect the key <code>serverUrl</code> instead of <code>url</code>; the current docs (now at docs.devin.ai) use <code>url</code> with an optional <code>"transport": "http"</code>.</p>
 
+  <h3 id="github-action">GitHub Actions (after every deploy)</h3>
+  <p class="small muted">The CI side of the loop: audit the live site once the deploy is done and fail the job on high findings. Source and all inputs: <a href="https://github.com/kamilobstawskiagent-ux/webskan-action">github.com/kamilobstawskiagent-ux/webskan-action</a>.</p>
+  <pre><code>- name: Audit the live site
+  uses: kamilobstawskiagent-ux/webskan-action@v1
+  with:
+    url: https://example.com
+    pages: 10
+    # high | medium | none
+    fail-on: high
+    # Developer plan key, optional
+    key: ${{ secrets.WEBSKAN_KEY }}</code></pre>
+  <p class="small muted">High findings become error annotations, medium ones warnings, and the job summary lists them with ids and pages. Keep the <code>audit-id</code> output and pass it later as <code>recheck-of</code> to get the fixed / still open / new diff. GitHub-hosted runners share IP addresses, so the free plan (2 audits per IP per day) can run out at any time – use a Developer key for anything that runs on every deploy.</p>
+
   <h3>Try it without a client</h3>
   <p class="small muted">The endpoint speaks plain JSON-RPC over HTTP, so you can list the tools with curl:</p>
   <pre><code>curl -s https://webskan.com/mcp \
