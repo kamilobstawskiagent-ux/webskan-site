@@ -3,7 +3,7 @@
   "name": "webskan",
   "main": "src/worker.js",
   "compatibility_date": "2026-11-04",
-  "observability": { "enabled": true },
+  "observability": { "enabled": true, "head_sampling_rate": 0.2 },
   "workers_dev": true,
   "routes": [
     { "pattern": "webskan.com", "custom_domain": true },
