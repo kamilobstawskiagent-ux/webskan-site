@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Publicznie dostępne pliki na stronie: phpinfo, logi, .git, kopie bazy – jak sprawdzić i zamknąć – Webskan</title>
+<meta name="description" content="Co dziesiąty mały sklep internetowy ma pod publicznym adresem plik, którego nie powinno być widać: phpinfo.php, debug.log, katalog .git, kopię bazy albo panel Adminer. Jak to sprawdzić w 5 minut, co każdy z tych plików zdradza i jak go zamknąć na Apache, nginx i w WordPressie.">
+<link rel="canonical" href="https://webskan.com/blog/publicznie-dostepne-pliki-na-stronie/">
+<meta property="og:title" content="Publicznie dostępne pliki na stronie: phpinfo, logi, .git, kopie bazy – jak sprawdzić i zamknąć">
+<meta property="og:description" content="Co dziesiąty mały sklep ma pod publicznym adresem plik, którego nie powinno być widać. Lista adresów do sprawdzenia w 5 minut, co każdy plik zdradza i gotowe reguły .htaccess / nginx, które go zamykają.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/blog/publicznie-dostepne-pliki-na-stronie/">
+<meta property="og:image" content="https://webskan.com/og-pl.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Publicznie dostępne pliki na stronie: phpinfo, logi, .git, kopie bazy – jak sprawdzić i zamknąć","description":"Co dziesiąty mały sklep internetowy ma pod publicznym adresem plik, którego nie powinno być widać. Jak to sprawdzić w 5 minut, co każdy plik zdradza i jak go zamknąć na Apache, nginx i w WordPressie.","datePublished":"2026-11-12","dateModified":"2026-11-12","inLanguage":"pl","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"mainEntityOfPage":"https://webskan.com/blog/publicznie-dostepne-pliki-na-stronie/"}</script>
+<link rel="alternate" type="application/rss+xml" title="Webskan – blog (RSS)" href="/blog/feed.xml">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a><a href="/#faq">FAQ</a><a href="/en/blog/" hreflang="en">EN</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 12 listopada 2026 · 8 min czytania</p>
+<h1>Publicznie dostępne pliki na stronie: phpinfo, logi, .git, kopie bazy – jak sprawdzić i zamknąć</h1>
+<p class="lead">Strona działa, certyfikat jest, sklep sprzedaje – a pod adresem <code>twojsklep.pl/info.php</code> od trzech lat leży pełna konfiguracja serwera, pod <code>/wp-content/debug.log</code> 190 MB komunikatów o błędach, a pod <code>/.git/</code> cały kod strony z historią zmian. Nikt tego nie widzi, bo nikt tam nie wchodzi – poza skanerami, które robią to automatycznie, całą dobę. Gdy <a href="/blog/skan-255-sklepow-internetowych/">przeskanowaliśmy 255 małych sklepów internetowych</a>, taki plik miał co jedenasty. Poniżej: które adresy sprawdzić, co każdy plik zdradza i jak go zamknąć.</p>
+
+<h2>Skąd się biorą takie pliki</h2>
+<p>Prawie nigdy z włamania. Zwykle to pozostałość po pracy nad stroną: wykonawca wgrał <code>info.php</code>, żeby sprawdzić wersję PHP na nowym hostingu, i zapomniał usunąć; ktoś włączył tryb debugowania w WordPressie i nigdy go nie wyłączył; strona była wdrażana przez <code>git pull</code> bezpośrednio w katalogu publicznym; przed migracją zrobiono kopię bazy „na chwilę” do <code>public_html/backup.sql</code>; panel Adminer wgrano, bo hosting nie miał phpMyAdmina. Każda z tych rzeczy ma sens przez godzinę. Problem w tym, że serwer WWW serwuje wszystko, co leży w katalogu publicznym, dopóki ktoś mu tego nie zabroni.</p>
+
+<h2>Sprawdzenie w 5 minut</h2>
+<p>Potrzebna jest tylko przeglądarka w trybie prywatnym (żeby nie korzystać z zalogowanej sesji). Pod każdym z poniższych adresów powinien pojawić się błąd <strong>403</strong> lub <strong>404</strong> (albo przekierowanie na stronę główną). Jeśli widać treść – plik jest publiczny.</p>
+<table class="vitals headers">
+<thead><tr><th>Adres do sprawdzenia</th><th>Co to jest</th></tr></thead>
+<tbody>
+<tr><td><code>/phpinfo.php</code>, <code>/info.php</code>, <code>/test.php</code></td><td>wydruk konfiguracji PHP</td></tr>
+<tr><td><code>/wp-content/debug.log</code>, <code>/error_log</code>, <code>/error.log</code></td><td>logi błędów PHP / WordPressa</td></tr>
+<tr><td><code>/.git/HEAD</code>, <code>/.git/config</code></td><td>repozytorium Git</td></tr>
+<tr><td><code>/.env</code></td><td>zmienne środowiskowe z hasłami</td></tr>
+<tr><td><code>/wp-config.php.bak</code>, <code>/wp-config.php~</code>, <code>/wp-config.old</code></td><td>kopie pliku z hasłem do bazy</td></tr>
+<tr><td><code>/backup.sql</code>, <code>/dump.sql</code>, <code>/backup.zip</code>, <code>/<em>nazwadomeny</em>.sql</code></td><td>zrzut bazy lub kopia strony</td></tr>
+<tr><td><code>/adminer.php</code>, <code>/phpmyadmin/</code></td><td>panel do bazy danych</td></tr>
+<tr><td><code>/.DS_Store</code></td><td>lista plików zostawiona przez macOS</td></tr>
+</tbody>
+</table>
+<p>To lista najczęstszych nazw, nie wszystkich możliwych. Skaner, który sprawdza kilkadziesiąt wariantów naraz i rozpoznaje treść (a nie tylko kod odpowiedzi – wiele hostingów odpowiada „200” stroną błędu), jest w <a href="#skan">darmowym skanie Webskan</a> na dole tej strony.</p>
+
+<h2>Co każdy z tych plików zdradza</h2>
+<h3>phpinfo.php / info.php</h3>
+<p>Jedna strona z pełną konfiguracją: dokładna wersja PHP i serwera, ścieżki na dysku (<code>/home/klient123/domains/…</code>), załadowane moduły, limity, czasem zmienne środowiskowe – a w nich bywają hasła do bazy i klucze API. Dla kogoś, kto szuka strony podatnej na konkretny błąd w konkretnej wersji, to gotowa odpowiedź na pytanie „czy warto tu próbować”.</p>
+<h3>Logi błędów (debug.log, error_log)</h3>
+<p>Komunikaty w rodzaju <em>PHP Warning: … in /home/klient123/public_html/wp-content/plugins/nazwa-wtyczki/plik.php on line 212</em>. Z logu można odczytać listę zainstalowanych wtyczek z wersjami, strukturę katalogów, a przy źle napisanych formularzach – fragmenty danych wpisanych przez klientów. Dodatkowo log rośnie bez końca: dwa z plików, które widzieliśmy w skanie 255 sklepów, miały po około 190 MB i spowalniały każdą stronę, która do nich dopisywała.</p>
+<h3>Katalog .git</h3>
+<p>Jeśli <code>/.git/HEAD</code> odpowiada tekstem <code>ref: refs/heads/…</code>, repozytorium jest do pobrania w całości – istnieją narzędzia, które robią to automatycznie. W repozytorium jest kod strony (z ewentualnymi własnymi błędami bezpieczeństwa), a w historii zmian często pliki konfiguracyjne z hasłami, które „kiedyś” ktoś dodał i potem usunął. Usunięcie z bieżącej wersji nie usuwa z historii.</p>
+<h3>.env, kopie wp-config, zrzuty bazy, archiwa</h3>
+<p>To już nie konfiguracja, tylko dane: hasło do bazy, a w zrzucie bazy – klienci, zamówienia, adresy, zahaszowane hasła. Publicznie dostępna kopia bazy sklepu to naruszenie ochrony danych osobowych w rozumieniu RODO, niezależnie od tego, czy ktoś ją pobrał. O tym, co to oznacza praktycznie, piszemy w tekście <a href="/blog/rodo-na-stronie-firmowej/">RODO na stronie firmowej</a>.</p>
+<h3>Adminer, phpMyAdmin</h3>
+<p>Formularz logowania do bazy danych wystawiony na cały internet. Samo hasło go nie chroni: panel można atakować słownikowo bez ograniczeń, a znane wersje Adminera miały błędy pozwalające czytać pliki z serwera bez logowania.</p>
+<h3>.DS_Store</h3>
+<p>Najmniej groźny, ale wymowny: plik, który macOS tworzy w każdym katalogu otwartym w Finderze, zawiera listę plików i podkatalogów – także tych, których nazw nikt by nie zgadł (<code>stara-wersja/</code>, <code>kopia_2023.zip</code>). Jego obecność zwykle oznacza, że pliki wgrywano ręcznie i nikt nie przeglądał, co dokładnie trafiło na serwer.</p>
+
+<h2>Jak to zamknąć</h2>
+<p>Dwa kroki, w tej kolejności: <strong>usunąć</strong> plik z katalogu publicznego (albo przenieść poza niego), a potem <strong>zabronić</strong> serwerowi serwowania takich plików w ogóle – żeby następny <code>info.php</code> też był niewidoczny. Katalog publiczny to zwykle <code>public_html</code>, <code>htdocs</code> lub <code>www</code> w menedżerze plików hostingu albo przez FTP/SFTP.</p>
+<h3>Apache (większość hostingów współdzielonych) – plik .htaccess</h3>
+<p>W głównym katalogu strony (tam, gdzie jest <code>index.php</code>) dopisać na początku pliku <code>.htaccess</code>:</p>
+<pre><code># Pliki konfiguracyjne, logi, kopie, repozytoria – nigdy publicznie
+&lt;FilesMatch "^(phpinfo|info|test)\.php$|\.(log|sql|bak|old|orig|env|ini|zip|tar|gz|7z)$|^(error_log|\.env|\.DS_Store|adminer\.php|wp-config\.php~)$"&gt;
+  Require all denied
+&lt;/FilesMatch&gt;
+RedirectMatch 404 /\.(git|svn|hg)(/|$)
+</code></pre>
+<p>Na starszych serwerach (Apache 2.2) zamiast <code>Require all denied</code> działa <code>Order allow,deny</code> + <code>Deny from all</code>. Po zapisaniu warto odświeżyć stronę główną: jeśli pojawi się błąd 500, w regule jest literówka – cofnąć zmianę i poprawić. Uwaga: reguła blokuje też wtyczki i narzędzia, które same nazywają się np. <code>test.php</code>, oraz wszystkie archiwa – jeśli sklep udostępnia klientom pliki <code>.zip</code> do pobrania, usunąć te rozszerzenia z listy; jeśli coś innego przestało działać, zawęzić regułę.</p>
+<h3>nginx</h3>
+<p>W bloku <code>server</code> konfiguracji witryny (zwykle dostęp ma do tego hosting lub administrator, nie właściciel sklepu):</p>
+<pre><code>location ~ /\.(git|svn|hg|env|DS_Store) { deny all; return 404; }
+location ~* ^/(phpinfo|info|test)\.php$ { deny all; return 404; }
+location ~* \.(log|sql|bak|old|orig|ini|zip|tar|gz|7z)$ { deny all; return 404; }
+location ~* ^/(error_log|adminer\.php)$ { deny all; return 404; }
+</code></pre>
+<h3>WordPress – wyłączyć zapis logu do katalogu publicznego</h3>
+<p>W <code>wp-config.php</code> sprawdzić linie z <code>WP_DEBUG</code>. Na sklepie produkcyjnym powinno być:</p>
+<pre><code>define('WP_DEBUG', false);
+define('WP_DEBUG_LOG', false);
+define('WP_DEBUG_DISPLAY', false);
+</code></pre>
+<p>Jeśli log jest potrzebny do diagnozy, można zamiast <code>false</code> podać ścieżkę poza katalogiem publicznym, np. <code>define('WP_DEBUG_LOG', '/home/klient123/logs/wp-debug.log');</code>. Plik <code>debug.log</code> i tak trzeba skasować ręcznie – wyłączenie opcji go nie usuwa.</p>
+<h3>Git – wdrażać bez .git w katalogu publicznym</h3>
+<p>Najprościej: repozytorium poziom wyżej, a katalog publiczny jako podkatalog lub dowiązanie (np. <code>repo/public → public_html</code>). Jeśli to niemożliwe – reguła Apache/nginx z poprzednich punktów blokuje dostęp, a dodatkowo: <strong>jeśli w historii repozytorium kiedykolwiek były hasła, trzeba je zmienić</strong>, bo każdy, kto zdążył pobrać repozytorium, nadal je ma.</p>
+
+<h2>Co zrobić po zamknięciu</h2>
+<ol>
+<li><strong>Sprawdzić ponownie</strong> każdy adres w trybie prywatnym – 403/404. Pamięć podręczna hostingu lub Cloudflare może przez chwilę pokazywać starą odpowiedź; wtedy wyczyścić cache.</li>
+<li><strong>Zmienić hasła</strong>, jeśli publiczny był <code>.env</code>, kopia <code>wp-config</code>, zrzut bazy albo katalog <code>.git</code> z taką zawartością w historii: baza danych, panel administracyjny, FTP/SFTP, klucze API widoczne w pliku.</li>
+<li><strong>Zajrzeć do logów serwera</strong> (panel hostingu → statystyki / logi dostępu) i sprawdzić, czy ktoś pobierał ten plik. Przy kopii bazy z danymi klientów to decyduje o tym, czy trzeba zgłosić naruszenie do UODO (72 godziny od stwierdzenia).</li>
+<li><strong>Dopisać to do listy kontrolnej po każdym wdrożeniu</strong> – obok testu formularza i przekierowań; mamy taką w tekście <a href="/blog/co-sprawdzic-po-wdrozeniu-nowej-strony/">Co sprawdzić po wdrożeniu nowej strony</a>.</li>
+</ol>
+
+<section class="fullbox" id="skan">
+<h2>Sprawdź swoją stronę – za darmo, w minutę</h2>
+<p>Darmowy szybki skan Webskan sprawdza kilkadziesiąt typowych nazw plików konfiguracyjnych, logów, kopii i repozytoriów – i patrzy na treść odpowiedzi, nie tylko na kod HTTP, więc strona błędu zwracana jako „200” nie da fałszywego alarmu. Do tego szybkość na telefonie, przekierowanie i HSTS, nagłówki bezpieczeństwa i podstawy SEO. Bez e-maila, bez rejestracji.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="pl"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://twojsklep.pl" required maxlength="500" aria-label="Adres strony"><button class="btn" type="submit">Skanuj za darmo</button></form>
+<p class="note">Szybki skan patrzy na stronę główną i typowe adresy plików. <a href="/#cena">Audyt pogłębiony</a> (249 zł) sprawdza całą witrynę – do 30 podstron, bezpieczeństwo, szybkość, dostępność i błędy widoczne dla klientów – z ponownym sprawdzeniem po poprawkach i 30 dniami <a href="/#cena">Webskan Monitora</a> w cenie.</p>
+</section>
+
+<h2>Najczęstsze pytania</h2>
+<h3>Hosting mówi, że „to normalne” albo że plik jest potrzebny</h3>
+<p>Żaden z wymienionych plików nie jest potrzebny do działania sklepu. Jeśli panel hostingu sam tworzy <code>info.php</code> lub <code>error_log</code>, reguła w <code>.htaccess</code> rozwiązuje problem bez kłótni z hostingiem.</p>
+<h3>Czy samo zablokowanie w .htaccess wystarczy, bez usuwania pliku?</h3>
+<p>Dla phpinfo i logów – praktycznie tak, choć usunięcie jest czystsze. Dla kopii bazy, <code>.env</code> i <code>.git</code> – nie: plik z hasłami nie powinien leżeć w katalogu publicznym nawet zablokowany, bo jedna zmiana konfiguracji (migracja, nowy hosting, nadpisany <code>.htaccess</code> przez wtyczkę) odsłania go z powrotem.</p>
+<h3>Skąd mam wiedzieć, czy ktoś już to pobrał?</h3>
+<p>Tylko z logów dostępu serwera. Większość hostingów trzyma je od kilku dni do kilku tygodni, więc im szybciej, tym lepiej. Jeśli logów nie ma – założyć, że plik mógł zostać pobrany, i postąpić jak w punkcie „Co zrobić po zamknięciu”.</p>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/blog/feed.xml">RSS</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a> · <a href="/developers/" hreflang="en">Dla programistów (EN)</a> · kontakt: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer>
+</div>
+</body>
+</html>

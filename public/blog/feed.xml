@@ -8,6 +8,13 @@
 <language>pl</language>
 <lastBuildDate>Thu, 12 Nov 2026 07:00:00 GMT</lastBuildDate>
 <item>
+<title>Publicznie dostępne pliki na stronie: phpinfo, logi, .git, kopie bazy – jak sprawdzić i zamknąć</title>
+<link>https://webskan.com/blog/publicznie-dostepne-pliki-na-stronie/</link>
+<guid isPermaLink="true">https://webskan.com/blog/publicznie-dostepne-pliki-na-stronie/</guid>
+<pubDate>Thu, 12 Nov 2026 07:00:00 GMT</pubDate>
+<description>Co dziesiąty mały sklep internetowy ma pod publicznym adresem plik, którego nie powinno być widać. Jak to sprawdzić w 5 minut, co każdy plik zdradza i jak go zamknąć na Apache, nginx i w WordPressie.</description>
+</item>
+<item>
 <title>Przeskanowaliśmy 255 małych sklepów internetowych: co się psuje najczęściej</title>
 <link>https://webskan.com/blog/skan-255-sklepow-internetowych/</link>
 <guid isPermaLink="true">https://webskan.com/blog/skan-255-sklepow-internetowych/</guid>
