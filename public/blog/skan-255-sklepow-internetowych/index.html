@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Przeskanowaliśmy 255 małych sklepów internetowych: co się psuje najczęściej – Webskan</title>
+<meta name="description" content="Strony główne 255 małych polskich sklepów internetowych zmierzone tym samym narzędziem w dwa dni: mediana szybkości na telefonie 58/100, LCP 8,3 s, 98 % bez kompletu nagłówków bezpieczeństwa, 9 % z publicznie dostępnymi plikami phpinfo, logami PHP albo panelem bazy danych. Liczby, metoda i trzy rzeczy do sprawdzenia we własnym sklepie.">
+<link rel="canonical" href="https://webskan.com/blog/skan-255-sklepow-internetowych/">
+<meta property="og:title" content="Przeskanowaliśmy 255 małych sklepów internetowych: co się psuje najczęściej">
+<meta property="og:description" content="Mediana szybkości na telefonie 58/100, LCP 8,3 s, 98 % bez kompletu nagłówków bezpieczeństwa, 9 % z publicznie dostępnymi plikami, których nie powinno być widać. Liczby z 255 sklepów i trzy rzeczy do sprawdzenia dziś.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/blog/skan-255-sklepow-internetowych/">
+<meta property="og:image" content="https://webskan.com/og-pl.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Przeskanowaliśmy 255 małych sklepów internetowych: co się psuje najczęściej","description":"Mediana szybkości na telefonie 58/100, LCP 8,3 s, 98 % bez kompletu nagłówków bezpieczeństwa, 9 % z publicznie dostępnymi plikami, których nie powinno być widać. Liczby z 255 sklepów i trzy rzeczy do sprawdzenia dziś.","datePublished":"2026-11-12","dateModified":"2026-11-12","inLanguage":"pl","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com"},"mainEntityOfPage":"https://webskan.com/blog/skan-255-sklepow-internetowych/"}</script>
+<link rel="alternate" type="application/rss+xml" title="Webskan – blog (RSS)" href="/blog/feed.xml">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a><a href="/#faq">FAQ</a><a href="/en/blog/" hreflang="en">EN</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 12 listopada 2026 · 7 min czytania</p>
+<h1>Przeskanowaliśmy 255 małych sklepów internetowych: co się psuje najczęściej</h1>
+<p class="lead">W dwa dni (10–11 listopada 2026) zmierzyliśmy strony główne 255 małych polskich sklepów internetowych tym samym narzędziem, z tego samego komputera i w tych samych warunkach. Wynik jest laboratoryjny, ale porównanie między sklepami jest uczciwe – i mało pocieszające: mediana szybkości na telefonie to 58/100, główna treść pojawia się po 8 sekundach, a co jedenasty sklep ma w internecie plik, którego nie powinien tam mieć.</p>
+
+<h2>Metoda w trzech zdaniach</h2>
+<p>Każdy sklep dostał ten sam pomiar strony głównej: Lighthouse w prawdziwej przeglądarce Chrome z symulacją telefonu i łącza 4G (tak liczy też Google PageSpeed Insights w trybie „laboratoryjnym”), plus kilkanaście sprawdzeń nagłówków HTTP, przekierowań, certyfikatu, HTML i publicznie dostępnych plików. Do zestawienia weszły tylko sklepy, dla których Lighthouse zdołał wystawić pełną ocenę – 255 z około 290 zmierzonych. Próba to małe sklepy z kilkudziesięciu nisz (zoo, kawa i herbata, kosmetyki, ogród, zabawki, sport, zdrowa żywność, rękodzieło, części i narzędzia) na WooCommerce, PrestaShop, Shopify i własnych silnikach; nie jest to próba reprezentatywna dla całego polskiego e-commerce, tylko obraz tego, jak wygląda typowy mały sklep.</p>
+<p>Wynik laboratoryjny oznacza, że u prawdziwych klientów (szybszy telefon, Wi-Fi, pamięć podręczna) bywa lepiej, a na słabym telefonie w terenie – gorzej. Kolejność sklepów od najszybszego do najwolniejszego się od tego nie zmienia.</p>
+
+<h2>Szybkość: mediana 58/100, główna treść po 8 sekundach</h2>
+<table class="vitals headers">
+<thead><tr><th>Pomiar (telefon, 4G)</th><th>Wynik</th></tr></thead>
+<tbody>
+<tr><td>Mediana oceny wydajności Lighthouse</td><td>58/100</td></tr>
+<tr><td>Ocena poniżej 90 („wymaga poprawy” lub gorzej)</td><td>226 sklepów (89 %)</td></tr>
+<tr><td>Ocena poniżej 50 (czerwona)</td><td>92 sklepy (36 %)</td></tr>
+<tr><td>Ocena 90 i więcej</td><td>29 sklepów (11 %)</td></tr>
+<tr><td>Mediana LCP (moment, w którym widać główną treść)</td><td>8,3 s</td></tr>
+<tr><td>LCP powyżej 4 s (Google: „słabo”)</td><td>190 sklepów (75 %)</td></tr>
+<tr><td>Łączne blokowanie wątku (TBT) powyżej progu</td><td>66 sklepów (26 %)</td></tr>
+<tr><td>Przesunięcia układu (CLS) w strefie „słabo”</td><td>35 sklepów (14 %)</td></tr>
+<tr><td>Mediana wagi strony głównej</td><td>3,4 MB (rekord: 81 MB)</td></tr>
+</tbody>
+</table>
+<p>Google uznaje LCP do 2,5 s za dobre, a powyżej 4 s za słabe. Trzy czwarte sklepów z próby jest w tej drugiej grupie – klient na telefonie przez kilka sekund patrzy na pustą stronę albo na sam pasek z logo. W naszym doświadczeniu najgorsze wyniki rzadko wynikają z samej platformy; częściej z liczby wtyczek, sliderów ze zdjęciami w pełnej rozdzielczości i skryptów marketingowych ładowanych na starcie (więcej w tekście <a href="/blog/dlaczego-strona-jest-wolna-na-telefonie/">Dlaczego strona jest wolna na telefonie</a>).</p>
+
+<h2>Bezpieczeństwo: nagłówki prawie u nikogo, pliki, których nie powinno być widać, u co jedenastego</h2>
+<table class="vitals headers">
+<thead><tr><th>Sprawdzenie</th><th>Sklepy z problemem</th></tr></thead>
+<tbody>
+<tr><td>Brak kompletu nagłówków bezpieczeństwa (CSP, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy)</td><td>249 (98 %)</td></tr>
+<tr><td>Brak HSTS</td><td>197 (77 %)</td></tr>
+<tr><td>Adres http:// nie przekierowuje na https://</td><td>22 (9 %)</td></tr>
+<tr><td>Publicznie dostępny plik, którego nie powinno być widać</td><td>24 (9 %)</td></tr>
+</tbody>
+</table>
+<p>Nagłówki bezpieczeństwa to kilka linijek konfiguracji serwera, które ograniczają skutki błędów na stronie (wstrzyknięty skrypt, osadzenie sklepu w cudzej ramce, wyciek adresu strony w odnośnikach). Ich brak sam w sobie nie jest włamaniem, ale 98 % to liczba, która pokazuje, że prawie nikt tego nie konfiguruje – opisujemy je w tekście <a href="/blog/naglowki-bezpieczenstwa-http/">Nagłówki bezpieczeństwa HTTP</a>.</p>
+<p>Poważniejsza jest ostatnia pozycja. U 24 sklepów (9 %) w chwili skanu pod publicznym adresem leżał plik, który powinien być niewidoczny:</p>
+<ul>
+<li><strong>12× phpinfo</strong> (<code>/phpinfo.php</code> lub <code>/info.php</code>) – pełna konfiguracja serwera: wersja PHP, ścieżki na dysku, moduły, czasem zmienne środowiskowe;</li>
+<li><strong>10× log błędów PHP</strong> (<code>/wp-content/debug.log</code>, <code>/error_log</code>) – komunikaty z pełnymi ścieżkami plików i nazwami wtyczek; dwa z nich miały po około 190 MB i rosły od lat;</li>
+<li><strong>2× plik <code>.DS_Store</code></strong> zostawiony przez macOS – lista plików i katalogów, także tych „ukrytych”;</li>
+<li><strong>2× katalog <code>.git</code></strong> – możliwość pobrania całego kodu strony z historią zmian;</li>
+<li><strong>1× panel Adminer</strong> do bazy danych, wystawiony na świat z formularzem logowania.</li>
+</ul>
+<p>Każdy z tych plików sprawdziliśmy ręcznie, zanim trafił do statystyki. Nazw sklepów nie publikujemy – to podatności, nie ciekawostki. Do właścicieli, dla których znaleźliśmy ogólny adres firmowy, wysłaliśmy po jednej wiadomości z opisem pliku i instrukcją, jak go zamknąć.</p>
+
+<h2>Podstawy SEO: nagłówek H1 i opis brakują częściej, niż można by sądzić</h2>
+<table class="vitals headers">
+<thead><tr><th>Sprawdzenie strony głównej</th><th>Sklepy z problemem</th></tr></thead>
+<tbody>
+<tr><td>Brak nagłówka H1</td><td>101 (40 %)</td></tr>
+<tr><td>Kilka nagłówków H1</td><td>29 (11 %)</td></tr>
+<tr><td>Brak meta description</td><td>62 (24 %)</td></tr>
+<tr><td>Tytuł strony dłuższy niż 60 znaków</td><td>84 (33 %)</td></tr>
+<tr><td>Brak adresu kanonicznego (canonical)</td><td>72 (28 %)</td></tr>
+<tr><td>Brak znaczników Open Graph (podgląd w komunikatorach i mediach społecznościowych)</td><td>79 (31 %)</td></tr>
+<tr><td>Obrazki bez tekstu alternatywnego</td><td>79 (31 %)</td></tr>
+<tr><td>Brak atrybutu języka (lang)</td><td>27 (11 %)</td></tr>
+<tr><td>Brak meta viewport (strona nie deklaruje wersji mobilnej)</td><td>16 (6 %)</td></tr>
+<tr><td>Brak tytułu strony</td><td>9 (4 %)</td></tr>
+</tbody>
+</table>
+<p>Żadna z tych pozycji sama nie decyduje o pozycji w Google, ale razem mówią, czy ktokolwiek zaglądał do strony od strony technicznej po jej wdrożeniu. Sklep bez tytułu strony głównej albo bez meta viewport to zwykle sklep, który od wdrożenia nikt nie otworzył w narzędziach dla programistów.</p>
+
+<h2>Dostępność: dwie trzecie poniżej 90/100</h2>
+<p>169 sklepów (66 %) ma ocenę dostępności Lighthouse poniżej 90. To automatyczny pomiar (kontrast, etykiety pól, nazwy linków i przycisków, kolejność nagłówków), który wyłapuje tylko część barier – ale od czerwca 2025 r. część sklepów internetowych podlega ustawie o dostępności (EAA), więc warto wiedzieć, od czego się zaczyna; piszemy o tym w tekście <a href="/blog/dostepnosc-strony-a-prawo-eaa/">Dostępność strony a prawo</a>.</p>
+
+<h2>Trzy rzeczy do sprawdzenia dziś we własnym sklepie</h2>
+<ol>
+<li><strong>Szybkość na telefonie.</strong> Wpisz adres sklepu w <a href="https://pagespeed.web.dev/" rel="noopener">PageSpeed Insights</a> i spójrz na LCP w zakładce „Telefon”. Poniżej 2,5 s – dobrze; powyżej 4 s – klienci czekają na pustą stronę. Jak czytać resztę raportu: <a href="/blog/jak-czytac-raport-pagespeed/">Jak czytać raport PageSpeed</a>.</li>
+<li><strong>Przekierowanie i HSTS.</strong> Wpisz w przeglądarce adres z <code>http://</code> – powinien natychmiast zmienić się na <code>https://</code>. Czy serwer wysyła HSTS, sprawdzisz w darmowym skanie poniżej albo w narzędziach dla programistów (zakładka Sieć → nagłówek <code>Strict-Transport-Security</code>).</li>
+<li><strong>Pliki, których nie powinno być.</strong> Wejdź w trybie prywatnym na <code>twojsklep.pl/phpinfo.php</code>, <code>/info.php</code>, <code>/wp-content/debug.log</code>, <code>/.git/HEAD</code> i <code>/.env</code>. Każdy z tych adresów powinien zwrócić błąd 403 lub 404. Jeśli zobaczysz treść – usuń plik (albo poproś o to opiekuna strony) i zablokuj go w konfiguracji serwera.</li>
+</ol>
+
+<section class="fullbox">
+<h2>Ten sam pomiar dla Twojego sklepu – za darmo</h2>
+<p>Darmowy szybki skan Webskan to dokładnie ten pomiar, którym zmierzyliśmy 255 sklepów: Lighthouse na telefonie, przekierowanie i HSTS, nagłówki bezpieczeństwa, publicznie dostępne pliki, podstawy SEO. Bez e-maila, bez rejestracji, wynik w ok. 30–60 sekund.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="pl"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://twojsklep.pl" required maxlength="500" aria-label="Adres strony"><button class="btn" type="submit">Skanuj za darmo</button></form>
+<p class="note">Szybki skan patrzy tylko na stronę główną. <a href="/#cena">Audyt pogłębiony</a> (249 zł) sprawdza do 30 podstron i do 500 linków, ścieżkę do koszyka w prawdziwej przeglądarce mobilnej, dostępność i bezpieczeństwo całej witryny – z ponownym sprawdzeniem po poprawkach i 30 dniami <a href="/#cena">Webskan Monitora</a> w cenie.</p>
+</section>
+
+<h2>Zastrzeżenia</h2>
+<ul>
+<li>Pomiar z 10–11 listopada 2026, z jednego komputera w Polsce, po jednym przebiegu Lighthouse na sklep. Pojedynczy wynik potrafi różnić się o kilka punktów między przebiegami; mediany i udziały procentowe są na to odporne, pojedyncze rekordy mniej.</li>
+<li>Do statystyki weszły tylko sklepy z pełną oceną Lighthouse (255 z ok. 290). Sklepy, które zablokowały pomiar albo nie załadowały się w 90 s, pominięto – gdyby je doliczyć, wyniki szybkości byłyby gorsze, nie lepsze.</li>
+<li>„Brak kompletu nagłówków bezpieczeństwa” oznacza brak co najmniej jednego z pięciu wymienionych; sklep z czterema z pięciu liczy się tak samo jak sklep bez żadnego.</li>
+<li>Pliki publicznie dostępne liczono według stanu z chwili skanu; każdy z 24 przypadków zweryfikowano ręcznie (kod HTTP 200 i treść pasująca do rodzaju pliku).</li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/blog/feed.xml">RSS</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a> · <a href="/developers/" hreflang="en">Dla programistów (EN)</a> · kontakt: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer>
+</div>
+</body>
+</html>

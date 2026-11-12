@@ -6,7 +6,14 @@
 <atom:link href="https://webskan.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
 <description>Zdrowie strony WWW małej firmy po ludzku: szybkość, bezpieczeństwo, SEO, dostępność, prawo.</description>
 <language>pl</language>
-<lastBuildDate>Sat, 07 Nov 2026 07:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 12 Nov 2026 07:00:00 GMT</lastBuildDate>
+<item>
+<title>Przeskanowaliśmy 255 małych sklepów internetowych: co się psuje najczęściej</title>
+<link>https://webskan.com/blog/skan-255-sklepow-internetowych/</link>
+<guid isPermaLink="true">https://webskan.com/blog/skan-255-sklepow-internetowych/</guid>
+<pubDate>Thu, 12 Nov 2026 07:00:00 GMT</pubDate>
+<description>Mediana szybkości na telefonie 58/100, LCP 8,3 s, 98 % bez kompletu nagłówków bezpieczeństwa, 9 % z publicznie dostępnymi plikami, których nie powinno być widać. Liczby z 255 sklepów i trzy rzeczy do sprawdzenia dziś.</description>
+</item>
 <item>
 <title>Strona po zmianie wykonawcy: lista dostępów, które musisz mieć (i jak sprawdzić, czy je masz)</title>
 <link>https://webskan.com/blog/strona-po-zmianie-wykonawcy-lista-dostepow/</link>
