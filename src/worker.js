@@ -133,6 +133,7 @@ async function route(request, env, pathname, ctx) {
     if (pathname === "/api/audit/next") return nextAudits(request, env);
     if (pathname === "/api/audit/result" && request.method === "POST") return auditResult(request, env);
     if (pathname === "/api/developer/checkout") { // plan Developer (MCP): checkout Polar w USD niezależnie od IP; klucz licencyjny pokazuje strona potwierdzenia Polar
+      if (request.method !== "POST") return Response.redirect(new URL("/developers/#teams", request.url).href, 302); // 12.11: tylko POST z przycisku – crawlery wchodzące w link GET tworzyły puste checkouty w Polar
       if (!env.POLAR_TOKEN || !env.POLAR_PRODUCT_DEVELOPER) return Response.redirect("https://buy.polar.sh/polar_cl_RMFoXX3b2OZdyFTRd7Y4iaSYgL769CDQOrA413aqatO", 302);
       const ip = request.headers.get("cf-connecting-ip") || "";
       const r = await fetch(`${env.POLAR_API}/v1/checkouts/`, { method: "POST", headers: { authorization: `Bearer ${env.POLAR_TOKEN}`, "content-type": "application/json" },

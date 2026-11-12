@@ -195,7 +195,7 @@ url = "https://webskan.com/mcp"</code></pre>
     <li>The same four tools, the same report, the same 30-page maximum. <code>scan_website</code> keeps its 10-per-hour limit (it is cached per host anyway).</li>
   </ul>
   <p><strong>Start on the free plan first.</strong> Everything above works today without a key or an account – <a href="#install">add the server</a>, run <code>scan_website</code> and one <code>audit_website</code> on your own site, and look at the result. You only need a key when two audits a day, or one audit per host per day, gets in the way of your deploy loop. If it does:</p>
-  <p><a class="btn" href="/api/developer/checkout" rel="noopener">Get a key – $29/month</a></p>
+  <form method="post" action="/api/developer/checkout" class="inline"><button class="btn" type="submit">Get a key – $29/month</button></form>
   <p class="small muted">Billed by Polar (merchant of record; VAT handled at checkout), cancel any time in the customer portal, no minimum term.</p>
   <h3 id="key">After purchase</h3>
   <p>The key (format <code>WSK-…</code>) is shown on Polar's confirmation page right after checkout, and within a few minutes we e-mail it to you together with these setup instructions; it is always available in the customer portal (link in the order e-mail). Put it in your MCP client configuration as a header:</p>
