@@ -139,16 +139,19 @@ function dailyCharts(byDay, lang, t) {
 <p style="display:flex;flex-wrap:wrap;gap:.4rem 1rem;color:#6b7280;font-size:.8rem;margin:.5rem 0 0"><span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#1a7f37;vertical-align:-1px"></span> ${t.legendGood}</span><span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#b45309;vertical-align:-1px"></span> ${t.legendWarn}</span><span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#b42318;vertical-align:-1px"></span> ${t.legendBad}</span><span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#e5e7eb;vertical-align:-1px"></span> ${t.legendNone}</span></p>`;
   const pts = days.map((r, i) => r.avg_ms != null ? { i, v: Math.round(r.avg_ms), d: r.d } : null).filter(Boolean);
   if (pts.length < 7) return strip + `<p style="color:#6b7280;font-size:.9rem;margin:1rem 0 0">${t.respSoon}</p>`;
-  const max = Math.max(100, ...pts.map((p) => p.v)); const LH = 100, LW = 600;
-  const x = (i) => i * (LW / 29), y = (v) => LH - (v / max) * LH;
+  // 12.11 (UI audyt): oś X od pierwszego dnia z danymi (zamiast pustych 3 tygodni przy świeżym monitorze), skala = „ładny” sufit nad maksimum (min 50 ms), nie sztywne 0–100.
+  const first = pts[0].i, span = Math.max(1, 29 - first);
+  const peak = Math.max(...pts.map((p) => p.v)) * 1.2; const step = peak <= 100 ? 10 : peak <= 500 ? 50 : peak <= 2000 ? 100 : 500;
+  const max = Math.max(50, Math.ceil(peak / step) * step); const LH = 100, LW = 600;
+  const x = (i) => (i - first) * (LW / span), y = (v) => LH - (v / max) * LH;
   const path = pts.map((p, k) => `${k ? 'L' : 'M'}${x(p.i).toFixed(1)},${y(p.v).toFixed(1)}`).join(' ');
-  const cols = days.map((r, i) => r.avg_ms != null ? `<rect x="${(x(i) - LW / 58).toFixed(1)}" y="0" width="${(LW / 29).toFixed(1)}" height="${LH}" fill="transparent"><title>${label(r.d)}: ${Math.round(r.avg_ms)} ms</title></rect>` : '').join('');
+  const cols = days.map((r, i) => r.avg_ms != null && i >= first ? `<rect x="${(x(i) - LW / (2 * span)).toFixed(1)}" y="0" width="${(LW / span).toFixed(1)}" height="${LH}" fill="transparent"><title>${label(r.d)}: ${Math.round(r.avg_ms)} ms</title></rect>` : '').join('');
   const line = `<h3 style="font-size:1rem;margin:1.25rem 0 .25rem">${t.respDaily}</h3>
 <div style="display:flex;justify-content:flex-end;color:#6b7280;font-size:.8rem"><span>${t.maxMs(max)}</span></div>
 <svg viewBox="0 0 ${LW} ${LH}" width="100%" height="110" preserveAspectRatio="none" role="img" aria-label="${t.respDaily}" style="display:block;overflow:visible;margin:4px 0">
 <line x1="0" y1="0" x2="${LW}" y2="0" stroke="#e5e7eb" stroke-dasharray="3 3" vector-effect="non-scaling-stroke"/><line x1="0" y1="${LH}" x2="${LW}" y2="${LH}" stroke="#e5e7eb" vector-effect="non-scaling-stroke"/>
 <path d="${path}" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>${cols}</svg>
-<div style="display:flex;justify-content:space-between;color:#6b7280;font-size:.8rem"><span>${label(days[0].d)}</span><span>${label(days[29].d)}</span></div>`;
+<div style="display:flex;justify-content:space-between;color:#6b7280;font-size:.8rem"><span>${label(days[first].d)}</span><span>${label(days[29].d)}</span></div>`;
   return strip + line;
 }
 export async function statusPage(env, lang, token) {
