@@ -145,7 +145,8 @@ function dailyCharts(byDay, lang, t) {
   const max = Math.max(50, Math.ceil(peak / step) * step); const LH = 100, LW = 600;
   const x = (i) => (i - first) * (LW / span), y = (v) => LH - (v / max) * LH;
   const path = pts.map((p, k) => `${k ? 'L' : 'M'}${x(p.i).toFixed(1)},${y(p.v).toFixed(1)}`).join(' ');
-  const cols = days.map((r, i) => r.avg_ms != null && i >= first ? `<rect x="${(x(i) - LW / (2 * span)).toFixed(1)}" y="0" width="${(LW / span).toFixed(1)}" height="${LH}" fill="transparent"><title>${label(r.d)}: ${Math.round(r.avg_ms)} ms</title></rect>` : '').join('');
+  // 13.11 (UI audyt): pola najechania przycięte do [0, LW] – pierwsze wystawało o pół kroku poza SVG (off-viewport na telefonie).
+  const cols = days.map((r, i) => { if (r.avg_ms == null || i < first) return ''; const x0 = Math.max(0, x(i) - LW / (2 * span)), x1 = Math.min(LW, x(i) + LW / (2 * span)); return `<rect x="${x0.toFixed(1)}" y="0" width="${(x1 - x0).toFixed(1)}" height="${LH}" fill="transparent"><title>${label(r.d)}: ${Math.round(r.avg_ms)} ms</title></rect>`; }).join('');
   const line = `<h3 style="font-size:1rem;margin:1.25rem 0 .25rem">${t.respDaily}</h3>
 <div style="display:flex;justify-content:flex-end;color:#6b7280;font-size:.8rem"><span>${t.maxMs(max)}</span></div>
 <svg viewBox="0 0 ${LW} ${LH}" width="100%" height="110" preserveAspectRatio="none" role="img" aria-label="${t.respDaily}" style="display:block;overflow:visible;margin:4px 0">
