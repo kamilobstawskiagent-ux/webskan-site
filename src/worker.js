@@ -5,6 +5,7 @@ import { recheckApi, recheckPage } from "./recheck.js";
 import { handleMcp, mcpStatsApi } from "./mcp.js";
 import { polarApi } from "./polar.js";
 import { normalizeUrl } from "./url.js";
+import { trackEntry, refsApi } from "./refs.js";
 export { ScanQueue, MonitorHub };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -121,6 +122,7 @@ export default {
     if (u.protocol === "http:") { u.protocol = "https:"; return Response.redirect(u.toString(), 301); }
     // Jeden kanoniczny host: www i stary adres workers.dev przekierowują na webskan.com (API bez przekierowania, żeby nie psuć pollera i formularzy POST).
     if (u.hostname !== CANONICAL_HOST && !u.pathname.startsWith("/api/")) { u.hostname = CANONICAL_HOST; return Response.redirect(u.toString(), 301); }
+    trackEntry(request, env, ctx, u); // zbiorczy licznik źródeł wejść (src/refs.js)
     return secure(await route(request, env, u.pathname, ctx));
   },
   async scheduled(event, env, ctx) { ctx.waitUntil(monitorCron(env)); }, // co minutę: kontrola dostępności monitorowanych stron
@@ -164,6 +166,7 @@ async function route(request, env, pathname, ctx) {
     { const m = pathname.match(/^\/en\/recheck\/([0-9a-f]{32})\/?$/); if (m) return recheckPage(request, env, "en", m[1]); }
     { const m = pathname.match(/^\/status\/([0-9a-f]{32})\/?$/); if (m) return statusPage(env, "pl", m[1]); }
     { const m = pathname.match(/^\/en\/status\/([0-9a-f]{32})\/?$/); if (m) return statusPage(env, "en", m[1]); }
+    if (pathname === "/api/refs") return refsApi(request, env);
     if (pathname === "/api/health") return Response.json({ ok: true, polar: Boolean(env.POLAR_TOKEN && env.POLAR_PRODUCT_PL), webhook: Boolean(env.POLAR_WEBHOOK_SECRET), mode: env.SALES_MODE || "live" });
     const res = await env.ASSETS.fetch(request);
     if (env.SALES_MODE === "presale" && (pathname === "/" || pathname === "/en/")) return presaleRewrite(res, pathname === "/en/" ? "en" : "pl");
