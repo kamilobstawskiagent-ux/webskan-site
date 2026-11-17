@@ -63,12 +63,14 @@ const CHECKS = `(() => {
   const sel = (el) => el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') + (typeof el.className === 'string' && el.className.trim() ? '.' + el.className.trim().split(/\\s+/).slice(0, 3).join('.') : '');
   const txt = (el) => (el.textContent || el.getAttribute('aria-label') || el.placeholder || '').trim().replace(/\\s+/g, ' ').slice(0, 40);
   if (sw > vw + 1) issues.push({ k: 'page-overflow', d: 'scrollWidth ' + sw + ' > viewport ' + vw });
+  // element przewijany w poziomie wewnątrz kontenera overflow-x:auto/scroll (np. blok kodu) to nie błąd układu
+  const inScroller = (el) => { for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) { const o = getComputedStyle(p).overflowX; if ((o === 'auto' || o === 'scroll') && p.getBoundingClientRect().right <= vw + 1) return true; } return false; };
   const seen = new Set();
   for (const el of document.querySelectorAll('body *')) {
     const b = el.getBoundingClientRect(); if (!b.width || !b.height) continue;
     const cs = getComputedStyle(el);
     if (cs.visibility === 'hidden' || cs.display === 'none') continue;
-    if ((b.right > vw + 1 || b.left < -1) && !(cs.position === 'absolute' && b.right < 0)) { const s = sel(el); if (!seen.has(s)) { seen.add(s); issues.push({ k: 'off-viewport', d: s + ' [' + Math.round(b.left) + '..' + Math.round(b.right) + ']' }); } }
+    if ((b.right > vw + 1 || b.left < -1) && !(cs.position === 'absolute' && b.right < 0) && !inScroller(el)) { const s = sel(el); if (!seen.has(s)) { seen.add(s); issues.push({ k: 'off-viewport', d: s + ' [' + Math.round(b.left) + '..' + Math.round(b.right) + ']' }); } }
     if (cs.overflow !== 'visible' && el.scrollWidth > el.clientWidth + 2 && cs.overflowX !== 'auto' && cs.overflowX !== 'scroll' && !/^(pre|code|table)$/i.test(el.tagName)) issues.push({ k: 'clipped-text', d: sel(el) + ' "' + txt(el) + '"' });
     const fs = parseFloat(cs.fontSize);
     if (fs && fs < 12 && el.childNodes.length && [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim())) issues.push({ k: 'tiny-font', d: sel(el) + ' ' + fs + 'px "' + txt(el) + '"' });
