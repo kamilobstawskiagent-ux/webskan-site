@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Napisaliśmy do 17 sklepów, że mają publicznie dostępny plik. Po tygodniu zamknęły go 4 – Webskan</title>
+<meta name="description" content="17 małych sklepów internetowych dostało od nas jedną wiadomość: pod tym adresem leży publicznie plik phpinfo, log błędów albo panel bazy. Cztery zamknęły go tego samego dnia, trzynaście ma go do dziś, nikt nie odpisał. Co z tego wynika dla właściciela strony i jak sprawić, żeby takie zgłoszenie do Ciebie dotarło.">
+<link rel="canonical" href="https://webskan.com/blog/17-sklepow-odsloniety-plik-po-tygodniu/">
+<meta property="og:title" content="Napisaliśmy do 17 sklepów, że mają publicznie dostępny plik. Po tygodniu zamknęły go 4">
+<meta property="og:description" content="17 małych sklepów internetowych dostało od nas jedną wiadomość: pod tym adresem leży publicznie plik phpinfo, log błędów albo panel bazy. Cztery zamknęły go tego samego dnia, trzynaście ma go do dziś, nikt nie odpisał. Co z tego wynika dla właściciela strony i jak sprawić, żeby takie zgłoszenie do Ciebie dotarło.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/blog/17-sklepow-odsloniety-plik-po-tygodniu/">
+<meta property="og:image" content="https://webskan.com/og-pl.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Napisaliśmy do 17 sklepów, że mają publicznie dostępny plik. Po tygodniu zamknęły go 4","description":"17 małych sklepów internetowych dostało od nas jedną wiadomość: pod tym adresem leży publicznie plik phpinfo, log błędów albo panel bazy. Cztery zamknęły go tego samego dnia, trzynaście ma go do dziś, nikt nie odpisał. Co z tego wynika dla właściciela strony i jak sprawić, żeby takie zgłoszenie do Ciebie dotarło.","datePublished":"2026-11-17","dateModified":"2026-11-17","inLanguage":"pl","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"mainEntityOfPage":"https://webskan.com/blog/17-sklepow-odsloniety-plik-po-tygodniu/"}</script>
+<link rel="alternate" type="application/rss+xml" title="Webskan – blog (RSS)" href="/blog/feed.xml">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a><a href="/#faq">FAQ</a><a href="/en/blog/" hreflang="en">EN</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 17 listopada 2026 · 6 min czytania</p>
+<h1>Napisaliśmy do 17 sklepów, że mają publicznie dostępny plik. Po tygodniu zamknęły go 4</h1>
+<p class="lead">Przy okazji <a href="/blog/skan-255-sklepow-internetowych/">skanu stron głównych małych sklepów internetowych</a> znaleźliśmy pliki, których nie powinno być widać z zewnątrz: wydruki konfiguracji PHP, logi błędów, panel do bazy danych. Do 17 sklepów wysłaliśmy po jednej krótkiej wiadomości: co to za plik, pod jakim adresem i jak go zamknąć. Dziś sprawdziliśmy, co się z tymi plikami stało. Wynik: 4 zamknięte, 13 otwartych, 0 odpowiedzi.</p>
+
+<h2>Co dokładnie zrobiliśmy</h2>
+<p>Między 11 a 13 listopada 2026 r. wysłaliśmy 17 wiadomości na adres kontaktowy podany na stronie sklepu (zwykle <code>sklep@</code>, <code>kontakt@</code> albo <code>biuro@</code>). Każda dotyczyła jednego pliku i miała tę samą budowę: adres pliku, dwa zdania o tym, co plik zdradza, instrukcja zamknięcia w dwóch–trzech krokach i zdanie, że to jedyna wiadomość w tej sprawie i nie trzeba na nią odpisywać. Przed wysłaniem każdy plik został sprawdzony ręcznie: czy odpowiada kodem 200 i czy treść rzeczywiście jest tym, na co wygląda.</p>
+<p>17 listopada sprawdziliśmy te same adresy jeszcze raz, czyli po 4–6 dniach od wysyłki. Za „zamknięty” uznajemy tylko plik, który odpowiada błędem 403 lub 404. Za „otwarty” – taki, który nadal zwraca tę samą treść (sprawdzaliśmy treść, nie sam kod odpowiedzi). Nazw sklepów nie podajemy.</p>
+
+<h2>Wyniki</h2>
+<table class="vitals headers">
+<thead><tr><th>Rodzaj pliku</th><th>Wysłane</th><th>Zamknięte</th><th>Nadal otwarte</th></tr></thead>
+<tbody>
+<tr><td>Wydruk konfiguracji PHP (<code>info.php</code>, <code>phpinfo.php</code>)</td><td data-l="Wysłane">8</td><td data-l="Zamknięte">1</td><td data-l="Nadal otwarte">7</td></tr>
+<tr><td>Log błędów (<code>debug.log</code>, <code>error_log</code>)</td><td data-l="Wysłane">7</td><td data-l="Zamknięte">3</td><td data-l="Nadal otwarte">4</td></tr>
+<tr><td>Panel bazy danych (<code>adminer.php</code>)</td><td data-l="Wysłane">1</td><td data-l="Zamknięte">0</td><td data-l="Nadal otwarte">1</td></tr>
+<tr><td>Lista plików z macOS (<code>.DS_Store</code>)</td><td data-l="Wysłane">1</td><td data-l="Zamknięte">0</td><td data-l="Nadal otwarte">1</td></tr>
+<tr><td><strong>Razem</strong></td><td data-l="Wysłane"><strong>17</strong></td><td data-l="Zamknięte"><strong>4 (24 %)</strong></td><td data-l="Nadal otwarte"><strong>13 (76 %)</strong></td></tr>
+</tbody>
+</table>
+<p>Na żadną z 17 wiadomości nikt nie odpisał. To akurat nie dziwi – sami napisaliśmy, że nie trzeba.</p>
+<p>Siedemnaście sklepów to mała próba, więc procentów nie należy przenosić na „wszystkie sklepy w Polsce”. Trzy obserwacje są jednak na tyle wyraźne, że warto je opisać.</p>
+
+<h2>1. Kto reaguje, reaguje w kilka godzin. Potem już nikt</h2>
+<p>Wszystkie cztery pliki zniknęły tego samego dnia, w którym wysłaliśmy wiadomość – trzy w ciągu kilku godzin. Przez kolejne dni nie zamknął się ani jeden. Nie ma więc grupy „zrobimy to w przyszłym tygodniu”: wiadomość albo trafia od razu do kogoś, kto wie, co z nią zrobić, albo przepada.</p>
+<p>To zgadza się z tym, jak działają skrzynki sklepów. Adres <code>sklep@</code> czyta osoba od zamówień i reklamacji. Wiadomość o pliku <code>/wp-content/debug.log</code> nie jest ani zamówieniem, ani reklamacją, wygląda obco, a osoba, która umiałaby coś z nią zrobić – wykonawca strony, informatyk, hosting – jej nie widzi.</p>
+
+<h2>2. Logi znikają częściej niż wydruki konfiguracji</h2>
+<p>Z siedmiu logów zamknięto trzy, z ośmiu plików <code>info.php</code> – jeden. Przy tak małych liczbach to może być przypadek, ale jest też proste wytłumaczenie: log z tysiącami linii błędów wygląda na problem dla każdego, kto go otworzy. Tabelka z wersją PHP wygląda na coś, co „chyba ma tam być”.</p>
+<p>Tymczasem to wydruk konfiguracji mówi więcej. Wszystkie siedem nadal otwartych plików <code>info.php</code> pokazuje wersję PHP, dla której twórcy języka zakończyli wsparcie w latach 2018–2020: cztery razy 7.1, po jednym razie 7.2, 7.0 i 5.6. Część hostingów sama łata stare wersje, więc nie oznacza to automatycznie dziury – ale to właśnie ta informacja, której szuka ktoś, kto wybiera, którą stronę zaatakować w pierwszej kolejności.</p>
+<p>Wśród otwartych logów największy ma dziś prawie 790 MB, dwa kolejne 0,8 i 0,5 MB. Każdy zawiera pełne ścieżki na serwerze i nazwy wtyczek, w których występują błędy. Otwarty pozostaje też panel logowania do bazy danych.</p>
+
+<h2>3. Szesnaście z 17 sklepów nie podaje adresu do takich zgłoszeń</h2>
+<p>Istnieje na to prosty standard: plik <code>/.well-known/security.txt</code> (RFC 9116), w którym strona podaje, dokąd pisać w sprawach bezpieczeństwa. Miał go jeden sklep z 17 – i jest to jeden z czterech, które zamknęły plik (choć nasza wiadomość poszła akurat na adres ogólny, więc nie wiemy, czy to miało znaczenie). Pozostałe szesnaście nie zostawia innej drogi niż skrzynka do zamówień. W małej firmie nie chodzi o „dział bezpieczeństwa” – wystarczy, żeby taki e-mail trafił do osoby, która ma dostęp do serwera.</p>
+
+<h2>Co z tego wynika dla Ciebie</h2>
+<h3>Sprawdź, czy sam nie masz takiego pliku</h3>
+<p>Osiem adresów do wpisania w przeglądarce i gotowe reguły dla Apache, nginx i WordPressa są w tekście <a href="/blog/publicznie-dostepne-pliki-na-stronie/">Publicznie dostępne pliki na stronie</a>. Zajmuje to pięć minut. Szybciej: formularz poniżej sprawdza kilkadziesiąt takich adresów naraz.</p>
+<h3>Ustal, kto dostaje wiadomości „techniczne”</h3>
+<p>Jedno zdanie dla osoby, która obsługuje skrzynkę sklepu: <em>wiadomości o stronie, serwerze, domenie, certyfikacie albo „pliku pod adresem…” przekazujemy od razu do [imię wykonawcy lub informatyka]</em>. Dotyczy to też powiadomień od hostingu i rejestratora domeny – one również lądują na adresie ogólnym i również wyglądają obco. O tym, kto powinien mieć jakie dostępy, piszemy w tekście <a href="/blog/strona-po-zmianie-wykonawcy-lista-dostepow/">Strona po zmianie wykonawcy: lista dostępów</a>.</p>
+<h3>Dodaj security.txt</h3>
+<p>To zwykły plik tekstowy w katalogu <code>.well-known</code> na serwerze. Minimum to dwie linie:</p>
+<pre><code>Contact: mailto:it@twojsklep.pl
+Expires: 2027-11-17T00:00:00.000Z</code></pre>
+<p><code>Contact</code> to adres, który czyta osoba techniczna (może być adres wykonawcy, jeśli się na to zgodził). <code>Expires</code> to data, po której plik trzeba odświeżyć – standard zaleca nie dalej niż rok. Nasz wygląda tak: <a href="/.well-known/security.txt">webskan.com/.well-known/security.txt</a>.</p>
+<h3>Jak odróżnić uczciwe zgłoszenie od naciągania</h3>
+<p>Ostrożność wobec obcych e-maili o „problemie ze stroną” jest zdrowa. Uczciwe zgłoszenie da się sprawdzić samodzielnie i bez klikania w cokolwiek: podaje konkretny adres na <em>Twojej</em> domenie, który możesz wpisać ręcznie w przeglądarce. Nie zawiera załączników, nie prosi o hasło ani o płatność, nie grozi terminem. Jeśli pod podanym adresem rzeczywiście widać plik – problem jest prawdziwy niezależnie od tego, kto napisał.</p>
+
+<section class="fullbox" id="skan">
+<h2>Sprawdź swoją stronę – za darmo, w minutę</h2>
+<p>Darmowy szybki skan Webskan sprawdza kilkadziesiąt typowych nazw plików konfiguracyjnych, logów, kopii i repozytoriów – i patrzy na treść odpowiedzi, nie tylko na kod HTTP. Do tego szybkość na telefonie, przekierowanie i HSTS, nagłówki bezpieczeństwa i podstawy SEO. Bez e-maila, bez rejestracji.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="pl"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://twojsklep.pl" required maxlength="500" aria-label="Adres strony"><button class="btn" type="submit">Skanuj za darmo</button></form>
+<p class="note">Szybki skan patrzy na stronę główną i typowe adresy plików. <a href="/#cena">Audyt pogłębiony</a> (249 zł) sprawdza całą witrynę – do 30 podstron, bezpieczeństwo, szybkość, dostępność i błędy widoczne dla klientów – z ponownym sprawdzeniem po poprawkach i 30 dniami <a href="/#cena">Webskan Monitora</a> w cenie.</p>
+</section>
+
+<h2>Metoda i zastrzeżenia</h2>
+<ul>
+<li>Sklepy pochodzą z naszych skanów stron głównych małych polskich sklepów internetowych z listopada 2026 r.; wiadomość dostał każdy sklep z potwierdzonym plikiem, dla którego znaleźliśmy adres kontaktowy i do którego wcześniej nie pisaliśmy.</li>
+<li>Jedna wiadomość na sklep, bez przypomnień. Nie wiemy, ile wiadomości zostało otwartych – nie stosujemy śledzenia otwarć.</li>
+<li>Obecność <code>security.txt</code> sprawdziliśmy 17 listopada pod adresami <code>/.well-known/security.txt</code> i <code>/security.txt</code>; liczył się plik z polem <code>Contact</code>.</li>
+<li>Stan plików: 17 listopada 2026 r., ok. godz. 16:00. Plik mógł zostać zamknięty z innego powodu niż nasza wiadomość.</li>
+<li>Żadnego z plików nie pobieraliśmy w całości ani nie używaliśmy ich treści do niczego poza potwierdzeniem, czym są.</li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/blog/feed.xml">RSS</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a> · <a href="/developers/" hreflang="en">Dla programistów (EN)</a> · kontakt: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer>
+</div>
+</body>
+</html>

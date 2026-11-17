@@ -6,7 +6,14 @@
 <atom:link href="https://webskan.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
 <description>Zdrowie strony WWW małej firmy po ludzku: szybkość, bezpieczeństwo, SEO, dostępność, prawo.</description>
 <language>pl</language>
-<lastBuildDate>Thu, 12 Nov 2026 07:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 17 Nov 2026 07:00:00 GMT</lastBuildDate>
+<item>
+<title>Napisaliśmy do 17 sklepów, że mają publicznie dostępny plik. Po tygodniu zamknęły go 4</title>
+<link>https://webskan.com/blog/17-sklepow-odsloniety-plik-po-tygodniu/</link>
+<guid isPermaLink="true">https://webskan.com/blog/17-sklepow-odsloniety-plik-po-tygodniu/</guid>
+<pubDate>Tue, 17 Nov 2026 07:00:00 GMT</pubDate>
+<description>17 małych sklepów internetowych dostało od nas jedną wiadomość: pod tym adresem leży publicznie plik phpinfo, log błędów albo panel bazy. Cztery zamknęły go tego samego dnia, trzynaście ma go do dziś, nikt nie odpisał. Co z tego wynika dla właściciela strony i jak sprawić, żeby takie zgłoszenie do Ciebie dotarło.</description>
+</item>
 <item>
 <title>Publicznie dostępne pliki na stronie: phpinfo, logi, .git, kopie bazy – jak sprawdzić i zamknąć</title>
 <link>https://webskan.com/blog/publicznie-dostepne-pliki-na-stronie/</link>
