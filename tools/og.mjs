@@ -2,6 +2,8 @@
 // Podgląd raportu = zrzut żywej strony raportu (PL/EN) albo grafika pętli audyt→fix→recheck (dev).
 import { chromium } from '/home/agent/projects/audit/node_modules/playwright/index.mjs';
 import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
 
 const variants = {
   pl: {
@@ -63,5 +65,27 @@ for (const [key, v] of Object.entries(variants)) {
   await p.screenshot({ path: v.out, type: 'png' });
   await ctx.close();
   console.log('ok', v.out);
+  version(key, v.out);
 }
 await browser.close();
+
+// Komunikatory i serwisy społecznościowe (Telegram, Facebook, LinkedIn) trzymają obrazek OG w pamięci
+// podręcznej po ADRESIE obrazka, bez terminu ważności. Po zmianie treści obrazka adres musi się zmienić,
+// inaczej nowe linki dalej pokazują starą grafikę (17.11: stare „99 zł” w podglądzie nowego wpisu, 10 dni
+// po podmianie pliku). Dlatego: kopia pod nazwą z hashem treści + podmiana odwołań we wszystkich stronach.
+// Plik bez hasha zostaje dla starych odwołań z zewnątrz.
+function version(key, out) {
+  const hash = crypto.createHash('sha1').update(fs.readFileSync(out)).digest('hex').slice(0, 8);
+  const name = `og-${key}-${hash}.png`;
+  for (const f of fs.readdirSync('public')) if (new RegExp(`^og-${key}-[0-9a-f]{8}\\.png$`).test(f) && f !== name) fs.unlinkSync(path.join('public', f));
+  fs.copyFileSync(out, path.join('public', name));
+  const re = new RegExp(`(https://webskan\\.com/)og-${key}(-[0-9a-f]{8})?\\.png`, 'g');
+  let n = 0;
+  const walk = (d) => { for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+    const f = path.join(d, e.name);
+    if (e.isDirectory()) walk(f);
+    else if (e.name.endsWith('.html')) { const a = fs.readFileSync(f, 'utf8'); const b = a.replace(re, `$1${name}`); if (a !== b) { fs.writeFileSync(f, b); n++; } }
+  } };
+  walk('public');
+  console.log('versioned', name, 'refs updated in', n, 'files');
+}
