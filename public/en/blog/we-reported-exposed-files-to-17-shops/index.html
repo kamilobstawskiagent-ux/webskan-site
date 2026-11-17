@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>We reported an exposed file to 17 online shops. A week later, 13 are still serving it – Webskan</title>
+<meta name="description" content="Seventeen small online shops got one short e-mail from us: this URL on your site serves a phpinfo page, a PHP error log or a database panel. Four fixed it the same day, thirteen still serve the file, nobody replied. What the numbers say about where security reports go to die, and a two-line security.txt that fixes the routing.">
+<link rel="canonical" href="https://webskan.com/en/blog/we-reported-exposed-files-to-17-shops/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/we-reported-exposed-files-to-17-shops/">
+<meta property="og:title" content="We reported an exposed file to 17 online shops. A week later, 13 are still serving it">
+<meta property="og:description" content="Seventeen small online shops got one short e-mail from us: this URL on your site serves a phpinfo page, a PHP error log or a database panel. Four fixed it the same day, thirteen still serve the file, nobody replied. What the numbers say about where security reports go to die, and a two-line security.txt that fixes the routing.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/en/blog/we-reported-exposed-files-to-17-shops/">
+<meta property="og:image" content="https://webskan.com/og-dev.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"We reported an exposed file to 17 online shops. A week later, 13 are still serving it","description":"Seventeen small online shops got one short e-mail from us: this URL on your site serves a phpinfo page, a PHP error log or a database panel. Four fixed it the same day, thirteen still serve the file, nobody replied. What the numbers say about where security reports go to die, and a two-line security.txt that fixes the routing.","datePublished":"2026-11-17","dateModified":"2026-11-17","inLanguage":"en","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/en/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/en/"},"mainEntityOfPage":"https://webskan.com/en/blog/we-reported-exposed-files-to-17-shops/"}</script>
+<link rel="alternate" type="application/rss+xml" title="Webskan – blog (RSS)" href="/en/blog/feed.xml">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a href="/en/blog/">Blog</a><a class="m-hide" href="/developers/">For developers</a><a href="/en/#pricing">Pricing</a><a href="/blog/" hreflang="pl">PL</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 17 November 2026 · 6 min read · for developers</p>
+<h1>We reported an exposed file to 17 online shops. A week later, 13 are still serving it</h1>
+<p class="lead">While scanning the home pages of small Polish online shops we kept finding files that should never be public: <code>phpinfo()</code> pages, PHP error logs, a database admin panel. We sent 17 shops one short e-mail each: which file, at which URL, and how to close it. Today we re-checked every URL. Result: 4 closed, 13 still open, 0 replies.</p>
+
+<h2>What we did</h2>
+<p>Between 11 and 13 November 2026 we sent 17 e-mails to the contact address published on each shop's site (typically <code>shop@</code>, <code>contact@</code> or <code>office@</code>). Each message covered exactly one file and had the same structure: the URL, two sentences on what the file reveals, a two- or three-step fix, and a line saying this is the only message we will send and no reply is needed. Before sending, every file was verified by hand: HTTP 200 <em>and</em> content that is actually what it looks like.</p>
+<p>On 17 November – four to six days later – we requested the same URLs again. “Closed” means the URL now answers 403 or 404. “Open” means it still returns the same kind of content; we matched content signatures rather than trusting the status code, for the reasons described in <a href="/en/blog/exposed-env-git-on-live-sites/">Your deploy just published .env</a>. We are not naming the shops.</p>
+
+<h2>Results</h2>
+<table class="vitals headers">
+<thead><tr><th>File type</th><th>Reported</th><th>Closed</th><th>Still open</th></tr></thead>
+<tbody>
+<tr><td><code>phpinfo()</code> output (<code>info.php</code>, <code>phpinfo.php</code>)</td><td data-l="Reported">8</td><td data-l="Closed">1</td><td data-l="Still open">7</td></tr>
+<tr><td>Error log (<code>wp-content/debug.log</code>, <code>error_log</code>)</td><td data-l="Reported">7</td><td data-l="Closed">3</td><td data-l="Still open">4</td></tr>
+<tr><td>Database panel (<code>adminer.php</code>)</td><td data-l="Reported">1</td><td data-l="Closed">0</td><td data-l="Still open">1</td></tr>
+<tr><td>macOS directory listing (<code>.DS_Store</code>)</td><td data-l="Reported">1</td><td data-l="Closed">0</td><td data-l="Still open">1</td></tr>
+<tr><td><strong>Total</strong></td><td data-l="Reported"><strong>17</strong></td><td data-l="Closed"><strong>4 (24%)</strong></td><td data-l="Still open"><strong>13 (76%)</strong></td></tr>
+</tbody>
+</table>
+<p>Nobody replied to any of the 17 messages – which is fair, since we said no reply was needed.</p>
+<p>Seventeen shops is a small sample, so do not read the percentages as a statistic about e-commerce in general. Three patterns were clear enough to be worth writing down.</p>
+
+<h2>1. Fixes happen within hours or not at all</h2>
+<p>All four files disappeared on the day the message was sent, three of them within a few hours. In the days after that, not a single additional file was closed. There is no “we'll get to it next week” group: the message either reaches someone who knows what to do with it straight away, or it is gone.</p>
+<p>That matches how a small shop's inbox works. <code>shop@</code> is read by whoever handles orders and returns. A message about <code>/wp-content/debug.log</code> is neither; it looks foreign, and the person who could act on it – the freelancer who built the site, the hosting company – never sees it.</p>
+
+<h2>2. Logs get fixed more often than phpinfo pages</h2>
+<p>Three of seven logs were closed, but only one of eight <code>info.php</code> files. With numbers this small it may be chance, but there is a plausible explanation: a log with thousands of error lines looks like a problem to anyone who opens it. A tidy table with a PHP version looks like something that is probably supposed to be there.</p>
+<p>The tidy table is the more useful one to an attacker. All seven <code>info.php</code> pages that are still open report a PHP branch that reached end of life between 2018 and 2020: four on 7.1, one each on 7.2, 7.0 and 5.6. Some hosts backport security patches to old branches, so this is not automatically a vulnerability – but it is exactly the fact someone uses to decide which site to try first.</p>
+<p>Of the logs still open, the largest is close to 790 MB today; two others are 0.8 and 0.5 MB. Each contains full server paths and the names of the plugins throwing errors. The database login panel is still open too.</p>
+
+<h2>3. Sixteen of 17 shops publish no address for this kind of report</h2>
+<p>There is a simple standard for it: <code>/.well-known/security.txt</code> (RFC 9116), where a site states where security reports should go. One shop of the 17 had one – and it is one of the four that closed the file (our message happened to go to its general address, so we cannot say whether that mattered). The other sixteen leave a reporter no route except the orders inbox.</p>
+
+<h2>What to take from this if you build or run sites for clients</h2>
+<h3>Ship a security.txt with every site</h3>
+<p>It is a plain text file. The two required fields are enough:</p>
+<pre><code>Contact: mailto:you@your-agency.example
+Expires: 2027-11-17T00:00:00.000Z</code></pre>
+<p>Point <code>Contact</code> at someone with server access – for a client site that is usually you, not the client. <code>Expires</code> is mandatory and the RFC recommends keeping it under a year out, so put the renewal in the same calendar as the domain and the certificate. Ours: <a href="/.well-known/security.txt">webskan.com/.well-known/security.txt</a>.</p>
+<h3>Tell the client where technical mail goes</h3>
+<p>One sentence for whoever reads the shop inbox: <em>anything about the website, server, domain, certificate or “a file at this URL” gets forwarded to [name] the same day</em>. The same rule catches renewal notices from the registrar and the host, which also land in the general inbox and also look foreign.</p>
+<h3>Remove the files before anyone has to report them</h3>
+<p>Every file in the table is a leftover from normal work: an <code>info.php</code> uploaded to check the PHP version after a migration, <code>WP_DEBUG_LOG</code> switched on for an afternoon. A check that runs after every deploy catches them while the person who created them is still looking. The signatures and server rules are in <a href="/en/blog/exposed-env-git-on-live-sites/">the exposed-files post</a>; if a coding agent does your deploys, <a href="/en/blog/make-your-agent-verify-every-deploy/">make it verify every deploy</a>.</p>
+<h3>If you are the one reporting</h3>
+<p>What we would keep: one file per message, the exact URL on the recipient's own domain so they can verify it by typing it into a browser, the fix in the message itself, no attachment, no deadline, no follow-up. What we would change: look for <code>security.txt</code> first, and where the site names its developer or agency in the footer, write to them instead of the orders inbox.</p>
+
+<section class="fullbox">
+<h2>Check a site now</h2>
+<p>The free Webskan quick scan runs the exposed-file probe, Lighthouse, security headers and the basic SEO checks on any public site. No sign-up; results in about 30 seconds.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="en"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://yourproject.com" required maxlength="500" aria-label="Website address"><button class="btn" type="submit">Scan for free</button></form>
+<p class="note">Shipping sites with a coding agent? Give it the <a href="/developers/">Webskan MCP server</a> – free for 2 whole-site audits a day, <a href="/developers/#teams">Developer plan</a> for 30.</p>
+</section>
+
+<h2>Method and caveats</h2>
+<ul>
+<li>The shops come from our November 2026 scans of small Polish online shops' home pages. A message went to every shop with a verified file for which we found a contact address and which we had not written to before.</li>
+<li>One message per shop, no reminders. We do not know how many were opened; we do not use open tracking.</li>
+<li><code>security.txt</code> was checked on 17 November at <code>/.well-known/security.txt</code> and <code>/security.txt</code>; only a file with a <code>Contact</code> field counted.</li>
+<li>File status as of 17 November 2026, around 16:00 CET. A file may have been closed for reasons unrelated to our message.</li>
+<li>We did not download any file in full or use its contents for anything other than confirming what it is.</li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/blog/feed.xml">RSS</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a> · <a href="/developers/">For developers</a> · contact: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer>
+</div>
+</body>
+</html>

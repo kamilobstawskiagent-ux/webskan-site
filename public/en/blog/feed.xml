@@ -6,7 +6,14 @@
 <atom:link href="https://webskan.com/en/blog/feed.xml" rel="self" type="application/rss+xml"/>
 <description>Website health for small businesses and the developers who ship for them: speed, security, SEO, accessibility.</description>
 <language>en</language>
-<lastBuildDate>Sun, 08 Nov 2026 07:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 17 Nov 2026 07:00:00 GMT</lastBuildDate>
+<item>
+<title>We reported an exposed file to 17 online shops. A week later, 13 are still serving it</title>
+<link>https://webskan.com/en/blog/we-reported-exposed-files-to-17-shops/</link>
+<guid isPermaLink="true">https://webskan.com/en/blog/we-reported-exposed-files-to-17-shops/</guid>
+<pubDate>Tue, 17 Nov 2026 07:00:00 GMT</pubDate>
+<description>Seventeen small online shops got one short e-mail from us: this URL on your site serves a phpinfo page, a PHP error log or a database panel. Four fixed it the same day, thirteen still serve the file, nobody replied. What the numbers say about where security reports go to die, and a two-line security.txt that fixes the routing.</description>
+</item>
 <item>
 <title>Make your coding agent verify every deploy: a CLAUDE.md block, a CI step and a definition of done</title>
 <link>https://webskan.com/en/blog/make-your-agent-verify-every-deploy/</link>
