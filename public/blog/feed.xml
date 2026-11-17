@@ -8,6 +8,13 @@
 <language>pl</language>
 <lastBuildDate>Tue, 17 Nov 2026 07:00:00 GMT</lastBuildDate>
 <item>
+<title>PHP po końcu wsparcia: połowa sklepów, które zdradzają wersję, ma przestarzałą. Jak sprawdzić swoją</title>
+<link>https://webskan.com/blog/php-po-koncu-wsparcia/</link>
+<guid isPermaLink="true">https://webskan.com/blog/php-po-koncu-wsparcia/</guid>
+<pubDate>Tue, 17 Nov 2026 07:00:00 GMT</pubDate>
+<description>51 małych sklepów internetowych podaje wersję PHP w nagłówku odpowiedzi. 26 z nich działa na wersji, dla której nie wychodzą już poprawki bezpieczeństwa – najstarsza straciła wsparcie w 2011 r. Jak w dwie minuty sprawdzić wersję PHP na swojej stronie i jak ją bezpiecznie podnieść.</description>
+</item>
+<item>
 <title>Napisaliśmy do 17 sklepów, że mają publicznie dostępny plik. Po tygodniu zamknęły go 4</title>
 <link>https://webskan.com/blog/17-sklepow-odsloniety-plik-po-tygodniu/</link>
 <guid isPermaLink="true">https://webskan.com/blog/17-sklepow-odsloniety-plik-po-tygodniu/</guid>
