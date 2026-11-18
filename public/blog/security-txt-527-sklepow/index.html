@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>security.txt: sprawdziliśmy 527 sklepów. Plik ma 20, a tylko 3 napisały go same – Webskan</title>
+<meta name="description" content="Plik security.txt mówi, do kogo pisać, gdy ktoś znajdzie błąd na Twojej stronie. Z 527 małych sklepów internetowych ma go 20 – w 13 wystawiła go platforma albo serwer hostingu, często z adresem, którego nikt nie czyta, a 4 są przeterminowane. Jak sprawdzić swój i napisać poprawny w pięć minut.">
+<link rel="canonical" href="https://webskan.com/blog/security-txt-527-sklepow/">
+<meta property="og:title" content="security.txt: sprawdziliśmy 527 sklepów. Plik ma 20, a tylko 3 napisały go same">
+<meta property="og:description" content="Plik security.txt mówi, do kogo pisać, gdy ktoś znajdzie błąd na Twojej stronie. Z 527 małych sklepów internetowych ma go 20 – w 13 wystawiła go platforma albo serwer hostingu, często z adresem, którego nikt nie czyta, a 4 są przeterminowane. Jak sprawdzić swój i napisać poprawny w pięć minut.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/blog/security-txt-527-sklepow/">
+<meta property="og:image" content="https://webskan.com/og-pl-ed0a65b3.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"security.txt: sprawdziliśmy 527 sklepów. Plik ma 20, a tylko 3 napisały go same","description":"Plik security.txt mówi, do kogo pisać, gdy ktoś znajdzie błąd na Twojej stronie. Z 527 małych sklepów internetowych ma go 20 – w 13 wystawiła go platforma albo serwer hostingu, często z adresem, którego nikt nie czyta, a 4 są przeterminowane. Jak sprawdzić swój i napisać poprawny w pięć minut.","datePublished":"2026-11-18","dateModified":"2026-11-18","inLanguage":"pl","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"mainEntityOfPage":"https://webskan.com/blog/security-txt-527-sklepow/"}</script>
+<link rel="alternate" type="application/rss+xml" title="Webskan – blog (RSS)" href="/blog/feed.xml">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a><a href="/#faq">FAQ</a><a href="/en/blog/" hreflang="en">EN</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 18 listopada 2026 · 6 min czytania</p>
+<h1>security.txt: sprawdziliśmy 527 sklepów. Plik ma 20, a tylko 3 napisały go same</h1>
+<p class="lead">Kiedy ktoś z zewnątrz zauważy na Twojej stronie coś niepokojącego – odsłonięty plik, błąd w formularzu, wyciek danych – musi wiedzieć, komu to zgłosić. Do tego służy <code>security.txt</code>: mały plik tekstowy pod stałym adresem, z jednym adresem kontaktowym. 18 listopada sprawdziliśmy, ile małych polskich sklepów internetowych go ma. Z 527 – dwadzieścia. A po przeczytaniu tych dwudziestu plików okazało się, że większości nie napisał sklep.</p>
+
+<h2>Czym jest security.txt</h2>
+<p>To standard internetowy (RFC 9116 z 2022 r.). Plik leży zawsze pod tym samym adresem – <code>twojadomena.pl/.well-known/security.txt</code> – i ma dwa obowiązkowe wiersze: <code>Contact</code> (adres, na który zgłaszać problemy) oraz <code>Expires</code> (data, po której plik należy uznać za nieaktualny). Reszta jest opcjonalna. Osoba, która trafi na problem, nie musi wtedy zgadywać, czy pisać na adres z zakładki „Kontakt”, do biura obsługi klienta, czy przez formularz reklamacyjny.</p>
+<p>Dlaczego nas to obchodzi: w listopadzie <a href="/blog/17-sklepow-odsloniety-plik-po-tygodniu/">napisaliśmy do 17 sklepów o odsłoniętym pliku</a> na ich serwerze. Adresów szukaliśmy ręcznie na stronach kontaktowych. Do dziś plik zamknęło pięć sklepów, nie odpisał żaden – i nie wiemy, ile z tych wiadomości w ogóle dotarło do kogoś, kto mógł coś z nimi zrobić.</p>
+
+<h2>Co pokazało sprawdzenie</h2>
+<table class="vitals headers">
+<thead><tr><th>Stan pliku security.txt</th><th>Sklepy</th><th>Udział</th></tr></thead>
+<tbody>
+<tr><td>Brak pliku</td><td data-l="Sklepy">507</td><td data-l="Udział">96,2 %</td></tr>
+<tr><td>Plik wystawiony przez platformę sklepową, kontakt do platformy</td><td data-l="Sklepy">6</td><td data-l="Udział">1,1 %</td></tr>
+<tr><td>Plik tworzony automatycznie przez serwer hostingu</td><td data-l="Sklepy">7</td><td data-l="Udział">1,3 %</td></tr>
+<tr><td>Plik przeterminowany</td><td data-l="Sklepy">4</td><td data-l="Udział">0,8 %</td></tr>
+<tr><td><strong>Plik własny i aktualny</strong></td><td data-l="Sklepy"><strong>3</strong></td><td data-l="Udział"><strong>0,6 %</strong></td></tr>
+</tbody>
+</table>
+<p>Zastrzeżenie jak zawsze: to nie jest próba losowa, tylko sklepy z list, które sami układaliśmy według branż, bez dużych sieci. Szczegóły w metodzie na końcu.</p>
+
+<h2>1. Plik najczęściej ma ten, kto o nim nie wie</h2>
+<p>W 13 z 20 przypadków pliku nie napisał ani sklep, ani jego wykonawca.</p>
+<p><strong>Sześć sklepów</strong> działa na gotowych platformach sklepowych, które wystawiają jeden wspólny plik dla wszystkich klientów. Adres kontaktowy prowadzi do platformy. To rozsądne w sprawach samej platformy; zgłoszenie dotyczące konkretnego sklepu – na przykład jego danych albo treści – trafi do firmy, która nie jest jego właścicielem. Jeden z tych sześciu plików nie ma daty <code>Expires</code>, czyli nie spełnia standardu.</p>
+<p><strong>Siedem sklepów</strong> ma plik, który serwer hostingu tworzy sam. Rozpoznać go łatwo: wszystkie siedem mają dokładnie dwa wiersze i tę samą datę ważności, przypadającą równo 30 dni po dniu naszego sprawdzenia – choć sklepy stoją na pięciu różnych serwerach. Jako kontakt serwer wpisuje adres e-mail przypisany do konta hostingowego. I tu zaczyna się kłopot:</p>
+<ul>
+<li>w dwóch sklepach jest to adres techniczny w rodzaju <code>admin@</code> w subdomenie serwera – skrzynka, o której właściciel sklepu najpewniej nie wie;</li>
+<li>w jednym – prywatny adres na darmowej poczcie, opublikowany w ten sposób pod adresem sklepu;</li>
+<li>w jednym – adres w domenie, która nie ma dziś ani serwera poczty, ani żadnego innego wpisu; wiadomość wysłana na ten adres nie dojdzie;</li>
+<li>w dwóch – adres w zupełnie innej domenie niż sklep: imienny adres w innej firmie i adres konta w domenie firmy hostingowej;</li>
+<li>w jednym – zwykły adres biura sklepu. To jedyny przypadek z siedmiu, w którym automat trafił dobrze.</li>
+</ul>
+<p>Wniosek jest praktyczny: <strong>możesz mieć security.txt, którego nigdy nie pisałeś, z adresem, którego nie chciałbyś publikować albo którego nikt nie czyta.</strong> Sprawdzenie zajmuje pół minuty – instrukcja niżej.</p>
+
+<h2>2. Plik z datą trzeba odnawiać</h2>
+<p>Cztery pliki są przeterminowane. Trzy z nich wygenerowało to samo narzędzie i prowadzą do tego samego wykonawcy – wszystkie straciły ważność 21 stycznia 2026 r., dziesięć miesięcy temu. Czwarty wygasł z końcem 2024 r. Standard mówi wprost, że po dacie <code>Expires</code> z pliku nie należy korzystać, więc sumienny zgłaszający potraktuje go tak, jakby go nie było.</p>
+<p>Data ważności ma sens: adresy się zmieniają, wykonawcy też. Ale skoro plik wygasa, ktoś musi pamiętać, żeby go odnowić. Najprościej: wpis w kalendarzu na miesiąc przed datą, w tym samym miejscu co odnowienie domeny i <a href="/blog/certyfikat-ssl-wygasa/">certyfikatu</a>.</p>
+
+<h2>3. „Strona się otwiera” nie znaczy, że plik jest</h2>
+<p>55 sklepów pod adresem <code>/.well-known/security.txt</code> odpowiada kodem 200 – „wszystko w porządku” – ale zamiast pliku wysyła zwykłą stronę HTML: stronę główną albo stronę błędu. Przy ręcznym sprawdzaniu widać to od razu. Automat, który patrzy tylko na kod odpowiedzi, uzna, że plik istnieje. Dlatego liczyliśmy wyłącznie odpowiedzi, które zawierają wiersz <code>Contact</code>.</p>
+
+<h2>Sprawdź swój sklep w pół minuty</h2>
+<p>Wpisz w przeglądarce: <code>twojsklep.pl/.well-known/security.txt</code>. Możliwe są trzy wyniki.</p>
+<ul>
+<li><strong>Strona błędu albo strona główna</strong> – pliku nie ma. Tak jest w 96 % sklepów; pięć minut pracy niżej.</li>
+<li><strong>Kilka wierszy tekstu, których nie pisałeś</strong> – plik wystawił hosting albo platforma. Przeczytaj adres w wierszu <code>Contact</code> i zadaj sobie dwa pytania: czy ktoś tę skrzynkę czyta i czy chcesz, żeby ten adres był publiczny. Jeśli nie – zapytaj pomoc techniczną hostingu, skąd serwer bierze ten adres i jak go zmienić albo zastąpić plik własnym.</li>
+<li><strong>Twój plik</strong> – sprawdź datę w wierszu <code>Expires</code> i to, czy adres nadal jest aktualny.</li>
+</ul>
+
+<h2>Poprawny plik w pięć minut</h2>
+<p>Utwórz zwykły plik tekstowy o nazwie <code>security.txt</code> z taką treścią:</p>
+<pre><code>Contact: mailto:kontakt@twojsklep.pl
+Expires: 2027-11-18T00:00:00.000Z
+Preferred-Languages: pl, en
+Canonical: https://twojsklep.pl/.well-known/security.txt</code></pre>
+<p>Cztery uwagi, które decydują o tym, czy plik zadziała:</p>
+<ol>
+<li><strong>Adres ma być czytany</strong> przez kogoś, kto może coś zrobić albo wie, komu przekazać sprawę. Wspólna skrzynka firmowa jest lepsza niż adres jednej osoby – ludzie odchodzą, skrzynka zostaje. Jeśli stroną opiekuje się wykonawca, można podać dwa wiersze <code>Contact</code>: najpierw swój, potem jego.</li>
+<li><strong>Data <code>Expires</code> najwyżej rok naprzód</strong>, w podanym formacie. Od razu wpisz przypomnienie do kalendarza.</li>
+<li><strong>Miejsce: katalog <code>.well-known</code></strong> w głównym folderze strony. Plik wgrasz przez menedżer plików w panelu hostingu albo przez FTP; na WordPressie nie potrzeba do tego wtyczki. Starsze miejsce – <code>twojsklep.pl/security.txt</code> – standard dopuszcza tylko dla zgodności wstecznej; dwa sklepy z naszej dwudziestki mają plik wyłącznie tam.</li>
+<li><strong>Po wgraniu otwórz adres w przeglądarce.</strong> Masz zobaczyć cztery wiersze czystego tekstu, pod adresem zaczynającym się od <code>https://</code>. Jeśli widzisz stronę sklepu albo błąd 403, serwer nie udostępnia plików z katalogu zaczynającego się od kropki – zgłoś to pomocy technicznej hostingu.</li>
+</ol>
+<p>Nasz własny plik wygląda tak samo: <a href="/.well-known/security.txt">webskan.com/.well-known/security.txt</a>.</p>
+<p>Plik niczego nie zabezpiecza i nie jest zaproszeniem do testowania sklepu. Skraca tylko drogę wiadomości, którą ktoś i tak chce Ci wysłać. Jak odróżnić uczciwe zgłoszenie od próby naciągania, opisaliśmy w <a href="/blog/17-sklepow-odsloniety-plik-po-tygodniu/">tekście o 17 powiadomieniach</a>.</p>
+
+<section class="fullbox" id="skan">
+<h2>Sprawdź swoją stronę – za darmo, w minutę</h2>
+<p>Najlepiej, żeby nie było czego zgłaszać. Darmowy szybki skan Webskan sprawdza kilkadziesiąt typowych adresów plików, których nie powinno być widać z zewnątrz (logi, kopie, <code>info.php</code>), a do tego szybkość strony na telefonie, HTTPS, nagłówki bezpieczeństwa i podstawy SEO. Bez e-maila, bez rejestracji. Samego pliku <code>security.txt</code> skan nie ocenia – to sprawdzisz sposobem opisanym wyżej.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="pl"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://twojsklep.pl" required maxlength="500" aria-label="Adres strony"><button class="btn" type="submit">Skanuj za darmo</button></form>
+<p class="note"><a href="/#cena">Audyt pogłębiony</a> (249 zł) sprawdza całą witrynę – do 30 podstron – i obejmuje ponowne sprawdzenie po poprawkach oraz 30 dni <a href="/#cena">Webskan Monitora</a>.</p>
+</section>
+
+<h2>Metoda i zastrzeżenia</h2>
+<ul>
+<li>Lista: 567 domen małych polskich sklepów internetowych z naszych listopadowych skanów, układana ręcznie według branż, bez dużych sieci. 18 listopada 2026 r. wysłaliśmy do każdej jedno zapytanie o stronę główną i jedno–dwa o plik. 527 sklepów odpowiedziało poprawnie na zapytanie o stronę główną i tylko te liczymy; 40 nie odpowiedziało nam tego dnia albo odmówiło dostępu.</li>
+<li>Za plik uznajemy odpowiedź z kodem 200 zawierającą wiersz <code>Contact</code>, pod adresem <code>/.well-known/security.txt</code> albo – gdy tam go nie ma – <code>/security.txt</code>. 11 sklepów odpowiedziało na ten adres odmową dostępu (403); liczymy je jako brak pliku, bo zgłaszający też go nie zobaczy.</li>
+<li>„Tworzony automatycznie przez serwer hostingu” to nasz wniosek z treści plików (dwa wiersze, identyczna data ważności równo 30 dni naprzód na różnych serwerach, adres konta hostingowego), a nie informacja od firm hostingowych.</li>
+<li>Czy adres przyjmuje pocztę, sprawdzaliśmy tylko po wpisach DNS domeny; nie wysyłaliśmy wiadomości testowych. Nazw sklepów, platform ani adresów nie podajemy.</li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/blog/feed.xml">RSS</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a> · <a href="/developers/" hreflang="en">Dla programistów (EN)</a> · kontakt: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer>
+</div>
+</body>
+</html>

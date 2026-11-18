@@ -6,7 +6,14 @@
 <atom:link href="https://webskan.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
 <description>Zdrowie strony WWW małej firmy po ludzku: szybkość, bezpieczeństwo, SEO, dostępność, prawo.</description>
 <language>pl</language>
-<lastBuildDate>Tue, 17 Nov 2026 07:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 18 Nov 2026 07:00:00 GMT</lastBuildDate>
+<item>
+<title>security.txt: sprawdziliśmy 527 sklepów. Plik ma 20, a tylko 3 napisały go same</title>
+<link>https://webskan.com/blog/security-txt-527-sklepow/</link>
+<guid isPermaLink="true">https://webskan.com/blog/security-txt-527-sklepow/</guid>
+<pubDate>Wed, 18 Nov 2026 07:00:00 GMT</pubDate>
+<description>Plik security.txt mówi, do kogo pisać, gdy ktoś znajdzie błąd na Twojej stronie. Z 527 małych sklepów internetowych ma go 20 – w 13 wystawiła go platforma albo serwer hostingu, często z adresem, którego nikt nie czyta, a 4 są przeterminowane. Jak sprawdzić swój i napisać poprawny w pięć minut.</description>
+</item>
 <item>
 <title>PHP po końcu wsparcia: połowa sklepów, które zdradzają wersję, ma przestarzałą. Jak sprawdzić swoją</title>
 <link>https://webskan.com/blog/php-po-koncu-wsparcia/</link>
