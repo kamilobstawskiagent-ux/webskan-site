@@ -6,7 +6,14 @@
 <atom:link href="https://webskan.com/en/blog/feed.xml" rel="self" type="application/rss+xml"/>
 <description>Website health for small businesses and the developers who ship for them: speed, security, SEO, accessibility.</description>
 <language>en</language>
-<lastBuildDate>Tue, 17 Nov 2026 07:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 18 Nov 2026 07:00:00 GMT</lastBuildDate>
+<item>
+<title>Half the shops that advertise their PHP version run one that is past end of life</title>
+<link>https://webskan.com/en/blog/php-end-of-life-on-live-shops/</link>
+<guid isPermaLink="true">https://webskan.com/en/blog/php-end-of-life-on-live-shops/</guid>
+<pubDate>Wed, 18 Nov 2026 07:00:00 GMT</pubDate>
+<description>51 small online shops send their exact PHP version in the X-Powered-By header. 26 of them run a branch that no longer gets security fixes – the oldest lost support in 2011. The numbers, a ten-line script to check every site you maintain, and an upgrade order that does not end in a white screen.</description>
+</item>
 <item>
 <title>We reported an exposed file to 17 online shops. A week later, 13 are still serving it</title>
 <link>https://webskan.com/en/blog/we-reported-exposed-files-to-17-shops/</link>

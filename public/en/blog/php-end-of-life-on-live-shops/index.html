@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Half the shops that advertise their PHP version run one that is past end of life – Webskan</title>
+<meta name="description" content="51 small online shops send their exact PHP version in the X-Powered-By header. 26 of them run a branch that no longer gets security fixes – the oldest lost support in 2011. The numbers, a ten-line script to check every site you maintain, and an upgrade order that does not end in a white screen.">
+<link rel="canonical" href="https://webskan.com/en/blog/php-end-of-life-on-live-shops/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/php-end-of-life-on-live-shops/">
+<meta property="og:title" content="Half the shops that advertise their PHP version run one that is past end of life">
+<meta property="og:description" content="51 small online shops send their exact PHP version in the X-Powered-By header. 26 of them run a branch that no longer gets security fixes – the oldest lost support in 2011. The numbers, a ten-line script to check every site you maintain, and an upgrade order that does not end in a white screen.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/en/blog/php-end-of-life-on-live-shops/">
+<meta property="og:image" content="https://webskan.com/og-dev-daa15906.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Half the shops that advertise their PHP version run one that is past end of life","description":"51 small online shops send their exact PHP version in the X-Powered-By header. 26 of them run a branch that no longer gets security fixes – the oldest lost support in 2011. The numbers, a ten-line script to check every site you maintain, and an upgrade order that does not end in a white screen.","datePublished":"2026-11-18","dateModified":"2026-11-18","inLanguage":"en","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/en/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/en/"},"mainEntityOfPage":"https://webskan.com/en/blog/php-end-of-life-on-live-shops/"}</script>
+<link rel="alternate" type="application/rss+xml" title="Webskan – blog (RSS)" href="/en/blog/feed.xml">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a href="/en/blog/">Blog</a><a href="/en/#pricing">Pricing</a><a href="/en/#faq">FAQ</a><a href="/blog/" hreflang="pl">PL</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 18 November 2026 · 7 min read · for developers</p>
+<h1>Half the shops that advertise their PHP version run one that is past end of life</h1>
+<p class="lead">Every PHP branch gets security fixes for four years and then stops. In our November scans of small Polish online shops, 51 servers announce their exact PHP version to anyone who asks. 26 of them are on a branch that is already closed. If you build or maintain sites for clients, some of those are probably yours – here are the numbers, a script that checks a whole client list in a minute, and the upgrade order that keeps the shop selling.</p>
+
+<h2>What the scans showed</h2>
+<p>In November 2026 we scanned the home pages of 547 small Polish online shops (WooCommerce, PrestaShop and custom builds; no large chains). A server may add an <code>X-Powered-By</code> header with the PHP version – it does not have to, and most do not. On 17 November we re-requested every shop that did: 51 still send a version.</p>
+<table class="vitals headers">
+<thead><tr><th>PHP branch</th><th>Shops</th><th>Security fixes</th></tr></thead>
+<tbody>
+<tr><td>5.2 and 5.6</td><td data-l="Shops">4</td><td data-l="Security fixes">ended in 2011 and 2018</td></tr>
+<tr><td>7.0, 7.1 and 7.3</td><td data-l="Shops">9</td><td data-l="Security fixes">ended 2019–2021</td></tr>
+<tr><td>7.4</td><td data-l="Shops">7</td><td data-l="Security fixes">ended 28 November 2022</td></tr>
+<tr><td>8.1</td><td data-l="Shops">6</td><td data-l="Security fixes">ended 31 December 2025</td></tr>
+<tr><td><strong>Past end of life</strong></td><td data-l="Shops"><strong>26 (51%)</strong></td><td data-l="Security fixes">none</td></tr>
+<tr><td>8.2</td><td data-l="Shops">4</td><td data-l="Security fixes">until 31 December 2026 – six weeks left</td></tr>
+<tr><td>8.3, 8.4 and 8.5</td><td data-l="Shops">21</td><td data-l="Security fixes">until the end of 2027, 2028 and 2029</td></tr>
+</tbody>
+</table>
+<p>This is not a random sample, and the headline number should not be read as “half of all shops”. We only see servers that announce their version, and a server nobody configured is more likely to be a server nobody updates. What the number does say: among the shops where the version is public, an attacker reading the same header finds a closed branch every second time.</p>
+<p>The wider picture comes from WordPress.org, which collects the PHP version from every install that checks for updates. As of 18 November 2026, 31.7% of WordPress sites run PHP 8.1 or older – all past end of life – and another 22.4% run 8.2, which closes at the end of this year. WordPress itself recommends PHP 8.3 or greater.</p>
+<p>One detail from our own data: between the first scan and the re-check, one shop moved from 7.4 to 8.3. It can be done on a live shop.</p>
+
+<h2>What “end of life” actually means</h2>
+<p>A PHP branch gets two years of bug fixes and then two years of security fixes only. After that the branch is closed: when a vulnerability is found, the fix ships for newer branches and the description is public.</p>
+<table class="vitals headers">
+<thead><tr><th>Branch</th><th>Released</th><th>Security fixes until</th></tr></thead>
+<tbody>
+<tr><td>8.1</td><td data-l="Released">November 2021</td><td data-l="Security fixes until">31 December 2025 (ended)</td></tr>
+<tr><td>8.2</td><td data-l="Released">December 2022</td><td data-l="Security fixes until">31 December 2026</td></tr>
+<tr><td>8.3</td><td data-l="Released">November 2023</td><td data-l="Security fixes until">31 December 2027</td></tr>
+<tr><td>8.4</td><td data-l="Released">November 2024</td><td data-l="Security fixes until">31 December 2028</td></tr>
+<tr><td>8.5</td><td data-l="Released">November 2025</td><td data-l="Security fixes until">31 December 2029</td></tr>
+</tbody>
+</table>
+<p>Source: <a href="https://www.php.net/supported-versions.php" rel="noopener">php.net/supported-versions.php</a>.</p>
+<p>For a client, the risk argument is rarely the one that lands. These three usually do:</p>
+<ul>
+<li><strong>Updates silently stop.</strong> WordPress core and plugins raise their minimum PHP version. On an old branch the dashboard simply does not offer the new plugin release – including the one that patches a hole in the plugin itself. The site looks up to date and is not.</li>
+<li><strong>The shop is slower than it needs to be.</strong> Each branch runs the same code faster; the jump from 5.6 to 7 was the largest. It shows most in the cart and checkout, where page caching does not help.</li>
+<li><strong>The host will switch it for them.</strong> Hosting companies retire old branches after a few warning e-mails to the account owner. A forced switch on a day the host picked is the worst way to upgrade.</li>
+</ul>
+<p>A fair caveat: some hosts and Linux distributions backport security fixes to older branches, sometimes as a paid service. A version number alone does not prove a site is vulnerable. If you do not know for certain that the host does this, assume it does not.</p>
+
+<h2>Check every site you maintain</h2>
+<p>From the outside, the same way we did it:</p>
+<pre><code>curl -sI https://example-shop.com/ | grep -i x-powered-by</code></pre>
+<p>For a client list, one URL per line in <code>sites.txt</code>:</p>
+<pre><code>#!/usr/bin/env bash
+# usage: ./check.sh sites.txt   (one URL per line)
+while read -r site; do
+  [ -z "$site" ] &amp;&amp; continue
+  v=$(curl -sI -m 15 "$site" | tr -d '\r' \
+    | awk -F'PHP/' 'tolower($0) ~ /^x-powered-by:.*php\// {print $2; exit}')
+  echo "$site ${v:-not advertised}"
+done &lt; "${1:-sites.txt}"</code></pre>
+<p>A line such as <code>https://example-shop.com/ 7.4.33</code> means the version is public. <code>not advertised</code> only means the server keeps it to itself – then the version has to be read on the inside: <em>Tools → Site Health → Info → Server</em> in WordPress, <em>Advanced Parameters → Information</em> in PrestaShop, or the PHP selector in the hosting panel.</p>
+<p>One method to avoid: uploading an <code>info.php</code> with <code>phpinfo()</code>. It shows the version and the entire server configuration, and it tends to stay there for years. It is one of the two most common <a href="/en/blog/exposed-env-git-on-live-sites/">exposed files</a> in our scans, and of the eight shops we told about theirs, <a href="/en/blog/we-reported-exposed-files-to-17-shops/">one removed it</a>.</p>
+
+<h2>An upgrade order that does not break the shop</h2>
+<p>Switching the PHP branch in a hosting panel takes a minute and can be undone in a minute. The risk is not the switch; it is old plugins, themes and custom code that throw on the new branch. So the order matters:</p>
+<ol>
+<li><strong>Take a backup of files and database</strong> and confirm it downloads. (What a usable backup contains: <a href="/en/blog/website-backup-what-you-really-have/">Website backup: what you really have</a>.)</li>
+<li><strong>Update core, plugins and theme first</strong>, still on the old branch. Current releases are written for current PHP; old ones often are not.</li>
+<li><strong>Remove what is not used.</strong> A deactivated five-year-old plugin is the most common cause of a fatal error after the switch.</li>
+<li><strong>Do it on a staging copy if there is one</strong>, and move one or two branches at a time rather than from 7.4 straight to the newest. Target a branch with at least a year of fixes ahead: today 8.3 or 8.4.</li>
+<li><strong>Walk the customer path:</strong> home page, product, cart, a test order up to the payment step, contact form, admin login. White screen or “critical error” – switch back in the panel and find the culprit in the error log.</li>
+<li><strong>Read the error log for two days.</strong> <code>Deprecated</code> notices are a to-do list, not an outage; <code>Fatal error</code> is an outage.</li>
+</ol>
+<p>Where custom code usually breaks: functions removed in PHP 8.0 (<code>create_function()</code>, <code>each()</code>), passing <code>null</code> to built-in functions that expect a string (deprecated since 8.1) and dynamic properties (deprecated since 8.2). A static compatibility check before the switch finds most of these without touching production.</p>
+<p>If the honest answer is “it cannot be upgraded because the theme will not run”, that is worth saying to the client in exactly those words. It is a debt that grows every year, and it is easier to quote a theme replacement now than to explain a forced switch by the host later.</p>
+<h3>Then hide the version</h3>
+<p><code>X-Powered-By</code> helps nobody. <code>expose_php = Off</code> in <code>php.ini</code> (a toggle in many hosting panels) removes it. That is housekeeping, not a fix – hiding the number does not replace the upgrade – but there is no reason to hand it to every scanner that asks.</p>
+
+<h2>Make it part of handover</h2>
+<p>None of the 26 shops chose to run closed PHP. Somebody launched the site on the branch that was current that year, and nobody was asked to look again. Two lines in a handover document change that: which PHP branch the site runs, and the date its security fixes end. Put the date in a calendar – yours, if you sell maintenance, or the client's, if you do not.</p>
+
+<section class="fullbox">
+<h2>Check a site now</h2>
+<p>The free Webskan quick scan runs Lighthouse, security headers, basic SEO checks and a probe for files that should not be public – <code>info.php</code> included – on any public site. No sign-up; results in about 30 seconds.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="en"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://yourproject.com" required maxlength="500" aria-label="Website address"><button class="btn" type="submit">Scan for free</button></form>
+<p class="note">Shipping sites with a coding agent? Give it the <a href="/developers/">Webskan MCP server</a> – free for 2 whole-site audits a day, <a href="/developers/#teams">Developer plan</a> for 30. The whole-site audit reports headers that leak software versions.</p>
+</section>
+
+<h2>Method and caveats</h2>
+<ul>
+<li>547 shops are the home pages that answered correctly in our November 2026 scans; the lists were compiled by hand, by niche, without large chains.</li>
+<li>In the first scan 61 shops sent a PHP version. On 17 November we re-requested each home page once: 51 still sent a version (these are counted), 9 did not answer us that day, 1 had stopped sending the header. On 18 November 49 of the 51 sent the same version again; one answered without the header and one refused the request.</li>
+<li>We count the number in <code>X-Powered-By</code>. We did not test whether a given server carries backported security fixes.</li>
+<li>Support dates: php.net. WordPress shares: public WordPress.org statistics on 18 November 2026 (sum of 8.1 and older). Shops are not named.</li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/blog/feed.xml">RSS</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a> · <a href="/developers/">For developers</a> · contact: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer>
+</div>
+</body>
+</html>
