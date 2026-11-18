@@ -122,8 +122,9 @@ export default {
     if (u.protocol === "http:") { u.protocol = "https:"; return Response.redirect(u.toString(), 301); }
     // Jeden kanoniczny host: www i stary adres workers.dev przekierowują na webskan.com (API bez przekierowania, żeby nie psuć pollera i formularzy POST).
     if (u.hostname !== CANONICAL_HOST && !u.pathname.startsWith("/api/")) { u.hostname = CANONICAL_HOST; return Response.redirect(u.toString(), 301); }
-    trackEntry(request, env, ctx, u); // zbiorczy licznik źródeł wejść (src/refs.js)
-    return secure(await route(request, env, u.pathname, ctx));
+    const res = await route(request, env, u.pathname, ctx);
+    if (res.status < 400) trackEntry(request, env, ctx, u); // zbiorczy licznik źródeł wejść (src/refs.js); 404 = sondy skanerów (/settings/api-keys, /swagger) – nie liczymy
+    return secure(res);
   },
   async scheduled(event, env, ctx) { ctx.waitUntil(monitorCron(env)); }, // co minutę: kontrola dostępności monitorowanych stron
 };
