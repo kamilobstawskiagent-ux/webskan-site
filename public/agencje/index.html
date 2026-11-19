@@ -1,0 +1,96 @@
+<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Audyt strony pod logo Twojej agencji (white-label) – Webskan</title>
+<meta name="description" content="Raport audytu technicznego strony WWW z logo, kolorem i danymi kontaktowymi Twojej agencji. Do 30 podstron, ścieżki klienta, plan poprawek. 149 zł/mies., próba: 3 raporty bez karty."><link rel="canonical" href="https://webskan.com/agencje/"><link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Audyt strony pod logo Twojej agencji"><meta property="og:description" content="Raport audytu technicznego z logo i danymi Twojej agencji. Próba: 3 raporty bez karty."><meta property="og:type" content="website"><meta property="og:url" content="https://webskan.com/agencje/"><meta property="og:image" content="https://webskan.com/og-pl.png">
+<link rel="stylesheet" href="/style.css"><script src="/prefill.js" defer></script></head><body><div class="wrap"><header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a><a href="/#faq">FAQ</a><a href="/en/" hreflang="en">EN</a></nav></header>
+<main>
+<section class="hero">
+  <p class="eyebrow">Dla agencji, studiów WWW i freelancerów</p>
+  <h1>Audyt strony klienta pod logo Twojej agencji</h1>
+  <p class="lead">Podajesz adres strony. Dostajesz raport PDF i wersję online z Twoim logo, kolorem i danymi kontaktowymi – gotowy do wysłania klientowi albo do rozmowy sprzedażowej. O Webskan nie ma w nim ani słowa.</p>
+  <p><a class="btn" href="#proba">Zamów 3 raporty na próbę</a> <a class="btn sec" href="/agencje/przyklad/raport.html">Zobacz przykładowy raport</a></p>
+  <p class="note">Próba bez karty i bez zobowiązań. Przykład pokazuje raport fikcyjnego „Studia Przykład” dla prawdziwej strony.</p>
+</section>
+
+<section>
+  <h2>Do czego agencje używają takiego raportu</h2>
+  <ul class="check">
+    <li><strong>Oferta dla nowego klienta.</strong> Zamiast „Państwa strona wymaga poprawy” – lista konkretnych ustaleń z dowodami i kolejnością prac, którą można wycenić.</li>
+    <li><strong>Odbiór własnej realizacji.</strong> Sprawdzenie przed oddaniem strony: uszkodzone linki, formularze, menu na telefonie, nagłówki, dostępność.</li>
+    <li><strong>Opieka nad stroną.</strong> Cykliczny raport dla klientów na abonamencie – widać, co zostało zrobione i co jest następne.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Co jest w raporcie</h2>
+  <ul class="check">
+    <li>Do 30 podstron i 500 linków: uszkodzone linki z miejscem wystąpienia, tytuły i opisy, adresy kanoniczne, mapa strony.</li>
+    <li>Ścieżki klienta w prawdziwej przeglądarce mobilnej: menu, wyszukiwarka, formularz kontaktowy, w sklepie produkt → koszyk → kasa (bez wysyłania formularzy i bez płatności).</li>
+    <li>Szybkość ładowania na telefonie i komputerze (Lighthouse) z najcięższymi skryptami.</li>
+    <li>Bezpieczeństwo i konfiguracja: certyfikat, przekierowania, nagłówki HTTP, publicznie dostępne pliki (logi, kopie, phpinfo).</li>
+    <li>Dostępność według WCAG 2.1 AA (axe-core) z przykładami elementów.</li>
+    <li>Plan działań od najważniejszego, z gotowymi poprawkami – napisany tak, żeby zrozumiał go właściciel firmy.</li>
+  </ul>
+  <p>Raport powstaje automatycznie, zwykle w ciągu godziny. Wyniki pomiarów laboratoryjnych mogą różnić się od danych realnych użytkowników – metoda jest opisana na końcu każdego raportu.</p>
+</section>
+
+<section id="cena-agencje">
+  <h2>Cena</h2>
+  <div class="plans">
+    <div class="plan">
+      <h3>Próba</h3>
+      <div class="amt">0 zł</div><small>14 dni, bez karty</small>
+      <ul class="check"><li>3 raporty pod Twoją marką</li><li>Logo, kolor i dane kontaktowe agencji</li><li>PDF i wersja online</li><li>Kończy się sama, nic nie trzeba wypowiadać</li></ul>
+      <a class="btn" href="#proba">Zamów próbę</a>
+    </div>
+    <div class="plan">
+      <h3>Webskan dla agencji</h3>
+      <div class="amt">149 zł<span class="per">/mies.</span></div><small>bez umowy, rezygnacja w każdej chwili</small>
+      <ul class="check"><li>Do 10 raportów miesięcznie</li><li>Ponowne sprawdzenie po poprawkach: lista naprawione / otwarte / nowe</li><li>Raporty po polsku lub po angielsku</li><li>Zamówienia e-mailem, pytania do raportów w cenie</li></ul>
+      <a class="btn sec" href="#proba">Zacznij od próby</a>
+    </div>
+  </div>
+  <p class="small muted" style="margin-top:12px">Cena brutto. Po próbie wysyłamy link do płatności kartą przez operatora Polar (Merchant of Record), który wystawia fakturę. Potrzebujesz więcej niż 10 raportów miesięcznie – napisz, ustalimy.</p>
+</section>
+
+<section id="proba">
+  <h2>Zamów próbę</h2>
+  <div class="orderbox">
+  <div>
+  <form class="order" action="/api/agency/trial" method="post">
+    <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+    <label>Nazwa agencji lub studia (trafi do nagłówka raportu)<br><input type="text" name="agency" placeholder="Studio Przykład" required maxlength="120"></label>
+    <label>Twój e-mail (na niego wyślemy raport)<br><input type="email" name="email" placeholder="biuro@twojaagencja.pl" required maxlength="254"></label>
+    <label>Adres strony do audytu (klienta albo własnej)<br><input type="text" name="url" inputmode="url" placeholder="https://klient.pl" required maxlength="500"></label>
+    <label>Adres Twojej strony albo pliku z logo (opcjonalnie – logo pobierzemy sami)<br><input type="text" name="logo" inputmode="url" placeholder="https://twojaagencja.pl" maxlength="500"></label>
+    <label>Uwagi (opcjonalnie): kolor przewodni, telefon do stopki raportu<br><input type="text" name="note" maxlength="600"></label>
+    <label class="consent"><input type="checkbox" name="consent" required> Akceptuję <a href="/regulamin/">regulamin</a> i <a href="/prywatnosc/">politykę prywatności</a>. Rozumiem, że audyt dotyczy publicznie dostępnej wersji strony i jest wykonywany automatycznie.</label>
+    <button class="btn" type="submit">Zamów pierwszy raport</button>
+  </form>
+  <p class="note">Wolisz e-mailem? Napisz na <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a>: adres strony do audytu i logo.</p>
+  </div>
+  <aside class="orderaside" aria-label="Co dalej">
+    <h3>Co się dzieje po zgłoszeniu</h3>
+    <ol>
+      <li><strong>Przygotowujemy szablon</strong> – logo, kolor i dane kontaktowe Twojej agencji.</li>
+      <li><strong>Audyt rusza</strong> – przechodzimy witrynę, klikamy ścieżki, mierzymy.</li>
+      <li><strong>Raport trafia na Twój e-mail</strong> – PDF i link do wersji online, zwykle w ciągu kilku godzin. Do klienta wysyłasz go Ty.</li>
+      <li><strong>Kolejne dwa raporty</strong> zamawiasz odpowiedzią na e-mail, w ciągu 14 dni.</li>
+    </ol>
+    <p>Skaner przedstawia się na serwerze jako Webskan (<a href="/bot/">szczegóły</a>) – w raporcie tej nazwy nie ma.</p>
+  </aside>
+  </div>
+</section>
+
+<section id="faq-agencje">
+  <h2>Pytania</h2>
+  <h3>Czy klient zobaczy, że raport zrobił Webskan?</h3>
+  <p>W raporcie PDF i w wersji online nie ma naszej nazwy ani logo. Wersja online jest pod adresem w domenie webskan.com – jeśli to przeszkadza, klientowi wystarczy wysłać PDF. W logach serwera klienta skaner jest widoczny pod własną nazwą; nie ukrywamy jej, bo administratorzy muszą móc go rozpoznać.</p>
+  <h3>Czy mogę audytować stronę, której nie jestem właścicielem?</h3>
+  <p>Tak. Audyt czyta wyłącznie publicznie dostępną wersję strony, niczego nie wysyła i nie zmienia, a obciążenie odpowiada kilkunastu minutom zwykłego ruchu. Jeśli zapora strony zablokuje skaner, dostaniesz o tym informację zamiast raportu z dziurami – taki raport nie liczy się do limitu.</p>
+  <h3>Jak zamawiam kolejne raporty?</h3>
+  <p>E-mailem: adres strony w odpowiedzi na dowolną naszą wiadomość. Raport wraca zwykle w ciągu kilku godzin, najpóźniej następnego dnia roboczego.</p>
+  <h3>Co po 14 dniach próby?</h3>
+  <p>Nic się nie dzieje samo. Jeśli raporty się przydały, odpisujesz „zostaję” i dostajesz link do płatności. Jeśli nie – nie trzeba niczego wypowiadać.</p>
+</section>
+</main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a> · <a href="/developers/" hreflang="en">Dla programistów (EN)</a> · kontakt: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer></div></body></html>

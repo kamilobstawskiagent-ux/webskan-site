@@ -10,7 +10,7 @@
 const TTL = 7 * 24 * 3600;
 const PREFIX = 'pw:';
 const DIRTY = 'pw-dirty', SEEN = 'pw-seen'; // poza prefiksem, żeby list ich nie zwracał
-const markDirty = (env) => env.ORDERS.put(DIRTY, `${Date.now()}-${crypto.randomUUID().slice(0, 8)}`);
+export const markDirty = (env) => env.ORDERS.put(DIRTY, `${Date.now()}-${crypto.randomUUID().slice(0, 8)}`);
 
 function authed(request, env) { const k = request.headers.get('x-scan-key') || ''; return Boolean(env.SCAN_KEY) && k.length === env.SCAN_KEY.length && k === env.SCAN_KEY; }
 
