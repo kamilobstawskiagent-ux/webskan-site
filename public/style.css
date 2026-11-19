@@ -112,3 +112,67 @@ form.order label.pick{display:flex;gap:10px;align-items:flex-start;padding:7px 0
 
 .agshow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:36px;align-items:center;margin-top:18px}.agshow figure{margin:0}.agshow img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:12px;box-shadow:0 20px 44px -26px rgba(17,24,39,.4),0 6px 16px -10px rgba(17,24,39,.18);background:#fff}.agshow .check li{margin:12px 0}
 @media(max-width:900px){.agshow{grid-template-columns:1fr;gap:20px}}
+
+/* ===== Wygląd v4 (2026-11-19): język wizualny raportu – Inter, spokojna typografia, białe karty, miękkie cienie ===== */
+@font-face{font-family:Inter;font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/inter-400.woff2) format("woff2")}
+@font-face{font-family:Inter;font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/inter-500.woff2) format("woff2")}
+@font-face{font-family:Inter;font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/inter-600.woff2) format("woff2")}
+@font-face{font-family:Inter;font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/inter-700.woff2) format("woff2")}
+@font-face{font-family:Inter;font-style:normal;font-weight:800;font-display:swap;src:url(/fonts/inter-800.woff2) format("woff2")}
+:root{--ink:#0f172a;--text:#1e293b;--soft:#475569;--muted:#64748b;--line:#e2e8f0;--bg:#f8fafc;--acc:#1d4ed8;--acc-d:#1e40af;--acc-s:#eff4ff;--good:#15803d;--shadow:0 1px 2px rgba(15,23,42,.05),0 10px 30px -18px rgba(15,23,42,.18)}
+html{background:#fff}
+body{font:17px/1.65 Inter,"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--text);background:linear-gradient(180deg,#f3f6fc 0,#fff 560px) no-repeat;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.wrap{max-width:1080px;padding:0 24px}
+a{color:var(--acc);text-underline-offset:3px;text-decoration-thickness:1px}
+header{padding:22px 0}
+.logo{font-size:24px;font-weight:800;letter-spacing:-.03em}
+nav{gap:6px}nav a{color:var(--soft);font-size:15px;font-weight:500;padding:8px 12px;border-radius:8px;transition:background .15s,color .15s}nav a:hover{color:var(--ink);background:rgba(15,23,42,.05)}
+h1,h2,h3,h4{color:var(--ink)}
+h1{font-size:52px;line-height:1.06;letter-spacing:-.035em;font-weight:800;margin:0 0 20px}
+h2{font-size:32px;line-height:1.18;letter-spacing:-.025em;font-weight:800;margin:88px 0 14px}
+h3{font-weight:700;letter-spacing:-.01em}
+.hero{padding:56px 0 16px}.hero.split{gap:56px}
+.eyebrow{font-size:13px;letter-spacing:.1em;font-weight:700;margin:0 0 14px}
+.lead{font-size:20px;line-height:1.6;color:var(--soft);max-width:620px}
+strong,b{color:var(--ink);font-weight:650}
+.btn{padding:14px 24px;border-radius:12px;font-weight:650;font-size:16px;letter-spacing:-.005em;border:1px solid transparent;box-shadow:0 1px 2px rgba(15,23,42,.12),0 10px 22px -12px rgba(29,78,216,.6);transition:background .15s,border-color .15s,color .15s,box-shadow .15s,transform .15s}
+button.btn{font-weight:650;font-size:16px;border:1px solid transparent}form.order button.btn,form.scanform .btn{font-weight:650;border:1px solid transparent}
+.btn:hover{background:var(--acc-d);transform:translateY(-1px);box-shadow:0 2px 4px rgba(15,23,42,.14),0 14px 26px -12px rgba(29,78,216,.65)}
+.btn.sec{background:#fff;color:var(--ink);border:1px solid #cbd5e1;box-shadow:0 1px 2px rgba(15,23,42,.06)}.btn.sec:hover{background:#fff;border-color:var(--ink);box-shadow:0 2px 6px rgba(15,23,42,.1)}
+.cta .link{font-weight:600}
+.note{background:rgba(255,255,255,.7);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:14.5px;line-height:1.55;color:var(--soft)}
+.trust{font-size:14px;color:var(--muted)}
+.hero-img img{transform:none;border-radius:14px;border-color:#dbe2ec;box-shadow:0 1px 2px rgba(15,23,42,.06),0 40px 70px -36px rgba(15,23,42,.45)}
+.imgtag{font-size:12.5px;padding:6px 12px;left:16px;bottom:-14px;box-shadow:0 6px 16px -6px rgba(15,23,42,.5)}
+.grid{gap:18px;margin:28px 0}
+.card,.step,.plan,.dev .tool,.orderaside,.leadbox,.lhfail{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.card{padding:22px}.card h3{font-size:17.5px;margin:0 0 8px}.card p{color:var(--soft);font-size:15.5px;line-height:1.6}
+.steps{gap:18px;margin:28px 0}.step{padding:24px 22px 22px}.step .n{width:36px;height:36px;background:var(--acc-s);color:var(--acc);font-weight:800;font-size:16px;margin-bottom:14px}.step h3{font-size:17.5px;margin:0 0 8px}.step p{color:var(--soft);font-size:15.5px;line-height:1.6}
+ul.check li{padding-left:32px;margin:9px 0}
+ul.check li::before{content:"";top:.28em;width:20px;height:20px;border-radius:50%;background:#dcfce7 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.4l3 3 6-6.6' fill='none' stroke='%2315803d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/20px no-repeat}
+.plans{gap:22px;margin:28px 0}.plan{padding:30px 28px 26px}.plan h3{font-size:19px;margin:0 0 12px}.plan .amt{font-size:46px;letter-spacing:-.035em;color:var(--ink)}.plan small{font-size:14.5px}
+.plan.featured{border:2px solid var(--acc);background:#fff;box-shadow:0 1px 2px rgba(15,23,42,.05),0 30px 60px -34px rgba(29,78,216,.5)}
+.plan .tag{top:-12px;left:26px;font-size:11.5px;letter-spacing:.07em;padding:4px 11px}
+.price{border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:var(--shadow)}
+.fullbox{border:1px solid var(--line);border-radius:18px;padding:32px;background:linear-gradient(180deg,#f8fafc,#fff);box-shadow:var(--shadow)}
+details{border-bottom:1px solid var(--line);padding:18px 0}details summary{font-weight:600;font-size:17px;color:var(--ink);list-style:none;position:relative;padding-right:36px}details summary::-webkit-details-marker{display:none}
+details summary::after{content:"";position:absolute;right:4px;top:.2em;width:22px;height:22px;border-radius:50%;background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22'%3E%3Cpath d='M11 6.5v9M6.5 11h9' stroke='%23475569' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") center/22px no-repeat;transition:transform .2s}details[open] summary::after{transform:rotate(45deg)}
+details p{color:var(--soft)}
+input{padding:13px 14px;border-radius:10px;border:1px solid #cbd5e1;transition:border-color .15s,box-shadow .15s}input:focus-visible{outline:0;border-color:var(--acc);box-shadow:0 0 0 4px rgba(29,78,216,.15)}
+input[type=radio],input[type=checkbox]{box-shadow:none}
+.orderaside{padding:24px 24px;color:var(--soft)}.orderaside h3{font-size:17.5px}
+.plans-pick{border-radius:12px;padding:12px 16px 14px}
+footer{margin:104px 0 40px;padding-top:28px;font-size:14px;color:var(--muted)}footer a{color:var(--soft);text-decoration:none}footer a:hover{color:var(--ink);text-decoration:underline}
+ul.issues li{border-radius:12px;padding:14px 16px;box-shadow:0 1px 2px rgba(15,23,42,.04)}ul.issues li p{color:var(--soft)}
+.badge{padding:2px 10px}
+.post h1{font-size:42px;line-height:1.1;letter-spacing:-.03em;font-weight:800}.post .lead{font-size:20px;color:var(--soft)}.post h2{font-size:26px;margin:48px 0 12px;font-weight:750}.post p,.post li{font-size:17.5px;line-height:1.72}.post h3{font-size:20px}
+.post pre,.dev pre{border-radius:12px;padding:16px 18px}
+.postlist li{padding:26px 0}.postlist li a{font-size:22px;letter-spacing:-.015em;font-weight:700}.postlist li p{color:var(--soft)}
+.vitals th,.dev .limits th,main.scan th{font-size:12px;letter-spacing:.06em;font-weight:650}
+.dev .tool{padding:22px 24px}.dev .clients li{padding:6px 14px;box-shadow:0 1px 2px rgba(15,23,42,.04)}.dev .prompt{border-radius:0 10px 10px 0}
+.agshow img{border-radius:14px;border-color:#dbe2ec}
+.legal h2{font-size:21px;margin-top:36px;letter-spacing:-.01em}
+@media(max-width:860px){.hero{padding:36px 0 8px}h1{font-size:42px}}
+@media(max-width:600px){body{font-size:16.5px}.wrap{padding:0 18px}h1{font-size:34px;letter-spacing:-.03em}h2{font-size:26px;margin:60px 0 12px}.lead{font-size:18px}.post h1{font-size:30px}.post h2{font-size:23px}.post p,.post li{font-size:17px}.plan{padding:26px 22px 22px}.fullbox{padding:22px 18px}nav{gap:2px}nav a{padding:8px 8px;font-size:14.5px}footer{margin-top:72px}.logo{font-size:22px}}
+h1{letter-spacing:-.028em}
+@media(min-width:901px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
