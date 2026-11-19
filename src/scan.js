@@ -266,6 +266,9 @@ export function layout(lang, title, body, head = '') {
 }
 
 // POST /api/scan  (form: url, lang)
+// Źródło wejścia przenoszone bez cookies: ?utm_source=/?src= → ukryte pole formularza → ?src= na stronie wyniku → metadata.src zamówienia.
+export const cleanSrc = (v) => String(v || '').toLowerCase().replace(/[^a-z0-9._-]/g, '').slice(0, 40);
+
 export async function startScan(request, env, normalizeUrl) {
   let form;
   try { form = await request.formData(); } catch { return new Response('Bad request: expected form data', { status: 400 }); }
@@ -276,11 +279,12 @@ export async function startScan(request, env, normalizeUrl) {
   if (!url) return layout(lang, lang === 'pl' ? 'Nieprawidłowy adres strony' : 'Invalid website address', `<section class="hero"><h1>${lang === 'pl' ? 'Nieprawidłowy adres strony' : 'Invalid website address'}</h1><p>${lang === 'pl' ? 'Podaj publiczny adres w formie <code>https://twojafirma.pl</code>.' : 'Enter a public address such as <code>https://yourcompany.com</code>.'} <a href="${t.home}">${lang === 'pl' ? 'Wróć' : 'Back'}</a>.</p></section>`);
   const host = new URL(url).hostname.replace(/^www\./, '');
   const origin = new URL(request.url).origin;
+  const src = cleanSrc(form.get('src')), sq = src ? `?src=${src}` : '';
 
   // Ten sam host w ciągu 24 h → istniejący wynik.
   const db = store(env);
   const cached = await db.latestDone(host);
-  if (cached) return Response.redirect(`${origin}${T[lang].path(cached.id)}`, 303);
+  if (cached) return Response.redirect(`${origin}${T[lang].path(cached.id)}${sq}`, 303);
 
   const ip = request.headers.get('cf-connecting-ip') || 'x';
   const hour = Math.floor(Date.now() / 3600000);
@@ -291,7 +295,7 @@ export async function startScan(request, env, normalizeUrl) {
 
   const id = newId();
   await db.create({ id, url, host, lang });
-  return Response.redirect(`${origin}${t.path(id)}`, 303);
+  return Response.redirect(`${origin}${t.path(id)}${sq}`, 303);
 }
 
 // GET /api/scan/next  (poller; nagłówek x-scan-key)
@@ -460,7 +464,7 @@ export async function scanPage(request, env, lang, id) {
     if (age > STALE_MS) return layout(lang, t.failed, `<section class="hero"><h1>${t.failed}</h1><p>${t.failedBody(lang === 'pl' ? 'przekroczony czas' : 'timeout')}</p>${scanForm(lang, job.url)}</section>`);
     return layout(lang, t.scanning(host), `<section class="hero"><h1>${esc(t.scanning(host))}</h1><p class="lead">${t.scanningBody}</p><div class="progress"><div></div></div>${age > 60000 ? `<p class="note">${t.queuedLong}</p>` : ''}</section>`, '<meta http-equiv="refresh" content="4">');
   }
-  if (job.status === 'error') return layout(lang, t.failed, `<section class="hero"><h1>${t.failed}: ${esc(host)}</h1><p>${t.failedBody(esc(errorText(job.error, lang)))}</p>${scanForm(lang, '')}${orderBox(lang, env, job.url, t)}</section>`);
+  if (job.status === 'error') return layout(lang, t.failed, `<section class="hero"><h1>${t.failed}: ${esc(host)}</h1><p>${t.failedBody(esc(errorText(job.error, lang)))}</p>${scanForm(lang, '')}${orderBox(lang, env, job.url, t, cleanSrc(new URL(request.url).searchParams.get('src')))}</section>`);
   return layout(lang, t.title(host), renderResult(job, lang, env, new URL(request.url)), ogHead(job, lang, new URL(request.url)));
 }
 
@@ -496,11 +500,11 @@ function ogHead(job, lang, u) {
   return `<meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}"><meta property="og:type" content="website"><meta property="og:url" content="${esc(u.origin + t.path(job.id))}"><meta property="og:image" content="${u.origin}/og-${lang}.png"><meta name="twitter:card" content="summary_large_image">`;
 }
 
-function orderBox(lang, env, url, t) {
+function orderBox(lang, env, url, t, src = '') {
   const presale = env.SALES_MODE === 'presale';
   return `<section class="fullbox" id="${lang === 'pl' ? 'zamow' : 'order'}"><h2>${t.fullH}</h2><p>${t.fullLead}</p><ul class="check">${t.fullList.map((x) => `<li>${x}</li>`).join('')}</ul>
   <h3>${t.orderH}</h3>
-  <form class="order" action="/api/order" method="post"><input type="hidden" name="lang" value="${lang}"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+  <form class="order" action="/api/order" method="post"><input type="hidden" name="lang" value="${lang}">${src ? `<input type="hidden" name="src" value="${esc(src)}">` : ''}<input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
   <label>URL<br><input type="text" name="url" inputmode="url" value="${esc(url)}" required maxlength="500"></label>
   <label>${t.email}<br><input type="email" name="email" placeholder="${lang === "en" ? "you@yourcompany.com" : "ty@twojafirma.pl"}" required maxlength="254"></label>
   <label class="consent"><input type="checkbox" name="consent" required> ${t.consent}</label>
@@ -551,6 +555,6 @@ function renderResult(job, lang, env, u) {
   <section><h2>${t.issues(issues.length)}</h2>${issues.length ? `<ul class="issues">${issues.map((i) => `<li class="${i.sev}"><span class="badge ${i.sev === 'high' ? 'poor' : i.sev === 'medium' ? 'needs' : 'good'}">${t.sev[i.sev]}</span><b>${i.title}</b><p>${i.why}</p>${i.detail ? `<p class="muted small">${i.detail}</p>` : ''}</li>`).join('')}</ul>` : `<p>${t.noIssues}</p>`}
   ${oks.length ? `<h3>${t.okList}</h3><p class="oks">${oks.map((o) => `<span class="chip">✓ ${esc(o)}</span>`).join(' ')}</p>` : ''}</section>
   ${leadBox(lang, job, u)}
-  ${orderBox(lang, env, job.url, t)}
+  ${orderBox(lang, env, job.url, t, cleanSrc(u.searchParams.get('src')))}
   <section><p class="muted small">${t.share} <a class="share" href="${esc(link)}">${esc(link)}</a></p>${scanForm(lang, '')}<p class="muted small">${lang === 'pl' ? '↑ ' + t.again : '↑ ' + t.again}</p></section>`;
 }

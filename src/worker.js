@@ -1,5 +1,5 @@
 // Webskan – Worker: statyczne pliki z public/ + /api/order (checkout Polar albo kolejka przedsprzedażowa w KV) + darmowy szybki skan (src/scan.js).
-import { startScan, nextScans, scanResult, scanRequeue, scanPage, nextAudits, auditResult, ScanQueue, layout, scanLead, leadsNext, leadsDone, leadStats, leadUnsub, blockedPreflight } from "./scan.js";
+import { startScan, cleanSrc, nextScans, scanResult, scanRequeue, scanPage, nextAudits, auditResult, ScanQueue, layout, scanLead, leadsNext, leadsDone, leadStats, leadUnsub, blockedPreflight } from "./scan.js";
 import { MonitorHub, monitorCron, monitorApi, statusPage } from "./monitor.js";
 import { recheckApi, recheckPage } from "./recheck.js";
 import { handleMcp, mcpStatsApi } from "./mcp.js";
@@ -44,6 +44,7 @@ async function handleOrder(request, env) {
   const email = (form.get("email") || "").trim().toLowerCase();
   const consent = form.get("consent") === "on" || form.get("consent") === "1";
   const product = form.get("product") === "monitor" ? "monitor" : "audit"; // audit = audyt pogłębiony (jednorazowo), monitor = abonament (stan wyjściowy bez LLM); audyt daje 30 dni monitora w cenie
+  const src = cleanSrc(form.get("src")); // źródło wejścia (np. googleads) – tylko do metadata zamówienia
   const competitors = String(form.get("competitors") || "").split(/[,\s;]+/).map((c) => normalizeUrl(c)).filter(Boolean).slice(0, 2);
   if (form.get("website")) return page(lang, ...t.saved); // honeypot: udajemy sukces
   if (!url) return page(lang, ...t.badUrl);
@@ -58,7 +59,7 @@ async function handleOrder(request, env) {
     if (why) {
       const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
       const b = t.blocked, host = new URL(url).hostname;
-      const hidden = [["lang", lang], ["url", url], ["email", email], ["consent", "1"], ["product", product], ["competitors", competitors.join(",")], ["force", "1"], ["blocked", why]].map(([k, v]) => `<input type="hidden" name="${k}" value="${esc(v)}">`).join("");
+      const hidden = [["lang", lang], ["url", url], ["email", email], ["consent", "1"], ["product", product], ["competitors", competitors.join(",")], ["force", "1"], ["blocked", why], ...(src ? [["src", src]] : [])].map(([k, v]) => `<input type="hidden" name="${k}" value="${esc(v)}">`).join("");
       return page(lang, b.title, b.lead(esc(why)).replace("{host}", esc(host)) + `<form method="post" action="/api/order">${hidden}<p><button class="btn" type="submit">${b.go}</button></p></form><p><a href="${b.back[0]}">${b.back[1]}</a></p>`);
     }
   }
@@ -73,7 +74,7 @@ async function handleOrder(request, env) {
     const body = {
       products: [productId],
       customer_email: email,
-      metadata: { url, lang, product, source: "webskan", ...(competitors.length ? { competitors: competitors.join(",") } : {}), ...(blockedWhy ? { blocked_warning: blockedWhy } : {}) }, // Polar odrzuca puste stringi w metadata (min. 1 znak)
+      metadata: { url, lang, product, source: "webskan", ...(src ? { src } : {}), ...(competitors.length ? { competitors: competitors.join(",") } : {}), ...(blockedWhy ? { blocked_warning: blockedWhy } : {}) }, // Polar odrzuca puste stringi w metadata (min. 1 znak)
       success_url: `${origin}${t.thanksPath}?checkout_id={CHECKOUT_ID}`,
       locale: lang === "pl" ? "pl-PL" : "en-US",
       currency: lang === "pl" ? "pln" : "usd", // bez tego Polar wybiera walutę po IP, a dla krajów bez własnej ceny bierze domyślną organizacji (PLN) – strona EN obiecuje dolary
