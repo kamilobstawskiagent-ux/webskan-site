@@ -57,42 +57,44 @@
   <div class="plans">
     <div class="plan">
       <h3>Próba</h3>
-      <div class="amt">0 zł</div><small>14 dni, bez karty</small>
+      <div class="amt">0 zł</div><small>14 dni, bez karty, dla agencji i studiów</small>
       <ul class="check"><li>3 raporty pod Twoją marką</li><li>Logo, kolor i dane kontaktowe agencji</li><li>PDF i wersja online</li><li>Kończy się sama, nic nie trzeba wypowiadać</li></ul>
-      <a class="btn" href="#proba">Zamów próbę</a>
+      <a class="btn" href="#proba" data-agplan="trial">Zamów próbę</a>
     </div>
     <div class="plan">
       <h3>Webskan dla agencji</h3>
       <div class="amt">149 zł<span class="per">/mies.</span></div><small>bez umowy, rezygnacja w każdej chwili</small>
       <ul class="check"><li>Do 10 raportów miesięcznie</li><li>Ponowne sprawdzenie po poprawkach: lista naprawione / otwarte / nowe</li><li>Raporty po polsku lub po angielsku</li><li>Zamówienia e-mailem, pytania do raportów w cenie</li></ul>
-      <a class="btn sec" href="#proba">Zacznij od próby</a>
+      <a class="btn sec" href="#proba" data-agplan="paid">Kup plan – 149 zł/mies.</a>
     </div>
   </div>
-  <p class="small muted" style="margin-top:12px">Cena brutto. Po próbie wysyłamy link do płatności kartą przez operatora Polar (Merchant of Record), który wystawia fakturę. Potrzebujesz więcej niż 10 raportów miesięcznie – napisz, ustalimy.</p>
+  <p class="small muted" style="margin-top:12px">Cena brutto. Plan można kupić od razu albo po próbie; płatność kartą przez operatora Polar (Merchant of Record), który wystawia fakturę. Próba jest dla agencji i studiów: każde zgłoszenie sprawdzamy, jedna próba na firmę. Potrzebujesz więcej niż 10 raportów miesięcznie – napisz, ustalimy.</p>
 </section>
 
 <section id="proba">
-  <h2>Zamów próbę</h2>
+  <h2>Zamów próbę albo kup plan</h2>
   <div class="orderbox">
   <div>
   <form class="order" action="/api/agency/trial" method="post">
     <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+    <label class="pick"><input type="radio" name="plan" value="trial" checked><span><b>Próba: 3 raporty, 0 zł</b><br>14 dni, bez karty. Zgłoszenie sprawdzamy, raport w 1 dzień roboczy.</span></label>
+    <label class="pick"><input type="radio" name="plan" value="paid"><span><b>Plan: do 10 raportów miesięcznie, 149 zł/mies.</b><br>Płatność kartą teraz, rezygnacja w każdej chwili.</span></label>
     <label>Nazwa agencji lub studia (trafi do nagłówka raportu)<br><input type="text" name="agency" placeholder="Studio Przykład" required maxlength="120"></label>
     <label>Twój e-mail (na niego wyślemy raport)<br><input type="email" name="email" placeholder="biuro@twojaagencja.pl" required maxlength="254"></label>
     <label>Adres strony do audytu (klienta albo własnej)<br><input type="text" name="url" inputmode="url" placeholder="https://klient.pl" required maxlength="500"></label>
-    <label>Adres Twojej strony albo pliku z logo (opcjonalnie – logo pobierzemy sami)<br><input type="text" name="logo" inputmode="url" placeholder="https://twojaagencja.pl" maxlength="500"></label>
+    <label>Adres strony Twojej agencji lub studia (z niej pobierzemy logo)<br><input type="text" name="logo" inputmode="url" placeholder="https://twojaagencja.pl" required maxlength="500"></label>
     <label>Uwagi (opcjonalnie): kolor przewodni, telefon do stopki raportu<br><input type="text" name="note" maxlength="600"></label>
     <label class="consent"><input type="checkbox" name="consent" required> Akceptuję <a href="/regulamin/">regulamin</a> i <a href="/prywatnosc/">politykę prywatności</a>. Rozumiem, że audyt dotyczy publicznie dostępnej wersji strony i jest wykonywany automatycznie.</label>
-    <button class="btn" type="submit">Zamów pierwszy raport</button>
+    <button class="btn" type="submit"><span class="t-trial">Zamów pierwszy raport</span><span class="t-paid">Przejdź do płatności – 149 zł/mies.</span></button>
   </form>
   <p class="note">Wolisz e-mailem? Napisz na <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a>: adres strony do audytu i logo.</p>
   </div>
   <aside class="orderaside" aria-label="Co dalej">
     <h3>Co się dzieje po zgłoszeniu</h3>
     <ol>
-      <li><strong>Przygotowujemy szablon</strong> – logo, kolor i dane kontaktowe Twojej agencji.</li>
+      <li><strong>Sprawdzamy zgłoszenie i przygotowujemy szablon</strong> – logo, kolor i dane kontaktowe Twojej agencji.</li>
       <li><strong>Audyt rusza</strong> – przechodzimy witrynę, klikamy ścieżki, mierzymy.</li>
-      <li><strong>Raport trafia na Twój e-mail</strong> – PDF i link do wersji online, zwykle w ciągu kilku godzin. Do klienta wysyłasz go Ty.</li>
+      <li><strong>Raport trafia na Twój e-mail</strong> – PDF i link do wersji online, najpóźniej następnego dnia roboczego. Do klienta wysyłasz go Ty.</li>
       <li><strong>Kolejne dwa raporty</strong> zamawiasz odpowiedzią na e-mail, w ciągu 14 dni.</li>
     </ol>
     <p>Skaner przedstawia się na serwerze jako Webskan (<a href="/bot/">szczegóły</a>) – w raporcie tej nazwy nie ma.</p>
@@ -109,7 +111,10 @@
   <h3>Jak zamawiam kolejne raporty?</h3>
   <p>E-mailem: adres strony w odpowiedzi na dowolną naszą wiadomość. Raport wraca zwykle w ciągu kilku godzin, najpóźniej następnego dnia roboczego.</p>
   <h3>Co po 14 dniach próby?</h3>
-  <p>Nic się nie dzieje samo. Jeśli raporty się przydały, odpisujesz „zostaję” i dostajesz link do płatności. Jeśli nie – nie trzeba niczego wypowiadać.</p>
+  <p>Nic się nie dzieje samo. Jeśli raporty się przydały, kupujesz plan przyciskiem na tej stronie albo odpisujesz „zostaję” i dostajesz link do płatności. Jeśli nie – nie trzeba niczego wypowiadać.</p>
+  <h3>Kto może skorzystać z próby?</h3>
+  <p>Agencje, studia i freelancerzy, którzy robią strony dla klientów. Każde zgłoszenie sprawdzamy przed wykonaniem raportu (stąd pole z adresem Twojej strony), jedna próba na firmę. Jeśli chcesz sprawdzić własną stronę, wybierz <a href="/#skan">darmowy skan</a> albo <a href="/#audyt">audyt pogłębiony</a>.</p>
 </section>
+<style>form.order .t-paid{display:none}form.order:has(input[value=paid]:checked) .t-paid{display:inline}form.order:has(input[value=paid]:checked) .t-trial{display:none}</style>
 </main>
 <footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a> · <a href="/developers/" hreflang="en">Dla programistów (EN)</a> · kontakt: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer></div></body></html>
