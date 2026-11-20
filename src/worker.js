@@ -12,7 +12,7 @@ export { ScanQueue, MonitorHub };
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 function page(lang, title, body) {
-  const html = `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} – Webskan</title><link rel="stylesheet" href="/style.css"></head><body><div class="wrap"><header><a class="logo" href="${lang === "pl" ? "/" : "/en/"}">web<span>skan</span></a></header><section class="hero"><h1>${title}</h1>${body}</section></div></body></html>`;
+  const html = `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} – Webskan</title><meta name="robots" content="noindex"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#0E3B43"><link rel="stylesheet" href="/style.css"></head><body><div class="wrap"><header><a class="logo" href="${lang === "pl" ? "/" : "/en/"}">web<span>skan</span></a></header><section class="hero"><h1>${title}</h1>${body}</section></div></body></html>`;
   return new Response(html, { headers: { "content-type": "text/html; charset=utf-8" } });
 }
 

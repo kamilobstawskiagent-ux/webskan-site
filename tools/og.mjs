@@ -44,24 +44,33 @@ for (const [key, v] of Object.entries(variants)) {
   } else {
     dataUrl = 'data:image/png;base64,' + fs.readFileSync(v.previewFile).toString('base64');
   }
+  const font = (f) => 'data:font/woff2;base64,' + fs.readFileSync('public/fonts/' + f).toString('base64');
+  // Wygląd v5 (20.11): petrol + ochra, Bricolage / IBM Plex – jak strona.
   const html = `<!doctype html><html><head><meta charset="utf-8"><style>
-  *{box-sizing:border-box}body{margin:0;width:1200px;height:630px;overflow:hidden;background:#f6f8fb;font-family:Inter,"Segoe UI",system-ui,sans-serif;color:#0f172a;position:relative}
-  .txt{position:absolute;left:72px;top:0;height:630px;width:600px;display:flex;flex-direction:column;justify-content:center;z-index:2}
-  .logo{font-size:60px;font-weight:800;letter-spacing:-1.5px;margin-bottom:28px}.logo span{color:#2563eb}
-  h1{font-size:${key==='dev'?50:50}px;line-height:1.08;font-weight:800;letter-spacing:-1px;margin:0 0 20px}
-  .sub{font-size:24px;color:#475569;margin:0 0 14px}
-  .price{font-size:${key==='dev'?19:21}px;font-weight:700;color:#2563eb;margin:0;${key==='dev'?'font-family:ui-monospace,Menlo,monospace;background:#0f172a;color:#e2e8f0;padding:12px 16px;border-radius:10px;display:inline-block;font-weight:500;':''}}
-  .shot{position:absolute;left:690px;top:60px;width:${key==='dev'?560:540}px;height:${key==='dev'?335:600}px;border-radius:14px;overflow:hidden;box-shadow:0 30px 60px rgba(15,23,42,.22),0 0 0 1px rgba(15,23,42,.08);transform:rotate(-3deg);background:#fff;${key==='dev'?'top:140px;':''}}
+  @font-face{font-family:Bricolage;src:url(${font('bricolage.woff2')});font-weight:500 800;unicode-range:U+0000-00FF,U+2000-206F}
+  @font-face{font-family:Bricolage;src:url(${font('bricolage-ext.woff2')});font-weight:500 800;unicode-range:U+0100-02BA}
+  @font-face{font-family:Plex;src:url(${font('plexsans.woff2')});font-weight:400 600;unicode-range:U+0000-00FF,U+2000-206F,U+2192}
+  @font-face{font-family:Plex;src:url(${font('plexsans-ext.woff2')});font-weight:400 600;unicode-range:U+0100-02BA}
+  @font-face{font-family:PlexMono;src:url(${font('plexmono.woff2')});font-weight:500;unicode-range:U+0000-00FF,U+2000-206F}
+  @font-face{font-family:PlexMono;src:url(${font('plexmono-ext.woff2')});font-weight:500;unicode-range:U+0100-02BA}
+  *{box-sizing:border-box}body{margin:0;width:1200px;height:630px;overflow:hidden;background:#0E3B43 radial-gradient(90% 90% at 100% 0,rgba(233,185,73,.2),transparent 60%);font-family:Plex,system-ui,sans-serif;color:#EAF2F1;position:relative}
+  .txt{position:absolute;left:72px;top:0;height:630px;width:590px;display:flex;flex-direction:column;justify-content:center;z-index:2}
+  .logo{display:flex;align-items:center;gap:18px;font:700 54px/1 Bricolage;letter-spacing:-1.5px;margin-bottom:34px;color:#fff}.logo span{color:#E9B949}
+  .logo i{width:58px;height:58px;border:7px solid #E9B949;border-radius:14px;background:linear-gradient(#fff,#fff) center/30px 7px no-repeat}
+  h1{font:800 ${key === 'dev' ? 52 : 54}px/1.05 Bricolage;letter-spacing:-1.5px;margin:0 0 22px;color:#fff}
+  .sub{font-size:24px;color:#CFE0DE;margin:0 0 20px;line-height:1.35}
+  .price{font:500 ${key === 'dev' ? 17 : 19}px/1.45 PlexMono;color:#E9B949;margin:0;${key === 'dev' ? 'background:rgba(0,0,0,.3);color:#EAF2F1;padding:12px 16px;border-radius:10px;display:inline-block;white-space:nowrap;' : 'padding-top:18px;border-top:1px solid rgba(255,255,255,.18);'}}
+  .shot{position:absolute;left:700px;top:64px;width:${key === 'dev' ? 560 : 520}px;height:${key === 'dev' ? 335 : 600}px;border-radius:14px;overflow:hidden;box-shadow:0 40px 70px -20px rgba(0,0,0,.6);transform:rotate(-3deg);background:#fff;${key === 'dev' ? 'top:140px;left:690px;' : ''}}
   .shot img{width:100%;display:block}
-  .badge{position:absolute;white-space:nowrap;left:700px;top:${key==='dev'?528:540}px;background:${key==='dev'?'#2563eb':'#0f172a'};color:#fff;font-size:21px;font-weight:600;padding:12px 24px;border-radius:999px;z-index:3;box-shadow:0 10px 24px rgba(15,23,42,.25)}
+  .badge{position:absolute;white-space:nowrap;left:712px;top:${key === 'dev' ? 528 : 542}px;background:#E9B949;color:#0E3B43;font:500 19px PlexMono;padding:11px 18px;border-radius:8px;z-index:3;box-shadow:0 12px 26px rgba(0,0,0,.35)}
   </style></head><body>
-  <div class="txt"><div class="logo">web<span>skan</span></div><h1>${v.title}</h1><p class="sub">${v.sub}</p><p class="price">${v.price}</p></div>
+  <div class="txt"><div class="logo"><i></i><div>web<span>skan</span></div></div><h1>${v.title}</h1><p class="sub">${v.sub}</p><p class="price">${v.price}</p></div>
   <div class="shot"><img src="${dataUrl}"></div><div class="badge">${v.badge}</div>
   </body></html>`;
   const ctx = await browser.newContext({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
   const p = await ctx.newPage();
   await p.setContent(html, { waitUntil: 'load' });
-  await p.waitForTimeout(200);
+  await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(300);
   await p.screenshot({ path: v.out, type: 'png' });
   await ctx.close();
   console.log('ok', v.out);

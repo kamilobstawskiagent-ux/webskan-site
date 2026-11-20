@@ -131,14 +131,14 @@ function dailyCharts(byDay, lang, t) {
   for (let i = 29; i >= 0; i--) { const d = new Date(Date.now() - i * 86400000).toISOString().slice(0, 10); days.push({ d, ...(map.get(d) || { n: 0, oks: 0, avg_ms: null }) }); }
   const loc = lang === 'en' ? 'en-GB' : 'pl-PL';
   const label = (d) => new Date(d + 'T12:00:00Z').toLocaleDateString(loc, { day: 'numeric', month: 'short' });
-  const col = (r) => !r.n ? '#e5e7eb' : (r.oks / r.n >= 0.999 ? '#1a7f37' : r.oks / r.n >= 0.99 ? '#b45309' : '#b42318');
+  const col = (r) => !r.n ? '#D5DDDB' : (r.oks / r.n >= 0.999 ? '#067647' : r.oks / r.n >= 0.99 ? '#B54708' : '#B42318');
   const W = 600, bw = 16, gap = 4, H = 36;
   const bars = days.map((r, i) => `<rect x="${i * (bw + gap)}" y="0" width="${bw}" height="${H}" rx="4" fill="${col(r)}"><title>${label(r.d)}: ${r.n ? `${(100 * r.oks / r.n).toLocaleString(loc, { maximumFractionDigits: 2 })} % ${t.dayUp}, ${t.checksN(r.n)}` : t.noChecks}</title></rect>`).join('');
   const strip = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" preserveAspectRatio="none" role="img" aria-label="${t.last30}" style="display:block">${bars}</svg>
-<div style="display:flex;justify-content:space-between;color:#6b7280;font-size:.8rem;margin-top:.3rem"><span>${label(days[0].d)}</span><span>${label(days[29].d)}</span></div>
-<p style="display:flex;flex-wrap:wrap;gap:.4rem 1rem;color:#6b7280;font-size:.8rem;margin:.5rem 0 0"><span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#1a7f37;vertical-align:-1px"></span> ${t.legendGood}</span><span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#b45309;vertical-align:-1px"></span> ${t.legendWarn}</span><span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#b42318;vertical-align:-1px"></span> ${t.legendBad}</span><span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#e5e7eb;vertical-align:-1px"></span> ${t.legendNone}</span></p>`;
+<div class="ax"><span>${label(days[0].d)}</span><span>${label(days[29].d)}</span></div>
+<p class="legend"><span><i style="background:#067647"></i>${t.legendGood}</span><span><i style="background:#B54708"></i>${t.legendWarn}</span><span><i style="background:#B42318"></i>${t.legendBad}</span><span><i style="background:#D5DDDB"></i>${t.legendNone}</span></p>`;
   const pts = days.map((r, i) => r.avg_ms != null ? { i, v: Math.round(r.avg_ms), d: r.d } : null).filter(Boolean);
-  if (pts.length < 7) return strip + `<p style="color:#6b7280;font-size:.9rem;margin:1rem 0 0">${t.respSoon}</p>`;
+  if (pts.length < 7) return strip + `<p class="muted small" style="margin:14px 0 0">${t.respSoon}</p>`;
   // 12.11 (UI audyt): oś X od pierwszego dnia z danymi (zamiast pustych 3 tygodni przy świeżym monitorze), skala = „ładny” sufit nad maksimum (min 50 ms), nie sztywne 0–100.
   const first = pts[0].i, span = Math.max(1, 29 - first);
   const peak = Math.max(...pts.map((p) => p.v)) * 1.2; const step = peak <= 100 ? 10 : peak <= 500 ? 50 : peak <= 2000 ? 100 : 500;
@@ -147,12 +147,12 @@ function dailyCharts(byDay, lang, t) {
   const path = pts.map((p, k) => `${k ? 'L' : 'M'}${x(p.i).toFixed(1)},${y(p.v).toFixed(1)}`).join(' ');
   // 13.11 (UI audyt): pola najechania przycięte do [0, LW] – pierwsze wystawało o pół kroku poza SVG (off-viewport na telefonie).
   const cols = days.map((r, i) => { if (r.avg_ms == null || i < first) return ''; const x0 = Math.max(0, x(i) - LW / (2 * span)), x1 = Math.min(LW, x(i) + LW / (2 * span)); return `<rect x="${x0.toFixed(1)}" y="0" width="${(x1 - x0).toFixed(1)}" height="${LH}" fill="transparent"><title>${label(r.d)}: ${Math.round(r.avg_ms)} ms</title></rect>`; }).join('');
-  const line = `<h3 style="font-size:1rem;margin:1.25rem 0 .25rem">${t.respDaily}</h3>
-<div style="display:flex;justify-content:flex-end;color:#6b7280;font-size:.8rem"><span>${t.maxMs(max)}</span></div>
+  const line = `<h3>${t.respDaily}</h3>
+<div class="ax" style="justify-content:flex-end"><span>${t.maxMs(max)}</span></div>
 <svg viewBox="0 0 ${LW} ${LH}" width="100%" height="110" preserveAspectRatio="none" role="img" aria-label="${t.respDaily}" style="display:block;overflow:visible;margin:4px 0">
-<line x1="0" y1="0" x2="${LW}" y2="0" stroke="#e5e7eb" stroke-dasharray="3 3" vector-effect="non-scaling-stroke"/><line x1="0" y1="${LH}" x2="${LW}" y2="${LH}" stroke="#e5e7eb" vector-effect="non-scaling-stroke"/>
-<path d="${path}" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>${cols}</svg>
-<div style="display:flex;justify-content:space-between;color:#6b7280;font-size:.8rem"><span>${label(days[first].d)}</span><span>${label(days[29].d)}</span></div>`;
+<line x1="0" y1="0" x2="${LW}" y2="0" stroke="#D5DDDB" stroke-dasharray="3 3" vector-effect="non-scaling-stroke"/><line x1="0" y1="${LH}" x2="${LW}" y2="${LH}" stroke="#D5DDDB" vector-effect="non-scaling-stroke"/>
+<path d="${path}" fill="none" stroke="#13696B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>${cols}</svg>
+<div class="ax"><span>${label(days[first].d)}</span><span>${label(days[29].d)}</span></div>`;
   return strip + line;
 }
 export async function statusPage(env, lang, token) {
@@ -161,7 +161,6 @@ export async function statusPage(env, lang, token) {
   if (!m) { const t404 = lang === 'en' ? ['Status page not found', 'This status link is invalid or the monitor was removed.', '/en/', 'Home page'] : ['Nie ma takiej strony stanu', 'Ten link jest nieprawidłowy albo monitor został usunięty.', '/', 'Strona główna']; const r = layout(lang, t404[0], `<section class="hero"><p class="eyebrow">404</p><h1>${t404[0]}</h1><p class="lead">${t404[1]}</p><p><a class="btn sec" href="${t404[2]}">${t404[3]}</a></p></section>`); return new Response(r.body, { status: 404, headers: r.headers }); }
   const [s1, s7, s30] = await Promise.all([h.stats(m.id, 1), h.stats(m.id, 7), h.stats(m.id, 30)]);
   const state = !m.active ? 'paused' : m.state;
-  const color = { up: '#1a7f37', down: '#b42318', unknown: '#6b7280', paused: '#6b7280' }[state];
   const pct = (s) => s.uptime == null ? t.nodata : `${s.uptime.toLocaleString(lang === 'en' ? 'en-GB' : 'pl-PL')} %`;
   const incidents = [];
   let open = null;
@@ -169,21 +168,21 @@ export async function statusPage(env, lang, token) {
   if (open) incidents.push({ down: open.at, up: null, dur: Math.round((Date.now() - open.at) / 1000) });
   incidents.reverse();
   const body = `
-<section class="hero" style="padding-bottom:1rem"><p class="eyebrow">${t.footer}</p><h1>${esc(t.title(m.host))}</h1>
+<section class="hero"><p class="eyebrow">${t.footer}</p><h1>${esc(t.title(m.host))}</h1>
 <p><a href="${esc(m.url)}" rel="noopener">${esc(m.url)}</a></p></section>
-<section class="status-card" style="border:1px solid #e5e7eb;border-radius:12px;padding:1.25rem 1.5rem;margin:0 0 1.5rem">
-  <p style="margin:0;font-size:1.6rem;font-weight:700;color:${color}">● ${t[state]}</p>
-  <p style="margin:.25rem 0 0;color:#4b5563">${[state === 'up' || state === 'down' ? `${t.since} ${fmtDate(m.since, lang)}` : '', m.last_at ? `${t.lastCheck}: ${fmtDate(m.last_at, lang)}${m.last_ms ? `, ${t.resp} ${m.last_ms} ms` : ''}${m.last_err ? ` (${esc(m.last_err)})` : ''}` : ''].filter(Boolean).join(' · ')}</p>
+<section class="status-card">
+  <p class="state ${state}">${t[state]}</p>
+  <p class="meta">${[state === 'up' || state === 'down' ? `${t.since} ${fmtDate(m.since, lang)}` : '', m.last_at ? `${t.lastCheck}: ${fmtDate(m.last_at, lang)}${m.last_ms ? `, ${t.resp} ${m.last_ms} ms` : ''}${m.last_err ? ` (${esc(m.last_err)})` : ''}` : ''].filter(Boolean).join(' · ')}</p>
 </section>
 <section><h2>${t.uptime}</h2>
-<div class="grid3" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem">
-  ${[[t.d1, s1], [t.d7, s7], [t.d30, s30]].map(([l, s]) => `<div style="border:1px solid #e5e7eb;border-radius:12px;padding:.9rem .8rem"><p style="margin:0;color:#6b7280;font-size:.85rem">${l}</p><p style="margin:.2rem 0 0;font-size:1.5rem;font-weight:700">${pct(s)}</p><p style="margin:0;color:#6b7280;font-size:.85rem">${s.checks} ${t.checks}${s.avg_ms ? ` · ${t.avg.toLowerCase()} ${s.avg_ms} ms` : ''}</p></div>`).join('')}
+<div class="grid3">
+  ${[[t.d1, s1], [t.d7, s7], [t.d30, s30]].map(([l, s]) => `<div><p>${l}</p><p class="v">${pct(s)}</p><p>${s.checks} ${t.checks}${s.avg_ms ? ` · ${t.avg.toLowerCase()} ${s.avg_ms} ms` : ''}</p></div>`).join('')}
 </div></section>
-<section><h2>${t.last30}</h2>${dailyCharts(s30.byDay, lang, t)}</section>
+<section><h2>${t.last30}</h2><div class="chartbox">${dailyCharts(s30.byDay, lang, t)}</div></section>
 <section><h2>${t.incidents}</h2>
-${incidents.length ? `<ul style="list-style:none;padding:0;margin:0">${incidents.map((i) => `<li style="border-top:1px solid #e5e7eb;padding:.6rem 0;display:flex;flex-wrap:wrap;gap:.25rem 1.25rem"><span style="color:#b42318;font-weight:600">${t.downAt} ${fmtDate(i.down, lang)}</span><span>${i.up ? `${t.upAt} ${fmtDate(i.up, lang)}` : '…'}</span><span style="color:#6b7280">${t.dur}: ${fmtDur(i.dur, t)}</span></li>`).join('')}</ul>` : `<p>${t.none}</p>`}
+${incidents.length ? `<ul class="incidents">${incidents.map((i) => `<li><span class="d">${t.downAt} ${fmtDate(i.down, lang)}</span><span>${i.up ? `${t.upAt} ${fmtDate(i.up, lang)}` : '…'}</span><span class="m">${t.dur}: ${fmtDur(i.dur, t)}</span></li>`).join('')}</ul>` : `<p>${t.none}</p>`}
 </section>
-<section><p style="color:#6b7280;font-size:.9rem">${t.how}</p></section>
-<section class="fullbox" style="margin-top:28px"><h2 style="font-size:22px">${t.ctaH}</h2><p>${t.ctaP}</p><p style="margin-bottom:0"><a class="btn" href="${t.ctaHref}">${t.ctaBtn}</a></p></section>`;
-  return layout(lang, t.title(m.host), body, '<style>@media(max-width:600px){.grid3{grid-template-columns:1fr!important}.grid3>div{display:grid;grid-template-columns:1fr auto;column-gap:12px;align-items:baseline}.grid3>div p:last-child{grid-column:1/-1}}</style>'); // layout: noindex + no-store
+<section><p class="muted small">${t.how}</p></section>
+<section class="fullbox"><h2>${t.ctaH}</h2><p>${t.ctaP}</p><p style="margin-bottom:0"><a class="btn" href="${t.ctaHref}">${t.ctaBtn}</a></p></section>`;
+  return layout(lang, t.title(m.host), body, ''); // layout: noindex + no-store
 }
