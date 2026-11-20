@@ -114,3 +114,57 @@ export async function depsCheck(request, env) {
   if (wantJson) return Response.json({ ok: true, files, checked: r.checked, vulnerablePackages: r.vulnerable.length, unpinned: [...new Set(unpinned)], truncated: r.truncated, source: "OSV.dev (GitHub Advisory Database CC-BY 4.0, PyPA Advisory Database CC-BY 4.0)", packages: r.vulnerable.map((p) => ({ ecosystem: p.ecosystem, name: p.name, version: p.version, dev: p.dev, severity: p.top, updateTo: p.fixAll, vulnerabilities: p.vulns.map((x) => ({ id: x.id, aliases: x.aliases, severity: x.severity, summary: x.summary, fixed: x.fixed, url: x.url })) })) }, { headers: { "cache-control": "no-store" } });
   return renderResult(lang, r, { files, unpinned: [...new Set(unpinned)] });
 }
+
+// --- Stały dozór zależności (projekty z tokenem) ---
+// POST /api/deps/project   (x-scan-key; JSON {token, name})      – rejestracja projektu (laptop: monitor.mjs deps-add) → KV `depsproj:<token>`
+// POST /api/deps/push/<token>  (multipart file[] / text)          – z potoku CI: zapis samej listy pakietów (nazwa, wersja) → KV `depsdata:<token>`; odpowiedź = wynik sprawdzenia (JSON)
+// GET  /api/deps/export    (x-scan-key)                           – wszystkie listy dla dozoru dziennego (laptop)
+const authed = (request, env) => { const k = request.headers.get("x-scan-key") || ""; return Boolean(env.SCAN_KEY) && k.length === env.SCAN_KEY.length && k === env.SCAN_KEY; };
+const TOKEN_RE = /^[0-9a-f]{32}$/;
+
+export async function depsProject(request, env) {
+  if (!authed(request, env)) return new Response("Unauthorized", { status: 401 });
+  const j = await request.json().catch(() => null);
+  if (!j || !TOKEN_RE.test(j.token || "")) return new Response("Bad token", { status: 400 });
+  if (j.remove) { await env.ORDERS.delete(`depsproj:${j.token}`); await env.ORDERS.delete(`depsdata:${j.token}`); return Response.json({ ok: true, removed: true }); }
+  await env.ORDERS.put(`depsproj:${j.token}`, JSON.stringify({ name: String(j.name || "").slice(0, 120), created: new Date().toISOString() }));
+  return Response.json({ ok: true });
+}
+
+export async function depsPush(request, env, token) {
+  if (request.method !== "POST") return Response.json({ ok: false, error: "POST" }, { status: 405 });
+  if (!TOKEN_RE.test(token) || !(await env.ORDERS.get(`depsproj:${token}`))) return Response.json({ ok: false, error: "UNKNOWN_PROJECT" }, { status: 404 });
+  if (Number(request.headers.get("content-length") || 0) > MAX_BYTES + 4096) return Response.json({ ok: false, error: "TOOBIG" }, { status: 413 });
+  const form = await request.formData().catch(() => null);
+  if (!form) return Response.json({ ok: false, error: "EMPTYFORM" }, { status: 400 });
+  const files = {}, unpinned = []; let err = null, bytes = 0;
+  const entries = [...form.getAll("file")]; const pasted = form.get("text"); if (typeof pasted === "string" && pasted.trim()) entries.push(pasted);
+  for (const f of entries.slice(0, 10)) {
+    const name = typeof f === "object" ? (f.name || "plik") : "plik", text = typeof f === "object" ? await f.text() : f;
+    bytes += text.length; if (bytes > MAX_BYTES) return Response.json({ ok: false, error: "TOOBIG" }, { status: 413 });
+    const m = parseManifest(name, text);
+    if (m.error && !m.unpinned.length) { err = err || m.error; continue; }
+    const key = name === "plik" ? m.format : name.split(/[\\/]/).pop().slice(0, 60);
+    files[key] = m.packages.map((p) => [p.ecosystem === "npm" ? "n" : "p", p.name, p.version, p.dev ? 1 : 0]); unpinned.push(...m.unpinned);
+  }
+  if (!Object.keys(files).length) return Response.json({ ok: false, error: err || "EMPTY" }, { status: 400 });
+  // zapis tylko przy zmianie listy (oszczędza dzienny limit zapisów KV, gdy CI wysyła ten sam plik przy każdym buildzie)
+  const body = JSON.stringify({ files, unpinned: [...new Set(unpinned)].slice(0, 200) });
+  const old = await env.ORDERS.get(`depsdata:${token}`);
+  const changed = !old || JSON.parse(old).body !== body;
+  if (changed) await env.ORDERS.put(`depsdata:${token}`, JSON.stringify({ body, at: new Date().toISOString() }));
+  const pkgs = Object.values(files).flat().map(([e, name, version, dev]) => ({ ecosystem: e === "n" ? "npm" : "PyPI", name, version, dev: !!dev }));
+  const uniq = [...new Map(pkgs.map((p) => [`${p.ecosystem}:${p.name}@${p.version}`, p])).values()];
+  let r = null; try { r = await checkDeps(uniq, { maxDetails: 40 }); } catch {}
+  return Response.json({ ok: true, stored: true, changed, files: Object.keys(files), packages: uniq.length, unpinned: [...new Set(unpinned)], ...(r ? { vulnerablePackages: r.vulnerable.length, vulnerable: r.vulnerable.map((p) => ({ name: p.name, version: p.version, severity: p.top, updateTo: p.fixAll, ids: p.vulns.map((x) => x.id) })) } : { check: "unavailable" }) }, { headers: { "cache-control": "no-store" } });
+}
+
+export async function depsExport(request, env) {
+  if (!authed(request, env)) return new Response("Unauthorized", { status: 401 });
+  const out = []; let cursor;
+  do {
+    const l = await env.ORDERS.list({ prefix: "depsdata:", cursor }); cursor = l.list_complete ? null : l.cursor;
+    for (const k of l.keys) { const v = await env.ORDERS.get(k.name); if (!v) continue; const j = JSON.parse(v); out.push({ token: k.name.slice(9), at: j.at, ...JSON.parse(j.body) }); }
+  } while (cursor);
+  return Response.json({ ok: true, projects: out });
+}

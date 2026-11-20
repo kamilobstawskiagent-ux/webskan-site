@@ -7,7 +7,7 @@ import { polarApi } from "./polar.js";
 import { normalizeUrl } from "./url.js";
 import { trackEntry, refsApi } from "./refs.js";
 import { agencyTrial, agencyReportPut, agencyReportGet } from "./agency.js";
-import { depsCheck } from "./depsweb.js";
+import { depsCheck, depsProject, depsPush, depsExport } from "./depsweb.js";
 export { ScanQueue, MonitorHub };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -170,6 +170,9 @@ async function route(request, env, pathname, ctx) {
     { const m = pathname.match(/^\/en\/recheck\/([0-9a-f]{32})\/?$/); if (m) return recheckPage(request, env, "en", m[1]); }
     { const m = pathname.match(/^\/status\/([0-9a-f]{32})\/?$/); if (m) return statusPage(env, "pl", m[1]); }
     { const m = pathname.match(/^\/en\/status\/([0-9a-f]{32})\/?$/); if (m) return statusPage(env, "en", m[1]); }
+    if (pathname === "/api/deps/project" && request.method === "POST") return depsProject(request, env);
+    if (pathname === "/api/deps/export") return depsExport(request, env);
+    if (pathname.startsWith("/api/deps/push/")) return depsPush(request, env, pathname.slice(15));
     if (pathname === "/api/deps/check") return depsCheck(request, env); // sprawdzenie zależności projektu w OSV (src/depsweb.js)
     if (pathname === "/api/agency/trial") return agencyTrial(request, env); // próba planu dla agencji (src/agency.js)
     if (pathname === "/api/agency/report" && request.method === "POST") return agencyReportPut(request, env);

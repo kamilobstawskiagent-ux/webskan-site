@@ -110,6 +110,8 @@ export function cmpVer(a, b) {
   return A.pre === B.pre ? 0 : A.pre < B.pre ? -1 : 1;
 }
 
+// opis: jedno zdanie, najwyżej ok. 200 znaków, bez urwanego słowa
+const shortText = (t) => { t = String(t).replace(/\s+/g, " ").trim(); if (t.length <= 200) return t; const first = /^(.{40,200}?[.!?])\s/.exec(t); return first ? first[1] : t.slice(0, 190).replace(/\s+\S*$/, "") + "…"; };
 const SEV_RANK = { high: 0, medium: 1, low: 2 };
 function summarize(rec, pkg) {
   const ids = [rec.id, ...(rec.aliases || [])];
@@ -128,7 +130,7 @@ function summarize(rec, pkg) {
     if (an !== pkg.name) continue;
     for (const r of a.ranges || []) { if (r.type === "GIT") continue; for (const ev of r.events || []) if (ev.fixed && cmpVer(ev.fixed, pkg.version) > 0 && (!fixed || cmpVer(ev.fixed, fixed) < 0)) fixed = ev.fixed; }
   }
-  return { id: cve || ghsa || rec.id, osv: rec.id, cve, ghsa, aliases: ids, summary: (rec.summary || String(rec.details || "").split("\n")[0] || "").slice(0, 240), severity: sev, label: label || null, noLogin, network, malicious, fixed, published: (rec.published || "").slice(0, 10), url: `https://osv.dev/vulnerability/${rec.id}` };
+  return { id: cve || ghsa || rec.id, osv: rec.id, cve, ghsa, aliases: ids, summary: shortText(rec.summary || String(rec.details || "").split("\n")[0] || ""), severity: sev, label: label || null, noLogin, network, malicious, fixed, published: (rec.published || "").slice(0, 10), url: `https://osv.dev/vulnerability/${rec.id}` };
 }
 
 // cache: opcjonalnie { get(klucz) → lista rekordów|undefined, set(klucz, lista) }, klucz „ekosystem:nazwa@wersja” – laptop może trzymać odpowiedzi OSV na dysku (krótko: nowe luki muszą być widoczne)
