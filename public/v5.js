@@ -7,6 +7,10 @@ if(t){var tick=false,upd=function(){tick=false;t.classList.toggle('on',window.sc
   addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(upd);}},{passive:true});upd();
   t.addEventListener('click',function(e){e.preventDefault();scrollTo({top:0,behavior:calm?'auto':'smooth'});});}
 if(calm)return;
+// Wskaźniki w karcie wyniku: animacja jest w CSS; jeśli karta jest poniżej ekranu (telefon), czeka na przewinięcie
+var rc=document.querySelector('.result');
+if(rc&&'IntersectionObserver' in window&&rc.getBoundingClientRect().top>innerHeight*.6){rc.classList.add('wait');
+  var ro=new IntersectionObserver(function(es){if(es[0].isIntersecting){rc.classList.remove('wait');ro.disconnect();}},{threshold:.35});ro.observe(rc);}
 // Wejścia: chowamy tylko to, co jest poniżej ekranu w chwili startu (bez mignięcia treści)
 if('IntersectionObserver' in window){
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:.12});

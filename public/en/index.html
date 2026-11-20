@@ -34,8 +34,8 @@
     <p class="prices">Audit with a fix plan: <b>$69</b> · Ongoing monitoring: <b>$15/month</b> · <a href="#pricing">compare</a></p>
   </div>
   <div class="result" aria-label="Sample scan result">
-    <div class="bar"><strong>yourcompany.com</strong><span>scan: 31 s</span></div>
-    <div class="dials"><div class="dial"><svg viewBox="0 0 64 64" role="img" aria-label="Speed: 54 out of 100"><circle cx="32" cy="32" r="28" fill="none" stroke="#E8EDEC" stroke-width="6"/><circle class="v" cx="32" cy="32" r="28" fill="none" stroke="#B54708" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="81.0"/><text x="32" y="40" text-anchor="middle" fill="#14262A">54</text></svg><span>Speed</span></div><div class="dial"><svg viewBox="0 0 64 64" role="img" aria-label="Accessibility: 91 out of 100"><circle cx="32" cy="32" r="28" fill="none" stroke="#E8EDEC" stroke-width="6"/><circle class="v" cx="32" cy="32" r="28" fill="none" stroke="#067647" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="15.8"/><text x="32" y="40" text-anchor="middle" fill="#14262A">91</text></svg><span>Accessibility</span></div><div class="dial"><svg viewBox="0 0 64 64" role="img" aria-label="Best practices: 78 out of 100"><circle cx="32" cy="32" r="28" fill="none" stroke="#E8EDEC" stroke-width="6"/><circle class="v" cx="32" cy="32" r="28" fill="none" stroke="#B54708" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="38.7"/><text x="32" y="40" text-anchor="middle" fill="#14262A">78</text></svg><span>Best practices</span></div><div class="dial"><svg viewBox="0 0 64 64" role="img" aria-label="Google (SEO): 92 out of 100"><circle cx="32" cy="32" r="28" fill="none" stroke="#E8EDEC" stroke-width="6"/><circle class="v" cx="32" cy="32" r="28" fill="none" stroke="#067647" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="14.1"/><text x="32" y="40" text-anchor="middle" fill="#14262A">92</text></svg><span>Google (SEO)</span></div></div>
+    <div class="bar"><strong>yourcompany.com</strong><span class="tm" style="--v:31" aria-label="scan: 31 s">scan: </span></div>
+    <div class="dials"><div class="dial" style="--v:54" role="img" aria-label="Speed: 54 out of 100"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28" fill="none" stroke="#E8EDEC" stroke-width="5"/><circle class="v" cx="32" cy="32" r="28" fill="none" stroke="#B54708" stroke-width="5" pathLength="100"/></svg><b></b><span>Speed</span></div><div class="dial" style="--v:91" role="img" aria-label="Accessibility: 91 out of 100"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28" fill="none" stroke="#E8EDEC" stroke-width="5"/><circle class="v" cx="32" cy="32" r="28" fill="none" stroke="#067647" stroke-width="5" pathLength="100"/></svg><b></b><span>Accessibility</span></div><div class="dial" style="--v:78" role="img" aria-label="Best practices: 78 out of 100"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28" fill="none" stroke="#E8EDEC" stroke-width="5"/><circle class="v" cx="32" cy="32" r="28" fill="none" stroke="#B54708" stroke-width="5" pathLength="100"/></svg><b></b><span>Best practices</span></div><div class="dial" style="--v:92" role="img" aria-label="Google (SEO): 92 out of 100"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28" fill="none" stroke="#E8EDEC" stroke-width="5"/><circle class="v" cx="32" cy="32" r="28" fill="none" stroke="#067647" stroke-width="5" pathLength="100"/></svg><b></b><span>Google (SEO)</span></div></div>
     <ul class="rows">
       <li><i class="st bad" aria-label="problem">✕</i><span>The page takes 4.8 s to load on a phone<small>Some customers will leave before they see anything.</small></span></li>
       <li><i class="st warn" aria-label="warning">!</i><span>The connection is not always encrypted<small>The setting that enforces https is missing.</small></span></li>
@@ -163,26 +163,37 @@
 </div></section>
 
 <section class="band" id="order"><div class="w">
-  <h2>Order</h2>
-  <div class="orderbox">
-  <form class="order" data-rv action="/api/order" method="post">
+  <h2>Order an audit or monitoring</h2>
+  <p class="lead">No account and no passwords to your site. Just the address and an e-mail.</p>
+  <div class="orderbox" data-rv>
+  <form class="order" action="/api/order" method="post">
     <input type="hidden" name="lang" value="en">
     <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
     <fieldset><legend>What you are ordering</legend>
-      <label class="pick"><input type="radio" name="product" value="audit" checked> <span><b>In-depth audit</b> – $69 one-off</span></label>
-      <label class="pick"><input type="radio" name="product" value="monitor"> <span><b>Webskan Monitor</b> – $15/month</span></label>
+      <label class="pick"><input type="radio" name="product" value="audit" checked><span><b>In-depth audit</b><small>One-off diagnosis with a fix plan</small></span><em>$69<small>one-off</small></em></label>
+      <label class="pick"><input type="radio" name="product" value="monitor"><span><b>Webskan Monitor</b><small>Ongoing checks and alerts</small></span><em>$15<small>per month</small></em></label>
     </fieldset>
     <label>Website address<input type="text" name="url" inputmode="url" placeholder="yourcompany.com" required maxlength="500"></label>
     <label>Your e-mail<input type="email" name="email" placeholder="you@yourcompany.com" required maxlength="254"></label>
     <label class="consent"><input type="checkbox" name="consent" required><span>I accept the <a href="/en/terms/">terms</a> and the <a href="/en/privacy/">privacy policy</a>. The audit covers the public version of the site and is performed automatically.</span></label>
-    <button class="btn deep" type="submit" data-cta="order">Go to payment</button>
+    <button class="btn" type="submit" data-cta="order">Go to payment</button>
+    <p class="pay"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2M3.5 7h9v6.5h-9z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>Card payment on the page of our payment operator, Polar.</p>
   </form>
-  <ol class="steps" data-rv>
-    <li><span><b>You pay by card</b><small>No account needed.</small></span></li>
-    <li><span><b>We check your site</b><small>Usually 1–2 hours, at most 24 h.</small></span></li>
-    <li><span><b>You get the PDF report by e-mail</b><small>With a link to the re-check after your fixes.</small></span></li>
-    <li><span><b>Questions? Reply to the e-mail</b><small>We help you understand the result and set the order of work.</small></span></li>
-  </ol>
+  <div class="sum">
+    <p class="k">Your order</p>
+    <div class="v-a">
+      <div class="shot"><img src="/img/rep-en-2.webp" alt="" loading="lazy" width="720" height="931"><img src="/img/rep-en-1.webp" alt="A page of the sample report" loading="lazy" width="720" height="931"></div>
+      <h3>In-depth audit</h3><p class="amt">$69<small>one-off</small></p>
+      <h4>Included</h4><ul class="inc"><li>Up to 30 pages and 500 links</li><li>Complete outside-in security check</li><li>Fix plan with ready-made code (PDF)</li><li>Re-check within 30 days</li><li>30 days of Monitor included</li></ul>
+      <h4>What happens next</h4><ol class="steps"><li><b>You pay by card</b><small>No account needed.</small></li><li><b>We check your site</b><small>Usually 1–2 hours, at most 24 h.</small></li><li><b>You get the PDF report by e-mail</b><small>With a link to the re-check after your fixes.</small></li><li><b>Questions? Reply to the e-mail</b><small>We help you understand the result and set the order of work.</small></li></ol>
+    </div>
+    <div class="v-m">
+      <div class="ping"><i></i><span><b>yourcompany.com has not responded since 14:02</b><small>30 days · uptime 99.93%</small></span></div>
+      <h3>Webskan Monitor</h3><p class="amt">$15<small>per month</small></p>
+      <h4>Included</h4><ul class="inc"><li>Daily checks, the whole site every week</li><li>Certificate, domain, security settings</li><li>Alert within minutes when the site goes down</li><li>List of issues at the start (no fix plan)</li></ul>
+      <h4>What happens next</h4><ol class="steps"><li><b>You pay by card</b><small>No account needed.</small></li><li><b>We start watching your site</b><small>First check and a starting list of problems by e-mail.</small></li><li><b>You get an alert when something breaks</b><small>With what happened and what to do.</small></li><li><b>Cancel whenever you want</b><small>One click from the link in every e-mail.</small></li></ol>
+    </div>
+  </div>
   </div>
 </div></section>
 
