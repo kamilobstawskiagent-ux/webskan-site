@@ -48,16 +48,16 @@ section{padding-block:76px}
 /* Wskaźniki: łuk i liczba liczone z tej samej wartości (--p / --n), więc zawsze są zgodne. Bez JS; bez @property = stan końcowy. */
 @property --n{syntax:"<integer>";inherits:true;initial-value:0}
 @property --p{syntax:"<number>";inherits:true;initial-value:0}
-.dial{position:relative;--n:var(--v);--p:var(--v);animation:gauge 1.5s cubic-bezier(.2,.8,.2,1) both}
-.dial:nth-child(1){animation-delay:.3s}.dial:nth-child(2){animation-delay:.44s}.dial:nth-child(3){animation-delay:.58s}.dial:nth-child(4){animation-delay:.72s}
+.dial{position:relative;--n:var(--v);--p:var(--v);animation:gauge .9s cubic-bezier(.2,.8,.2,1) both}
+.dial:nth-child(1){animation-delay:0s}.dial:nth-child(2){animation-delay:.07s}.dial:nth-child(3){animation-delay:.14s}.dial:nth-child(4){animation-delay:.21s}
 @keyframes gauge{from{--n:0;--p:0}}
 .dial svg{display:block;width:64px;height:64px;margin:0 auto}.dial span{display:block;font-size:12.5px;color:var(--mute);margin-top:6px;line-height:1.2}
 .dial circle.v{transform:rotate(-90deg);transform-origin:50% 50%;stroke-linecap:round;stroke-dasharray:100 100;stroke-dashoffset:calc(100 - var(--p))}
 .dial b{position:absolute;left:0;right:0;top:0;height:64px;display:grid;place-items:center;font:500 21px/1 var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
 .dial b::after{counter-reset:n var(--n);content:counter(n)}
-.tm{--n:var(--v);animation:gauge 1.9s .3s cubic-bezier(.3,.6,.3,1) both}.tm::after{counter-reset:n var(--n);content:counter(n) " s"}
-.result .rows li{animation:rowin .45s ease-out both}.result .rows li:nth-child(1){animation-delay:1.5s}.result .rows li:nth-child(2){animation-delay:1.68s}.result .rows li:nth-child(3){animation-delay:1.86s}
-.result .rows .st{animation:stin .4s cubic-bezier(.2,.8,.2,1) both;animation-delay:inherit}.result .cap{animation:rowin .45s 2.1s ease-out both}
+.tm{--n:var(--v);animation:gauge 1.1s cubic-bezier(.3,.6,.3,1) both}.tm::after{counter-reset:n var(--n);content:counter(n) " s"}
+.result .rows li{animation:rowin .3s ease-out both}.result .rows li:nth-child(1){animation-delay:.45s}.result .rows li:nth-child(2){animation-delay:.57s}.result .rows li:nth-child(3){animation-delay:.69s}
+.result .rows .st{animation:stin .4s cubic-bezier(.2,.8,.2,1) both;animation-delay:inherit}.result .cap{animation:rowin .3s .85s ease-out both}
 @keyframes rowin{from{opacity:0}}@keyframes stin{from{opacity:0;transform:scale(.5)}}
 .result.wait,.result.wait *{animation-play-state:paused!important}
 .rows{list-style:none;margin:12px 0 0;padding:0}
@@ -195,11 +195,11 @@ details[open]:not(.closing) summary::after{transform:rotate(135deg);background-c
 details p{color:var(--mute);padding:0 0 18px;max-width:680px}.faq .a{overflow:hidden}
 .totop{position:fixed;right:18px;bottom:18px;z-index:20;width:50px;height:50px;border-radius:50%;background:var(--brand);color:var(--ochre);display:grid;place-items:center;border:2px solid rgba(255,255,255,.85);box-shadow:0 10px 24px -8px rgba(14,59,67,.6);opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .25s,transform .25s,visibility .25s,background .15s}
 .totop svg{width:22px;height:22px}.totop.on{opacity:1;visibility:visible;transform:none}.totop:hover{background:var(--brand2)}
-.rv{opacity:0;transform:translateY(18px)}.rv.in{opacity:1;transform:none;transition:opacity .5s ease-out,transform .5s cubic-bezier(.2,.7,.2,1)}
-.rv .path li,.rv .film span{opacity:0}.rv.in .path li,.rv.in .film span{animation:pop .35s ease-out both}
-.rv.in .path li:nth-child(1),.rv.in .film span:nth-child(1){animation-delay:.25s}.rv.in .path li:nth-child(2),.rv.in .film span:nth-child(2){animation-delay:.45s}
-.rv.in .path li:nth-child(3),.rv.in .film span:nth-child(3){animation-delay:.65s}.rv.in .path li:nth-child(4),.rv.in .film span:nth-child(4){animation-delay:.85s}
-.rv .flag{opacity:0}.rv.in .flag{animation:pop .35s 1.1s ease-out both}
+.rv{opacity:0;transform:translateY(12px)}.rv.in{opacity:1;transform:none;transition:opacity .3s ease-out,transform .3s cubic-bezier(.2,.7,.2,1)}
+.rv .path li,.rv .film span{opacity:0}.rv.in .path li,.rv.in .film span{animation:pop .25s ease-out both}
+.rv.in .path li:nth-child(1),.rv.in .film span:nth-child(1){animation-delay:.1s}.rv.in .path li:nth-child(2),.rv.in .film span:nth-child(2){animation-delay:.2s}
+.rv.in .path li:nth-child(3),.rv.in .film span:nth-child(3){animation-delay:.3s}.rv.in .path li:nth-child(4),.rv.in .film span:nth-child(4){animation-delay:.4s}
+.rv .flag{opacity:0}.rv.in .flag{animation:pop .25s .5s ease-out both}
 @keyframes pop{from{opacity:0;transform:translateY(6px) scale(.94)}to{opacity:1;transform:none}}
 .last{text-align:center}.last .scanform{margin:26px auto 0}.last h2{color:#fff}.last p{color:#CFE0DE;margin-top:10px}
 footer{background:var(--brand);color:#B5CBC9;font-size:14.5px;padding:26px 0 40px;border-top:1px solid rgba(255,255,255,.14)}

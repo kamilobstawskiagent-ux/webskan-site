@@ -54,6 +54,7 @@ nav a{color:#CFE0DE;text-decoration:none;font-size:16px;padding:10px 0;white-spa
 /* --- przyciski */
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:12px 26px;border-radius:10px;border:2px solid transparent;background:var(--ochre);color:var(--brand);font:700 17px/1.2 var(--disp);text-decoration:none;text-align:center;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
 .btn:hover{background:var(--ochre2)}
+p:has(>.btn+.btn){display:flex;flex-wrap:wrap;gap:14px}
 .btn.sec{background:transparent;border-color:var(--brand);color:var(--brand)}.btn.sec:hover{background:#E4ECEA}
 a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--ochre);outline-offset:3px;border-radius:6px}
 form.inline{margin:18px 0}
@@ -149,8 +150,8 @@ main.scan h2{font-size:clamp(23px,3vw,28px);margin:44px 0 12px}main.scan h3{marg
 .dials{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:560px;background:var(--paper);color:var(--ink);border-radius:16px;padding:22px 18px 18px;margin:26px 0 14px;box-shadow:0 30px 60px -20px rgba(0,0,0,.45);text-align:center}
 @property --n{syntax:"<integer>";inherits:true;initial-value:0}
 @property --p{syntax:"<number>";inherits:true;initial-value:0}
-.dial{position:relative;--n:var(--v);--p:var(--v);animation:gauge 1.4s cubic-bezier(.2,.8,.2,1) both}
-.dial:nth-child(1){animation-delay:.15s}.dial:nth-child(2){animation-delay:.29s}.dial:nth-child(3){animation-delay:.43s}.dial:nth-child(4){animation-delay:.57s}
+.dial{position:relative;--n:var(--v);--p:var(--v);animation:gauge .9s cubic-bezier(.2,.8,.2,1) both}
+.dial:nth-child(1){animation-delay:0s}.dial:nth-child(2){animation-delay:.07s}.dial:nth-child(3){animation-delay:.14s}.dial:nth-child(4){animation-delay:.21s}
 @keyframes gauge{from{--n:0;--p:0}}
 .dial svg{display:block;width:76px;height:76px;margin:0 auto}.dial span{display:block;font-size:13.5px;color:var(--mute);margin-top:8px;line-height:1.25}
 .dial circle{fill:none;stroke-width:3.4}.dial circle.t{stroke:#E4EAE8}

@@ -10,13 +10,13 @@ if(calm)return;
 // Wskaźniki w karcie wyniku: animacja jest w CSS; jeśli karta jest poniżej ekranu (telefon), czeka na przewinięcie
 var rc=document.querySelector('.result');
 if(rc&&'IntersectionObserver' in window&&rc.getBoundingClientRect().top>innerHeight*.6){rc.classList.add('wait');
-  var ro=new IntersectionObserver(function(es){if(es[0].isIntersecting){rc.classList.remove('wait');ro.disconnect();}},{threshold:.35});ro.observe(rc);}
+  var ro=new IntersectionObserver(function(es){if(es[0].isIntersecting){rc.classList.remove('wait');ro.disconnect();}},{rootMargin:'0px 0px -30px 0px',threshold:0});ro.observe(rc);}
 // Wejścia: chowamy tylko to, co jest poniżej ekranu w chwili startu (bez mignięcia treści)
 if('IntersectionObserver' in window){
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:.12});
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -20px 0px',threshold:0});
   var vh=innerHeight,row={};
   document.querySelectorAll('[data-rv]').forEach(function(el){var r=el.getBoundingClientRect();if(r.top<vh*.92)return;
-    var k=Math.round(r.top+scrollY);row[k]=(row[k]||0)+1;el.style.transitionDelay=((row[k]-1)*90)+'ms';el.classList.add('rv');io.observe(el);});
+    var k=Math.round(r.top+scrollY);row[k]=(row[k]||0)+1;el.style.transitionDelay=((row[k]-1)*60)+'ms';el.classList.add('rv');io.observe(el);});
 }
 // FAQ: płynne otwieranie i zamykanie
 if(!Element.prototype.animate)return;
