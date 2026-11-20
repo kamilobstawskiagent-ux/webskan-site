@@ -3,155 +3,208 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Webskan – in-depth website audit and ongoing website care</title>
-<meta name="description" content="We check your website like a customer and like Google: the whole site, purchase and contact journeys in a real mobile browser, ready-made fixes for your developer, a re-check. Then daily monitoring with alerts.">
+<title>Webskan – website audit: security, speed and a fix plan</title>
+<meta name="description" content="Free website scan in 30 seconds. A whole-site audit with a fix plan for $69: security, speed, customer journey, Google. Ongoing monitoring for $15 a month.">
 <link rel="canonical" href="https://webskan.com/en/">
 <link rel="alternate" hreflang="pl" href="https://webskan.com/">
 <link rel="alternate" hreflang="en" href="https://webskan.com/en/">
-<meta property="og:title" content="Webskan – in-depth website audit and ongoing website care">
-<meta property="og:description" content="Whole site, customer journeys in a real browser, ready-made fixes, re-check. Then daily monitoring.">
+<meta property="og:title" content="Webskan – is your website secure, and is it losing you customers?">
+<meta property="og:description" content="Free scan in 30 seconds. Whole-site audit with a fix plan: $69. Ongoing monitoring: $15 a month.">
 <meta property="og:type" content="website">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:image" content="https://webskan.com/og-en-b809c20d.png">
 <meta property="og:url" content="https://webskan.com/en/">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"Webskan – in-depth website audit","serviceType":"Website audit","provider":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/en/"},"offers":[{"@type":"Offer","name":"In-depth audit","price":"69","priceCurrency":"USD","url":"https://webskan.com/en/#order"},{"@type":"Offer","name":"Webskan Monitor","price":"15","priceCurrency":"USD","url":"https://webskan.com/en/#order"}]}</script>
-<link rel="stylesheet" href="/style.css">
+<link rel="preload" href="/fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/v5.css">
 </head>
-<body>
-<div class="wrap">
-<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a class="m-hide" href="#audit">Audit</a><a class="m-hide" href="#monitor">Monitoring</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="/">PL</a></nav></header>
-<main>
-
-<section class="hero split">
-  <div class="hero-text">
-  <p class="eyebrow">In-depth audit · ongoing website care</p>
-  <h1>We check your website like a customer and like Google. Then we keep watching it.</h1>
-  <p class="lead">Not one measurement of the home page, but the whole site: subpages, contact form, cart and checkout clicked through in a real mobile browser, the site judged through a first-time customer’s eyes. You get an <strong>action plan with ready-made fixes for your developer</strong> and a <strong>re-check</strong> to confirm everything worked.</p>
-  <h2 class="h-scan" id="scan">Start with a free quick scan</h2>
-  <form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="en"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://yourcompany.com" required maxlength="500" aria-label="Website address"><button class="btn" type="submit">Scan for free</button></form>
-  <p class="scanhint">Result in about 30 seconds: mobile Lighthouse scores, key measurements and basic issues of the home page. No e-mail, no sign-up.</p>
-  <div class="cta"><a class="btn sec" href="#pricing">See pricing</a><a class="link" href="/en/sample/">See a sample audit&nbsp;→</a></div>
+<body id="top">
+<div class="dark">
+<header class="w top">
+  <a class="logo" href="/en/"><svg viewBox="0 0 28 28" aria-hidden="true"><rect x="1.5" y="1.5" width="25" height="25" rx="6" fill="none" stroke="#E9B949" stroke-width="3"/><path d="M7 14h14" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg><span>web<b>skan</b></span></a>
+  <nav aria-label="Main"><a class="h" href="#what">What we check</a><a class="h" href="/en/sample/">Sample report</a><a href="#pricing">Pricing</a><a href="/" hreflang="pl">PL</a></nav>
+</header>
+<section class="w hero" id="scan">
+  <div>
+    <h1>Is your website <em>secure</em>, and is it losing you customers?</h1>
+    <p class="lead">Enter your address. See the result in 30 seconds.</p>
+    <form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="en"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" id="u1" inputmode="url" placeholder="yourcompany.com" aria-label="Website address" required maxlength="500"><button class="btn" type="submit">Check my site</button></form>
+    <p class="facts"><span>free</span><span>no sign-up</span><span>no access to your site needed</span></p>
+    <p class="prices">Audit with a fix plan: <b>$69</b> · Ongoing monitoring: <b>$15/month</b> · <a href="#pricing">compare</a></p>
   </div>
-  <div class="hero-img"><a href="/en/sample/" aria-label="Sample report (PDF)"><img src="/img/report-en.webp" width="760" height="670" alt="First page of a sample Webskan audit: summary, number of findings, mobile and desktop scores" fetchpriority="high"><span class="imgtag">Sample audit (PDF)</span></a></div>
-</section>
-<p class="trust">Real mobile browser (Chrome, Pixel 7 emulation) · Google Lighthouse and axe-core (WCAG 2.1 AA) · Nothing to install, no access to your server · Card payment via Polar</p>
-
-<section id="audit">
-  <h2>The in-depth audit: what we actually check</h2>
-  <p class="lead">Free tools and any AI assistant will measure your home page. We do what nobody has time for: we go through the whole site like a customer and leave you a ready-made task list.</p>
-  <div class="grid">
-    <div class="card"><h3>The whole site, not the home page</h3><p>Up to 30 pages from navigation and the sitemap: titles, descriptions, headings, indexing, response time, duplicate titles, broken pages. Up to 500 links with the exact page where each broken one sits.</p></div>
-    <div class="card"><h3>Customer journeys in a real browser</h3><p>On an emulated phone we click like a customer: menu, search, contact form, in shops product → cart → checkout (no payment), a wrong address. If something is broken, you see it first.</p></div>
-    <div class="card"><h3>Your site through a first-time customer’s eyes</h3><p>An AI consultant reviews screenshots of the key pages: is it clear in 5 seconds what you offer, where the “order” button is, can the phone number be tapped, does the cookie banner hide the content. Every remark has evidence and a concrete suggestion.</p></div>
-    <div class="card"><h3>Speed, SEO, security, accessibility</h3><p>Lighthouse on mobile and desktop, security headers and certificate, technical SEO, WCAG test with the selector and code of every issue, JavaScript errors, mixed content.</p></div>
-    <div class="card"><h3>Ready-made fixes for your developer</h3><p>An action plan, most important first. Each item: what it costs you now, how to do it on your platform (WordPress, WooCommerce, Shopify…) and a ready snippet of code or setting to paste.</p></div>
-    <div class="card"><h3>Re-check within 30 days</h3><p>After the fixes you run a repeat with one link. You get a list: fixed, still open, new. Every finding has a stable identifier, so the comparison is exact.</p></div>
-  </div>
-  <p class="small muted">Optional: comparison with 2 competitors (speed, SEO, accessibility with the same method at the same time) – enter their addresses when ordering.</p>
-</section>
-
-<section id="how">
-  <h2>How it works</h2>
-  <div class="steps">
-    <div class="step"><span class="n">1</span><h3>You enter the address and your e-mail</h3><p>Nothing to install, no access needed. We check the public version of the site, the way Google and customers see it.</p></div>
-    <div class="step"><span class="n">2</span><h3>The audit works for up to 24 h</h3><p>The automation walks the site, clicks the journeys, measures, and an AI model reviews screenshots and writes the action plan. Every recommendation is tied to a concrete finding – no guessing.</p></div>
-    <div class="step"><span class="n">3</span><h3>PDF report and re-check</h3><p>Hand the plan to your web developer or do it yourself. After the fixes, click the link and we check again.</p></div>
+  <div class="result" aria-label="Sample scan result">
+    <div class="bar"><strong>yourcompany.com</strong><span>scan: 31 s</span></div>
+    <div class="dials"><div class="dial"><svg viewBox="0 0 64 64" role="img" aria-label="Speed: 54 out of 100"><circle cx="32" cy="32" r="28" fill="none" stroke="#E8EDEC" stroke-width="6"/><circle class="v" cx="32" cy="32" r="28" fill="none" stroke="#B54708" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="81.0"/><text x="32" y="40" text-anchor="middle" fill="#14262A">54</text></svg><span>Speed</span></div><div class="dial"><svg viewBox="0 0 64 64" role="img" aria-label="Accessibility: 91 out of 100"><circle cx="32" cy="32" r="28" fill="none" stroke="#E8EDEC" stroke-width="6"/><circle class="v" cx="32" cy="32" r="28" fill="none" stroke="#067647" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="15.8"/><text x="32" y="40" text-anchor="middle" fill="#14262A">91</text></svg><span>Accessibility</span></div><div class="dial"><svg viewBox="0 0 64 64" role="img" aria-label="Best practices: 78 out of 100"><circle cx="32" cy="32" r="28" fill="none" stroke="#E8EDEC" stroke-width="6"/><circle class="v" cx="32" cy="32" r="28" fill="none" stroke="#B54708" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="38.7"/><text x="32" y="40" text-anchor="middle" fill="#14262A">78</text></svg><span>Best practices</span></div><div class="dial"><svg viewBox="0 0 64 64" role="img" aria-label="Google (SEO): 92 out of 100"><circle cx="32" cy="32" r="28" fill="none" stroke="#E8EDEC" stroke-width="6"/><circle class="v" cx="32" cy="32" r="28" fill="none" stroke="#067647" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="14.1"/><text x="32" y="40" text-anchor="middle" fill="#14262A">92</text></svg><span>Google (SEO)</span></div></div>
+    <ul class="rows">
+      <li><i class="st bad" aria-label="problem">✕</i><span>The page takes 4.8 s to load on a phone<small>Some customers will leave before they see anything.</small></span></li>
+      <li><i class="st warn" aria-label="warning">!</i><span>The connection is not always encrypted<small>The setting that enforces https is missing.</small></span></li>
+      <li><i class="st ok" aria-label="OK">✓</i><span>Certificate valid, mobile version works</span></li>
+    </ul>
+    <p class="cap">sample result of the free scan</p>
   </div>
 </section>
+</div>
 
-<section id="monitor">
-  <h2>Webskan Monitor: someone watches your site every day</h2>
-  <p class="lead">Websites break quietly: a plugin update, an expired certificate, an accidental “noindex”, a form that stopped sending. Monitor checks the site daily and writes to you only when something changes for the worse – in plain language, with a ready-made fix.</p>
-  <div class="grid">
-    <div class="card"><h3>Uptime every minute</h3><p>Site not responding or returning an error? You know within minutes, not from a customer a week later.</p></div>
-    <div class="card"><h3>Certificate and domain</h3><p>A reminder before the TLS certificate or the domain expires – the most common cause of “the site is down”.</p></div>
-    <div class="card"><h3>Speed and Core Web Vitals</h3><p>Daily mobile measurement. An alert when the score drops clearly below your norm.</p></div>
-    <div class="card"><h3>SEO accidents</h3><p>A sudden “noindex”, robots.txt blocking Google, a vanished title, a broken sitemap, a changed canonical.</p></div>
-    <div class="card"><h3>Links and errors</h3><p>Weekly broken links across the site, new JavaScript errors on key pages, security header drift.</p></div>
-    <div class="card"><h3>Home page visual change</h3><p>We compare the screenshot with the previous day. Replaced content, a missing banner, a defacement – you notice right away.</p></div>
+<section id="what"><div class="w">
+  <h2>Six questions the audit answers</h2>
+  <p class="sub">We check the whole site: up to 30 pages and 500 links. Every answer comes with evidence.</p>
+  <div class="bento">
+    <div class="tile sec" data-rv>
+      <p class="k"><b>01</b> Security</p>
+      <h3>Does your site have weak spots visible from the outside?</h3>
+      <p>We look at it the way bots hunting for easy targets do.</p>
+      <ul class="rows">
+        <li><i class="st ok" aria-label="OK">✓</i><span>Encryption and certificate<small>Is the connection secure, and is the certificate about to expire?</small></span></li>
+        <li><i class="st bad" aria-label="problem">✕</i><span>Files that should not be public<small>Backups, files with passwords, logs, database panels.</small></span></li>
+        <li><i class="st warn" aria-label="warning">!</i><span>E-mail: can someone impersonate your address?<small>The domain’s SPF and DMARC settings.</small></span></li>
+        <li><i class="st warn" aria-label="warning">!</i><span>Outdated software<small>PHP and WordPress without security patches, a public list of user accounts.</small></span></li>
+        <li><i class="st ok" aria-label="OK">✓</i><span>Visitor protection<small>Security headers, forms, session cookies.</small></span></li>
+      </ul>
+      <p class="note">We check from the outside, without passwords. This is not a penetration test. <a href="#honest">What does that mean?</a></p>
+    </div>
+    <div class="tile chk" data-rv>
+      <div class="ex" aria-hidden="true"><div class="film"><span><i></i>1 s</span><span><i></i>2 s</span><span><i></i>3 s</span><span class="on"><i></i>4.8 s</span></div><em class="flag bad">4.8 s · too slow</em></div>
+      <p class="k"><b>02</b> Speed</p>
+      <h3>Will customers wait for your page to load?</h3>
+      <p>We measure loading on a phone and point to what slows it down.</p>
+    </div>
+    <div class="tile chk" data-rv>
+      <div class="ex" aria-hidden="true"><ol class="path"><li><i><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></i>menu</li><li><i><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></i>form</li><li><i><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></i>cart</li><li class="bad"><i><svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></i>checkout</li></ol><em class="flag bad">checkout does not open on a phone</em></div>
+      <p class="k"><b>03</b> Customer journey</p>
+      <h3>Can people buy from you or contact you on a phone?</h3>
+      <p>We walk the customer’s path step by step. We buy nothing and submit nothing.</p>
+    </div>
+    <div class="tile chk" data-rv>
+      <div class="ex" aria-hidden="true"><div class="serp"><span class="gu"><i></i>yourcompany.com › contact</span><b>Contact – Your Company | Your Company | Your Company</b><span class="gd"></span><span class="gd s"></span></div><em class="flag warn">title cut off · no description</em></div>
+      <p class="k"><b>04</b> Google</p>
+      <h3>How does your site look in Google results?</h3>
+      <p>The title and description of every page, and whether Google can show it at all.</p>
+    </div>
+    <div class="tile chk" data-rv>
+      <div class="ex" aria-hidden="true"><div class="win"><div class="wb"><i></i><i></i><i></i><span>yourcompany.com/pricing-2023.pdf</span></div><div class="wc"><b>404</b><span>Page not found</span></div></div><em class="flag bad">linked from /services/</em></div>
+      <p class="k"><b>05</b> Links</p>
+      <h3>Do customers hit a dead end?</h3>
+      <p>We follow every link and show which page each broken one is on.</p>
+    </div>
+    <div class="tile chk" data-rv>
+      <div class="ex" aria-hidden="true"><div class="cx"><span class="lo" data-t="Order now"><small>2.8 : 1 – too weak</small></span><span class="hi" data-t="Order now"><small>15 : 1 – good</small></span></div><em class="flag warn">text too pale to read</em></div>
+      <p class="k"><b>06</b> Accessibility</p>
+      <h3>Can everyone read your site?</h3>
+      <p>Text contrast, image descriptions, use without a mouse (WCAG requirements).</p>
+    </div>
   </div>
-  <p class="small muted">Monthly summary by e-mail. You start with a baseline: a list of findings across the whole site, against which every later check is compared. No contract – cancel with one click.</p>
-</section>
+</div></section>
 
-<section>
-  <h2>What the report looks like</h2>
-  <p>First a summary and the number of findings, then the action plan with ready-made fixes, the customer-eye review, the result of the customer journeys, and then the details: pages, speed, security, SEO, links, accessibility with code for every issue, and an appendix with all findings.</p>
-  <div class="scores"><div class="score needs"><b>84</b><small>Performance</small></div><div class="score good"><b>100</b><small>Accessibility</small></div><div class="score good"><b>100</b><small>Best practices</small></div><div class="score good"><b>100</b><small>SEO</small></div></div>
-  <p class="small muted">Scores from the sample audit (kamilobstawski.com, mobile). The sample was produced with the site owner’s consent.</p>
-  <p><a href="/en/sample/">Open the sample audit (PDF)&nbsp;→</a></p>
-</section>
+<section class="band" id="audit"><div class="w get">
+  <div class="pages" data-rv>
+    <figure><img src="/img/rep-en-1.webp" alt="Report page: summary" width="720" height="931" loading="lazy"><figcaption>1 · diagnosis</figcaption></figure>
+    <figure><img src="/img/rep-en-2.webp" alt="Report page: action plan with a ready-made fix" width="720" height="931" loading="lazy"><figcaption>2 · fix plan</figcaption></figure>
+    <figure><img src="/img/rep-en-3.webp" alt="Report page: customer journeys" width="720" height="931" loading="lazy"><figcaption>3 · evidence</figcaption></figure>
+  </div>
+  <div class="txt">
+    <h2>The audit: you get a fix plan, not a list of errors</h2>
+    <ul class="ticks">
+      <li>What to fix first and what you gain from it</li>
+      <li>Ready-made instructions and code for your developer</li>
+      <li>After the fixes we check again</li>
+      <li>30 days of monitoring included</li>
+    </ul>
+    <p class="price"><b>$69</b>one-off · PDF report within 24 h</p>
+    <div class="cta"><a class="btn deep" href="#order" data-plan="audit">Order the audit</a><a class="btn line" href="/en/sample/">See the full sample</a></div>
+  </div>
+</div></section>
 
-<section id="pricing">
-  <h2>Pricing</h2>
+<section id="monitor"><div class="w get">
+  <div class="txt">
+    <h2>Monitor: you hear about an outage first, not from a customer</h2>
+    <ul class="ticks">
+      <li><span><b>Every minute:</b> is the site up</span></li>
+      <li><span><b>Every day:</b> speed, certificate, visibility in Google, how the home page looks</span></li>
+      <li><span><b>Every week:</b> broken links, errors, security settings</span></li>
+      <li>We write only when something breaks</li>
+    </ul>
+    <p class="price"><b>$15</b>per month · cancel with one click</p>
+    <div class="cta"><a class="btn deep" href="#order" data-plan="monitor">Order monitoring</a></div>
+  </div>
+  <div>
+    <div class="mail" data-rv aria-label="Sample e-mail alert">
+      <div class="from"><span>Webskan Monitor</span><span>14:04</span></div>
+      <h4>yourcompany.com has not responded since 14:02</h4>
+      <p>The server returns error 500. We keep checking every minute and will let you know when the site is back.</p>
+      <p class="fix"><b>What to do:</b> forward this message to your hosting company. The error appeared after 14:00.</p>
+      <div class="up"><svg viewBox="0 0 297 34" preserveAspectRatio="none" role="img" aria-label="Uptime over 30 days: one outage"><rect x="0" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="10" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="20" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="30" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="40" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="50" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="60" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="70" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="80" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="90" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="100" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="110" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="120" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="130" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="140" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="150" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="160" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="170" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="180" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="190" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="200" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="210" y="0" width="7" height="34" rx="2" fill="#B42318"/><rect x="220" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="230" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="240" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="250" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="260" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="270" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="280" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="290" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/></svg><small><span>30 days</span><span>uptime 99.93%</span></small></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="band" id="pricing"><div class="w">
+  <h2>Scan, audit or monitor?</h2>
   <div class="plans">
-    <div class="plan">
-      <h3>In-depth audit</h3>
-      <div class="amt">$69</div><small>one-time, per website</small>
-      <ul class="check"><li>Up to 30 pages and 500 links</li><li>Customer journeys in a real browser</li><li>Customer-eye review (with evidence)</li><li>Action plan with ready-made fixes</li><li>Re-check within 30 days</li><li>30 days of Webskan Monitor included (expires by itself, no charge)</li><li>PDF report within 24 h, questions by e-mail</li></ul>
-      <a class="btn sec" href="#order" data-plan="audit">Order the audit</a>
-    </div>
-    <div class="plan featured">
-      <span class="tag">Recommended to start</span>
-      <h3>Webskan Monitor</h3>
-      <div class="amt">$15<span class="per">/mo</span></div><small>no contract, cancel any time</small>
-      <ul class="check"><li>Baseline to start: findings across the whole site</li><li>Uptime every minute, certificate, domain</li><li>Daily speed measurement and SEO accidents</li><li>Weekly links, JS errors, headers</li><li>Plain-language alerts with a ready-made fix</li><li>Monthly summary</li></ul>
-      <a class="btn" href="#order" data-plan="monitor">Order monitoring</a>
-    </div>
+    <div class="plan" data-rv><h3>Free scan</h3><p class="who">A quick look at your home page.</p><p class="amt">$0</p>
+      <ul class="feat"><li>Home page, 30 seconds</li><li>Speed and security basics</li><li class="no">Whole site and customer journey</li><li class="no">Fix plan with ready-made code</li><li class="no">Re-check</li><li class="no">Alert when the site goes down</li></ul>
+      <a class="btn line" href="#scan">Scan for free</a></div>
+    <div class="plan hot" data-tag="Full diagnosis" data-rv><h3>In-depth audit</h3><p class="who">A one-off diagnosis of the whole site.</p><p class="amt">$69<small>one-off</small></p>
+      <ul class="feat"><li>Up to 30 pages and 500 links</li><li>Complete outside-in security check</li><li>Customer journey clicked through on a phone</li><li>Fix plan with ready-made code (PDF)</li><li>Re-check within 30 days</li><li>30 days of Monitor included</li></ul>
+      <a class="btn" href="#order" data-plan="audit">Order the audit</a></div>
+    <div class="plan" data-rv><h3>Webskan Monitor</h3><p class="who">Ongoing watch once the site works well.</p><p class="amt">$15<small>/ month</small></p>
+      <ul class="feat"><li>Daily checks, the whole site every week</li><li>Certificate, domain, security settings</li><li>Alert within minutes when the site goes down</li><li>List of issues at the start (no fix plan)</li><li class="no">Customer journey clicked through on a phone</li><li class="no">PDF report with a fix plan</li></ul>
+      <a class="btn line" href="#order" data-plan="monitor">Order monitoring</a></div>
   </div>
-  <p class="small muted" style="margin-top:12px">Prices include VAT where applicable. Card payment via Polar (Merchant of Record), which also issues the invoice or receipt and e-mails it to you. For shops with more than 30 pages the audit covers a representative selection of every page type.</p>
-</section>
+  <p class="fine">Prices include VAT where applicable. Card payment; the invoice or receipt is issued by our payment provider, Polar.</p>
+</div></section>
 
-<section id="order">
+<section id="honest"><div class="w">
+  <h2>Honestly: what this is and what it is not</h2>
+  <div class="honest">
+    <div data-rv><h3><i class="st ok" aria-label="OK">✓</i> We do</h3><ul><li>We check the site from the outside, the way every visitor sees it.</li><li>Every problem comes with evidence: an address, a screenshot or a code snippet.</li><li>We need no passwords and change nothing on your site.</li></ul></div>
+    <div data-rv><h3><i class="st bad" aria-label="problem">✕</i> We don’t</h3><ul><li>This is not a penetration test: we do not try to break in.</li><li>We cannot see inside your server or admin panel.</li><li>A good result does not guarantee the site has no vulnerabilities.</li></ul></div>
+  </div>
+</div></section>
+
+<section class="band" id="order"><div class="w">
   <h2>Order</h2>
   <div class="orderbox">
-  <div>
-  <form class="order" action="/api/order" method="post">
+  <form class="order" data-rv action="/api/order" method="post">
     <input type="hidden" name="lang" value="en">
     <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
-    <fieldset class="plans-pick"><legend>What you are ordering</legend>
-      <label class="pick"><input type="radio" name="product" value="audit" checked> <span><b>In-depth audit</b> – $69 one-time</span></label>
-      <label class="pick"><input type="radio" name="product" value="monitor"> <span><b>Webskan Monitor</b> – $15/mo, no contract</span></label>
+    <fieldset><legend>What you are ordering</legend>
+      <label class="pick"><input type="radio" name="product" value="audit" checked> <span><b>In-depth audit</b> – $69 one-off</span></label>
+      <label class="pick"><input type="radio" name="product" value="monitor"> <span><b>Webskan Monitor</b> – $15/month</span></label>
     </fieldset>
-    <label>Website address<br><input type="text" name="url" inputmode="url" placeholder="https://yourcompany.com" required maxlength="500"></label>
-    <label>Your e-mail (we send the report and alerts there)<br><input type="email" name="email" placeholder="you@yourcompany.com" required maxlength="254"></label>
-    <label>1–2 competitor addresses for comparison (optional)<br><input type="text" name="competitors" placeholder="competitor1.com, competitor2.com" maxlength="300"></label>
-    <label class="consent"><input type="checkbox" name="consent" required> I accept the <a href="/en/terms/">terms</a> and <a href="/en/privacy/">privacy policy</a>. I understand the audit covers the publicly available version of the site and is performed automatically.</label>
-    <button class="btn" type="submit" data-cta="order">Continue to payment</button>
+    <label>Website address<input type="text" name="url" inputmode="url" placeholder="yourcompany.com" required maxlength="500"></label>
+    <label>Your e-mail<input type="email" name="email" placeholder="you@yourcompany.com" required maxlength="254"></label>
+    <label class="consent"><input type="checkbox" name="consent" required><span>I accept the <a href="/en/terms/">terms</a> and the <a href="/en/privacy/">privacy policy</a>. The audit covers the public version of the site and is performed automatically.</span></label>
+    <button class="btn deep" type="submit" data-cta="order">Go to payment</button>
   </form>
-  <p class="note" data-presale-note>Card payment via Polar (Merchant of Record), which also issues the invoice/receipt and e-mails it to you.</p>
+  <ol class="steps" data-rv>
+    <li><span><b>You pay by card</b><small>No account needed.</small></span></li>
+    <li><span><b>We check your site</b><small>Usually 1–2 hours, at most 24 h.</small></span></li>
+    <li><span><b>You get the PDF report by e-mail</b><small>With a link to the re-check after your fixes.</small></span></li>
+    <li><span><b>Questions? Reply to the e-mail</b><small>We help you understand the result and set the order of work.</small></span></li>
+  </ol>
   </div>
-  <aside class="orderaside" aria-label="What happens next">
-    <h3>What happens after you order</h3>
-    <ol>
-      <li><strong>You pay by card</strong> – securely via Polar, no account needed.</li>
-      <li><strong>The audit starts automatically</strong> – we walk the site, click the journeys, measure, review screenshots.</li>
-      <li><strong>The PDF report lands in your inbox</strong> – usually within 1–2 hours, at most 24 h. The report contains the re-check link.</li>
-      <li><strong>Monitor</strong> (if chosen) – from the next day, daily checks and alerts only when something gets worse.</li>
-    </ol>
-    <p>Questions about the report? Reply to the e-mail it came with – we help you understand the results and plan the work.</p>
-  </aside>
-  </div>
-</section>
+</div></section>
 
-<section id="faq">
+<section id="faq"><div class="w">
   <h2>Questions</h2>
-  <details><summary>How is this different from asking an AI assistant or free PageSpeed?</summary><p>An AI assistant and PageSpeed give you a snapshot of the home page. The in-depth audit walks the whole site in a real mobile browser, clicks the journeys (form, cart, checkout, menu, 404), records every finding with evidence and a stable identifier, and after your fixes checks what actually disappeared. Monitor adds what no one-off measurement can: someone looks at the site every day.</p></details>
-  <details><summary>Audit or Monitor – which one?</summary><p>The in-depth audit is a one-off, thorough diagnosis with an action plan and a customer-eye review; it includes a re-check and 30 days of Monitor so you can see what the alerts look like – after 30 days monitoring simply expires, nothing is charged. Monitor is ongoing care: it starts with a technical baseline (a list of findings across the whole site, without the AI plan and customer-eye review) and makes sure things do not get worse. If you want both, start with the audit; towards the end of the 30 days you get an e-mail with the option to continue monitoring for $15 a month.</p></details>
-  <details><summary>How does the quick scan differ from the in-depth audit?</summary><p>The quick scan is free and looks only at the home page on a simulated phone: four Lighthouse scores, key measurements and a dozen basic checks. The in-depth audit covers the whole site, customer journeys, the customer-eye review, an accessibility test with code for every issue, an action plan with ready-made fixes and a re-check.</p></details>
-  <details><summary>Do you need access to my website?</summary><p>No. We check the site the way every visitor and Google sees it. We install nothing and change nothing. We do not submit forms, and at checkout we enter no data and do not pay – we stop on the checkout page.</p></details>
-  <details><summary>Who performs the audit?</summary><p>The process is automated: measurements come from proven open-source tools (Lighthouse, axe-core, Playwright) and our own tests, and the action plan and customer-eye review are written by an AI model from the collected findings and screenshots. Every recommendation must point to a concrete finding – recommendations without evidence are rejected automatically.</p></details>
-  <details><summary>I run a shop with hundreds of products. What does the audit cover?</summary><p>Up to 30 pages selected to cover every page type (home, categories, product pages, cart, checkout, contact, blog), up to 500 links and the full purchase path to the checkout page. Problems in the product template affect all products, so this selection is enough to find what matters.</p></details>
-  <details><summary>How does the re-check work?</summary><p>The report contains a link valid for 30 days. After your fixes you click it (or reply to the e-mail) and we repeat the audit and compare findings by identifier. You get a list: fixed, still open, new – plus updated scores.</p></details>
-  <details><summary>How do I cancel Monitor?</summary><p>With one click in the Polar customer portal (link in every e-mail) – checks keep running until the end of the paid month, then nothing is charged. No notice period.</p></details>
-  <details><summary>My site requires a login / is under construction</summary><p>We audit publicly available websites only. If the site is unavailable or blocks automated measurement and the audit cannot be performed, we refund the full amount.</p></details>
-  <details><summary>My hosting or shop platform has a bot firewall. Will the audit work?</summary><p>Usually yes – the scanner identifies itself in every request (User-Agent with the token “Webskan”, a fixed IP address), so a single firewall exception is enough; the instructions for your administrator are at <a href="/bot/">webskan.com/bot</a>. If the firewall still cuts the scanner off (403/429, a “You have been blocked” page), we do not send a report with gaps: you get an e-mail with instructions, we retry every 6 hours for 7 days, and if an exception is not possible we refund the full amount. Before buying, run the free quick scan: if a firewall blocks us, you will see it right away on the result page.</p></details>
-  <details><summary>What if I disagree with the report?</summary><p>Reply to the report e-mail. Complaints are handled within 14 days in line with consumer law – see the <a href="/en/terms/">terms</a>.</p></details>
-</section>
+  <div class="faq">
+    <details><summary>Do I need to give you access or passwords?</summary><p>No. We check what is publicly visible. We do not submit forms, and in a shop we stop on the checkout page.</p></details>
+    <details><summary>Who performs the audit?</summary><p>The process is automated. Measurements come from proven tools (Google Lighthouse, axe-core, a real browser) and our own tests. The fix plan is written by an AI model, and every recommendation must point to a concrete, measured problem.</p></details>
+    <details><summary>I’m not technical. What do I do with the report?</summary><p>The first pages are written for the owner: what is wrong and what you gain by fixing it. The rest is a ready-made brief – you hand it to whoever looks after your site.</p></details>
+    <details><summary>What if the audit cannot be performed?</summary><p>If your site blocks our scanner or is unavailable, we tell you how to unblock it. If that does not work, we refund the full amount.</p></details>
+    <details><summary>How do I cancel Monitor?</summary><p>With one click from the link in every e-mail. Checks keep running until the end of the paid month, then nothing is charged.</p></details>
+  </div>
+</div></section>
 
-</main>
-<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a> · <a href="/developers/">For developers</a> · contact: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer>
-</div>
+<div class="dark"><section class="w last">
+  <h2>Check your site now</h2>
+  <p>30 seconds, free, no sign-up.</p>
+  <form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="en"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" id="u2" inputmode="url" placeholder="yourcompany.com" aria-label="Website address" required maxlength="500"><button class="btn" type="submit">Check my site</button></form>
+</section></div>
+<footer><div class="w"><span>© 2026 Webskan</span><a href="/en/blog/">Blog</a><a href="/en/terms/">Terms</a><a href="/en/privacy/">Privacy policy</a><a href="/developers/">For developers</a><a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></div></footer>
+<a class="totop" href="#top" aria-label="Back to top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V6M6 11.5 12 5.5l6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
 <script src="/prefill.js" defer></script>
+<script src="/v5.js" defer></script>
 </body>
 </html>

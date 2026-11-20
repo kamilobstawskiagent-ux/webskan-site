@@ -126,7 +126,7 @@ section{padding-block:76px}
 .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px;align-items:stretch}
 .plan{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px 24px;display:flex;flex-direction:column}
 .plan.hot{border:2px solid var(--brand);position:relative}
-.plan.hot::before{content:"Pełna diagnoza";position:absolute;top:-13px;left:22px;background:var(--ochre);color:var(--brand);font:700 13px var(--disp);padding:4px 10px;border-radius:6px}
+.plan.hot::before{content:attr(data-tag);position:absolute;top:-13px;left:22px;background:var(--ochre);color:var(--brand);font:700 13px var(--disp);padding:4px 10px;border-radius:6px}
 .plan .who{color:var(--mute);font-size:15.5px;margin-top:6px;min-height:48px}
 .plan .amt{font:700 40px/1 var(--disp);letter-spacing:-.03em;margin:16px 0 4px}.plan .amt small{font:500 14px var(--mono);color:var(--mute);letter-spacing:0;margin-left:6px}
 .feat{list-style:none;padding:0;margin:18px 0 22px;display:grid;gap:0}
