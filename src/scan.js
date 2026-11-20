@@ -13,9 +13,13 @@ const T = {
     queuedLong: 'Trwa to dłużej niż zwykle. Jeśli za minutę nadal nic się nie pojawi, spróbuj ponownie ze strony głównej.',
     failed: 'Nie udało się przeskanować tej strony', failedBody: (e) => `Powód: ${e}. Najczęściej strona blokuje boty, jest niedostępna albo bardzo wolna. Spróbuj ponownie za chwilę albo zamów audyt pogłębiony – jeśli i on się nie uda, zwracamy pieniądze.`,
     notFound: 'Nie ma takiego skanu', notFoundBody: 'Wyniki trzymamy 7 dni. Uruchom nowy skan ze strony głównej.',
-    mobileNote: 'Ocena Lighthouse, symulowany telefon z łączem 4G. Wynik laboratoryjny – u realnych użytkowników może się różnić.',
+    mobileNote: 'Wydajność, dostępność i SEO: ocena Lighthouse, symulowany telefon z łączem 4G (wynik laboratoryjny). Bezpieczeństwo: nasz wskaźnik, opisany niżej.',
     lhFail: 'Lighthouse nie zdołał zmierzyć tej strony', lhFailWhy: { BLOCKED: 'Zapora serwera podała naszej przeglądarce pomiarowej stronę blokady („You have been blocked”) zamiast sklepu – skaner został potraktowany jak bot. Oceny Lighthouse byłyby pomiarem pustej strony, więc ich nie pokazujemy.', INTERSTITIAL: 'Serwer pokazał naszej przeglądarce stronę błędu lub „maintenance” zamiast sklepu – najczęściej to blokada botów albo zapory. Realni klienci mogą widzieć stronę normalnie; jak serwer traktuje roboty wyszukiwarek, trzeba sprawdzić osobno.', NO_FCP: 'W symulowanym telefonie z łączem 4G przez 90 s nie pojawiła się żadna treść. To zwykle znaczy, że strona ładuje się bardzo długo albo blokuje wyświetlanie do czasu pobrania ciężkich skryptów.', UNKNOWN: 'Przeglądarka pomiarowa przerwała ładowanie przed zebraniem danych.' }, lhFailTail: 'Pozostałe sprawdzenia (HTTPS, nagłówki bezpieczeństwa, SEO) poniżej pochodzą z bezpośredniego pobrania strony i są aktualne. Audyt pogłębiony mierzy stronę w prawdziwej przeglądarce i dłużej.',
-    perf: 'Wydajność', a11y: 'Dostępność', bp: 'Dobre praktyki', seo: 'SEO',
+    perf: 'Wydajność', a11y: 'Dostępność', bp: 'Dobre praktyki', seo: 'SEO', sec: 'Bezpieczeństwo',
+    secH: (n) => `Bezpieczeństwo: ${n}/100`, secLead: 'Widok z zewnątrz, bez logowania i bez prób włamania: certyfikat, nagłówki, ochrona poczty, publicznie dostępne pliki oraz wersje oprogramowania porównane z bazą znanych luk.', secHow: 'Jak liczymy ten wskaźnik', secHowUrl: '/bezpieczenstwo/',
+    secNone: 'Nie znaleźliśmy problemów widocznych z zewnątrz. To dobry znak, ale nie gwarancja – skan nie widzi panelu, haseł ani kodu po stronie serwera.',
+    secSw: (cms, n, withVer, db, date) => `Rozpoznane oprogramowanie: ${cms}${n ? `, składniki: ${n} (wersję ujawnia ${withVer})` : ''}. Porównane z bazą ${db} znanych luk, stan na ${date}.`,
+    secHdr: (n, list) => [`Brakuje ${n} nagłówków bezpieczeństwa`, `Serwer nie wysyła: ${list}. To instrukcje dla przeglądarki, które utrudniają m.in. podsłuch połączenia, osadzenie strony w cudzej ramce i wstrzyknięcie obcego skryptu. Dodaje się je w konfiguracji serwera albo wtyczką; nie zmieniają wyglądu strony.`],
     metrics: 'Kluczowe pomiary (telefon)', metric: 'Pomiar', value: 'Wartość', rating: 'Ocena', good: 'dobrze', needs: 'do poprawy', poor: 'słabo',
     lcp: 'Największy element treści (LCP)', cls: 'Przeskoki układu (CLS)', tbt: 'Czas blokowania (TBT)', weight: 'Waga strony', requests: 'Liczba żądań',
     issues: (n) => n ? `Znalezione problemy (${n})` : 'Podstawowe sprawdzenia: bez zastrzeżeń', noIssues: 'Szybki skan nie znalazł podstawowych problemów. Audyt pogłębiony sprawdza znacznie więcej (poniżej).',
@@ -59,9 +63,13 @@ const T = {
     queuedLong: 'This is taking longer than usual. If nothing shows up within a minute, please try again from the homepage.',
     failed: 'We could not scan this site', failedBody: (e) => `Reason: ${e}. Usually the site blocks bots, is down, or is very slow. Try again in a moment, or order an in-depth audit – if that fails too, we refund.`,
     notFound: 'No such scan', notFoundBody: 'Results are kept for 7 days. Start a new scan from the homepage.',
-    mobileNote: 'Lighthouse scores, simulated phone on 4G. Lab data – real users may see different numbers.',
+    mobileNote: 'Performance, accessibility and SEO: Lighthouse score, simulated phone on 4G (lab result). Security: our own score, explained below.',
     lhFail: 'Lighthouse could not measure this page', lhFailWhy: { BLOCKED: 'The server’s firewall served our measuring browser a block page (“You have been blocked”) instead of the site – the scanner was treated as a bot. Lighthouse scores would measure an empty page, so we do not show them.', INTERSTITIAL: 'The server showed our browser an error or “maintenance” page instead of the site – usually a bot or firewall block. Real visitors may see the site fine; how the server treats search-engine crawlers needs a separate check.', NO_FCP: 'On a simulated 4G phone nothing was painted within 90 s. That usually means the page loads very slowly or blocks rendering until heavy scripts arrive.', UNKNOWN: 'The measuring browser aborted the load before collecting data.' }, lhFailTail: 'The remaining checks below (HTTPS, security headers, SEO) come from a direct fetch of the page and are current. The in-depth audit measures the site in a real browser and for longer.',
-    perf: 'Performance', a11y: 'Accessibility', bp: 'Best practices', seo: 'SEO',
+    perf: 'Performance', a11y: 'Accessibility', bp: 'Best practices', seo: 'SEO', sec: 'Security',
+    secH: (n) => `Security: ${n}/100`, secLead: 'An outside view, with no login and no intrusion attempts: certificate, headers, mail protection, publicly reachable files, and software versions compared against a database of known vulnerabilities.', secHow: 'How this score is calculated', secHowUrl: '/en/security/',
+    secNone: 'We found no problems visible from the outside. A good sign, not a guarantee – the scan cannot see the admin panel, passwords or server-side code.',
+    secSw: (cms, n, withVer, db, date) => `Detected software: ${cms}${n ? `, components: ${n} (${withVer} reveal a version)` : ''}. Compared against ${db} known vulnerabilities, as of ${date}.`,
+    secHdr: (n, list) => [`${n} security headers are missing`, `The server does not send: ${list}. These are instructions for the browser that make eavesdropping, framing the site on another page and injecting foreign scripts harder. They are added in server configuration or with a plugin and do not change how the site looks.`],
     metrics: 'Key measurements (mobile)', metric: 'Metric', value: 'Value', rating: 'Rating', good: 'good', needs: 'needs work', poor: 'poor',
     lcp: 'Largest Contentful Paint (LCP)', cls: 'Layout shift (CLS)', tbt: 'Total Blocking Time (TBT)', weight: 'Page weight', requests: 'Requests',
     issues: (n) => n ? `Issues found (${n})` : 'Basic checks: nothing to report', noIssues: 'The quick scan found no basic issues. The in-depth audit checks far more (see below).',
@@ -496,7 +504,7 @@ function ogHead(job, lang, u) {
   const t = T[lang];
   const noLh = s.performance == null;
   const title = noLh ? (lang === 'pl' ? `${job.host} – Szybki skan Webskan` : `${job.host} – Webskan quick scan`) : lang === 'pl' ? `${job.host}: wydajność ${s.performance}/100 na telefonie – Szybki skan Webskan` : `${job.host}: mobile performance ${s.performance}/100 – Webskan quick scan`;
-  const desc = noLh ? t.lhFail : `${t.perf} ${s.performance} · ${t.a11y} ${s.accessibility} · ${t.bp} ${s['best-practices']} · ${t.seo} ${s.seo}`;
+  const sec = job.result?.securityScore?.score; const desc = noLh ? t.lhFail : `${t.perf} ${s.performance} · ${t.a11y} ${s.accessibility} · ${sec != null ? `${t.sec} ${sec}` : `${t.bp} ${s['best-practices']}`} · ${t.seo} ${s.seo}`;
   return `<meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}"><meta property="og:type" content="website"><meta property="og:url" content="${esc(u.origin + t.path(job.id))}"><meta property="og:image" content="${u.origin}/og-${lang}.png"><meta name="twitter:card" content="summary_large_image">`;
 }
 
@@ -523,6 +531,24 @@ function renderResult(job, lang, env, u) {
   const fmtS = (v) => (v == null ? '–' : dp((v / 1000).toFixed(1)) + ' s');
   const fa = (lh.failed?.accessibility || []).map((x) => A11Y[lang][x.id] || x.title).filter(Boolean);
   const issues = (r.issues || []).map((i) => { const d = t.issue[i.code]; const dec = (x) => (lang === 'pl' ? x.replace(/(\d)\.(\d)/g, '$1,$2') : x); return d ? { ...i, title: dec(fill(d[0], i)), why: dec(fill(d[1], i)), detail: i.code === 'a11y_low' && fa.length ? `${A11Y_FOUND[lang]}: ${esc(fa.join(', '))}.` : '' } : null; }).filter(Boolean);
+  // Bezpieczeństwo (skany od 21.11): ustalenia sec.* i wskaźnik liczone w silniku tym samym kodem co w audycie.
+  const secRaw = Array.isArray(r.securityFindings?.[lang]) && r.securityScore ? r.securityFindings[lang] : null;
+  const secScore = secRaw ? r.securityScore.score : null;
+  let secItems = null;
+  if (secRaw) {
+    const rank = { high: 0, medium: 1, low: 2 };
+    const hd = secRaw.filter((f) => String(f.id).startsWith('sec.header.')); const rest = secRaw.filter((f) => !String(f.id).startsWith('sec.header.'));
+    secItems = rest.map((f) => ({ sev: f.severity, title: esc(f.title), why: esc(f.detail) }));
+    if (hd.length === 1) secItems.push({ sev: hd[0].severity, title: esc(hd[0].title), why: esc(hd[0].detail) });
+    else if (hd.length > 1) { const names = { hsts: 'Strict-Transport-Security', xfo: 'X-Frame-Options', xcto: 'X-Content-Type-Options', referrer: 'Referrer-Policy', csp: 'Content-Security-Policy', permissions: 'Permissions-Policy' }; const [title, why] = t.secHdr(hd.length, hd.map((f) => names[String(f.id).split('.').pop()] || f.id).join(', ')); secItems.push({ sev: hd.some((f) => f.severity === 'medium') ? 'medium' : 'low', title, why }); }
+    secItems.sort((a, b) => rank[a.sev] - rank[b.sev]);
+    const SEC_CODES = new Set(['tls_bad', 'no_https_redirect', 'exposed_files', 'no_hsts', 'security_headers', 'mixed_content']);
+    for (let k = issues.length - 1; k >= 0; k--) if (SEC_CODES.has(issues[k].code)) issues.splice(k, 1);
+  }
+  const sw = r.software, vm = r.vulns;
+  const swComps = (sw?.components || []).filter((c) => ['wp-plugin', 'wp-theme', 'ps-module', 'js'].includes(c.type));
+  const swLine = secRaw && sw?.cms && vm?.db?.counts?.vulns ? t.secSw(esc(sw.cms + (vm.core?.version ? ' ' + vm.core.version : '')), swComps.length, swComps.filter((c) => c.version).length, dp(String(vm.db.counts.vulns).replace(/\B(?=(\d{3})+(?!\d))/g, lang === 'pl' ? ' ' : ',')), new Date(vm.db.built).toLocaleDateString(lang === 'pl' ? 'pl-PL' : 'en-GB', { day: 'numeric', month: 'long', timeZone: 'Europe/Warsaw' })) : '';
+  const secBlock = !secRaw ? '' : `<section id="${lang === 'pl' ? 'bezpieczenstwo' : 'security'}"><h2>${t.secH(secScore)}</h2><p>${t.secLead} <a href="${t.secHowUrl}">${t.secHow}&nbsp;→</a></p>${secItems.length ? `<ul class="issues">${secItems.map((i) => `<li class="${i.sev}"><span class="badge ${i.sev === 'high' ? 'poor' : i.sev === 'medium' ? 'needs' : 'good'}">${t.sev[i.sev]}</span><b>${i.title}</b><p>${i.why}</p></li>`).join('')}</ul>` : `<p>${t.secNone}</p>`}${swLine ? `<p class="muted small">${swLine}</p>` : ''}</section>`;
   const codes = new Set(issues.map((i) => i.code));
   const seo = r.seo || {}, hc = r.http?.headers?.checks || {};
   const oks = [];
@@ -544,13 +570,14 @@ function renderResult(job, lang, env, u) {
   const noLh = s.performance == null; // Lighthouse bez ocen (interstitial / NO_FCP) – zamiast kresek wyjaśnienie (10.11)
   const lhBlock = noLh
     ? `<div class="lhfail"><h2>${t.lhFail}</h2><p>${t.lhFailWhy[lh.reason] || t.lhFailWhy.UNKNOWN}</p>${lh.runtimeCode ? `<p class="muted small">Lighthouse: ${esc(lh.runtimeCode)}</p>` : ''}<p class="muted small">${t.lhFailTail}</p></div>`
-    : `<div class="dials">${[['performance', t.perf], ['accessibility', t.a11y], ['best-practices', t.bp], ['seo', t.seo]].map(([k, l]) => `<div class="dial ${s[k] == null ? 'none' : cls(s[k])}" style="--v:${s[k] ?? 0}"><svg viewBox="0 0 36 36" aria-hidden="true"><circle class="t" cx="18" cy="18" r="15.9155"/><circle class="v" cx="18" cy="18" r="15.9155" pathLength="100"/></svg><b aria-label="${s[k] ?? '–'}"></b><span>${l}</span></div>`).join('')}</div>
+    : `<div class="dials">${[['performance', t.perf, s.performance], ['accessibility', t.a11y, s.accessibility], secRaw ? ['security', t.sec, secScore] : ['best-practices', t.bp, s['best-practices']], ['seo', t.seo, s.seo]].map(([k, l, v]) => `<div class="dial ${v == null ? 'none' : cls(v)}" style="--v:${v ?? 0}"><svg viewBox="0 0 36 36" aria-hidden="true"><circle class="t" cx="18" cy="18" r="15.9155"/><circle class="v" cx="18" cy="18" r="15.9155" pathLength="100"/></svg><b aria-label="${v ?? '–'}"></b><span>${l}</span></div>`).join('')}</div>
   <p class="muted small">${t.mobileNote}</p>`;
   const metricsBlock = noLh ? '' : `<section><h2>${t.metrics}</h2><table><tr><th>${t.metric}</th><th>${t.value}</th><th>${t.rating}</th></tr>
   ${row(t.lcp, fmtS(m.LCP), cL)}${row(t.cls, m.CLS == null ? '–' : dp(m.CLS.toFixed(3)), cC)}${row(t.tbt, m.TBT == null ? '–' : Math.round(m.TBT) + ' ms', cT)}
   ${row(t.weight, m.totalBytes ? dp(fmtBytes(m.totalBytes)) : '–', '')}${row(t.requests, m.requests ?? '–', '')}</table></section>`;
   return `<section class="hero"><p class="eyebrow">${lang === 'pl' ? 'Szybki skan' : 'Quick scan'}</p><h1>${esc(t.title(job.host))}</h1><p class="muted small share">${esc(r.http?.finalUrl || job.url)} · ${date}</p>
   ${lhBlock}</section>
+  ${secBlock}
   ${metricsBlock}
   <section><h2>${t.issues(issues.length)}</h2>${issues.length ? `<ul class="issues">${issues.map((i) => `<li class="${i.sev}"><span class="badge ${i.sev === 'high' ? 'poor' : i.sev === 'medium' ? 'needs' : 'good'}">${t.sev[i.sev]}</span><b>${i.title}</b><p>${i.why}</p>${i.detail ? `<p class="muted small">${i.detail}</p>` : ''}</li>`).join('')}</ul>` : `<p>${t.noIssues}</p>`}
   ${oks.length ? `<h3>${t.okList}</h3><p class="oks">${oks.map((o) => `<span class="chip">✓ ${esc(o)}</span>`).join(' ')}</p>` : ''}</section>

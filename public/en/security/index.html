@@ -1,0 +1,49 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Security score – what we check and how it is calculated – Webskan</title>
+<meta name="description" content="What the Webskan security score checks, how the 0–100 result is calculated, where the known-vulnerability data comes from and what the score does not tell you."><link rel="canonical" href="https://webskan.com/en/security/"><link rel="alternate" hreflang="pl" href="https://webskan.com/bezpieczenstwo/"><link rel="alternate" hreflang="en" href="https://webskan.com/en/security/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="theme-color" content="#0E3B43">
+<link rel="stylesheet" href="/style.css"></head><body><div class="wrap"><header><a class="logo" href="/en/">web<span>skan</span></a><nav><a href="/en/blog/">Blog</a><a href="/en/#pricing">Pricing</a><a href="/en/#faq">FAQ</a><a href="/regulamin/" hreflang="pl">PL</a></nav></header>
+<main><section class="legal"><h1>Security score: what we check and how it is calculated</h1>
+<p>The “Security” score (0–100) shows how many weak points of a site are visible from the outside – the way anyone visiting the site sees them, including bots looking for easy targets. We break nothing and log in nowhere.</p>
+<h2>What we check</h2>
+<ul>
+<li><strong>Known vulnerabilities in the site’s software.</strong> We read what the site is built with (WordPress, plugins, theme, libraries) and in which versions, then compare that with a database of published vulnerabilities. The result: “plugin X version Y has a known vulnerability, the fix is in version Z”.</li>
+<li><strong>Unsupported versions.</strong> A WordPress release that WordPress.org marks insecure, PHP past end of life, plugins removed from the directory.</li>
+<li><strong>Files that should not be visible.</strong> Backups, database dumps, configuration files, a code repository, error logs, a database panel.</li>
+<li><strong>The connection.</strong> The certificate and its expiry, the redirect to HTTPS, resources loaded without encryption.</li>
+<li><strong>Mail spoofing protection.</strong> The domain’s SPF and DMARC records – they decide whether someone can send e-mail “from you”.</li>
+<li><strong>Server and WordPress settings.</strong> Security headers, session cookies, a public account list, XML-RPC, directory listing.</li>
+</ul>
+<h2>How the score is calculated</h2>
+<p>We start from 100 points and subtract for every finding:</p>
+<table><tr><th>Finding weight</th><th>Points</th><th>Example</th></tr>
+<tr><td>important</td><td>−25</td><td>a plugin with a vulnerability usable without logging in; a publicly reachable database backup</td></tr>
+<tr><td>worth fixing</td><td>−8</td><td>no DMARC record; a vulnerability that needs a logged-in account</td></tr>
+<tr><td>minor</td><td>−2</td><td>XML-RPC enabled; an outdated plugin with no known vulnerabilities</td></tr></table>
+<ul>
+<li>Missing security headers subtract at most 12 points in total – headers alone do not turn a site red.</li>
+<li>One “important” finding caps the score at 49. A site with a serious vulnerability does not get an amber score because everything else is fine.</li>
+<li>Colours: 90–100 green, 50–89 amber, 0–49 red.</li>
+</ul>
+<p>The same formula runs in the free scan, the in-depth audit and Monitor, so results can be compared over time.</p>
+<h2>How we know about vulnerabilities</h2>
+<p>We maintain our own database of known vulnerabilities in website software – about 40,000 entries today for over 12,000 WordPress plugins and themes and popular libraries – refreshed several times a day from public, official sources (listed below). Every finding carries a CVE number, so it can be checked at the source.</p>
+<p>A plugin’s version is read from files the site itself serves. If the site does not reveal a version we say “nothing to compare” – we do not guess.</p>
+<h2>What the score does not tell you</h2>
+<ul>
+<li><strong>100 does not mean “cannot be hacked”.</strong> We cannot see the admin panel, passwords, server-side code or plugins that leave no trace in the page source.</li>
+<li><strong>A known vulnerability does not mean “the site is hacked”.</strong> It means this version has a documented flaw and is worth updating before someone uses it.</li>
+<li><strong>The admin panel is authoritative.</strong> If Plugins → Installed shows a newer version than our reading, the finding can be ignored.</li>
+<li>We do not run penetration tests: no login attempts, no form submissions, no checking whether a vulnerability is exploitable. Scanner traffic details: <a href="/bot/#en">webskan.com/bot</a>.</li>
+</ul>
+<h2 id="sources">Data sources and licences</h2>
+<ul>
+<li><strong>CVE Program</strong> (cve.org) – CVE records with version ranges, published among others by Wordfence, Patchstack and WPScan as CVE Numbering Authorities. Copyright © The MITRE Corporation. <em>“MITRE hereby grants you a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable copyright license to reproduce, prepare derivative works of, publicly display, publicly perform, sublicense, and distribute Common Vulnerabilities and Exposures (CVE™). Any copy you make for such purposes is authorized provided that you reproduce MITRE's copyright designation and this license in any such copy.”</em></li>
+<li><strong>CISA Known Exploited Vulnerabilities</strong> – vulnerabilities exploited in real attacks (CC0 1.0).</li>
+<li><strong>WordPress.org</strong> – WordPress version status, latest plugin versions, plugin closure information.</li>
+<li><strong>retire.js</strong> – known vulnerabilities in JavaScript libraries (Apache License 2.0).</li>
+<li><strong>WPVulnerability</strong> (wpvulnerability.net) – supplementary version ranges for plugins and themes (CC0 1.0 data).</li>
+<li><strong>endoflife.date</strong> – software end-of-life dates (MIT License).</li>
+</ul>
+<p>Webskan is not affiliated with or certified by any of these organisations. The plain-language descriptions of vulnerabilities are ours.</p>
+<p><a class="btn" href="/en/#scan">Check your site</a></p>
+</section></main>
+<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a> · <a href="/developers/">For developers</a> · contact: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer></div></body></html>
