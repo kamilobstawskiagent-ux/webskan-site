@@ -152,7 +152,7 @@ ul.check li{padding-left:32px;margin:9px 0}
 ul.check li::before{content:"";top:.28em;width:20px;height:20px;border-radius:50%;background:#dcfce7 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.4l3 3 6-6.6' fill='none' stroke='%2315803d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/20px no-repeat}
 .plans{gap:22px;margin:28px 0}.plan{padding:30px 28px 26px}.plan h3{font-size:19px;margin:0 0 12px}.plan .amt{font-size:46px;letter-spacing:-.035em;color:var(--ink)}.plan small{font-size:14.5px}
 .plan.featured{border:2px solid var(--acc);background:#fff;box-shadow:0 1px 2px rgba(15,23,42,.05),0 30px 60px -34px rgba(29,78,216,.5)}
-.plan .tag{top:-12px;left:26px;font-size:11.5px;letter-spacing:.07em;padding:4px 11px}
+.plan .tag{top:-12px;left:26px;font-size:12px;letter-spacing:.07em;padding:4px 11px}
 .price{border:1px solid var(--line);border-radius:16px;background:#fff;box-shadow:var(--shadow)}
 .fullbox{border:1px solid var(--line);border-radius:18px;padding:32px;background:linear-gradient(180deg,#f8fafc,#fff);box-shadow:var(--shadow)}
 details{border-bottom:1px solid var(--line);padding:18px 0}details summary{font-weight:600;font-size:17px;color:var(--ink);list-style:none;position:relative;padding-right:36px}details summary::-webkit-details-marker{display:none}
