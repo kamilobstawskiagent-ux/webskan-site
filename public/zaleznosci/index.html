@@ -1,0 +1,31 @@
+<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sprawdź zależności projektu: znane luki w pakietach Python i Node.js – Webskan</title>
+<meta name="description" content="Wyślij requirements.txt, poetry.lock albo package-lock.json i zobacz, które pakiety mają znane luki i do jakiej wersji je zaktualizować. Bez konta, plik nie jest zapisywany."><link rel="canonical" href="https://webskan.com/zaleznosci/"><link rel="alternate" hreflang="pl" href="https://webskan.com/zaleznosci/"><link rel="alternate" hreflang="en" href="https://webskan.com/en/dependencies/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="theme-color" content="#0E3B43">
+<link rel="stylesheet" href="/style.css"></head><body><div class="wrap"><header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a><a href="/#faq">FAQ</a><a href="/en/dependencies/" hreflang="en">EN</a></nav></header>
+<main><section class="legal"><h1>Sprawdź zależności projektu</h1>
+<p class="lead">Wyślij plik zależności aplikacji w Pythonie (Django, FastAPI, Flask) albo Node.js. Po kilku sekundach zobaczysz, które pakiety mają znane luki bezpieczeństwa i do jakiej wersji je zaktualizować.</p>
+<form class="order" action="/api/deps/check" method="post" enctype="multipart/form-data">
+  <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+  <input type="hidden" name="lang" value="pl">
+  <label>Plik zależności (można kilka naraz)<br><input type="file" name="file" multiple accept=".txt,.lock,.json,.yaml,.yml,.toml,text/plain,application/json"></label>
+  <label>albo wklej treść pliku<br><textarea name="text" spellcheck="false" placeholder="Django==4.2.7&#10;djangorestframework==3.14.0&#10;gunicorn==20.1.0"></textarea></label>
+  <button class="btn" type="submit">Sprawdź zależności</button>
+</form>
+<p class="note">Obsługiwane pliki: <code>requirements.txt</code> (także wynik <code>pip freeze</code>), <code>poetry.lock</code>, <code>uv.lock</code>, <code>pdm.lock</code>, <code>Pipfile.lock</code>, <code>package-lock.json</code>, <code>yarn.lock</code>, <code>pnpm-lock.yaml</code>. Bez konta i bez opłat.</p>
+<h2>Co dostajesz</h2>
+<ul>
+<li><strong>Listę pakietów z lukami</strong>, od najpoważniejszych: nazwa, wersja w projekcie i wersja, która usuwa wszystkie znane luki.</li>
+<li><strong>Każdą lukę z numerem CVE</strong> i odnośnikiem do źródła, z oznaczeniem wagi i wersji z poprawką.</li>
+<li><strong>Pakiety, których nie dało się sprawdzić</strong> – te bez przypiętej wersji – wypisane osobno, a nie przemilczane.</li>
+</ul>
+<h2>Co dzieje się z plikiem</h2>
+<p>Plik jest czytany w pamięci i nie jest zapisywany. Do bazy luk wysyłamy wyłącznie nazwy i wersje pakietów – to te same informacje, które widzi publiczny rejestr przy każdej instalacji. Kodu aplikacji nie potrzebujemy i nie oglądamy.</p>
+<h2>W potoku CI</h2>
+<p>To samo sprawdzenie działa z wiersza poleceń i zwraca JSON:</p>
+<pre class="cmd">curl -s -F file=@requirements.txt "https://webskan.com/api/deps/check?format=json"</pre>
+<p>Pole <code>vulnerablePackages</code> to liczba pakietów z lukami; przy każdym jest <code>updateTo</code>, czyli wersja do aktualizacji.</p>
+<h2>Dlaczego warto to robić regularnie</h2>
+<p>Zależności, które dziś są czyste, za miesiąc mogą mieć ogłoszoną lukę – kod się nie zmienił, zmieniła się wiedza o nim. Jednorazowe sprawdzenie pokazuje stan na dziś. Jeśli masz wiele projektów i chcesz dostawać e-mail, gdy dla któregoś pojawi się nowa luka, napisz na <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a> – przygotowujemy stały dozór zależności.</p>
+<h2>Skąd są dane</h2>
+<p>Z bazy <a href="https://osv.dev/">OSV.dev</a>, która zbiera m.in. GitHub Advisory Database (licencja CC-BY 4.0), PyPA Advisory Database (CC-BY 4.0) i listę złośliwych pakietów OpenSSF. Webskan nie jest powiązany z tymi organizacjami. Bezpieczeństwo strony widoczne z zewnątrz sprawdza osobno <a href="/bezpieczenstwo/">wskaźnik bezpieczeństwa</a>.</p>
+</section></main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a> · <a href="/developers/" hreflang="en">Dla programistów (EN)</a> · kontakt: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer></div></body></html>

@@ -1,0 +1,31 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Check project dependencies: known vulnerabilities in Python and Node.js packages – Webskan</title>
+<meta name="description" content="Upload requirements.txt, poetry.lock or package-lock.json and see which packages have known vulnerabilities and which version to update to. No account, the file is not stored."><link rel="canonical" href="https://webskan.com/en/dependencies/"><link rel="alternate" hreflang="pl" href="https://webskan.com/zaleznosci/"><link rel="alternate" hreflang="en" href="https://webskan.com/en/dependencies/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="theme-color" content="#0E3B43">
+<link rel="stylesheet" href="/style.css"></head><body><div class="wrap"><header><a class="logo" href="/en/">web<span>skan</span></a><nav><a href="/en/blog/">Blog</a><a href="/en/#pricing">Pricing</a><a href="/en/#faq">FAQ</a><a href="/regulamin/" hreflang="pl">PL</a></nav></header>
+<main><section class="legal"><h1>Check your project dependencies</h1>
+<p class="lead">Upload the dependency file of a Python (Django, FastAPI, Flask) or Node.js application. A few seconds later you see which packages have known security vulnerabilities and which version to update to.</p>
+<form class="order" action="/api/deps/check" method="post" enctype="multipart/form-data">
+  <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+  <input type="hidden" name="lang" value="en">
+  <label>Dependency file (several at once is fine)<br><input type="file" name="file" multiple accept=".txt,.lock,.json,.yaml,.yml,.toml,text/plain,application/json"></label>
+  <label>or paste the file content<br><textarea name="text" spellcheck="false" placeholder="Django==4.2.7&#10;djangorestframework==3.14.0&#10;gunicorn==20.1.0"></textarea></label>
+  <button class="btn" type="submit">Check dependencies</button>
+</form>
+<p class="note">Supported files: <code>requirements.txt</code> (including <code>pip freeze</code> output), <code>poetry.lock</code>, <code>uv.lock</code>, <code>pdm.lock</code>, <code>Pipfile.lock</code>, <code>package-lock.json</code>, <code>yarn.lock</code>, <code>pnpm-lock.yaml</code>. No account, no charge.</p>
+<h2>What you get</h2>
+<ul>
+<li><strong>A list of vulnerable packages</strong>, most serious first: name, the version in your project and the version that removes every known vulnerability.</li>
+<li><strong>Every vulnerability with its CVE number</strong> and a link to the source, with severity and the fixed version.</li>
+<li><strong>Packages that could not be checked</strong> – those without a pinned version – listed separately instead of silently skipped.</li>
+</ul>
+<h2>What happens to the file</h2>
+<p>The file is read in memory and is not stored. Only package names and versions are sent to the vulnerability database – the same information a public registry sees on every install. We do not need or look at your application code.</p>
+<h2>In a CI pipeline</h2>
+<p>The same check works from the command line and returns JSON:</p>
+<pre class="cmd">curl -s -F file=@requirements.txt "https://webskan.com/api/deps/check?format=json"</pre>
+<p>The <code>vulnerablePackages</code> field is the number of packages with vulnerabilities; each one carries <code>updateTo</code>, the version to update to.</p>
+<h2>Why do it regularly</h2>
+<p>Dependencies that are clean today may have a vulnerability announced next month – the code has not changed, the knowledge about it has. A one-off check shows today's state. If you run many projects and want an e-mail when a new vulnerability affects one of them, write to <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a> – we are preparing continuous dependency monitoring.</p>
+<h2>Where the data comes from</h2>
+<p>From <a href="https://osv.dev/">OSV.dev</a>, which aggregates the GitHub Advisory Database (CC-BY 4.0), the PyPA Advisory Database (CC-BY 4.0) and the OpenSSF malicious packages list, among others. Webskan is not affiliated with these organisations. What is visible from outside your site is covered separately by the <a href="/en/security/">security score</a>.</p>
+</section></main>
+<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a> · <a href="/developers/">For developers</a> · contact: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer></div></body></html>
