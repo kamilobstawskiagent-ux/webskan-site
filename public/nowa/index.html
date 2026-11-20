@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Webskan – sprawdź, czy Twoja strona jest bezpieczna i nie gubi klientów</title>
+<meta name="description" content="Darmowy skan strony w 30 sekund. Audyt całej witryny z planem napraw za 249 zł. Codzienny monitoring za 49 zł miesięcznie.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/v5.css">
+</head>
+<body>
+<div class="dark">
+<header class="w top">
+  <a class="logo" href="/"><svg viewBox="0 0 28 28" aria-hidden="true"><rect x="1.5" y="1.5" width="25" height="25" rx="6" fill="none" stroke="#E9B949" stroke-width="3"/><path d="M7 14h14" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg><span>web<b>skan</b></span></a>
+  <nav aria-label="Główne"><a class="h" href="#co">Co sprawdzamy</a><a class="h" href="/przyklad/">Przykładowy raport</a><a href="#cennik">Cennik</a><a href="/en/">EN</a></nav>
+</header>
+<section class="w hero" id="skan">
+  <div>
+    <h1>Czy Twoja strona jest <em>bezpieczna</em> i&nbsp;czy nie gubi klientów?</h1>
+    <p class="lead">Wpisz adres. Za 30 sekund zobaczysz wynik.</p>
+    <form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="pl"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" id="u1" inputmode="url" placeholder="twojafirma.pl" aria-label="Adres strony" required maxlength="500"><button class="btn" type="submit">Sprawdź stronę</button></form>
+    <p class="facts"><span>za darmo</span><span>bez rejestracji</span><span>bez dostępu do strony</span></p>
+    <p class="prices">Audyt z planem napraw: <b>249&nbsp;zł</b> · Stały monitoring: <b>49&nbsp;zł/mies.</b> · <a href="#cennik">porównaj</a></p>
+  </div>
+  <div class="result" aria-label="Przykładowy wynik skanu">
+    <div class="bar"><strong>twojafirma.pl</strong><span>skan: 31 s</span></div>
+    <div class="dials"><div class="dial"><svg viewBox="0 0 64 64" role="img" aria-label="Szybkość: 54 na 100"><circle cx="32" cy="32" r="28" fill="none" stroke="#E8EDEC" stroke-width="6"/><circle class="v" cx="32" cy="32" r="28" fill="none" stroke="#B54708" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="81.0"/><text x="32" y="40" text-anchor="middle" fill="#14262A">54</text></svg><span>Szybkość</span></div><div class="dial"><svg viewBox="0 0 64 64" role="img" aria-label="Dostępność: 91 na 100"><circle cx="32" cy="32" r="28" fill="none" stroke="#E8EDEC" stroke-width="6"/><circle class="v" cx="32" cy="32" r="28" fill="none" stroke="#067647" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="15.8"/><text x="32" y="40" text-anchor="middle" fill="#14262A">91</text></svg><span>Dostępność</span></div><div class="dial"><svg viewBox="0 0 64 64" role="img" aria-label="Dobre praktyki: 78 na 100"><circle cx="32" cy="32" r="28" fill="none" stroke="#E8EDEC" stroke-width="6"/><circle class="v" cx="32" cy="32" r="28" fill="none" stroke="#B54708" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="38.7"/><text x="32" y="40" text-anchor="middle" fill="#14262A">78</text></svg><span>Dobre praktyki</span></div><div class="dial"><svg viewBox="0 0 64 64" role="img" aria-label="Google (SEO): 92 na 100"><circle cx="32" cy="32" r="28" fill="none" stroke="#E8EDEC" stroke-width="6"/><circle class="v" cx="32" cy="32" r="28" fill="none" stroke="#067647" stroke-width="6" stroke-dasharray="176" stroke-dashoffset="14.1"/><text x="32" y="40" text-anchor="middle" fill="#14262A">92</text></svg><span>Google (SEO)</span></div></div>
+    <ul class="rows">
+      <li><i class="st bad" aria-label="problem">✕</i><span>Strona ładuje się 4,8 s na telefonie<small>Część klientów wyjdzie, zanim cokolwiek zobaczy.</small></span></li>
+      <li><i class="st warn" aria-label="uwaga">!</i><span>Połączenie nie jest zawsze szyfrowane<small>Brak ustawienia, które wymusza https.</small></span></li>
+      <li><i class="st ok" aria-label="w porządku">✓</i><span>Certyfikat ważny, wersja mobilna działa</span></li>
+    </ul>
+    <p class="cap">przykładowy wynik darmowego skanu</p>
+  </div>
+</section>
+</div>
+
+<section id="co"><div class="w">
+  <h2>Co sprawdzamy w audycie</h2>
+  <p class="sub">Całą witrynę, nie tylko stronę główną. Do 30 podstron i 500 linków.</p>
+  <div class="bento">
+    <div class="tile sec">
+      <h3>Bezpieczeństwo</h3>
+      <p>Patrzymy na stronę tak, jak automaty szukające słabych punktów.</p>
+      <ul class="rows">
+        <li><i class="st ok" aria-label="w porządku">✓</i><span>Szyfrowanie i certyfikat<small>Czy połączenie jest bezpieczne i czy certyfikat zaraz nie wygaśnie.</small></span></li>
+        <li><i class="st bad" aria-label="problem">✕</i><span>Pliki, które nie powinny być publiczne<small>Kopie zapasowe, pliki z hasłami, logi, panele bazy danych.</small></span></li>
+        <li><i class="st warn" aria-label="uwaga">!</i><span>Poczta: czy ktoś może podszyć się pod Twój adres<small>Ustawienia SPF i DMARC domeny.</small></span></li>
+        <li><i class="st warn" aria-label="uwaga">!</i><span>Przestarzałe oprogramowanie<small>PHP i WordPress bez poprawek bezpieczeństwa, publiczna lista kont.</small></span></li>
+        <li><i class="st ok" aria-label="w porządku">✓</i><span>Ochrona odwiedzających<small>Nagłówki bezpieczeństwa, formularze, ciasteczka sesji.</small></span></li>
+      </ul>
+      <p class="note">Sprawdzamy z zewnątrz, bez haseł. To nie jest test penetracyjny. <a href="#uczciwie" style="color:#fff">Co to znaczy?</a></p>
+    </div>
+    <div class="tile"><h3>Szybkość na telefonie</h3><p>Ile czeka klient, zanim coś zobaczy.</p><div class="viz"><div class="meter"><i></i></div><small>54 / 100 · ładowanie 4,8 s</small></div></div>
+    <div class="tile"><h3>Ścieżka klienta</h3><p>Klikamy jak klient, na telefonie.</p><div class="viz flow"><span>menu ✓</span><span>formularz ✓</span><span>koszyk ✓</span><span class="bad">kasa ✕</span></div></div>
+    <div class="tile"><h3>Widoczność w Google</h3><p>Tytuły, opisy i indeksowanie każdej podstrony.</p><div class="viz serp"><b>Kontakt – Twoja Firma | Twoja Firma | Twoja Fir…</b><span>Tytuł ucięty w wynikach: 86 znaków.</span></div></div>
+    <div class="tile"><h3>Zepsute linki</h3><p>Pokażemy, na której stronie są.</p><div class="viz links">/oferta/ → /cennik-2023.pdf <b>404</b></div></div>
+    <div class="tile"><h3>Dostępność</h3><p>Kontrast, opisy obrazków, obsługa klawiaturą (WCAG).</p><div class="viz flow"><span class="bad">kontrast 2,9 : 1</span><span>opisy ✓</span></div></div>
+  </div>
+</div></section>
+
+<section class="band" id="audyt"><div class="w get">
+  <div class="pages">
+    <figure><img src="/img/rep-pl-1.webp" alt="Strona raportu: podsumowanie" width="720" height="931" loading="lazy"><figcaption>1 · diagnoza</figcaption></figure>
+    <figure><img src="/img/rep-pl-2.webp" alt="Strona raportu: plan działań z gotową poprawką" width="720" height="931" loading="lazy"><figcaption>2 · plan napraw</figcaption></figure>
+    <figure><img src="/img/rep-pl-3.webp" alt="Strona raportu: ścieżki klienta" width="720" height="931" loading="lazy"><figcaption>3 · dowody</figcaption></figure>
+  </div>
+  <div class="txt">
+    <h2>Audyt: dostajesz plan napraw, nie listę błędów</h2>
+    <ul class="ticks">
+      <li>Co naprawić najpierw i co na tym zyskasz</li>
+      <li>Gotowa instrukcja i kod dla wykonawcy strony</li>
+      <li>Po poprawkach sprawdzamy jeszcze raz</li>
+      <li>30 dni monitoringu w cenie</li>
+    </ul>
+    <p class="price"><b>249 zł</b>jednorazowo · raport PDF do 24 h</p>
+    <div class="cta"><a class="btn deep" href="#zamow" data-plan="audit">Zamów audyt</a><a class="btn line" href="/przyklad/">Zobacz cały przykład</a></div>
+  </div>
+</div></section>
+
+<section id="monitor"><div class="w get">
+  <div class="txt">
+    <h2>Monitor: o awarii dowiesz się pierwszy, nie od klienta</h2>
+    <ul class="ticks">
+      <li><span><b>Co minutę:</b> czy strona działa</span></li>
+      <li><span><b>Codziennie:</b> szybkość, certyfikat, widoczność w Google, wygląd strony głównej</span></li>
+      <li><span><b>Co tydzień:</b> zepsute linki, błędy, ustawienia bezpieczeństwa</span></li>
+      <li>Piszemy tylko wtedy, gdy coś się zepsuje</li>
+    </ul>
+    <p class="price"><b>49 zł</b>miesięcznie · rezygnacja jednym kliknięciem</p>
+    <div class="cta"><a class="btn deep" href="#zamow" data-plan="monitor">Zamów monitoring</a></div>
+  </div>
+  <div>
+    <div class="mail" aria-label="Przykładowy alert e-mail">
+      <div class="from"><span>Webskan Monitor</span><span>14:04</span></div>
+      <h4>twojafirma.pl nie odpowiada od 14:02</h4>
+      <p>Serwer zwraca błąd 500. Sprawdzamy dalej co minutę i damy znać, gdy strona wróci.</p>
+      <p class="fix"><b>Co zrobić:</b> prześlij tę wiadomość firmie hostingowej. Błąd pojawił się po godz. 14:00.</p>
+      <div class="up"><svg viewBox="0 0 297 34" preserveAspectRatio="none" role="img" aria-label="Dostępność z 30 dni: jedna awaria"><rect x="0" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="10" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="20" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="30" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="40" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="50" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="60" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="70" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="80" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="90" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="100" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="110" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="120" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="130" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="140" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="150" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="160" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="170" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="180" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="190" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="200" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="210" y="0" width="7" height="34" rx="2" fill="#B42318"/><rect x="220" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="230" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="240" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="250" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="260" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="270" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="280" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/><rect x="290" y="0" width="7" height="34" rx="2" fill="#2F9E6E"/></svg><small><span>30 dni</span><span>dostępność 99,93 %</span></small></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="band" id="cennik"><div class="w">
+  <h2>Skan, audyt czy monitor?</h2>
+  <div class="plans">
+    <div class="plan"><h3>Darmowy skan</h3><p class="who">Szybki rzut oka na stronę główną.</p><p class="amt">0 zł</p>
+      <ul class="feat"><li>Strona główna, 30 sekund</li><li>Szybkość i podstawy bezpieczeństwa</li><li class="no">Cała witryna i ścieżka klienta</li><li class="no">Plan napraw z gotowym kodem</li><li class="no">Ponowne sprawdzenie</li><li class="no">Alert, gdy strona padnie</li></ul>
+      <a class="btn line" href="#skan">Skanuj za darmo</a></div>
+    <div class="plan hot"><h3>Audyt pogłębiony</h3><p class="who">Jednorazowa diagnoza całej witryny.</p><p class="amt">249 zł<small>jednorazowo</small></p>
+      <ul class="feat"><li>Do 30 podstron i 500 linków</li><li>Pełne sprawdzenie bezpieczeństwa z zewnątrz</li><li>Ścieżka klienta klikana na telefonie</li><li>Plan napraw z gotowym kodem (PDF)</li><li>Ponowne sprawdzenie w 30 dni</li><li>30 dni Monitora w cenie</li></ul>
+      <a class="btn" href="#zamow" data-plan="audit">Zamów audyt</a></div>
+    <div class="plan"><h3>Webskan Monitor</h3><p class="who">Stałe pilnowanie, gdy strona już działa dobrze.</p><p class="amt">49 zł<small>/ mies.</small></p>
+      <ul class="feat"><li>Kontrole codziennie, cała witryna co tydzień</li><li>Certyfikat, domena, ustawienia bezpieczeństwa</li><li>Alert w kilka minut, gdy strona padnie</li><li>Lista problemów na start (bez planu napraw)</li><li class="no">Ścieżka klienta klikana na telefonie</li><li class="no">Raport PDF z planem napraw</li></ul>
+      <a class="btn line" href="#zamow" data-plan="monitor">Zamów monitoring</a></div>
+  </div>
+  <p class="fine">Ceny brutto. Płatność kartą; fakturę lub paragon wystawia operator płatności Polar. Robisz strony dla klientów? <a href="/agencje/">Oferta dla agencji →</a></p>
+</div></section>
+
+<section id="uczciwie"><div class="w">
+  <h2>Uczciwie: co to jest, a co nie</h2>
+  <div class="honest">
+    <div><h3><i class="st ok" aria-label="w porządku">✓</i> Robimy</h3><ul><li>Sprawdzamy stronę z zewnątrz, tak jak widzi ją każdy odwiedzający.</li><li>Każdy problem ma dowód: adres, zrzut ekranu albo fragment kodu.</li><li>Nie potrzebujemy haseł i niczego nie zmieniamy na stronie.</li></ul></div>
+    <div><h3><i class="st bad" aria-label="problem">✕</i> Nie robimy</h3><ul><li>To nie jest test penetracyjny: nie próbujemy się włamać.</li><li>Nie widzimy wnętrza serwera ani panelu administracyjnego.</li><li>Dobry wynik nie gwarantuje, że strona nie ma żadnych luk.</li></ul></div>
+  </div>
+</div></section>
+
+<section class="band" id="zamow"><div class="w">
+  <h2>Zamów</h2>
+  <div class="orderbox">
+  <form class="order" action="/api/order" method="post">
+    <input type="hidden" name="lang" value="pl">
+    <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+    <fieldset><legend>Co zamawiasz</legend>
+      <label class="pick"><input type="radio" name="product" value="audit" checked> <span><b>Audyt pogłębiony</b> – 249 zł jednorazowo</span></label>
+      <label class="pick"><input type="radio" name="product" value="monitor"> <span><b>Webskan Monitor</b> – 49 zł/mies.</span></label>
+    </fieldset>
+    <label>Adres strony<input type="text" name="url" inputmode="url" placeholder="twojafirma.pl" required maxlength="500"></label>
+    <label>Twój e-mail<input type="email" name="email" placeholder="ty@twojafirma.pl" required maxlength="254"></label>
+    <label class="consent"><input type="checkbox" name="consent" required><span>Akceptuję <a href="/regulamin/">regulamin</a> i <a href="/prywatnosc/">politykę prywatności</a>. Audyt dotyczy publicznej wersji strony i jest wykonywany automatycznie.</span></label>
+    <button class="btn deep" type="submit" data-cta="order">Przejdź do płatności</button>
+  </form>
+  <ol class="steps">
+    <li><span><b>Płacisz kartą</b><small>Bez zakładania konta.</small></span></li>
+    <li><span><b>Sprawdzamy stronę</b><small>Zwykle 1–2 godziny, najpóźniej 24 h.</small></span></li>
+    <li><span><b>Dostajesz raport PDF e-mailem</b><small>Z linkiem do ponownego sprawdzenia po poprawkach.</small></span></li>
+    <li><span><b>Masz pytania? Odpisz na e-mail</b><small>Pomagamy zrozumieć wynik i ustalić kolejność prac.</small></span></li>
+  </ol>
+  </div>
+</div></section>
+
+<section id="faq"><div class="w">
+  <h2>Pytania</h2>
+  <div class="faq">
+    <details><summary>Czy muszę dać dostęp do strony albo hasła?</summary><p>Nie. Sprawdzamy to, co jest publicznie widoczne. Formularzy nie wysyłamy, w sklepie zatrzymujemy się na stronie kasy.</p></details>
+    <details><summary>Kto robi audyt?</summary><p>Proces jest zautomatyzowany. Pomiary wykonują sprawdzone narzędzia (Google Lighthouse, axe-core, prawdziwa przeglądarka) i nasze własne testy. Plan napraw pisze model AI, a każde zalecenie musi wskazywać konkretny, zmierzony problem.</p></details>
+    <details><summary>Nie znam się na tym. Co zrobię z raportem?</summary><p>Pierwsze strony są pisane dla właściciela: co jest nie tak i co zyskasz po naprawie. Reszta to gotowa instrukcja – przekazujesz ją osobie, która zajmuje się stroną.</p></details>
+    <details><summary>Co, jeśli audytu nie da się wykonać?</summary><p>Jeśli strona blokuje nasz skaner albo jest niedostępna, piszemy, jak to odblokować. Gdy się nie uda, zwracamy pełną kwotę.</p></details>
+    <details><summary>Jak zrezygnować z Monitora?</summary><p>Jednym kliknięciem z linku w każdym e-mailu. Kontrole działają do końca opłaconego miesiąca, potem nic nie pobieramy.</p></details>
+  </div>
+</div></section>
+
+<div class="dark"><section class="w last">
+  <h2>Sprawdź swoją stronę teraz</h2>
+  <p>30 sekund, za darmo, bez rejestracji.</p>
+  <form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="pl"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" id="u2" inputmode="url" placeholder="twojafirma.pl" aria-label="Adres strony" required maxlength="500"><button class="btn" type="submit">Sprawdź stronę</button></form>
+</section></div>
+<footer><div class="w"><span>© 2026 Webskan</span><a href="/blog/">Blog</a><a href="/regulamin/">Regulamin</a><a href="/prywatnosc/">Polityka prywatności</a><a href="/agencje/">Dla agencji</a><a href="/developers/">Dla programistów (EN)</a><a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></div></footer>
+<script src="/prefill.js" defer></script>
+</body>
+</html>
