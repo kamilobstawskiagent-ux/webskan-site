@@ -58,6 +58,7 @@ for (const f of walk(ROOT)) {
   if (SKIP.test(rel)) continue;
   const lang = rel.startsWith('en/') || rel.startsWith('developers/') ? 'en' : 'pl';
   let html = fs.readFileSync(f, 'utf8');
+  if (html.includes('href="/v5.css"')) continue; // strony w wyglądzie v5 mają własne menu i stopkę
   const orig = html;
   // stopka
   if (/<footer[^>]*>[\s\S]*?<\/footer>/.test(html)) html = html.replace(/<footer[^>]*>[\s\S]*?<\/footer>/, footer(lang, rel));
