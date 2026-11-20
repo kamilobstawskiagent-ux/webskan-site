@@ -34,6 +34,7 @@ const PAGES = {
   recheck_pl: '/recheck/00000000000000000000000000000000', recheck_en: '/en/recheck/00000000000000000000000000000000',
   scan_pl: async () => scanPath('pl'), scan_en: async () => scanPath('en'),
   developers: '/developers/',
+  agencies: '/agencje/', agencies_sample: '/agencje/przyklad/',
   notfound: '/nie-ma-takiej-strony/',
 };
 const PROFILES = {
