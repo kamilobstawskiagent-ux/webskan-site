@@ -421,7 +421,7 @@ export async function leadsNext(request, env) {
     leads.push({
       id: l.id, scanId: l.scan_id, host: l.host, url: l.scan_url || `https://${l.host}/`, email: l.email, lang: l.lang, status: l.status, at: new Date(l.at).toISOString(),
       link: `${origin}${T[l.lang].path(l.scan_id)}`, unsub: `${origin}/api/scan/lead/unsub?id=${l.id}&k=${await leadSig(l.id, env)}`,
-      scores: result?.lighthouse?.scores || null, metrics: result?.lighthouse?.metrics || null, issues: result ? issueList(result, l.lang) : [], scanFinished: l.scan_finished ? new Date(l.scan_finished).toISOString() : null,
+      scores: result?.lighthouse?.scores || null, security: result?.securityScore?.score ?? null, metrics: result?.lighthouse?.metrics || null, issues: result ? issueList(result, l.lang) : [], scanFinished: l.scan_finished ? new Date(l.scan_finished).toISOString() : null,
     });
   }
   return Response.json({ leads });
