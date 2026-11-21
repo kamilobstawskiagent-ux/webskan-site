@@ -7,7 +7,7 @@ import { polarApi } from "./polar.js";
 import { normalizeUrl } from "./url.js";
 import { trackEntry, refsApi } from "./refs.js";
 import { agencyTrial, agencyReportPut, agencyReportGet } from "./agency.js";
-import { depsCheck, depsProject, depsPush, depsExport } from "./depsweb.js";
+import { depsCheck, depsProject, depsPush, depsExport, depsAccount, depsOrder, depsThanks } from "./depsweb.js";
 export { ScanQueue, MonitorHub };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -172,6 +172,10 @@ async function route(request, env, pathname, ctx) {
     { const m = pathname.match(/^\/en\/status\/([0-9a-f]{32})\/?$/); if (m) return statusPage(env, "en", m[1]); }
     if (pathname === "/api/deps/project" && request.method === "POST") return depsProject(request, env);
     if (pathname === "/api/deps/export") return depsExport(request, env);
+    if (pathname === "/api/deps/account" && request.method === "POST") return depsAccount(request, env);
+    if (pathname === "/api/deps/order") return depsOrder(request, env); // abonament „Webskan Zależności” → checkout Polar
+    if (pathname === "/zaleznosci/dziekujemy/" || pathname === "/zaleznosci/dziekujemy") return depsThanks("pl");
+    if (pathname === "/en/dependencies/thanks/" || pathname === "/en/dependencies/thanks") return depsThanks("en");
     if (pathname.startsWith("/api/deps/push/")) return depsPush(request, env, pathname.slice(15));
     if (pathname === "/api/deps/check") return depsCheck(request, env); // sprawdzenie zależności projektu w OSV (src/depsweb.js)
     if (pathname === "/api/agency/trial") return agencyTrial(request, env); // próba planu dla agencji (src/agency.js)

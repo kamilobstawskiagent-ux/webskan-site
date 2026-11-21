@@ -131,12 +131,56 @@ export async function depsProject(request, env) {
   return Response.json({ ok: true });
 }
 
+// --- Abonament „Webskan Zależności” (konto z limitem projektów; 3 projekty 79 zł/mies., 10 projektów 149 zł/mies.) ---
+// KV `depsacct:<token>` {limit, active, projects:[slug…], created}; listy pakietów: `depsdata:<token>:<slug>`.
+// POST   /api/deps/account            (x-scan-key; JSON {token, limit, active, remove}) – zakłada/zmienia konto (poller po płatności, dozór dzienny po końcu abonamentu)
+// POST   /api/deps/push/<token>?project=<nazwa>   – wysyła listę pakietów projektu; pierwszy raz = projekt zajmuje miejsce w limicie
+// GET    /api/deps/push/<token>                   – stan konta: limit i lista projektów
+// DELETE /api/deps/push/<token>?project=<nazwa>   – usuwa projekt (zwalnia miejsce)
+// POST   /api/deps/order              (formularz: email, plan=3|10, lang, consent) → checkout Polar
+const SLUG_RE = /^[a-z0-9][a-z0-9._-]{0,59}$/;
+export const DEPS_PLANS = { 3: { pln: 79, usd: 25 }, 10: { pln: 149, usd: 45 } };
+const noStore = { headers: { "cache-control": "no-store" } };
+const jerr = (status, error, message, extra = {}) => Response.json({ ok: false, error, message, ...extra }, { status, headers: { "cache-control": "no-store" } });
+
+export async function depsAccount(request, env) {
+  if (!authed(request, env)) return new Response("Unauthorized", { status: 401 });
+  const j = await request.json().catch(() => null);
+  if (!j || !TOKEN_RE.test(j.token || "")) return new Response("Bad token", { status: 400 });
+  const key = `depsacct:${j.token}`; const old = JSON.parse((await env.ORDERS.get(key)) || "null");
+  if (j.remove) { for (const s of old?.projects || []) await env.ORDERS.delete(`depsdata:${j.token}:${s}`); await env.ORDERS.delete(key); return Response.json({ ok: true, removed: true }); }
+  const acct = { limit: Number(j.limit) === 10 ? 10 : Number(j.limit) === 3 ? 3 : old?.limit || 3, active: j.active === undefined ? old?.active ?? true : Boolean(j.active), projects: old?.projects || [], created: old?.created || new Date().toISOString() };
+  await env.ORDERS.put(key, JSON.stringify(acct));
+  return Response.json({ ok: true, ...acct });
+}
+
 export async function depsPush(request, env, token) {
-  if (request.method !== "POST") return Response.json({ ok: false, error: "POST" }, { status: 405 });
-  if (!TOKEN_RE.test(token) || !(await env.ORDERS.get(`depsproj:${token}`))) return Response.json({ ok: false, error: "UNKNOWN_PROJECT" }, { status: 404 });
+  token = token.replace(/\/$/, "");
+  if (!TOKEN_RE.test(token)) return jerr(404, "UNKNOWN_TOKEN", "Unknown token.");
+  const url = new URL(request.url);
+  const acct = JSON.parse((await env.ORDERS.get(`depsacct:${token}`)) || "null");
+  let dataKey = `depsdata:${token}`, slug = null;
+  if (acct) {
+    if (request.method === "GET") return Response.json({ ok: true, active: acct.active, limit: acct.limit, used: acct.projects.length, projects: acct.projects }, noStore);
+    if (!acct.active) return jerr(402, "SUBSCRIPTION_ENDED", "The subscription has ended; the list was not stored. Renew at https://webskan.com/zaleznosci/#dozor");
+    slug = String(url.searchParams.get("project") || "").trim().toLowerCase();
+    if (!SLUG_RE.test(slug)) return jerr(400, "PROJECT_NAME", "Add ?project=<name> to the address: 1-60 characters, lowercase letters, digits, dot, dash or underscore, e.g. ?project=shop-backend", { projects: acct.projects });
+    dataKey = `depsdata:${token}:${slug}`;
+    if (request.method === "DELETE") {
+      if (!acct.projects.includes(slug)) return jerr(404, "UNKNOWN_PROJECT", "No such project on this account.", { projects: acct.projects });
+      acct.projects = acct.projects.filter((x) => x !== slug);
+      await env.ORDERS.put(`depsacct:${token}`, JSON.stringify(acct)); await env.ORDERS.delete(dataKey);
+      return Response.json({ ok: true, removed: slug, limit: acct.limit, used: acct.projects.length, projects: acct.projects }, noStore);
+    }
+    if (request.method !== "POST") return jerr(405, "METHOD", "Use POST (send a list), GET (account status) or DELETE (remove a project).");
+    if (!acct.projects.includes(slug) && acct.projects.length >= acct.limit) return jerr(409, "PROJECT_LIMIT", `The plan covers ${acct.limit} projects and all are in use. Remove one (curl -X DELETE "https://webskan.com/api/deps/push/<token>?project=<name>") or change the plan at https://webskan.com/zaleznosci/#dozor`, { limit: acct.limit, projects: acct.projects });
+  } else {
+    if (request.method !== "POST") return jerr(405, "METHOD", "Use POST.");
+    if (!(await env.ORDERS.get(`depsproj:${token}`))) return jerr(404, "UNKNOWN_TOKEN", "Unknown token.");
+  }
   if (Number(request.headers.get("content-length") || 0) > MAX_BYTES + 4096) return Response.json({ ok: false, error: "TOOBIG" }, { status: 413 });
   const form = await request.formData().catch(() => null);
-  if (!form) return Response.json({ ok: false, error: "EMPTYFORM" }, { status: 400 });
+  if (!form) return jerr(400, "EMPTYFORM", "Send the dependency file as a multipart field named file, e.g. curl -F file=@requirements.txt …");
   const files = {}, unpinned = []; let err = null, bytes = 0;
   const entries = [...form.getAll("file")]; const pasted = form.get("text"); if (typeof pasted === "string" && pasted.trim()) entries.push(pasted);
   for (const f of entries.slice(0, 10)) {
@@ -147,16 +191,50 @@ export async function depsPush(request, env, token) {
     const key = name === "plik" ? m.format : name.split(/[\\/]/).pop().slice(0, 60);
     files[key] = m.packages.map((p) => [p.ecosystem === "npm" ? "n" : "p", p.name, p.version, p.dev ? 1 : 0]); unpinned.push(...m.unpinned);
   }
-  if (!Object.keys(files).length) return Response.json({ ok: false, error: err || "EMPTY" }, { status: 400 });
+  if (!Object.keys(files).length) return Response.json({ ok: false, error: err || "EMPTY", message: (L.en.errs[err || "EMPTY"] || ["", ""])[1].replace(/<[^>]+>/g, "") }, { status: 400 });
   // zapis tylko przy zmianie listy (oszczędza dzienny limit zapisów KV, gdy CI wysyła ten sam plik przy każdym buildzie)
   const body = JSON.stringify({ files, unpinned: [...new Set(unpinned)].slice(0, 200) });
-  const old = await env.ORDERS.get(`depsdata:${token}`);
+  const old = await env.ORDERS.get(dataKey);
   const changed = !old || JSON.parse(old).body !== body;
-  if (changed) await env.ORDERS.put(`depsdata:${token}`, JSON.stringify({ body, at: new Date().toISOString() }));
+  if (changed) await env.ORDERS.put(dataKey, JSON.stringify({ body, at: new Date().toISOString() }));
+  let created = false;
+  if (acct && !acct.projects.includes(slug)) { acct.projects.push(slug); created = true; await env.ORDERS.put(`depsacct:${token}`, JSON.stringify(acct)); }
   const pkgs = Object.values(files).flat().map(([e, name, version, dev]) => ({ ecosystem: e === "n" ? "npm" : "PyPI", name, version, dev: !!dev }));
   const uniq = [...new Map(pkgs.map((p) => [`${p.ecosystem}:${p.name}@${p.version}`, p])).values()];
   let r = null; try { r = await checkDeps(uniq, { maxDetails: 40 }); } catch {}
-  return Response.json({ ok: true, stored: true, changed, files: Object.keys(files), packages: uniq.length, unpinned: [...new Set(unpinned)], ...(r ? { vulnerablePackages: r.vulnerable.length, vulnerable: r.vulnerable.map((p) => ({ name: p.name, version: p.version, severity: p.top, updateTo: p.fixAll, ids: p.vulns.map((x) => x.id) })) } : { check: "unavailable" }) }, { headers: { "cache-control": "no-store" } });
+  return Response.json({ ok: true, stored: true, changed, ...(acct ? { project: slug, newProject: created, limit: acct.limit, used: acct.projects.length } : {}), files: Object.keys(files), packages: uniq.length, unpinned: [...new Set(unpinned)], ...(r ? { vulnerablePackages: r.vulnerable.length, vulnerable: r.vulnerable.map((p) => ({ name: p.name, version: p.version, severity: p.top, updateTo: p.fixAll, ids: p.vulns.map((x) => x.id) })) } : { check: "unavailable" }) }, { headers: { "cache-control": "no-store" } });
+}
+
+const OT = {
+  pl: { back: '<a href="/zaleznosci/#dozor">Wróć do formularza</a>', badEmail: ["Nieprawidłowy e-mail", "Sprawdź adres e-mail."], noConsent: ["Brak akceptacji regulaminu", "Aby zamówić dozór zależności, zaakceptuj regulamin i politykę prywatności."], fail: ["Coś poszło nie tak", "Nie udało się uruchomić płatności. Spróbuj ponownie za chwilę albo napisz na kontakt@webskan.com."], thanks: "/zaleznosci/dziekujemy/" },
+  en: { back: '<a href="/en/dependencies/#watch">Back to the form</a>', badEmail: ["Invalid e-mail", "Please check your e-mail address."], noConsent: ["Terms not accepted", "To order dependency monitoring, please accept the terms and privacy policy."], fail: ["Something went wrong", "We could not start the checkout. Please try again in a moment or write to kontakt@webskan.com."], thanks: "/en/dependencies/thanks/" },
+};
+export async function depsOrder(request, env) {
+  if (request.method !== "POST") return Response.redirect(new URL("/zaleznosci/#dozor", request.url).href, 302); // tylko POST z formularza – crawlery nie tworzą pustych checkoutów
+  const form = await request.formData().catch(() => null);
+  const lang = form?.get("lang") === "en" ? "en" : "pl"; const t = OT[lang];
+  const msg = ([title, text], status = 400) => { const r = layout(lang, title, `<section class="hero"><h1>${title}</h1><p>${text} ${t.back}.</p></section>`); return new Response(r.body, { status, headers: r.headers }); };
+  if (!form) return msg(t.fail);
+  if (form.get("website")) return Response.redirect(new URL(L[lang].page, request.url).href, 303); // honeypot
+  const email = String(form.get("email") || "").trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || email.length > 200) return msg(t.badEmail);
+  if (!form.get("consent")) return msg(t.noConsent);
+  const plan = String(form.get("plan")) === "10" ? 10 : 3;
+  const productId = env[`POLAR_PRODUCT_DEPS${plan}_${lang.toUpperCase()}`];
+  if (!env.POLAR_TOKEN || !productId) return msg(t.fail, 503);
+  const origin = new URL(request.url).origin, ip = request.headers.get("cf-connecting-ip") || "";
+  const r = await fetch(`${env.POLAR_API}/v1/checkouts/`, { method: "POST", headers: { authorization: `Bearer ${env.POLAR_TOKEN}`, "content-type": "application/json" },
+    body: JSON.stringify({ products: [productId], customer_email: email, metadata: { product: "deps", plan: String(plan), lang, source: "webskan" }, success_url: `${origin}${t.thanks}?checkout_id={CHECKOUT_ID}`, locale: lang === "pl" ? "pl-PL" : "en-US", currency: lang === "pl" ? "pln" : "usd", customer_ip_address: ip || undefined, allow_discount_codes: true }) });
+  if (r.ok) { const c = await r.json(); return Response.redirect(c.url, 303); }
+  const err = await r.text();
+  await env.ORDERS.put(`error:${Date.now()}`, JSON.stringify({ product: "deps", plan, email, lang, status: r.status, err: err.slice(0, 2000) }), { expirationTtl: 60 * 60 * 24 * 30 });
+  if (r.status === 422 && /"customer_email"/.test(err)) return msg(t.badEmail);
+  return msg(t.fail, 502);
+}
+export function depsThanks(lang) {
+  return lang === "pl"
+    ? layout("pl", "Dziękujemy", `<section class="hero"><h1>Dziękujemy – dozór zależności jest opłacony</h1><p class="lead">W ciągu kilku minut wyślemy na podany adres e-mail z gotowym poleceniem <code>curl</code> dla Twojego potoku CI. Pierwsze wysłanie pliku zakłada projekt i od razu zwraca wynik; od następnego dnia sprawdzamy listę codziennie. Sprawdź też folder spam. Potwierdzenie płatności i fakturę dostaniesz osobno od operatora płatności (Polar).</p><p><a class="btn sec" href="/zaleznosci/">Wróć do sprawdzania zależności</a></p></section>`)
+    : layout("en", "Thank you", `<section class="hero"><h1>Thank you – dependency monitoring is paid</h1><p class="lead">Within a few minutes we will e-mail you a ready-to-use <code>curl</code> command for your CI pipeline. The first upload creates the project and returns the result straight away; from the next day we check the list daily. Please check your spam folder too. The payment confirmation and invoice come separately from the payment operator (Polar).</p><p><a class="btn sec" href="/en/dependencies/">Back to the dependency check</a></p></section>`);
 }
 
 export async function depsExport(request, env) {
@@ -164,7 +242,7 @@ export async function depsExport(request, env) {
   const out = []; let cursor;
   do {
     const l = await env.ORDERS.list({ prefix: "depsdata:", cursor }); cursor = l.list_complete ? null : l.cursor;
-    for (const k of l.keys) { const v = await env.ORDERS.get(k.name); if (!v) continue; const j = JSON.parse(v); out.push({ token: k.name.slice(9), at: j.at, ...JSON.parse(j.body) }); }
+    for (const k of l.keys) { const v = await env.ORDERS.get(k.name); if (!v) continue; const j = JSON.parse(v); const id = k.name.slice(9); out.push({ token: id.slice(0, 32), project: id.length > 33 ? id.slice(33) : null, at: j.at, ...JSON.parse(j.body) }); }
   } while (cursor);
   return Response.json({ ok: true, projects: out });
 }
