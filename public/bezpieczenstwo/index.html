@@ -11,12 +11,13 @@
 <li><strong>Połączenie.</strong> Certyfikat i jego termin, przekierowanie na HTTPS, zasoby ładowane bez szyfrowania.</li>
 <li><strong>Ochrona poczty przed podszywaniem.</strong> Rekordy SPF i DMARC domeny – od nich zależy, czy ktoś może wysłać e-mail „od Ciebie”.</li>
 <li><strong>Ustawienia serwera i WordPressa.</strong> Nagłówki bezpieczeństwa, ciasteczka sesji, publiczna lista kont, XML-RPC, listowanie katalogów.</li>
+<li><strong>Aplikacje Django.</strong> Panel administracyjny otwarty pod domyślnym adresem <code>/admin/</code> i tryb DEBUG pozostawiony na produkcji (strona błędu pokazuje wtedy wnętrze aplikacji).</li>
 </ul>
 <h2>Jak powstaje wynik</h2>
 <p>Zaczynamy od 100 punktów i odejmujemy za każde ustalenie:</p>
 <table><tr><th>Waga ustalenia</th><th>Punkty</th><th>Przykład</th></tr>
-<tr><td>ważne</td><td>−25</td><td>wtyczka z luką, którą da się wykorzystać bez logowania; publicznie dostępna kopia bazy</td></tr>
-<tr><td>warto poprawić</td><td>−8</td><td>brak rekordu DMARC; luka wymagająca zalogowanego konta</td></tr>
+<tr><td>ważne</td><td>−25</td><td>wtyczka z luką, którą da się wykorzystać bez logowania i bez udziału innej osoby; publicznie dostępna kopia bazy; aplikacja w trybie DEBUG</td></tr>
+<tr><td>warto poprawić</td><td>−8</td><td>brak rekordu DMARC; luka wymagająca zalogowanego konta albo nakłonienia kogoś do kliknięcia linku</td></tr>
 <tr><td>drobiazg</td><td>−2</td><td>włączony XML-RPC; nieaktualna wtyczka bez znanych luk</td></tr></table>
 <ul>
 <li>Brakujące nagłówki bezpieczeństwa odejmują łącznie najwyżej 12 punktów – same nagłówki nie robią ze strony „czerwonej”.</li>

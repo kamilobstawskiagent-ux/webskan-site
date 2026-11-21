@@ -11,12 +11,13 @@
 <li><strong>The connection.</strong> The certificate and its expiry, the redirect to HTTPS, resources loaded without encryption.</li>
 <li><strong>Mail spoofing protection.</strong> The domain’s SPF and DMARC records – they decide whether someone can send e-mail “from you”.</li>
 <li><strong>Server and WordPress settings.</strong> Security headers, session cookies, a public account list, XML-RPC, directory listing.</li>
+<li><strong>Django applications.</strong> An admin panel open at the default <code>/admin/</code> address and DEBUG mode left on in production (the error page then exposes the application’s internals).</li>
 </ul>
 <h2>How the score is calculated</h2>
 <p>We start from 100 points and subtract for every finding:</p>
 <table><tr><th>Finding weight</th><th>Points</th><th>Example</th></tr>
-<tr><td>important</td><td>−25</td><td>a plugin with a vulnerability usable without logging in; a publicly reachable database backup</td></tr>
-<tr><td>worth fixing</td><td>−8</td><td>no DMARC record; a vulnerability that needs a logged-in account</td></tr>
+<tr><td>important</td><td>−25</td><td>a plugin with a vulnerability usable without logging in and without anyone else’s action; a publicly reachable database backup; an application left in DEBUG mode</td></tr>
+<tr><td>worth fixing</td><td>−8</td><td>no DMARC record; a vulnerability that needs a logged-in account or someone tricked into clicking a link</td></tr>
 <tr><td>minor</td><td>−2</td><td>XML-RPC enabled; an outdated plugin with no known vulnerabilities</td></tr></table>
 <ul>
 <li>Missing security headers subtract at most 12 points in total – headers alone do not turn a site red.</li>
