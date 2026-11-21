@@ -34,7 +34,9 @@ const PAGES = {
   recheck_pl: '/recheck/00000000000000000000000000000000', recheck_en: '/en/recheck/00000000000000000000000000000000',
   scan_pl: async () => scanPath('pl'), scan_en: async () => scanPath('en'),
   developers: '/developers/',
-  agencies: '/agencje/', agencies_sample: '/agencje/przyklad/raport',
+  agencies: '/agencje/', agencies_sample: '/agencje/przyklad/raport', agencies_thanks: '/agencje/dziekujemy/',
+  security_pl: '/bezpieczenstwo/', security_en: '/en/security/',
+  deps_pl: '/zaleznosci/', deps_en: '/en/dependencies/',
   notfound: '/nie-ma-takiej-strony/',
 };
 const PROFILES = {
