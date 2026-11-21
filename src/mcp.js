@@ -21,7 +21,7 @@ const VOLATILE = /^perf\.(score|lcp|cls|tbt|weight)\.mobile$/; // metryki Lighth
 const INSTRUCTIONS = `Webskan checks a live, publicly reachable website the way a technical auditor would – use it right after deploying to verify the result.
 
 Tools:
-- scan_website: quick scan of one page (~30-60 s): Lighthouse mobile scores and metrics (LCP, CLS, TBT, weight, requests) plus HTTPS/TLS, security headers, title/meta/H1/alt/viewport/canonical/Open Graph checks. Results for the same host are cached for 24 h.
+- scan_website: quick scan of one page (~30-60 s): scores for performance, accessibility, security and SEO, Lighthouse mobile metrics (LCP, CLS, TBT, weight, requests) plus HTTPS/TLS, security headers, title/meta/H1/alt/viewport/canonical/Open Graph checks. Results for the same host are cached for 24 h.
 - audit_website: full technical audit of the whole site, asynchronous (1-5 min): crawl of up to 30 pages, broken links, per-page SEO, Lighthouse mobile+desktop, WCAG/axe accessibility, security, platform detection, customer journeys. Returns an auditId; poll get_audit every 20-30 s.
 - get_audit: status or result of an audit (findings sorted high→low with page URLs). For a re-check it also returns a diff: fixed / still open / new / unverified.
 - recheck_website: runs the same audit again (same URL and page count) and diffs it against the original – call it after you have deployed fixes.
@@ -90,6 +90,7 @@ function scanStructured(job, cached) {
   return {
     status: 'done', cached, scanId: job.id, url: job.url, finalUrl: r.http?.finalUrl || job.url, scannedAt: job.finishedAt,
     scores: lh.scores || {},
+    securityScore: typeof r.securityScore?.score === 'number' ? r.securityScore.score : null,
     metrics: { lcpMs: m.LCP ?? null, cls: m.CLS ?? null, tbtMs: m.TBT ?? null, weightBytes: m.totalBytes ?? null, requests: m.requests ?? null },
     issues: scanIssues(r),
     accessibilityFailures: a11y,
@@ -99,7 +100,7 @@ function scanStructured(job, cached) {
 function scanMarkdown(s) {
   const sc = s.scores, m = s.metrics;
   const lines = [`# Quick scan: ${hostOf(s.url)}${s.cached ? ` (cached result from ${s.scannedAt})` : ''}`,
-    `Lighthouse (mobile): Performance ${sc.performance ?? '–'} · Accessibility ${sc.accessibility ?? '–'} · Best practices ${sc['best-practices'] ?? '–'} · SEO ${sc.seo ?? '–'}`,
+    `Scores (0–100): Performance ${sc.performance ?? '–'} · Accessibility ${sc.accessibility ?? '–'} · ${s.securityScore != null ? `Security ${s.securityScore}` : `Best practices ${sc['best-practices'] ?? '–'}`} · SEO ${sc.seo ?? '–'}${s.securityScore != null ? ' (performance, accessibility, SEO: Lighthouse mobile; security: Webskan score, https://webskan.com/en/security/)' : ' (Lighthouse mobile)'}`,
     `LCP ${fmtS(m.lcpMs)} · CLS ${m.cls == null ? '–' : m.cls.toFixed(3)} · TBT ${m.tbtMs == null ? '–' : Math.round(m.tbtMs) + ' ms'} · weight ${fmtKB(m.weightBytes)} · ${m.requests ?? '–'} requests`, ''];
   if (s.issues.length) { lines.push(`Issues (${s.issues.length}):`); for (const i of s.issues) lines.push(`- [${i.severity}] ${i.title}${i.detail ? ` — ${i.detail}` : ''}`); }
   else lines.push('Basic checks: no issues found.');
@@ -194,7 +195,7 @@ function auditDoneStructured(a, parent) {
   const out = {
     auditId: a.id, status: 'done', url: a.url, finalUrl: r.finalUrl || a.url, pages: a.pages, pagesCrawled: r.pagesCrawled ?? null, platform: r.platform || null,
     auditedAt: a.finishedAt, durationSeconds: a.startedAt ? Math.round((new Date(a.finishedAt) - new Date(a.startedAt)) / 1000) : null,
-    summary: summarize(findings), lighthouse: r.lighthouse || null, findings, errors: r.errors || [], parent: a.parent || undefined,
+    summary: summarize(findings), securityScore: r.securityScore || null, lighthouse: r.lighthouse || null, findings, errors: r.errors || [], parent: a.parent || undefined,
   };
   if (a.parent) {
     if (parent?.result) out.diff = { ...diffFindings(parent.result.findings || [], r.findings || [], r), lighthouseBefore: parent.result.lighthouse?.mobile?.scores || null, lighthouseAfter: r.lighthouse?.mobile?.scores || null, parentAuditedAt: parent.finishedAt };
@@ -204,9 +205,11 @@ function auditDoneStructured(a, parent) {
 }
 function auditDoneMarkdown(s) {
   const L = [], lh = s.lighthouse || {}, ms = lh.mobile?.scores || {}, ds = lh.desktop?.scores || {};
-  const scoreLine = (sc) => `perf ${sc.performance ?? '–'} · a11y ${sc.accessibility ?? '–'} · best practices ${sc['best-practices'] ?? '–'} · SEO ${sc.seo ?? '–'}`;
+  const sec = s.securityScore?.score;
+  const scoreLine = (sc) => `perf ${sc.performance ?? '–'} · a11y ${sc.accessibility ?? '–'} · ${sec != null ? '' : `best practices ${sc['best-practices'] ?? '–'} · `}SEO ${sc.seo ?? '–'}`;
   L.push(`# ${s.parent ? 'Re-check' : 'Whole-site audit'}: ${hostOf(s.url)} (${s.pagesCrawled ?? '?'} pages crawled${s.platform ? `, platform: ${s.platform}` : ''}, ${s.durationSeconds ?? '?'} s)`);
   L.push(`Findings: ${s.summary.total} (high ${s.summary.high}, medium ${s.summary.medium}, low ${s.summary.low}, info ${s.summary.info})`);
+  if (sec != null) L.push(`Security score: ${sec}/100 (Webskan score from the sec.* findings: high −25, medium −8, low −2, missing headers −12 at most; one high finding caps it at 49 – https://webskan.com/en/security/)`);
   L.push(`Lighthouse mobile: ${scoreLine(ms)}${lh.mobile?.metrics ? ` · LCP ${fmtS(lh.mobile.metrics.LCP)} · CLS ${lh.mobile.metrics.CLS == null ? '–' : lh.mobile.metrics.CLS.toFixed(3)} · TBT ${lh.mobile.metrics.TBT == null ? '–' : Math.round(lh.mobile.metrics.TBT) + ' ms'}` : ''}`);
   if (lh.desktop?.scores) L.push(`Lighthouse desktop: ${scoreLine(ds)}`);
   if (s.diff) {
@@ -251,7 +254,7 @@ function buildServer(ctx) {
   const guard = (fn) => async (args, extra) => { try { return await fn(args, ctx, extra); } catch (e) { return errResult(`Webskan internal error: ${String(e?.message || e).slice(0, 300)}`); } };
   server.registerTool('scan_website', {
     title: 'Quick website scan',
-    description: 'Quick scan of one page (the URL you pass, usually the home page): Lighthouse mobile scores (performance, accessibility, best practices, SEO) with LCP/CLS/TBT/page weight/requests, plus HTTPS redirect, TLS, HSTS and security headers, title, meta description, H1, image alt texts, viewport, canonical, Open Graph, mixed content. Takes 30-60 s; waits up to 90 s and otherwise returns status "pending" with a scanId – call again with the same URL in 30 s. Results per host are cached for 24 h (field cached: true). Free, 10 calls per hour per IP. Use it right after a deploy as a smoke check; use audit_website for the whole site.',
+    description: 'Quick scan of one page (the URL you pass, usually the home page): scores for performance, accessibility and SEO (Lighthouse mobile) and security (Webskan security score, 0–100) with LCP/CLS/TBT/page weight/requests, plus HTTPS redirect, TLS, HSTS and security headers, title, meta description, H1, image alt texts, viewport, canonical, Open Graph, mixed content. Takes 30-60 s; waits up to 90 s and otherwise returns status "pending" with a scanId – call again with the same URL in 30 s. Results per host are cached for 24 h (field cached: true). Free, 10 calls per hour per IP. Use it right after a deploy as a smoke check; use audit_website for the whole site.',
     inputSchema: { url: urlArg },
     annotations: { readOnlyHint: true, openWorldHint: true },
   }, guard(scanWebsite));
@@ -263,7 +266,7 @@ function buildServer(ctx) {
   }, guard(auditWebsite));
   server.registerTool('get_audit', {
     title: 'Get audit status / result',
-    description: 'Returns the status (queued / running with ETA) or the finished result of an audit started with audit_website or recheck_website: summary counts by severity, Lighthouse mobile+desktop scores, findings sorted high → medium → low → info (each with id, area, severity, title, detail and the pages it was found on; every id is documented at https://webskan.com/developers/findings/), pagesCrawled, finalUrl, platform. For a re-check it also returns diff: fixed / open / new / unverified findings and Lighthouse before/after. Poll every 20-30 s while status is queued or running.',
+    description: 'Returns the status (queued / running with ETA) or the finished result of an audit started with audit_website or recheck_website: summary counts by severity, the security score, Lighthouse mobile+desktop scores, findings sorted high → medium → low → info (each with id, area, severity, title, detail and the pages it was found on; every id is documented at https://webskan.com/developers/findings/), pagesCrawled, finalUrl, platform. For a re-check it also returns diff: fixed / open / new / unverified findings and Lighthouse before/after. Poll every 20-30 s while status is queued or running.',
     inputSchema: { auditId: z.string().regex(/^[0-9a-f]{16}$/).describe('auditId returned by audit_website or recheck_website (16 hex characters).') },
     annotations: { readOnlyHint: true },
   }, guard(getAudit));
