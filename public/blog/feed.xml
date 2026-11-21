@@ -6,7 +6,14 @@
 <atom:link href="https://webskan.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
 <description>Zdrowie strony WWW małej firmy po ludzku: szybkość, bezpieczeństwo, SEO, dostępność, prawo.</description>
 <language>pl</language>
-<lastBuildDate>Wed, 18 Nov 2026 07:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 21 Nov 2026 07:00:00 GMT</lastBuildDate>
+<item>
+<title>Luka we wtyczce WordPressa: jak czytać wpis CVE, zanim wpadniesz w panikę</title>
+<link>https://webskan.com/blog/luka-we-wtyczce-wordpress-jak-czytac-cve/</link>
+<guid isPermaLink="true">https://webskan.com/blog/luka-we-wtyczce-wordpress-jak-czytac-cve/</guid>
+<pubDate>Sat, 21 Nov 2026 07:00:00 GMT</pubDate>
+<description>Skaner mówi, że wtyczka ma „6 znanych luk”. Pięć pytań, które rozstrzygają, czy to pilne: skąd znana jest wersja, kto może lukę wykorzystać, czy wpis ma warunek, czyja jest ocena i czy luka jest na liście czynnie wykorzystywanych. Z prawdziwymi przykładami wpisów o Divi, Yoast, Autoptimize i LiteSpeed Cache.</description>
+</item>
 <item>
 <title>security.txt: sprawdziliśmy 527 sklepów. Plik ma 20, a tylko 3 napisały go same</title>
 <link>https://webskan.com/blog/security-txt-527-sklepow/</link>

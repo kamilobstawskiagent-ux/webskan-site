@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luka we wtyczce WordPressa: jak czytać wpis CVE, zanim wpadniesz w panikę – Webskan</title>
+<meta name="description" content="Skaner mówi, że wtyczka ma „6 znanych luk”. Pięć pytań, które rozstrzygają, czy to pilne: skąd znana jest wersja, kto może lukę wykorzystać, czy wpis ma warunek, czyja jest ocena i czy luka jest na liście czynnie wykorzystywanych. Z prawdziwymi przykładami wpisów o Divi, Yoast, Autoptimize i LiteSpeed Cache.">
+<link rel="canonical" href="https://webskan.com/blog/luka-we-wtyczce-wordpress-jak-czytac-cve/">
+<meta property="og:title" content="Luka we wtyczce WordPressa: jak czytać wpis CVE, zanim wpadniesz w panikę">
+<meta property="og:description" content="Skaner mówi, że wtyczka ma „6 znanych luk”. Pięć pytań, które rozstrzygają, czy to pilne: skąd znana jest wersja, kto może lukę wykorzystać, czy wpis ma warunek, czyja jest ocena i czy luka jest na liście czynnie wykorzystywanych. Z prawdziwymi przykładami wpisów o Divi, Yoast, Autoptimize i LiteSpeed Cache.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/blog/luka-we-wtyczce-wordpress-jak-czytac-cve/">
+<meta property="og:image" content="https://webskan.com/og-pl-2a636789.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="theme-color" content="#0E3B43">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Luka we wtyczce WordPressa: jak czytać wpis CVE, zanim wpadniesz w panikę","description":"Skaner mówi, że wtyczka ma „6 znanych luk”. Pięć pytań, które rozstrzygają, czy to pilne: skąd znana jest wersja, kto może lukę wykorzystać, czy wpis ma warunek, czyja jest ocena i czy luka jest na liście czynnie wykorzystywanych. Z prawdziwymi przykładami wpisów o Divi, Yoast, Autoptimize i LiteSpeed Cache.","datePublished":"2026-11-21","dateModified":"2026-11-21","inLanguage":"pl","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"mainEntityOfPage":"https://webskan.com/blog/luka-we-wtyczce-wordpress-jak-czytac-cve/"}</script>
+<link rel="alternate" type="application/rss+xml" title="Webskan – blog (RSS)" href="/blog/feed.xml">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a><a href="/#faq">FAQ</a><a href="/en/blog/" hreflang="en">EN</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 21 listopada 2026 · 7 min czytania</p>
+<h1>Luka we wtyczce WordPressa: jak czytać wpis CVE, zanim wpadniesz w panikę</h1>
+<p class="lead">Wtyczka bezpieczeństwa, skaner albo wykonawca mówi: „ta wtyczka ma 6 znanych luk”. Brzmi groźnie. Tyle że taki komunikat znaczy zwykle tylko jedno: publiczne bazy mają sześć wpisów, których zakres wersji obejmuje wersję zainstalowaną na stronie. Czy którykolwiek z nich da się na tej stronie wykorzystać – to osobne pytanie. W listopadzie, przygotowując raporty dla pięciu stron na WordPressie, porównaliśmy kilkadziesiąt takich wpisów z oficjalnymi rekordami CVE, zdanie po zdaniu. Poniżej pięć pytań, które z tego wyszły, z prawdziwymi przykładami.</p>
+
+<h2>Najpierw: czym jest wpis CVE</h2>
+<p>CVE to publiczny rejestr znanych luk w oprogramowaniu. Każda luka dostaje numer (np. <code>CVE-2024-44000</code>), opis, zakres wersji, których dotyczy, i zwykle ocenę powagi w skali 0–10 (CVSS). Rekord można przeczytać za darmo na <a href="https://www.cve.org/" rel="noopener">cve.org</a> – wystarczy wpisać numer. Skanery i wtyczki bezpieczeństwa robią prostą rzecz: biorą wersję wtyczki i sprawdzają, w ilu rekordach mieści się w zakresie.</p>
+<p>To porównanie numerów wersji, nie test strony. Dlatego wynik „6 wpisów” jest dobrym powodem, żeby zaktualizować wtyczkę, i słabym powodem, żeby twierdzić, że strona „jest dziurawa”.</p>
+
+<h2>1. Skąd wiadomo, jaką mam wersję?</h2>
+<p>W panelu WordPressa (Wtyczki → Zainstalowane) wersja jest pewna. Z zewnątrz już nie zawsze. Narzędzie, które nie ma dostępu do panelu, czyta ją z publicznych plików: z <code>readme.txt</code> wtyczki albo z dopisku <code>?ver=</code> przy adresach skryptów i stylów.</p>
+<p>Pierwsze źródło jest zwykle wiarygodne. Drugie bywa mylące: motywy i wtyczki wpisują tam czasem własny numer albo numer WordPressa. Na jednej ze sprawdzanych stron adres pliku jQuery kończył się na <code>?ver=3.6.3</code>, a w samym pliku była wersja 3.6.4. Na innej wtyczka dostała wersję „1.0.0” z dopisku przy jednym pliku – i cały wpis o luce wisiał na numerze, którego nikt nie potwierdził.</p>
+<p><strong>Co zrobić:</strong> zanim przejmiesz się wpisem, porównaj wersję z raportu z wersją w panelu. Jeśli się różnią, liczy się panel.</p>
+
+<h2>2. Kto może lukę wykorzystać?</h2>
+<p>To pytanie zmienia najwięcej. Są luki, do których wystarczy przeglądarka i adres strony. I są takie, do których trzeba być zalogowanym – jako Współtwórca, Autor albo administrator. Na firmowej wizytówce, gdzie konto ma jedna osoba, luka „dla zalogowanych” jest problemem dużo mniejszym niż w serwisie z rejestracją użytkowników czy redakcją z dziesięcioma kontami.</p>
+<p>Sama ocena liczbowa tego nie powie. Przykład: <code>CVE-2020-35945</code> w motywie Divi (wersje przed 4.5.3) ma ocenę 9,9 na 10 – prawie maksimum. Opis rekordu mówi jednak wprost, że plik na serwer może wgrać zalogowany użytkownik z uprawnieniami co najmniej Współtwórcy. Podobnie <code>CVE-2026-2352</code> we wtyczce Autoptimize: wstrzyknięcie skryptu, ale przez kogoś, kto ma konto z prawem pisania wpisów.</p>
+<p><strong>Gdzie to sprawdzić:</strong> w opisie rekordu szukaj słów <em>unauthenticated</em> (bez logowania) albo <em>authenticated, Contributor+ / Author+</em> (wymaga konta o podanej roli). W zapisie oceny CVSS odpowiada za to fragment <code>PR</code>: <code>PR:N</code> – bez konta, <code>PR:L</code> – zwykłe konto, <code>PR:H</code> – konto z wysokimi uprawnieniami. Fragment <code>UI:R</code> oznacza, że potrzebny jest jeszcze czyjś ruch, np. kliknięcie w podstawiony link przez administratora.</p>
+
+<h2>3. Czy wpis ma warunek?</h2>
+<p>Wiele rekordów dotyczy tylko stron z określoną konfiguracją. Zakres wersji się zgadza, a luka i tak nie ma jak zadziałać, bo na stronie brakuje tego, na czym się opiera. Trzy rodzaje warunków, na które trafiliśmy w ciągu jednego dnia:</p>
+<table class="vitals headers">
+<thead><tr><th>Rodzaj warunku</th><th>Przykład</th><th>Co mówi rekord</th></tr></thead>
+<tbody>
+<tr><td>Włączona opcja wtyczki</td><td data-l="Przykład">Autoptimize, CVE-2026-2352</td><td data-l="Co mówi rekord">Działa, gdy włączona jest optymalizacja obrazów albo leniwe ładowanie obrazów</td></tr>
+<tr><td>Inna wtyczka na stronie</td><td data-l="Przykład">LiteSpeed Cache, CVE-2026-93389 (ocena 8,2)</td><td data-l="Co mówi rekord">Ujawnia dane klientów z koszyka WooCommerce – bez sklepu WooCommerce nie ma czego ujawnić</td></tr>
+<tr><td>Użyta funkcja</td><td data-l="Przykład">Autoptimize i dwie inne wtyczki, CVE-2026-3220</td><td data-l="Co mówi rekord">Błąd siedzi w zmniejszaniu (minifikacji) kodu HTML</td></tr>
+</tbody>
+</table>
+<p>Drugi wiersz to przypadek, który omal nie trafił na czoło jednego z naszych raportów: najwyżej oceniony wpis dla wtyczki LiteSpeed Cache dotyczył wyłącznie sklepów WooCommerce, a badana strona sklepu nie miała. Liczba się zgadzała, wniosek byłby fałszywy.</p>
+<p><strong>Gdzie to sprawdzić:</strong> w opisie rekordu szukaj zwrotów w rodzaju <em>when … is enabled</em>, <em>granted the … setting</em>, <em>with … mode</em> albo nazwy innej wtyczki. Czy opcja jest włączona, widać w ustawieniach wtyczki – z zewnątrz zwykle nie da się tego stwierdzić, więc narzędzie, które pisze „luka do wykorzystania”, nie mając dostępu do panelu, mówi więcej, niż wie.</p>
+
+<h2>4. Czyja to ocena?</h2>
+<p>Ocena 0–10 nie jest jedna. Wystawia ją zgłaszający lukę, czasem dopisuje własną amerykańska agencja CISA, a bazy prowadzone przez firmy od bezpieczeństwa WordPressa liczą po swojemu. Różnice bywają istotne nie w samej liczbie, tylko w tym, co za nią stoi.</p>
+<p>Przykład: <code>CVE-2019-13478</code> we wtyczce Yoast SEO (wersje przed 11.6). W oficjalnym rekordzie ocena to 9,9 i zapis <code>PR:L</code> – potrzebne konto. Jedna z popularnych otwartych baz luk WordPressa podaje dla tego samego wpisu 9,8 i <code>PR:N</code> – bez konta. Dwie prawie identyczne liczby, dwie różne odpowiedzi na pytanie z punktu 2. Z kolei <code>CVE-2026-3220</code> w chwili pisania nie ma oceny od zgłaszającego; jedyną (8,8, z zastrzeżeniem <code>UI:R</code>) dopisała CISA.</p>
+<p><strong>Co zrobić:</strong> gdy dwa narzędzia pokazują różną powagę tej samej luki, żadne nie musi się mylić – korzystają z różnych źródeł. Rozstrzyga opis w rekordzie na cve.org, nie liczba.</p>
+
+<h2>5. Czy ktoś tę lukę naprawdę wykorzystuje?</h2>
+<p>To jedyne pytanie, na które istnieje publiczna, twarda odpowiedź. CISA prowadzi <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" rel="noopener">katalog luk czynnie wykorzystywanych</a> (KEV): trafiają tam tylko te, dla których są dowody ataków. 20 listopada 2026 r. katalog miał 1790 pozycji; wtyczki WordPressa to wśród nich nieliczne przypadki – m.in. File Manager, Duplicator i Social Warfare.</p>
+<p>Wpis z tej listy to inna kategoria niż pozostałe: aktualizacja jeszcze dziś, a jeśli strona długo działała na podatnej wersji – sprawdzenie, czy nie została już przejęta (<a href="/blog/strona-zhakowana-jak-poznac/">jak to poznać</a>). Brak wpisu na liście nie znaczy, że luka jest bezpieczna – znaczy tylko, że nie ma publicznego potwierdzenia ataków.</p>
+
+<h2>Co z tego wynika: kolejność działań</h2>
+<table class="vitals headers">
+<thead><tr><th>Sytuacja</th><th>Co zrobić</th><th>Kiedy</th></tr></thead>
+<tbody>
+<tr><td>Luka jest w katalogu KEV albo WordPress.org oznacza wersję jako niebezpieczną</td><td data-l="Co zrobić">Aktualizacja, potem przegląd kont administratorów i plików</td><td data-l="Kiedy">Dziś</td></tr>
+<tr><td>Bez logowania, bez warunku w opisie</td><td data-l="Co zrobić">Aktualizacja po zrobieniu kopii</td><td data-l="Kiedy">W tym tygodniu</td></tr>
+<tr><td>Wymaga konta albo włączonej opcji, której nie używasz</td><td data-l="Co zrobić">Aktualizacja przy najbliższym przeglądzie strony</td><td data-l="Kiedy">W tym miesiącu</td></tr>
+<tr><td>Dotyczy wtyczki, której strona nie ma (np. WooCommerce)</td><td data-l="Co zrobić">Aktualizacja i tak – następny wpis może dotyczyć już Ciebie</td><td data-l="Kiedy">W tym miesiącu</td></tr>
+<tr><td>Wtyczka wycofana z katalogu albo bez aktualizacji od lat</td><td data-l="Co zrobić">Zamiana na inną – poprawka nie przyjdzie</td><td data-l="Kiedy">Zaplanować</td></tr>
+</tbody>
+</table>
+<p>Odpowiedź prawie zawsze brzmi „zaktualizować”. Pięć pytań nie służy do tego, żeby aktualizacji uniknąć, tylko żeby wiedzieć, czy trzeba rzucić wszystko, czy wystarczy dopisać to do listy na ten miesiąc – i żeby umieć odróżnić rzetelny raport od takiego, który straszy samą liczbą. Przed każdą aktualizacją <a href="/blog/kopia-zapasowa-strony/">zrób kopię, którą da się odtworzyć</a>.</p>
+
+<h2>Jak piszemy o tym w naszych raportach</h2>
+<p>Po tym przeglądzie zmieniliśmy własne sformułowania. Raport Webskan nie pisze, że lukę „da się wykorzystać”, bo z zewnątrz tego nie wiemy. Pisze, w ilu wpisach publiczne bazy obejmują wykrytą wersję, który wpis jest oceniony najwyżej i czy jego opis wskazuje warunek. Wśród ustaleń o znanych lukach wagę „ważne” dostaje tylko wpis z katalogu KEV oraz WordPress w wersji, którą WordPress.org sam oznacza jako niebezpieczną; reszta to „warto poprawić”. Wersji odczytanej wyłącznie z dopisku <code>?ver=</code> nie podajemy jako ustalonej. Cały wzór jest na stronie <a href="/bezpieczenstwo/">Jak liczymy wskaźnik bezpieczeństwa</a>.</p>
+
+<section class="fullbox" id="skan">
+<h2>Sprawdź, co widać z zewnątrz na Twojej stronie</h2>
+<p>Darmowy skan Webskan rozpoznaje WordPressa, wtyczki i motywy widoczne w kodzie strony, porównuje ich wersje z publicznymi bazami luk i pokazuje wskaźnik bezpieczeństwa – razem z szybkością na telefonie, HTTPS i nagłówkami. Bez e-maila, bez rejestracji. Czyta tylko to, co strona sama publikuje; niczego nie próbuje wykorzystać.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="pl"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://twojastrona.pl" required maxlength="500" aria-label="Adres strony"><button class="btn" type="submit">Skanuj za darmo</button></form>
+<p class="note"><a href="/#cena">Audyt pogłębiony</a> (249 zł) sprawdza całą witrynę – do 30 podstron – i obejmuje ponowne sprawdzenie po poprawkach oraz 30 dni <a href="/#cena">Webskan Monitora</a>, który daje znać, gdy pojawi się nowy wpis dotyczący Twojej strony.</p>
+</section>
+
+<h2>Źródła i zastrzeżenia</h2>
+<ul>
+<li>Opisy, zakresy wersji i oceny podane w tekście pochodzą z oficjalnych rekordów CVE (cve.org), odczytanych 21 listopada 2026 r.; rekordy bywają uzupełniane, więc oceny mogą się zmienić. Liczba pozycji w katalogu KEV: plik katalogu z 20 listopada 2026 r.</li>
+<li>Przykłady pochodzą z raportów przygotowanych w listopadzie 2026 r. Adresów stron nie podajemy; wymienione luki są publiczne, a wtyczki mają wydane poprawki.</li>
+<li>Tekst nie zastępuje przeglądu bezpieczeństwa z dostępem do panelu i serwera. Opisuje, jak czytać publiczne wpisy – nie jak sprawdzić, czy strona została zaatakowana.</li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/blog/feed.xml">RSS</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a> · <a href="/developers/" hreflang="en">Dla programistów (EN)</a> · kontakt: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer>
+</div>
+</body>
+</html>
