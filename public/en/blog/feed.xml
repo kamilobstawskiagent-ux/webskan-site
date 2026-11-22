@@ -6,7 +6,14 @@
 <atom:link href="https://webskan.com/en/blog/feed.xml" rel="self" type="application/rss+xml"/>
 <description>Website health for small businesses and the developers who ship for them: speed, security, SEO, accessibility.</description>
 <language>en</language>
-<lastBuildDate>Wed, 18 Nov 2026 07:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 22 Nov 2026 07:00:00 GMT</lastBuildDate>
+<item>
+<title>We asked 527 small shops for a page that does not exist. 35 answered 200 OK</title>
+<link>https://webskan.com/en/blog/missing-page-returns-200/</link>
+<guid isPermaLink="true">https://webskan.com/en/blog/missing-page-returns-200/</guid>
+<pubDate>Sun, 22 Nov 2026 07:00:00 GMT</pubDate>
+<description>A made-up URL should return 404. On 35 of 517 small online shops it returned 200 – usually after a silent redirect to the homepage. What that breaks for search engines, link checkers and monitoring, a short script to test every site you maintain, and the server settings that fix it.</description>
+</item>
 <item>
 <title>Half the shops that advertise their PHP version run one that is past end of life</title>
 <link>https://webskan.com/en/blog/php-end-of-life-on-live-shops/</link>

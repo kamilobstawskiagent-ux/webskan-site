@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>We asked 527 small shops for a page that does not exist. 35 answered 200 OK – Webskan</title>
+<meta name="description" content="A made-up URL should return 404. On 35 of 517 small online shops it returned 200 – usually after a silent redirect to the homepage. What that breaks for search engines, link checkers and monitoring, a short script to test every site you maintain, and the server settings that fix it.">
+<link rel="canonical" href="https://webskan.com/en/blog/missing-page-returns-200/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/missing-page-returns-200/">
+<link rel="alternate" hreflang="pl" href="https://webskan.com/blog/strony-nie-ma-a-serwer-mowi-ok/">
+<meta property="og:title" content="We asked 527 small shops for a page that does not exist. 35 answered 200 OK">
+<meta property="og:description" content="A made-up URL should return 404. On 35 of 517 small online shops it returned 200 – usually after a silent redirect to the homepage. What that breaks for search engines, link checkers and monitoring, a short script to test every site you maintain, and the server settings that fix it.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/en/blog/missing-page-returns-200/">
+<meta property="og:image" content="https://webskan.com/og-dev-ff265e97.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="theme-color" content="#0E3B43">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"We asked 527 small shops for a page that does not exist. 35 answered 200 OK","description":"A made-up URL should return 404. On 35 of 517 small online shops it returned 200 – usually after a silent redirect to the homepage. What that breaks for search engines, link checkers and monitoring, a short script to test every site you maintain, and the server settings that fix it.","datePublished":"2026-11-22","dateModified":"2026-11-22","inLanguage":"en","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"mainEntityOfPage":"https://webskan.com/en/blog/missing-page-returns-200/"}</script>
+<link rel="alternate" type="application/rss+xml" title="Webskan – blog (RSS)" href="/en/blog/feed.xml">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a href="/en/blog/">Blog</a><a href="/en/#pricing">Pricing</a><a href="/en/#faq">FAQ</a><a href="/blog/" hreflang="pl">PL</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 22 November 2026 · 5 min read</p>
+<h1>We asked 527 small shops for a page that does not exist. 35 answered 200 OK</h1>
+<p class="lead">Every HTTP response carries a status code. People never see it; search engines, link checkers and uptime monitors read nothing else. On 22 November we requested one made-up URL from each of 527 small Polish online shops. A missing page should answer 404. Thirty-five shops answered 200 – “here is your page”.</p>
+
+<h2>The numbers</h2>
+<p>Each shop got one request for a random path such as <code>/strona-ktorej-nie-ma-x7k2p9qa</code>, and we followed redirects. Ten shops could not be assessed: nine served a bot-verification screen to our client and one redirected to nowhere. That leaves 517.</p>
+<table class="vitals headers">
+<thead><tr><th>Response to a URL that does not exist</th><th>Shops</th><th>Share</th></tr></thead>
+<tbody>
+<tr><td><strong>404 – correct</strong></td><td data-l="Shops"><strong>482</strong></td><td data-l="Share"><strong>93.2%</strong></td></tr>
+<tr><td>Redirect to the homepage, 200</td><td data-l="Shops">19</td><td data-l="Share">3.7%</td></tr>
+<tr><td>200 at the requested URL (shop page or an error message)</td><td data-l="Shops">10</td><td data-l="Share">1.9%</td></tr>
+<tr><td>Redirect to a dedicated error page that itself answers 200</td><td data-l="Shops">4</td><td data-l="Share">0.8%</td></tr>
+<tr><td>Redirect to some other URL, 200</td><td data-l="Shops">2</td><td data-l="Share">0.4%</td></tr>
+</tbody>
+</table>
+<p>That is 35 shops, about one in fifteen, with what is usually called a soft 404.</p>
+<p>We then asked those 35 a second time, with a differently shaped path: inside a subdirectory and ending in <code>.html</code>. Twenty-nine answered 200 again. Six returned a proper 404 this time – their behaviour depends on what the wrong URL looks like. <strong>One probe is not enough</strong>; rewrite rules often treat <code>/foo</code> and <code>/foo/bar.html</code> differently.</p>
+<p>The usual caveat: this is not a random sample. It is a hand-built list of small shops by trade, without big chains. Method at the end.</p>
+
+<h2>What a soft 404 breaks</h2>
+<h3>Search engines have to guess</h3>
+<p>Google’s documentation on HTTP status codes is plain about 4xx: such URLs are not indexed, and URLs already in the index are removed. With a 200, Google has only the content to go on. If it looks like an error or an empty page, Search Console reports a soft 404. If it does not – and a homepage served for a retired product URL does not – the crawler has one more URL with content it already knows.</p>
+<p>None of the 35 pages carried <code>noindex</code>. On one shop the page served at the made-up URL declared that made-up URL as its own canonical.</p>
+<h3>Your tooling goes blind</h3>
+<p>Link checkers, uptime monitors and the “404 errors” report in analytics all key on the status code. If the site answers 200 to everything, a typo in a newsletter link, a deleted category and an old URL from a printed flyer all look healthy. The same applies to anything that probes for a file. When we <a href="/en/blog/we-reported-exposed-files-to-17-shops/">looked for exposed files on small shops</a>, a check had to match the file’s content, not the status code – on a soft-404 site a status-only check “finds” every file you ask for.</p>
+<h3>Visitors lose the thread</h3>
+<p>Someone follows a link to a specific product and lands on the homepage with no explanation. A real error page says the page is gone and offers search and categories. A homepage does neither.</p>
+
+<h2>Test every site you maintain</h2>
+<p>One site, one command:</p>
+<pre><code>curl -s -o /dev/null -w "%{http_code}\n" https://example.com/no-such-page-12345</code></pre>
+<p><code>404</code> or <code>410</code> is correct, <code>200</code> is a soft 404, <code>301</code>/<code>302</code> means a redirect – add <code>-L</code> to see where it ends. For a list of sites, this script probes both path shapes and follows redirects:</p>
+<pre><code>#!/usr/bin/env bash
+# usage: ./check404.sh sites.txt   (one origin per line, e.g. https://example.com)
+while read -r site; do
+  [ -z &quot;$site&quot; ] &amp;&amp; continue
+  for path in &quot;/no-such-page-$RANDOM&quot; &quot;/no-such-dir-$RANDOM/page.html&quot;; do
+    out=$(curl -s -o /dev/null -L --max-redirs 6 -m 20 \
+      -w &#x27;%{http_code} %{num_redirects} %{url_effective}&#x27; &quot;$site$path&quot;)
+    code=${out%% *}
+    case &quot;$code&quot; in
+      404|410) verdict=ok ;;
+      200)     verdict=SOFT-404 ;;
+      *)       verdict=check ;;
+    esac
+    echo &quot;$verdict $site$path -&gt; $out&quot;
+  done
+done &lt; &quot;$1&quot;</code></pre>
+<p>Output for a healthy site and for one that redirects missing pages to the homepage:</p>
+<pre><code>ok https://webskan.com/no-such-page-24448 -&gt; 404 0 https://webskan.com/no-such-page-24448
+SOFT-404 https://shop.example/no-such-page-9411 -&gt; 200 1 https://shop.example/</code></pre>
+
+<h2>Fixing it</h2>
+<ul>
+<li><strong>Turn off “redirect 404s to the homepage”.</strong> It was the most common pattern in our data (19 of 35) and usually comes from an option in a redirect or SEO plugin, a theme setting or the shop platform. A 301 is right only when the old URL has a specific successor.</li>
+<li><strong>Serve the error page at the failing URL, without a redirect.</strong> If the site sends visitors to <code>/404.html</code> or <code>/page-404/</code>, that page exists, so the server truthfully answers 200. In Apache, point to a local path: <code>ErrorDocument 404 /404.html</code>. With a full URL starting with <code>https://</code>, Apache – per its own documentation – sends a redirect and the client never receives the original error status. The nginx equivalent is <code>error_page 404 /404.html;</code>.</li>
+<li><strong>Single-page apps and catch-all routes:</strong> a wildcard route that renders the app shell for every path returns 200 for everything. Set the status in the server-side handler for unknown routes.</li>
+<li><strong>Re-test both path shapes</strong> after the change.</li>
+</ul>
+
+<section class="fullbox">
+<h2>Check a site now</h2>
+<p>The free Webskan quick scan runs Lighthouse, security headers, basic SEO checks and a probe for files that should not be public on any public site. No sign-up; results in about 30 seconds. The quick scan does not judge 404 handling – use the script above for that.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="en"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://yourproject.com" required maxlength="500" aria-label="Website address"><button class="btn" type="submit">Scan for free</button></form>
+<p class="note">Shipping sites with a coding agent? Give it the <a href="/developers/">Webskan MCP server</a> – free for 2 whole-site audits a day, <a href="/developers/#teams">Developer plan</a> for 30. The whole-site audit opens a missing URL in a real mobile browser and reports what it gets: <a href="/developers/findings/"><code>journey.404.soft</code>, <code>journey.404.redirect</code>, <code>journey.404.shows_home</code></a>.</p>
+</section>
+
+<h2>Method and caveats</h2>
+<ul>
+<li>The list: 527 small Polish online shops that answered a homepage request on 18 November 2026; hand-built by trade, no big chains.</li>
+<li>On 22 November 2026 each shop got one GET for a random extensionless path; we followed up to six redirects and counted the final status. The 35 shops that answered 200 got a second request for a random path in a subdirectory ending in <code>.html</code>. The other shops were not asked twice, so shops that fail only on <code>.html</code> paths may exist and are not counted.</li>
+<li>Nine shops served a verification screen instead of a page and one answered with a redirect that had no target; they are not assessed. A person in a normal browser might see something different there.</li>
+<li>Statements about Google rely on the “HTTP status codes” page in Google Search Central; about Apache, on the <code>ErrorDocument</code> directive in the 2.4 documentation. We do not name the shops.</li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/blog/feed.xml">RSS</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a> · <a href="/developers/">For developers</a> · contact: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer>
+</div>
+</body>
+</html>
