@@ -2,7 +2,8 @@
 // POST /api/agency/trial   – formularz ze strony /agencje/ (agency, email, url, logo = strona studia [wymagana], note, consent, plan=trial|paid, website=honeypot, src); plan=paid → checkout Polar (POLAR_PRODUCT_AGENCY) → KV `pw:agency:<id>` + flaga pw-dirty;
 //                            poller zamówień (orders/poll.mjs) odbiera to przez /api/polar/pending i budzi agenta (realizacja prób ręcznie w sesji).
 // POST /api/agency/report?token=<32 hex>  (x-scan-key) – treść HTML raportu → KV `wl:<token>` (TTL 90 dni).
-// GET  /r/<token>          – raport HTML pod marką agencji (noindex).
+// GET  /r/<token>          – raport HTML pod marką agencji (noindex); wejścia z przeglądarek liczone w KV `wlv:<token>:<ms>-<rand>` (metadane, bez IP).
+// GET  /api/agency/views   (x-scan-key) – lista wejść.
 import { layout } from "./scan.js";
 import { markDirty } from "./polar.js";
 import { normalizeUrl } from "./url.js";
@@ -67,8 +68,46 @@ export async function agencyReportPut(request, env) {
   return Response.json({ ok: true, url: `https://webskan.com/r/${token}`, bytes: html.length });
 }
 
-export async function agencyReportGet(env, token) {
+// Licznik wejść na raport: jeden wpis KV na wejście z przeglądarki (bez IP, bez ciasteczek) – godzina, rodzina przeglądarki, urządzenie, kraj.
+// Automaty (curl, headless, boty, podglądy linków) pomijane. Limit 40 wpisów na raport na dobę, żeby pętla odświeżeń nie zjadła dziennego limitu zapisów KV.
+const BOT_RE = /bot|crawl|spider|curl|wget|headless|python|node|go-http|preview|scan|monitor|fetch|lighthouse|playwright|puppeteer|facebookexternalhit|slack|whatsapp|telegram/i;
+function uaFamily(ua) {
+  const b = /Edg\//.test(ua) ? "Edge" : /OPR\//.test(ua) ? "Opera" : /Firefox\//.test(ua) ? "Firefox" : /Chrome\//.test(ua) ? "Chrome" : /Safari\//.test(ua) ? "Safari" : "inna";
+  const d = /iPhone|Android.*Mobile|Mobile/.test(ua) ? "telefon" : /iPad|Android/.test(ua) ? "tablet" : "komputer";
+  const o = /Windows/.test(ua) ? "Windows" : /Android/.test(ua) ? "Android" : /iPhone|iPad/.test(ua) ? "iOS" : /Mac OS X/.test(ua) ? "macOS" : /Linux/.test(ua) ? "Linux" : "inny";
+  return { b, d, o };
+}
+async function logView(request, env, token) {
+  const ua = request.headers.get("user-agent") || "";
+  if (!ua || BOT_RE.test(ua) || request.method !== "GET") return;
+  const purpose = request.headers.get("sec-purpose") || request.headers.get("purpose") || "";
+  if (/prefetch|preview/i.test(purpose)) return;
+  const now = new Date(), day = now.toISOString().slice(0, 10);
+  const capKey = `wlvc:${token}:${day}`;
+  const n = Number(await env.ORDERS.get(capKey)) || 0;
+  if (n >= 40) return;
+  const meta = { t: now.toISOString(), ...uaFamily(ua), c: request.cf?.country || "", ref: (request.headers.get("referer") || "").slice(0, 80) };
+  await env.ORDERS.put(`wlv:${token}:${now.getTime()}-${crypto.randomUUID().slice(0, 6)}`, "", { metadata: meta, expirationTtl: 120 * 24 * 3600 });
+  await env.ORDERS.put(capKey, String(n + 1), { expirationTtl: 2 * 24 * 3600 });
+}
+
+export async function agencyReportGet(env, token, request, ctx) {
   const html = await env.ORDERS.get(`wl:${token}`);
   if (!html) return null;
+  if (request && ctx) ctx.waitUntil(logView(request, env, token).catch(() => {}));
   return new Response(html, { headers: { "content-type": "text/html; charset=utf-8", "x-robots-tag": "noindex, nofollow", "cache-control": "private, max-age=300" } });
+}
+
+// GET /api/agency/views[?token=<32 hex>] (x-scan-key) – lista wejść na raporty (z metadanych KV, bez odczytu wartości).
+export async function agencyViews(request, env) {
+  if (!authed(request, env)) return new Response("Unauthorized", { status: 401 });
+  const token = new URL(request.url).searchParams.get("token") || "";
+  if (token && !/^[0-9a-f]{32}$/.test(token)) return new Response("Bad token", { status: 400 });
+  const views = []; let cursor;
+  do {
+    const l = await env.ORDERS.list({ prefix: `wlv:${token}`, cursor, limit: 1000 });
+    for (const k of l.keys) views.push({ token: k.name.split(":")[1], ...(k.metadata || {}) });
+    cursor = l.list_complete ? undefined : l.cursor;
+  } while (cursor && views.length < 5000);
+  return Response.json({ ok: true, views });
 }
