@@ -250,7 +250,7 @@ ul.vl{list-style:none;padding:0;margin:10px 0 0}ul.issues ul.vl li{border:0;bord
 ul.vl .fx{color:var(--mute)}
 details.vmore{border:0;margin-top:6px}details.vmore summary{font-size:14.5px;padding:8px 0}
 .lhfail.okbox{border-left-color:var(--ok)}
-pre.cmd{background:var(--brand);color:#fff;border-radius:10px;padding:14px 16px;font:500 13.5px/1.6 var(--mono);overflow-x:auto;max-width:820px}
+pre.cmd{background:var(--brand);color:#fff;border-radius:10px;padding:14px 16px;font:500 13.5px/1.6 var(--mono);overflow-x:auto;max-width:820px;white-space:pre-wrap;overflow-wrap:anywhere}
 .grid3.deps-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media (max-width:600px){.deps-tiles>div{padding:12px}.deps-tiles p{font-size:12.5px}.grid3.deps-tiles p.v{font-size:22px}}
 
