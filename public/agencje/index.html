@@ -1,5 +1,5 @@
 <!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Audyt strony pod logo Twojej agencji (white-label) – Webskan</title>
-<meta name="description" content="Raport audytu technicznego strony WWW z logo, kolorem i danymi kontaktowymi Twojej agencji. Do 30 podstron, ścieżki klienta, plan poprawek. 149 zł/mies., próba: 3 raporty bez karty."><link rel="canonical" href="https://webskan.com/agencje/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="theme-color" content="#0E3B43">
+<meta name="description" content="Raport audytu technicznego strony WWW z logo, kolorem i danymi kontaktowymi Twojej agencji. Do 30 podstron, ścieżki klienta, plan poprawek. Od 149 zł netto/mies., próba: 3 raporty bez karty."><link rel="canonical" href="https://webskan.com/agencje/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="theme-color" content="#0E3B43">
 <meta property="og:title" content="Audyt strony pod logo Twojej agencji"><meta property="og:description" content="Raport audytu technicznego z logo i danymi Twojej agencji. Próba: 3 raporty bez karty."><meta property="og:type" content="website"><meta property="og:url" content="https://webskan.com/agencje/"><meta property="og:image" content="https://webskan.com/og-pl-2a636789.png">
 <link rel="stylesheet" href="/style.css"><script src="/prefill.js" defer></script></head><body><div class="wrap"><header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a><a href="/#faq">FAQ</a><a href="/en/" hreflang="en">EN</a></nav></header>
 <main>
@@ -54,7 +54,7 @@
 
 <section id="cena-agencje">
   <h2>Cena</h2>
-  <div class="plans">
+  <div class="plans p3">
     <div class="plan">
       <h3>Próba</h3>
       <div class="amt">0 zł</div><small>14 dni, bez karty, dla agencji i studiów</small>
@@ -62,13 +62,19 @@
       <a class="btn" href="#proba" data-agplan="trial">Zamów próbę</a>
     </div>
     <div class="plan">
-      <h3>Webskan dla agencji</h3>
-      <div class="amt">149 zł<span class="per">/mies.</span></div><small>bez umowy, rezygnacja w każdej chwili</small>
+      <h3>10 raportów</h3>
+      <div class="amt">149 zł<span class="per">netto/mies.</span></div><small>do ofert i odbiorów własnych realizacji</small>
       <ul class="check"><li>Do 10 raportów miesięcznie</li><li>Ponowne sprawdzenie po poprawkach: lista naprawione / otwarte / nowe</li><li>Raporty po polsku lub po angielsku</li><li>Zamówienia e-mailem, pytania do raportów w cenie</li></ul>
-      <a class="btn sec" href="#proba" data-agplan="paid">Kup plan – 149 zł/mies.</a>
+      <a class="btn sec" href="#proba" data-agplan="paid">Kup plan – 149 zł netto</a>
+    </div>
+    <div class="plan">
+      <h3>30 raportów</h3>
+      <div class="amt">349 zł<span class="per">netto/mies.</span></div><small>do cyklicznych raportów w ramach opieki</small>
+      <ul class="check"><li>Do 30 raportów miesięcznie</li><li>Wszystko z planu 10 raportów</li><li>Wychodzi niecałe 12 zł netto za raport</li><li>Bez umowy, rezygnacja w każdej chwili</li></ul>
+      <a class="btn sec" href="#proba" data-agplan="paid30">Kup plan – 349 zł netto</a>
     </div>
   </div>
-  <p class="small muted" style="margin-top:12px">Cena brutto. Plan można kupić od razu albo po próbie; płatność kartą przez operatora Polar (Merchant of Record), który wystawia fakturę. Próba jest dla agencji i studiów: każde zgłoszenie sprawdzamy, jedna próba na firmę. Potrzebujesz więcej niż 10 raportów miesięcznie – napisz, ustalimy.</p>
+  <p class="small muted" style="margin-top:12px">Ceny netto, bez umowy, rezygnacja w każdej chwili. Przy płatności doliczany jest VAT (w Polsce 23%: 183,27 zł i 429,27 zł brutto). Plan można kupić od razu albo po próbie; płatność kartą przez operatora Polar (Merchant of Record), który wystawia fakturę. Próba jest dla agencji i studiów: każde zgłoszenie sprawdzamy, jedna próba na firmę. Potrzebujesz więcej niż 30 raportów miesięcznie – napisz, ustalimy.</p>
 </section>
 
 <section id="proba">
@@ -78,24 +84,27 @@
   <form class="order" action="/api/agency/trial" method="post">
     <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
     <label class="pick"><input type="radio" name="plan" value="trial" checked><span><b>Próba: 3 raporty, 0 zł</b><br>14 dni, bez karty. Zgłoszenie sprawdzamy, raport w 1 dzień roboczy.</span></label>
-    <label class="pick"><input type="radio" name="plan" value="paid"><span><b>Plan: do 10 raportów miesięcznie, 149 zł/mies.</b><br>Płatność kartą teraz, rezygnacja w każdej chwili.</span></label>
+    <label class="pick"><input type="radio" name="plan" value="paid"><span><b>Plan: do 10 raportów miesięcznie, 149 zł netto/mies.</b><br>Płatność kartą teraz, rezygnacja w każdej chwili.</span></label>
+    <label class="pick"><input type="radio" name="plan" value="paid30"><span><b>Plan: do 30 raportów miesięcznie, 349 zł netto/mies.</b><br>Płatność kartą teraz, rezygnacja w każdej chwili.</span></label>
     <label>Nazwa agencji lub studia (trafi do nagłówka raportu)<br><input type="text" name="agency" placeholder="Studio Przykład" required maxlength="120"></label>
     <label>Twój e-mail (na niego wyślemy raport)<br><input type="email" name="email" placeholder="biuro@twojaagencja.pl" required maxlength="254"></label>
     <label>Adres strony do audytu (klienta albo własnej)<br><input type="text" name="url" inputmode="url" placeholder="https://klient.pl" required maxlength="500"></label>
     <label>Adres strony Twojej agencji lub studia (z niej pobierzemy logo)<br><input type="text" name="logo" inputmode="url" placeholder="https://twojaagencja.pl" required maxlength="500"></label>
     <label>Uwagi (opcjonalnie): kolor przewodni, telefon do stopki raportu<br><input type="text" name="note" maxlength="600"></label>
     <label class="consent"><input type="checkbox" name="consent" required> Akceptuję <a href="/regulamin/">regulamin</a> i <a href="/prywatnosc/">politykę prywatności</a>. Rozumiem, że audyt dotyczy publicznie dostępnej wersji strony i jest wykonywany automatycznie.</label>
-    <button class="btn" type="submit"><span class="t-trial">Zamów pierwszy raport</span><span class="t-paid">Przejdź do płatności – 149 zł/mies.</span></button>
+    <button class="btn" type="submit"><span class="t-trial">Zamów pierwszy raport</span><span class="t-paid">Przejdź do płatności</span></button>
   </form>
   <p class="note">Wolisz e-mailem? Napisz na <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a>: adres strony do audytu i logo.</p>
   </div>
   <aside class="orderaside" aria-label="Co dalej">
-    <h3>Co się dzieje po zgłoszeniu</h3>
+    <h3><span class="t-trial">Co się dzieje po zgłoszeniu</span><span class="t-paid">Co się dzieje po zakupie</span></h3>
     <ol>
-      <li><strong>Sprawdzamy zgłoszenie i przygotowujemy szablon</strong> – logo, kolor i dane kontaktowe Twojej agencji.</li>
+      <li><strong><span class="t-trial">Sprawdzamy zgłoszenie i przygotowujemy szablon</span><span class="t-paid">Potwierdzamy plan e-mailem i przygotowujemy szablon</span></strong> – logo, kolor i dane kontaktowe Twojej agencji.</li>
       <li><strong>Audyt rusza</strong> – przechodzimy witrynę, klikamy ścieżki, mierzymy.</li>
       <li><strong>Raport trafia na Twój e-mail</strong> – PDF i link do wersji online, najpóźniej następnego dnia roboczego. Do klienta wysyłasz go Ty.</li>
-      <li><strong>Kolejne dwa raporty</strong> zamawiasz odpowiedzią na e-mail, w ciągu 14 dni.</li>
+      <li class="t-trial"><strong>Kolejne dwa raporty</strong> zamawiasz odpowiedzią na e-mail, w ciągu 14 dni.</li>
+      <li class="t-p10"><strong>Kolejne raporty</strong> zamawiasz odpowiedzią na e-mail – do 10 w każdym miesiącu.</li>
+      <li class="t-p30"><strong>Kolejne raporty</strong> zamawiasz odpowiedzią na e-mail – do 30 w każdym miesiącu.</li>
     </ol>
     <p>Skaner przedstawia się na serwerze jako Webskan (<a href="/bot/">szczegóły</a>) – w raporcie tej nazwy nie ma.</p>
   </aside>
@@ -115,6 +124,6 @@
   <h3>Kto może skorzystać z próby?</h3>
   <p>Agencje, studia i freelancerzy, którzy robią strony dla klientów. Każde zgłoszenie sprawdzamy przed wykonaniem raportu (stąd pole z adresem Twojej strony), jedna próba na firmę. Jeśli chcesz sprawdzić własną stronę, wybierz <a href="/#skan">darmowy skan</a> albo <a href="/#audyt">audyt pogłębiony</a>.</p>
 </section>
-<style>form.order .t-paid{display:none}form.order:has(input[value=paid]:checked) .t-paid{display:inline}form.order:has(input[value=paid]:checked) .t-trial{display:none}</style>
+<style>.orderbox .t-paid,.orderbox .t-p10,.orderbox .t-p30{display:none}.orderbox:has(input[value^=paid]:checked) .t-paid{display:inline}.orderbox:has(input[value^=paid]:checked) .t-trial{display:none}.orderbox:has(input[value=paid]:checked) .t-p10,.orderbox:has(input[value=paid30]:checked) .t-p30{display:list-item}@media(min-width:941px){.plans.p3{grid-template-columns:repeat(3,minmax(0,1fr))}.plans.p3 .amt{font-size:38px}}@media(max-width:940px){.plans.p3{grid-template-columns:1fr}}</style>
 </main>
 <footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a> · <a href="/developers/" hreflang="en">Dla programistów (EN)</a> · kontakt: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer></div></body></html>

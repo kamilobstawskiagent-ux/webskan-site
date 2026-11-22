@@ -6,7 +6,7 @@ import { handleMcp, mcpStatsApi } from "./mcp.js";
 import { polarApi } from "./polar.js";
 import { normalizeUrl } from "./url.js";
 import { trackEntry, refsApi } from "./refs.js";
-import { agencyTrial, agencyReportPut, agencyReportGet, agencyViews } from "./agency.js";
+import { agencyTrial, agencyReportPut, agencyReportGet, agencyViews, agencyProspectPut, agencyClient } from "./agency.js";
 import { depsCheck, depsProject, depsPush, depsExport, depsAccount, depsOrder, depsThanks } from "./depsweb.js";
 export { ScanQueue, MonitorHub };
 
@@ -181,6 +181,8 @@ async function route(request, env, pathname, ctx) {
     if (pathname === "/api/agency/trial") return agencyTrial(request, env); // próba planu dla agencji (src/agency.js)
     if (pathname === "/api/agency/report" && request.method === "POST") return agencyReportPut(request, env);
     if (pathname === "/api/agency/views" && request.method === "GET") return agencyViews(request, env);
+    if (pathname === "/api/agency/prospect" && request.method === "POST") return agencyProspectPut(request, env);
+    if (pathname === "/api/agency/client") return agencyClient(request, env); // pole nad raportem przykładowym
     { const m = pathname.match(/^\/r\/([0-9a-f]{32})\/?$/); if (m) { const r = await agencyReportGet(env, m[1], request, ctx); if (r) return r; return notFound("pl"); } }
     if (pathname === "/api/refs") return refsApi(request, env);
     if (pathname === "/api/health") return Response.json({ ok: true, polar: Boolean(env.POLAR_TOKEN && env.POLAR_PRODUCT_PL), webhook: Boolean(env.POLAR_WEBHOOK_SECRET), mode: env.SALES_MODE || "live" });
