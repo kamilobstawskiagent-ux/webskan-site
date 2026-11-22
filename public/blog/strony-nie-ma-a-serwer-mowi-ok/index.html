@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Strony nie ma, a serwer mówi „OK”. Sprawdziliśmy 527 sklepów – Webskan</title>
+<meta name="description" content="Poprosiliśmy 527 małych sklepów internetowych o stronę, która nie istnieje. 35 odpowiedziało kodem 200, czyli „wszystko w porządku” – najczęściej po cichu odsyłając na stronę główną. Co to psuje w Google, w monitoringu i u klienta, jak sprawdzić swój sklep jednym poleceniem i jak to naprawić.">
+<link rel="canonical" href="https://webskan.com/blog/strony-nie-ma-a-serwer-mowi-ok/">
+<meta property="og:title" content="Strony nie ma, a serwer mówi „OK”. Sprawdziliśmy 527 sklepów">
+<meta property="og:description" content="Poprosiliśmy 527 małych sklepów internetowych o stronę, która nie istnieje. 35 odpowiedziało kodem 200, czyli „wszystko w porządku” – najczęściej po cichu odsyłając na stronę główną. Co to psuje w Google, w monitoringu i u klienta, jak sprawdzić swój sklep jednym poleceniem i jak to naprawić.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/blog/strony-nie-ma-a-serwer-mowi-ok/">
+<meta property="og:image" content="https://webskan.com/og-pl-2a636789.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="theme-color" content="#0E3B43">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Strony nie ma, a serwer mówi „OK”. Sprawdziliśmy 527 sklepów","description":"Poprosiliśmy 527 małych sklepów internetowych o stronę, która nie istnieje. 35 odpowiedziało kodem 200, czyli „wszystko w porządku” – najczęściej po cichu odsyłając na stronę główną. Co to psuje w Google, w monitoringu i u klienta, jak sprawdzić swój sklep jednym poleceniem i jak to naprawić.","datePublished":"2026-11-22","dateModified":"2026-11-22","inLanguage":"pl","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"mainEntityOfPage":"https://webskan.com/blog/strony-nie-ma-a-serwer-mowi-ok/"}</script>
+<link rel="alternate" type="application/rss+xml" title="Webskan – blog (RSS)" href="/blog/feed.xml">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a><a href="/#faq">FAQ</a><a href="/en/blog/" hreflang="en">EN</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 22 listopada 2026 · 6 min czytania</p>
+<h1>Strony nie ma, a serwer mówi „OK”. Sprawdziliśmy 527 sklepów</h1>
+<p class="lead">Każdy serwer do każdej odpowiedzi dołącza trzycyfrowy kod. 200 znaczy „proszę, oto strona”, 404 – „takiej strony nie ma”. Człowiek tego kodu nie widzi, ale czytają go Google, narzędzia do pilnowania strony i programy sprawdzające linki. 22 listopada poprosiliśmy 527 małych polskich sklepów internetowych o adres, który na pewno nie istnieje. 35 odpowiedziało, że wszystko jest w porządku.</p>
+
+<h2>Co pokazało sprawdzenie</h2>
+<p>Do każdego sklepu wysłaliśmy jedno zapytanie o zmyślony adres w rodzaju <code>/strona-ktorej-nie-ma-x7k2p9qa</code>. Dziesięciu sklepów nie dało się ocenić: dziewięć pokazało naszemu programowi ekran weryfikacji „czy jesteś człowiekiem”, jeden odesłał przekierowaniem donikąd. Zostało 517.</p>
+<table class="vitals headers">
+<thead><tr><th>Odpowiedź na adres, którego nie ma</th><th>Sklepy</th><th>Udział</th></tr></thead>
+<tbody>
+<tr><td><strong>Kod 404 – poprawnie</strong></td><td data-l="Sklepy"><strong>482</strong></td><td data-l="Udział"><strong>93,2 %</strong></td></tr>
+<tr><td>Przekierowanie na stronę główną, kod 200</td><td data-l="Sklepy">19</td><td data-l="Udział">3,7 %</td></tr>
+<tr><td>Kod 200 pod tym samym adresem (strona sklepu albo komunikat o błędzie)</td><td data-l="Sklepy">10</td><td data-l="Udział">1,9 %</td></tr>
+<tr><td>Przekierowanie na osobną stronę błędu, która odpowiada kodem 200</td><td data-l="Sklepy">4</td><td data-l="Udział">0,8 %</td></tr>
+<tr><td>Przekierowanie pod inny adres, kod 200</td><td data-l="Sklepy">2</td><td data-l="Udział">0,4 %</td></tr>
+</tbody>
+</table>
+<p>Razem 35 sklepów, czyli co piętnasty, na pytanie o nieistniejącą stronę odpowiada „OK”. W branży nazywa się to „soft 404”: błąd, który udaje, że nim nie jest.</p>
+<p>Tych 35 sklepów zapytaliśmy drugi raz, o adres innego kształtu – w podkatalogu i z końcówką <code>.html</code>. 29 znów odpowiedziało kodem 200. Sześć tym razem zwróciło poprawne 404: ich zachowanie zależy od tego, jak wygląda błędny adres. To ważne przy sprawdzaniu własnej strony – jedna próba nie wystarczy.</p>
+<p>Zastrzeżenie jak zawsze: to nie jest próba losowa, tylko sklepy z list, które sami układaliśmy według branż, bez dużych sieci. Szczegóły w metodzie na końcu.</p>
+
+<h2>Dlaczego to nie jest drobiazg</h2>
+<h3>1. Google dostaje adresy, które nic nie znaczą</h3>
+<p>Dokumentacja Google mówi wprost: adresów z kodem 4xx wyszukiwarka nie indeksuje, a jeśli były w indeksie – usuwa je. Tak ma być: wycofany produkt znika z wyników. Przy kodzie 200 Google musi zgadywać z samej treści. Gdy treść wygląda na błąd albo pustą stronę, w Search Console pojawia się status „Pozorny błąd 404”. Gdy nie wygląda – a strona główna pokazana pod adresem starego produktu nie wygląda – wyszukiwarka dostaje kolejny adres z treścią, którą już zna.</p>
+<p>Żadna z 35 stron nie miała znacznika <code>noindex</code>. W jednym sklepie strona pod zmyślonym adresem sama podawała ten zmyślony adres jako swój adres kanoniczny, czyli prosiła wyszukiwarkę o traktowanie go jako właściwego.</p>
+<h3>2. Narzędzia przestają widzieć zepsute linki</h3>
+<p>Program sprawdzający linki, monitoring dostępności, raport „błędy 404” w statystykach – wszystkie patrzą na kod. Jeśli sklep na wszystko odpowiada 200, to literówka w linku z newslettera, usunięta kategoria i stary adres z ulotki wyglądają w raportach na działające strony. Błąd jest, tylko nikt się o nim nie dowie.</p>
+<p>Sami na to wpadliśmy: gdy <a href="/blog/security-txt-527-sklepow/">szukaliśmy pliku security.txt w tych samych sklepach</a>, 55 odpowiedziało kodem 200 na adres pliku, którego nie miało. Gdybyśmy patrzyli tylko na kod, policzylibyśmy 55 plików więcej.</p>
+<h3>3. Klient ląduje na stronie głównej i nie wie dlaczego</h3>
+<p>Ktoś klika link do konkretnego produktu – z wyszukiwarki, z forum, z wiadomości od znajomego. Zamiast produktu albo informacji „tego już nie mamy, zobacz podobne” dostaje stronę główną. Bez słowa wyjaśnienia. Część uzna, że kliknęła źle, i spróbuje jeszcze raz; część zamknie kartę. Dobra strona błędu mówi, co się stało, i podaje wyszukiwarkę oraz kategorie. Strona główna tego nie robi.</p>
+
+<h2>Sprawdź swój sklep</h2>
+<p><strong>W przeglądarce:</strong> dopisz do adresu sklepu coś zmyślonego, np. <code>twojsklep.pl/nie-ma-mnie-12345</code>, i drugi raz z końcówką: <code>twojsklep.pl/test/nie-ma-mnie.html</code>. Jeśli adres w pasku zmienił się na stronę główną – masz przekierowanie. Jeśli widzisz stronę błędu, to jeszcze nie znaczy, że kod jest dobry: otwórz narzędzia programisty (F12), kartę „Sieć”, odśwież stronę i spójrz na pierwszą pozycję w kolumnie „Stan”.</p>
+<p><strong>Jednym poleceniem</strong> (terminal w macOS lub Linuksie, w Windows „Wiersz polecenia”):</p>
+<pre><code>curl -s -o /dev/null -w "%{http_code}\n" https://twojsklep.pl/nie-ma-mnie-12345</code></pre>
+<p>Wynik <code>404</code> (albo <code>410</code>) jest poprawny. <code>200</code> to soft 404. <code>301</code> albo <code>302</code> oznacza przekierowanie – dopisz do polecenia <code>-L</code>, żeby zobaczyć, czym się kończy.</p>
+
+<h2>Jak to naprawić</h2>
+<ul>
+<li><strong>Wyłącz „przekierowuj błędy 404 na stronę główną”.</strong> To najczęstszy przypadek w naszych danych (19 z 35). Zwykle stoi za nim opcja we wtyczce do przekierowań albo SEO, w ustawieniach szablonu lub platformy sklepowej, włączona kiedyś w dobrej wierze. Przekierowanie 301 ma sens tylko wtedy, gdy stary adres ma konkretnego następcę – produkt zastąpiony nowszym modelem, kategoria po zmianie nazwy.</li>
+<li><strong>Strona błędu ma się wyświetlać pod błędnym adresem, bez przekierowania.</strong> Jeśli sklep odsyła na <code>/404.html</code> albo <code>/strona-404/</code>, to ta podstrona istnieje, więc serwer uczciwie odpowiada 200. W serwerze Apache wskazuje się ją ścieżką lokalną: <code>ErrorDocument 404 /404.html</code>. Przy pełnym adresie zaczynającym się od <code>https://</code> Apache – zgodnie ze swoją dokumentacją – wysyła przekierowanie i pierwotny kod błędu ginie. W nginx odpowiednikiem jest <code>error_page 404 /404.html;</code>.</li>
+<li><strong>Sklep na gotowej platformie albo własnym silniku:</strong> wyślij wykonawcy lub pomocy technicznej wynik polecenia z poprzedniego akapitu i jedno zdanie: „nieistniejący adres ma zwracać kod 404”. To zwykle jedna poprawka w konfiguracji.</li>
+<li><strong>Na stronie błędu zostaw człowiekowi wyjście:</strong> zdanie, że strony nie ma, wyszukiwarkę, linki do głównych kategorii i do strony głównej.</li>
+<li><strong>Sprawdź ponownie obydwa kształty adresu</strong> – w naszym badaniu sześć sklepów odpowiadało poprawnie na jeden, a błędnie na drugi.</li>
+</ul>
+
+<section class="fullbox" id="skan">
+<h2>Sprawdź swoją stronę – za darmo, w minutę</h2>
+<p>Darmowy szybki skan Webskan sprawdza szybkość strony na telefonie, HTTPS, nagłówki bezpieczeństwa, podstawy SEO i kilkadziesiąt adresów plików, których nie powinno być widać z zewnątrz. Bez e-maila, bez rejestracji. Odpowiedzi na nieistniejący adres szybki skan nie ocenia – to sprawdzisz poleceniem opisanym wyżej.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="pl"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://twojsklep.pl" required maxlength="500" aria-label="Adres strony"><button class="btn" type="submit">Skanuj za darmo</button></form>
+<p class="note"><a href="/#cena">Audyt pogłębiony</a> (249 zł) otwiera nieistniejący adres w prawdziwej przeglądarce na telefonie i opisuje, co zobaczy klient i jaki kod dostanie wyszukiwarka – razem z uszkodzonymi linkami na maksymalnie 30 podstronach.</p>
+</section>
+
+<h2>Metoda i zastrzeżenia</h2>
+<ul>
+<li>Lista: 527 małych polskich sklepów internetowych, tych samych, które 18 listopada odpowiedziały nam na zapytanie o stronę główną przy <a href="/blog/security-txt-527-sklepow/">sprawdzaniu security.txt</a>; układana ręcznie według branż, bez dużych sieci.</li>
+<li>22 listopada 2026 r. wysłaliśmy do każdego sklepu jedno zapytanie o losowy adres bez końcówki i szliśmy za przekierowaniami (najwyżej sześć). Liczy się kod ostatniej odpowiedzi. 35 sklepów, które odpowiedziały kodem 200, dostało drugie zapytanie – o losowy adres w podkatalogu z końcówką <code>.html</code>. Pozostałych nie pytaliśmy drugi raz, więc sklepów odpowiadających błędnie tylko na adresy z końcówką może być więcej.</li>
+<li>Dziewięć sklepów pokazało ekran weryfikacji zamiast strony, jeden odpowiedział przekierowaniem bez adresu docelowego; nie oceniamy ich. Człowiek w zwykłej przeglądarce mógłby zobaczyć tam co innego niż nasz program.</li>
+<li>Zdania o Google opieramy na dokumentacji „HTTP status codes” w Google Search Central i na nazwie statusu w Search Console; o Apache – na opisie dyrektywy <code>ErrorDocument</code> w dokumentacji serwera 2.4. Nazw sklepów nie podajemy.</li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/blog/feed.xml">RSS</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a> · <a href="/developers/" hreflang="en">Dla programistów (EN)</a> · kontakt: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer>
+</div>
+</body>
+</html>

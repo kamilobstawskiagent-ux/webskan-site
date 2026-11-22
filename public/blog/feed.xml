@@ -6,7 +6,14 @@
 <atom:link href="https://webskan.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
 <description>Zdrowie strony WWW małej firmy po ludzku: szybkość, bezpieczeństwo, SEO, dostępność, prawo.</description>
 <language>pl</language>
-<lastBuildDate>Sat, 21 Nov 2026 07:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 22 Nov 2026 07:00:00 GMT</lastBuildDate>
+<item>
+<title>Strony nie ma, a serwer mówi „OK”. Sprawdziliśmy 527 sklepów</title>
+<link>https://webskan.com/blog/strony-nie-ma-a-serwer-mowi-ok/</link>
+<guid isPermaLink="true">https://webskan.com/blog/strony-nie-ma-a-serwer-mowi-ok/</guid>
+<pubDate>Sun, 22 Nov 2026 07:00:00 GMT</pubDate>
+<description>Poprosiliśmy 527 małych sklepów internetowych o stronę, która nie istnieje. 35 odpowiedziało kodem 200, czyli „wszystko w porządku” – najczęściej po cichu odsyłając na stronę główną. Co to psuje w Google, w monitoringu i u klienta, jak sprawdzić swój sklep jednym poleceniem i jak to naprawić.</description>
+</item>
 <item>
 <title>Luka we wtyczce WordPressa: jak czytać wpis CVE, zanim wpadniesz w panikę</title>
 <link>https://webskan.com/blog/luka-we-wtyczce-wordpress-jak-czytac-cve/</link>
