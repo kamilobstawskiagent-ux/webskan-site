@@ -26,9 +26,10 @@ for (const lang of ['pl', 'en']) {
 const wl = path.join(src, 'wl/report.pl.html');
 await shotAt(wl, 950, 838, 1.2, '0', path.join(pub, 'agencje/img/report-agency.webp'));
 { // jeden punkt planu, przycięty do elementu
-  const ctx = await browser.newContext({ viewport: { width: 800, height: 1200 }, deviceScaleFactor: 1.5 }); const page = await ctx.newPage();
+  // 22.11 (uwaga Kamila): zrzut samego elementu nie miał marginesów (ramki dotykały krawędzi karty), a przy 800 px tekst był na telefonie nieczytelny – węższy widok i własny odstęp wokół punktu
+  const ctx = await browser.newContext({ viewport: { width: 600, height: 1400 }, deviceScaleFactor: 2 }); const page = await ctx.newPage();
   await page.goto('file://' + wl, { waitUntil: 'load' }); await page.evaluate(() => document.fonts.ready);
-  const el = page.locator('.step').nth(stepN - 1); await el.scrollIntoViewIfNeeded(); const png = path.join(tmp, 'step.png'); await el.screenshot({ path: png }); await ctx.close(); jobs.push([png, path.join(pub, 'agencje/img/step.webp')]);
+  const el = page.locator('.step').nth(stepN - 1); await el.evaluate((e) => { e.style.padding = '30px 32px 26px'; e.style.margin = '0'; e.style.border = '0'; e.style.background = '#fff'; e.style.boxSizing = 'border-box'; }); await el.scrollIntoViewIfNeeded(); const png = path.join(tmp, 'step.png'); await el.screenshot({ path: png }); await ctx.close(); jobs.push([png, path.join(pub, 'agencje/img/step.webp')]);
 }
 await browser.close();
 execFileSync('python3', ['-c', `
