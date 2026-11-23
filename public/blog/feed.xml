@@ -6,7 +6,14 @@
 <atom:link href="https://webskan.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
 <description>Zdrowie strony WWW małej firmy po ludzku: szybkość, bezpieczeństwo, SEO, dostępność, prawo.</description>
 <language>pl</language>
-<lastBuildDate>Sun, 22 Nov 2026 07:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 23 Nov 2026 07:00:00 GMT</lastBuildDate>
+<item>
+<title>11 932 luki we wtyczkach WordPressa w 12 miesięcy. Na co szóstą nie ma poprawki</title>
+<link>https://webskan.com/blog/luki-we-wtyczkach-wordpressa-12-miesiecy/</link>
+<guid isPermaLink="true">https://webskan.com/blog/luki-we-wtyczkach-wordpressa-12-miesiecy/</guid>
+<pubDate>Mon, 23 Nov 2026 07:00:00 GMT</pubDate>
+<description>Policzyliśmy wpisy o lukach we wtyczkach WordPressa opublikowane w ciągu ostatnich 12 miesięcy: 11 932 wpisy w 5 030 wtyczkach. 44 % nie wymaga konta ani udziału innej osoby, a 17 % do dziś nie ma wersji z poprawką. Co z tych liczb wynika dla firmowej strony i co ustawić w kwadrans.</description>
+</item>
 <item>
 <title>Strony nie ma, a serwer mówi „OK”. Sprawdziliśmy 527 sklepów</title>
 <link>https://webskan.com/blog/strony-nie-ma-a-serwer-mowi-ok/</link>

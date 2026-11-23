@@ -119,6 +119,10 @@ async function shoot(page, outDir, key, prof, url) {
     axe = r;
   } catch (e) { errors.push('axe: ' + String(e).slice(0, 120)); }
   const file = path.join(outDir, `${key}-${prof}.png`);
+  // 23.11: obrazki loading="lazy" (galeria raportu na stronie głównej) nie ładowały się bez przewinięcia – na arkuszach puste ramki.
+  try {
+    await page.evaluate(async () => { const h = document.documentElement.scrollHeight; for (let y = 0; y < h; y += 600) { window.scrollTo(0, y); await new Promise((r) => setTimeout(r, 60)); } window.scrollTo(0, 0); await Promise.all([...document.images].filter((i) => !i.complete).map((i) => new Promise((r) => { i.onload = i.onerror = r; setTimeout(r, 4000); }))); });
+  } catch { /* zrzut i tak robimy */ }
   await page.screenshot({ path: file, fullPage: true, animations: 'disabled' });
   const expected404 = /^(notfound|recheck_)/.test(key); // strony błędu: 404 dokumentu jest oczekiwane
   const errs = [...new Set(errors)].filter((e) => !(expected404 && /^(http 404: |console: Failed to load resource: the server responded with a status of 404)/.test(e)));
