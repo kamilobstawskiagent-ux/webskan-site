@@ -87,7 +87,7 @@
 </section>
 
 <section id="performance">
-  <p><strong>Security score.</strong> Reports and scan results carry <code>securityScore</code> (0–100) computed from the <code>sec.*</code> findings: start at 100, subtract 25 per high, 8 per medium and 2 per low finding; missing security headers cost at most 12 points in total; any high finding caps the score at 49. Vulnerability data comes from CVE records (cve.org, © The MITRE Corporation), CISA KEV, retire.js, WordPress.org and WPVulnerability – details on the <a href="/en/security/">security score page</a>. For application dependencies (Python, Node.js) there is a separate check: <a href="/en/dependencies/">project dependencies</a>, also available as JSON at <code>POST /api/deps/check?format=json</code>.</p>
+  <p><strong>Security score.</strong> Reports and scan results carry <code>securityScore</code> (0–100) computed from the <code>sec.*</code> findings: start at 100, subtract 25 per high, 8 per medium and 2 per low finding; missing security headers cost at most 12 points in total; any high finding caps the score at 49. Vulnerability data comes from CVE records (cve.org, © The MITRE Corporation), CISA KEV, Wordfence Intelligence (© Defiant Inc.), retire.js, WordPress.org and WPVulnerability – details on the <a href="/en/security/">security score page</a>. For application dependencies (Python, Node.js) there is a separate check: <a href="/en/dependencies/">project dependencies</a>, also available as JSON at <code>POST /api/deps/check?format=json</code>.</p>
   <h2>Performance – <code>perf.*</code></h2>
   <p>Measured with Lighthouse on an emulated mid-range phone over simulated 4G, from the audit location. Values vary between runs; gate with a margin.</p>
   <table class="limits">
