@@ -6,7 +6,14 @@
 <atom:link href="https://webskan.com/en/blog/feed.xml" rel="self" type="application/rss+xml"/>
 <description>Website health for small businesses and the developers who ship for them: speed, security, SEO, accessibility.</description>
 <language>en</language>
-<lastBuildDate>Sun, 22 Nov 2026 07:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 23 Nov 2026 07:00:00 GMT</lastBuildDate>
+<item>
+<title>11,932 WordPress plugin vulnerabilities in 12 months. One in six has no fix</title>
+<link>https://webskan.com/en/blog/wordpress-plugin-vulnerabilities-12-months/</link>
+<guid isPermaLink="true">https://webskan.com/en/blog/wordpress-plugin-vulnerabilities-12-months/</guid>
+<pubDate>Mon, 23 Nov 2026 07:00:00 GMT</pubDate>
+<description>We counted the WordPress plugin vulnerability records published in the last 12 months: 11,932 records across 5,030 plugins. 44% need no account and no action by anyone else, and 17% still have no patched version. What the numbers mean for the sites you maintain, and four settings that take fifteen minutes.</description>
+</item>
 <item>
 <title>We asked 527 small shops for a page that does not exist. 35 answered 200 OK</title>
 <link>https://webskan.com/en/blog/missing-page-returns-200/</link>

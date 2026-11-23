@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>11,932 WordPress plugin vulnerabilities in 12 months. One in six has no fix – Webskan</title>
+<meta name="description" content="We counted the WordPress plugin vulnerability records published in the last 12 months: 11,932 records across 5,030 plugins. 44% need no account and no action by anyone else, and 17% still have no patched version. What the numbers mean for the sites you maintain, and four settings that take fifteen minutes.">
+<link rel="canonical" href="https://webskan.com/en/blog/wordpress-plugin-vulnerabilities-12-months/">
+<link rel="alternate" hreflang="en" href="https://webskan.com/en/blog/wordpress-plugin-vulnerabilities-12-months/">
+<link rel="alternate" hreflang="pl" href="https://webskan.com/blog/luki-we-wtyczkach-wordpressa-12-miesiecy/">
+<meta property="og:title" content="11,932 WordPress plugin vulnerabilities in 12 months. One in six has no fix">
+<meta property="og:description" content="We counted the WordPress plugin vulnerability records published in the last 12 months: 11,932 records across 5,030 plugins. 44% need no account and no action by anyone else, and 17% still have no patched version. What the numbers mean for the sites you maintain, and four settings that take fifteen minutes.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/en/blog/wordpress-plugin-vulnerabilities-12-months/">
+<meta property="og:image" content="https://webskan.com/og-dev-ff265e97.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="theme-color" content="#0E3B43">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"11,932 WordPress plugin vulnerabilities in 12 months. One in six has no fix","description":"We counted the WordPress plugin vulnerability records published in the last 12 months: 11,932 records across 5,030 plugins. 44% need no account and no action by anyone else, and 17% still have no patched version. What the numbers mean for the sites you maintain, and four settings that take fifteen minutes.","datePublished":"2026-11-23","dateModified":"2026-11-23","inLanguage":"en","author":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"publisher":{"@type":"Organization","name":"Webskan","url":"https://webskan.com/"},"mainEntityOfPage":"https://webskan.com/en/blog/wordpress-plugin-vulnerabilities-12-months/"}</script>
+<link rel="alternate" type="application/rss+xml" title="Webskan – blog (RSS)" href="/en/blog/feed.xml">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/en/">web<span>skan</span></a><nav><a href="/en/blog/">Blog</a><a href="/en/#pricing">Pricing</a><a href="/en/#faq">FAQ</a><a href="/blog/" hreflang="pl">PL</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 23 November 2026 · 5 min read</p>
+<h1>11,932 WordPress plugin vulnerabilities in 12 months. One in six has no fix</h1>
+<p class="lead">“Keep your plugins updated” is the advice every WordPress site owner has heard. We counted what that advice actually covers – and what it does not. In the last 12 months, 11,932 vulnerability records were published for WordPress plugins, about 33 a day. For 2,026 of them there is still no version to update to.</p>
+
+<h2>Where the numbers come from</h2>
+<p>This week we added Wordfence Intelligence data to our <a href="/en/security/">database of known vulnerabilities</a> – one of the most complete public registers of WordPress vulnerabilities. Each record names the plugin, the affected version range, the patched version (if there is one) and a 0–10 score. We took the records published from 23 November 2025 to 22 November 2026 that concern plugins and counted them as they stood on 23 November 2026.</p>
+
+<table class="vitals headers">
+<thead><tr><th>Plugin vulnerability records, 12 months</th><th>Count</th><th>Share</th></tr></thead>
+<tbody>
+<tr><td>All records (5,030 different plugins)</td><td data-l="Count">11,932</td><td data-l="Share">100%</td></tr>
+<tr><td>Exploitable with no account and no action by another person</td><td data-l="Count">5,225</td><td data-l="Share">44%</td></tr>
+<tr><td>Require a low-privilege account</td><td data-l="Count">4,898</td><td data-l="Share">41%</td></tr>
+<tr><td>Require a high-privilege account</td><td data-l="Count">747</td><td data-l="Share">6%</td></tr>
+<tr><td>Score 9.0 or higher (critical)</td><td data-l="Count">542</td><td data-l="Share">5%</td></tr>
+<tr><td>No patched version (1,750 plugins)</td><td data-l="Count">2,026</td><td data-l="Share">17%</td></tr>
+</tbody>
+</table>
+<p>The remaining 9% need no account but do need someone – usually a logged-in administrator – to click a planted link.</p>
+
+<h2>What this means for a business site</h2>
+<h3>1. Updating does not fix one vulnerability in six</h3>
+<p>2,026 records, or 17%, have no patched version. They concern 1,750 plugins. These are typically plugins abandoned by their author or closed in the WordPress directory: the admin panel shows no update for them, so the site looks maintained while the vulnerable code keeps running. The only way out is to deactivate and delete the plugin, or replace it with another one.</p>
+<h3>2. Almost half need no account at all</h3>
+<p>For 5,225 records (44%) the scoring says an ordinary request from the internet is enough. Nobody looks for these by hand; automated tools sweep sites in bulk and check plugin versions. A small site is not safer than a large one here – the tool does not know whose site it is.</p>
+<h3>3. A “subscriber” account is a way in, too</h3>
+<p>4,898 records (41%) require a login, but only a low-privilege one. The titles of 1,418 of them name the subscriber, the lowest role in WordPress, and 1,925 name the contributor. If a site lets anyone create an account (a shop, a members area, a forum), this group applies to it just like the “no login” group. If registration is off and only trusted people have accounts, it mostly falls away.</p>
+<h3>4. Most records are “medium”, not critical</h3>
+<p>542 records (5%) score 9.0 or higher. The most common type is cross-site scripting (XSS) – 3,732 records, 31% – followed by missing authorization: 2,883 records, 24%. SQL injection, which allows reading the database, accounts for 960 records (8%).</p>
+
+<h2>Fifteen minutes of work</h2>
+<ol>
+<li><strong>Open the plugin list and delete what is not used.</strong> A deactivated plugin still sits on the server and its files can often be reached from outside. Fewer plugins means fewer records that will ever concern the site.</li>
+<li><strong>Turn on automatic plugin updates.</strong> In the admin panel: Plugins → the “Automatic Updates” column. A fix installed on release day closes the window in which automated tools look for old versions.</li>
+<li><strong>Check when each plugin was last updated.</strong> Click “View details” next to the plugin. No update for more than two years, or a notice that the plugin has been closed in the directory, is a signal to look for a replacement.</li>
+<li><strong>Turn off registration if the site does not need it.</strong> Settings → General → “Anyone can register” should be unticked on a site without customer accounts.</li>
+</ol>
+<p>More settings that limit the damage before a patch arrives are in <a href="/en/blog/wordpress-security-settings/">our list of WordPress security settings</a>.</p>
+
+<section class="fullbox">
+<h2>Check a site now</h2>
+<p>The free Webskan quick scan reads the versions of WordPress, plugins and the theme that are visible from outside and compares them with 54,000 published vulnerabilities – along with mobile speed, HTTPS, security headers and basic SEO. No sign-up. Not every plugin is visible from outside; the admin panel has the authoritative list.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="en"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://yourproject.com" required maxlength="500" aria-label="Website address"><button class="btn" type="submit">Scan for free</button></form>
+<p class="note"><a href="/en/#pricing">Webskan Monitor</a> ($15/month) repeats the check every day and sends an alert when a plugin or the CMS gets a new vulnerability.</p>
+</section>
+
+<h2>Method and caveats</h2>
+<ul>
+<li>Source: Wordfence Intelligence (wordfence.com), copy downloaded on 23 November 2026; Copyright 2012-2026 Defiant Inc. The licence and the other sources of our database are listed at <a href="/en/security/">webskan.com/en/security</a>. We count records with a publication date from 23 Nov 2025 to 22 Nov 2026 in which at least one affected component is a plugin; purely informational records are left out.</li>
+<li>One record is one vulnerability in one plugin (sometimes in several plugins by the same author). The number of records says nothing about how many sites are vulnerable – that depends on how popular the plugin is and how fast owners update.</li>
+<li>“No account”, “low-privilege account” and “high-privilege account” are fields of the CVSS score attached to the record; roles (subscriber, contributor) were counted from record titles. “No patched version” is the state on the download date – some of these plugins may still get a fix.</li>
+<li>A record covers a version range. Whether it applies to a particular site also depends on its settings and on which plugin features are switched on.</li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a> · <a href="/en/blog/feed.xml">RSS</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a> · <a href="/developers/">For developers</a> · contact: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer>
+</div>
+</body>
+</html>
