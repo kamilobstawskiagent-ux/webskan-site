@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Podrobiony e-mail „od sklepu”: 565 domen, trzy czwarte bez polityki DMARC, która go zatrzyma – Webskan</title>
+<meta name="description" content="Sprawdziliśmy rekordy SPF i DMARC 565 małych polskich sklepów internetowych. SPF ma 96 %, ale DMARC z polityką, która zatrzymuje podrobioną pocztę, tylko 133 sklepy. Jak sprawdzić swoją domenę jednym poleceniem.">
+<link rel="canonical" href="https://webskan.com/blog/dmarc-spf-565-sklepow/">
+<meta property="og:title" content="Podrobiony e-mail „od sklepu”: 565 domen, trzy czwarte bez polityki DMARC, która go zatrzyma">
+<meta property="og:description" content="Sprawdziliśmy rekordy SPF i DMARC 565 małych polskich sklepów internetowych. SPF ma 96 %, ale DMARC z polityką, która zatrzymuje podrobioną pocztę, tylko 133 sklepy. Jak sprawdzić swoją domenę jednym poleceniem.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/blog/dmarc-spf-565-sklepow/">
+<meta property="og:image" content="https://webskan.com/og-pl-2a636789.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="theme-color" content="#0E3B43">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Podrobiony e-mail „od sklepu”: 565 domen, trzy czwarte bez polityki DMARC, która go zatrzyma", "description": "Sprawdziliśmy rekordy SPF i DMARC 565 małych polskich sklepów internetowych. SPF ma 96 %, ale DMARC z polityką, która zatrzymuje podrobioną pocztę, tylko 133 sklepy. Jak sprawdzić swoją domenę jednym poleceniem.", "datePublished": "2026-11-27", "dateModified": "2026-11-27", "inLanguage": "pl", "author": {"@type": "Organization", "name": "Webskan", "url": "https://webskan.com/"}, "publisher": {"@type": "Organization", "name": "Webskan", "url": "https://webskan.com/"}, "mainEntityOfPage": "https://webskan.com/blog/dmarc-spf-565-sklepow/"}</script>
+<link rel="alternate" type="application/rss+xml" title="Webskan – blog (RSS)" href="/blog/feed.xml">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a><a href="/#faq">FAQ</a><a href="/en/blog/" hreflang="en">EN</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 27 listopada 2026 · 4 min czytania</p>
+<h1>Podrobiony e-mail „od sklepu”: 565 domen, trzy czwarte bez polityki DMARC, która go zatrzyma</h1>
+<p class="lead">Wiadomość z adresu <code>sklep@twojsklep.pl</code> może wysłać każdy, nie tylko Ty. O tym, czy skrzynka klienta ją przyjmie, decydują dwa wpisy w ustawieniach domeny: SPF i DMARC. Sprawdziliśmy je dla 565 małych polskich sklepów internetowych. SPF ma prawie każdy. Politykę DMARC, która każe podrobioną wiadomość zatrzymać, ma 133, czyli mniej niż co czwarty.</p>
+
+<h2>Co pokazało sprawdzenie</h2>
+<table class="vitals headers">
+<thead><tr><th>Rekord DMARC domeny sklepu</th><th>Sklepy</th><th>Udział</th></tr></thead>
+<tbody>
+<tr><td>Brak rekordu</td><td data-l="Sklepy">181</td><td data-l="Udział">32,0 %</td></tr>
+<tr><td>Polityka <code>none</code> – tylko obserwacja</td><td data-l="Sklepy">249</td><td data-l="Udział">44,1 %</td></tr>
+<tr><td>Polityka <code>quarantine</code> – do spamu</td><td data-l="Sklepy">106</td><td data-l="Udział">18,8 %</td></tr>
+<tr><td>Polityka <code>reject</code> – odrzucić</td><td data-l="Sklepy">27</td><td data-l="Udział">4,8 %</td></tr>
+<tr><td>Dwa rekordy naraz – wpis nieważny</td><td data-l="Sklepy">2</td><td data-l="Udział">0,4 %</td></tr>
+</tbody>
+</table>
+<p>Rekord SPF ma 544 z 565 domen (96 %); 21 nie ma żadnego. Jedna domena ma dwa rekordy SPF, co według standardu oznacza błąd. 16 domen nie ma ani SPF, ani DMARC.</p>
+<p>Zastrzeżenie jak zawsze: to nie jest próba losowa, tylko sklepy z list, które sami układaliśmy według branż, bez dużych sieci. Szczegóły w metodzie na końcu.</p>
+
+<h2>Co te wpisy robią</h2>
+<p><strong>SPF</strong> to lista serwerów, które mogą wysyłać pocztę w imieniu domeny. <strong>DMARC</strong> mówi skrzynce odbiorcy, co zrobić z wiadomością, która podaje Twoją domenę jako nadawcę, ale ani sprawdzenie SPF, ani podpis DKIM nie potwierdzają, że wysłano ją z tej domeny. Możliwe są trzy polecenia: <code>none</code> (nic nie rób), <code>quarantine</code> (odłóż do spamu), <code>reject</code> (odrzuć).</p>
+<p>Sam SPF nie wystarcza. Sprawdza adres techniczny wiadomości, a nie ten, który klient widzi w polu „Od”. Dopiero DMARC wiąże jedno z drugim.</p>
+
+<h2>Co z tego wynika</h2>
+<h3>1. Trzy czwarte sklepów zostawia decyzję skrzynce odbiorcy</h3>
+<p>432 z 565 domen (76 %) nie ma polityki <code>quarantine</code> ani <code>reject</code>. Wiadomość „Twoje zamówienie wymaga dopłaty” wysłana z podrobionego adresu takiego sklepu nie zostanie odrzucona z powodu DMARC. Czy trafi do klienta, zależy wtedy od filtrów jego poczty.</p>
+<h3>2. Polityka <code>none</code> ma sens tylko z raportami</h3>
+<p><code>none</code> to etap przejściowy: domena prosi skrzynki odbiorców o raporty, kto wysyła pocztę w jej imieniu, i na tej podstawie zaostrza politykę. Raporty przychodzą na adres z pola <code>rua</code>. Z 249 sklepów z polityką <code>none</code> pole <code>rua</code> ma 107. Pozostałe 142 mają rekord, który niczego nie blokuje i o niczym nie informuje.</p>
+<h3>3. Dwa rekordy to tak, jakby nie było żadnego</h3>
+<p>Dwa sklepy mają pod adresem <code>_dmarc</code> dwa rekordy, w obu przypadkach jeden z <code>quarantine</code>, drugi z <code>none</code>. Standard każe wtedy uznać, że rekordu nie ma. Tak się zwykle dzieje, gdy nowy wpis dodaje się obok starego, zamiast go zastąpić.</p>
+<h3>4. Domena bez skrzynek też potrzebuje wpisu</h3>
+<p>15 domen nie ma rekordu MX, a jedna wprost deklaruje, że poczty nie przyjmuje. 14 z tych 16 nie ma rekordu DMARC. Podszyć się można także pod domenę, w której nikt nie ma skrzynki. Jeśli z takiej domeny naprawdę nic nie wychodzi, także potwierdzenia zamówień, polityka <code>reject</code> niczego nie zepsuje.</p>
+
+<h2>Sprawdź swoją domenę</h2>
+<p>Jedno polecenie w terminalu (macOS, Linux):</p>
+<pre><code>dig +short TXT _dmarc.twojsklep.pl</code></pre>
+<p>W Windows: <code>nslookup -type=TXT _dmarc.twojsklep.pl</code>. Pusta odpowiedź oznacza brak rekordu. W odpowiedzi szukaj pola <code>p=</code>.</p>
+
+<h2>Jak dojść do polityki, która chroni</h2>
+<ol>
+<li><strong>Zacznij od obserwacji z raportami.</strong> W panelu domeny dodaj rekord TXT o nazwie <code>_dmarc</code> i treści <code>v=DMARC1; p=none; rua=mailto:dmarc@twojsklep.pl</code>. Jeśli rekord już jest, zmień go, nie dodawaj drugiego.</li>
+<li><strong>Przez dwa do czterech tygodni czytaj raporty.</strong> Pokażą wszystkie systemy, które wysyłają pocztę z Twojej domeny: skrzynkę firmową, platformę sklepu, newsletter, program do faktur. Każdy z nich musi przechodzić SPF albo podpisywać wiadomości DKIM w Twojej domenie. Instrukcję ma zwykle dostawca danego systemu.</li>
+<li><strong>Zaostrz politykę.</strong> Gdy w raportach nie ma już własnych wiadomości z błędem, zmień <code>p=none</code> na <code>p=quarantine</code>, a po kolejnych tygodniach bez problemów na <code>p=reject</code>.</li>
+</ol>
+<p>Kolejność ma znaczenie. <code>reject</code> ustawione od razu, bez sprawdzenia raportów, potrafi odciąć własne potwierdzenia zamówień. Nasza domena ma politykę <code>quarantine</code> i adres do raportów.</p>
+
+<section class="fullbox" id="skan">
+<h2>Sprawdź swoją stronę – za darmo, w minutę</h2>
+<p>Darmowy szybki skan Webskan sprawdza rekordy SPF i DMARC domeny, a do tego szybkość strony na telefonie, HTTPS, nagłówki bezpieczeństwa, odsłonięte pliki i podstawy SEO. Bez e-maila, bez rejestracji.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="pl"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://twojafirma.pl" required maxlength="500" aria-label="Adres strony"><button class="btn" type="submit">Skanuj za darmo</button></form>
+</section>
+
+<h2>Metoda i zastrzeżenia</h2>
+<p>Zestawienie wszystkich naszych pomiarów, z próbą, datą i metodą: <a href="/badania/">Małe polskie sklepy internetowe w liczbach</a>.</p>
+<ul>
+<li>Lista: 567 domen małych polskich sklepów internetowych, tych samych co w zestawieniu o <a href="/blog/security-txt-527-sklepow/">security.txt</a>; układana ręcznie według branż, bez dużych sieci. Dwie domeny już nie istnieją w DNS, zostało 565.</li>
+<li>Pomiar: w nocy z 26 na 27 listopada 2026 r. Wyłącznie zapytania do publicznego serwera DNS: o rekordy A, MX i TXT domeny oraz TXT pod nazwą <code>_dmarc</code>. Do serwerów sklepów nie wysłaliśmy żadnego zapytania ani wiadomości.</li>
+<li>Dla dziesięciu sklepów działających w subdomenie (np. <code>sklep.firma.pl</code>) sprawdziliśmy domenę główną, bo to jej polityka obowiązuje, gdy subdomena nie ma własnej. Nie sprawdzaliśmy, czy subdomena ma własny rekord.</li>
+<li>Nie ocenialiśmy podpisów DKIM (z zewnątrz nie da się ich wyliczyć), pól <code>sp</code> i <code>pct</code> ani tego, czy lista serwerów w SPF jest poprawna. Liczy się sama obecność rekordu i wartość pola <code>p</code>.</li>
+<li>Brak polityki <code>quarantine</code> lub <code>reject</code> nie znaczy, że podrobiona wiadomość na pewno dojdzie: duże skrzynki pocztowe mają własne filtry. Znaczy, że domena sama o to nie prosi.</li>
+<li>Zdania o standardzie opieramy na RFC 7489 (DMARC) i RFC 7208 (SPF). Nazw sklepów nie podajemy.</li>
+</ul>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/blog/feed.xml">RSS</a> · <a href="/badania/">Badania</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a> · <a href="/developers/" hreflang="en">Dla programistów (EN)</a> · kontakt: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer>
+</div>
+</body>
+</html>

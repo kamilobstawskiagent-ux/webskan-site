@@ -6,7 +6,14 @@
 <atom:link href="https://webskan.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
 <description>Zdrowie strony WWW małej firmy po ludzku: szybkość, bezpieczeństwo, SEO, dostępność, prawo.</description>
 <language>pl</language>
-<lastBuildDate>Thu, 26 Nov 2026 07:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 27 Nov 2026 07:00:00 GMT</lastBuildDate>
+<item>
+<title>Podrobiony e-mail „od sklepu”: 565 domen, trzy czwarte bez polityki DMARC, która go zatrzyma</title>
+<link>https://webskan.com/blog/dmarc-spf-565-sklepow/</link>
+<guid isPermaLink="true">https://webskan.com/blog/dmarc-spf-565-sklepow/</guid>
+<pubDate>Fri, 27 Nov 2026 07:00:00 GMT</pubDate>
+<description>Sprawdziliśmy rekordy SPF i DMARC 565 małych polskich sklepów internetowych. SPF ma 96 %, ale DMARC z polityką, która zatrzymuje podrobioną pocztę, tylko 133 sklepy. Jak sprawdzić swoją domenę jednym poleceniem.</description>
+</item>
 <item>
 <title>Cztery luki w samym WordPressie na liście aktywnie wykorzystywanych. Co piąty sklep ma wersję sprzed poprawki</title>
 <link>https://webskan.com/blog/wordpress-luki-aktywnie-wykorzystywane-2026/</link>
