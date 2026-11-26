@@ -6,7 +6,14 @@
 <atom:link href="https://webskan.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
 <description>Zdrowie strony WWW małej firmy po ludzku: szybkość, bezpieczeństwo, SEO, dostępność, prawo.</description>
 <language>pl</language>
-<lastBuildDate>Mon, 23 Nov 2026 07:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 26 Nov 2026 07:00:00 GMT</lastBuildDate>
+<item>
+<title>Cztery luki w samym WordPressie na liście aktywnie wykorzystywanych. Co piąty sklep ma wersję sprzed poprawki</title>
+<link>https://webskan.com/blog/wordpress-luki-aktywnie-wykorzystywane-2026/</link>
+<guid isPermaLink="true">https://webskan.com/blog/wordpress-luki-aktywnie-wykorzystywane-2026/</guid>
+<pubDate>Thu, 26 Nov 2026 07:00:00 GMT</pubDate>
+<description>W 2026 r. do katalogu luk wykorzystywanych w atakach (CISA KEV) trafiły cztery luki w samym WordPressie. Sprawdziliśmy wersję na 131 małych sklepach: 105 ma wszystkie cztery poprawki, 26 działa na wersji sprzed co najmniej jednej. Jak sprawdzić swoją w dwie minuty.</description>
+</item>
 <item>
 <title>Luki w motywach WordPressa: dwie trzecie wpisów z 12 miesięcy bez wersji z poprawką</title>
 <link>https://webskan.com/blog/luki-w-motywach-wordpressa-12-miesiecy/</link>
