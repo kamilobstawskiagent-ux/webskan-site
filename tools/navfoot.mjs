@@ -28,7 +28,7 @@ const LANDING = new Set(['index.html', 'en/index.html', 'developers/index.html',
 const SKIP = /(^|\/)(raport|report)\.html$/;
 const THANKS = new Set(['dziekujemy/index.html', 'en/thanks/index.html']);
 // strony bez odpowiednika językowego w nazwie: mapa ręczna
-const PAIRS = { 'regulamin/': '/en/terms/', 'prywatnosc/': '/en/privacy/', 'przyklad/': '/en/sample/', 'en/terms/': '/regulamin/', 'en/privacy/': '/prywatnosc/', 'en/sample/': '/przyklad/', 'blog/': '/en/blog/', 'en/blog/': '/blog/' };
+const PAIRS = { 'regulamin/': '/en/terms/', 'prywatnosc/': '/en/privacy/', 'przyklad/': '/en/sample/', 'en/terms/': '/regulamin/', 'en/privacy/': '/prywatnosc/', 'en/sample/': '/przyklad/', 'blog/': '/en/blog/', 'en/blog/': '/blog/', 'badania/': '/en/research/', 'en/research/': '/badania/' };
 
 function footer(lang, rel) {
   const blog = rel.startsWith('blog/') || rel.startsWith('en/blog/');
@@ -36,7 +36,7 @@ function footer(lang, rel) {
   if (lang === 'pl') {
     return `<footer>© 2026 Webskan · <a href="/blog/">Blog</a>${blog ? ' · <a href="/blog/feed.xml">RSS</a>' : ''} · <a href="/badania/">Badania</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a> · <a href="/developers/" hreflang="en">Dla programistów (EN)</a> · kontakt: ${MAIL}</footer>`;
   }
-  return `<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a>${blog ? ' · <a href="/en/blog/feed.xml">RSS</a>' : ''} · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a> · ${dev ? '<a href="/en/">For business owners</a>' : '<a href="/developers/">For developers</a>'} · contact: ${MAIL}</footer>`;
+  return `<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a>${blog ? ' · <a href="/en/blog/feed.xml">RSS</a>' : ''} · <a href="/en/research/">Research</a> · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a> · ${dev ? '<a href="/en/">For business owners</a>' : '<a href="/developers/">For developers</a>'} · contact: ${MAIL}</footer>`;
 }
 
 function nav(lang, rel, oldNav) {
