@@ -6,7 +6,7 @@
 //  - pozostałe strony treści: Blog · Cennik · FAQ · EN  (EN: Blog · Pricing · FAQ · PL; wpisy dla programistów: + For developers),
 //    link językowy prowadzi do odpowiednika strony, a gdy go nie ma – do indeksu bloga w drugim języku,
 //  - strony podziękowania bez menu (bez rozpraszania po zakupie),
-//  - stopka wszędzie ta sama: Blog · [RSS na blogu] · Regulamin · Polityka prywatności · Dla programistów (EN) · kontakt
+//  - stopka wszędzie ta sama: Blog · [RSS na blogu] · Badania (PL) · Regulamin · Polityka prywatności · Dla programistów (EN) · kontakt
 //    (EN: Blog · Terms · Privacy policy · For developers / na stronach developers: For business owners · contact).
 // Wygenerowane raporty próbki (raport.html / report.html) są pomijane. Strony renderowane przez Workera mają to samo w src/scan.js layout().
 import fs from 'node:fs';
@@ -34,7 +34,7 @@ function footer(lang, rel) {
   const blog = rel.startsWith('blog/') || rel.startsWith('en/blog/');
   const dev = rel.startsWith('developers/');
   if (lang === 'pl') {
-    return `<footer>© 2026 Webskan · <a href="/blog/">Blog</a>${blog ? ' · <a href="/blog/feed.xml">RSS</a>' : ''} · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a> · <a href="/developers/" hreflang="en">Dla programistów (EN)</a> · kontakt: ${MAIL}</footer>`;
+    return `<footer>© 2026 Webskan · <a href="/blog/">Blog</a>${blog ? ' · <a href="/blog/feed.xml">RSS</a>' : ''} · <a href="/badania/">Badania</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a> · <a href="/developers/" hreflang="en">Dla programistów (EN)</a> · kontakt: ${MAIL}</footer>`;
   }
   return `<footer>© 2026 Webskan · <a href="/en/blog/">Blog</a>${blog ? ' · <a href="/en/blog/feed.xml">RSS</a>' : ''} · <a href="/en/terms/">Terms</a> · <a href="/en/privacy/">Privacy policy</a> · ${dev ? '<a href="/en/">For business owners</a>' : '<a href="/developers/">For developers</a>'} · contact: ${MAIL}</footer>`;
 }

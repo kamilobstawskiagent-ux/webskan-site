@@ -36,7 +36,7 @@ const PAGES = {
   developers: '/developers/',
   agencies: '/agencje/', agencies_sample: '/agencje/przyklad/raport', agencies_thanks: '/agencje/dziekujemy/',
   security_pl: '/bezpieczenstwo/', security_en: '/en/security/',
-  deps_pl: '/zaleznosci/', deps_en: '/en/dependencies/',
+  badania: '/badania/', deps_pl: '/zaleznosci/', deps_en: '/en/dependencies/',
   notfound: '/nie-ma-takiej-strony/',
 };
 const PROFILES = {
