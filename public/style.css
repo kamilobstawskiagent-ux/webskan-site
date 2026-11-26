@@ -289,3 +289,11 @@ pre.cmd{background:var(--brand);color:#fff;border-radius:10px;padding:14px 16px;
 .res .cite{font:500 14px/1.5 var(--mono);background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 16px;max-width:820px}
 @media (max-width:900px){.res .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.res .studies{grid-template-columns:1fr}}
 @media (max-width:420px){.res .kpis{gap:8px}.res .kpi{padding:14px 12px 12px}.res .kpi span{font-size:14.5px}.res .meta div{grid-template-columns:1fr;gap:0}}
+.res .sum{width:100%;border-collapse:separate;border-spacing:0;margin:18px 0 8px;background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:15.5px}
+.res .sum th,.res .sum td{text-align:left;padding:11px 16px;border-bottom:1px solid #E8EDEC;vertical-align:baseline}
+.res .sum tbody tr:last-child th,.res .sum tbody tr:last-child td{border-bottom:0}
+.res .sum thead th{font:500 11.5px var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--mute);background:#EDF1F0}
+.res .sum tbody th{font-weight:400}.res .sum tbody th a{display:inline-block;padding:3px 0;color:var(--ink);text-decoration-color:#B9C6C3}.res .sum tbody th a:hover{color:var(--brand2)}
+.res .sum td{font:500 13px/1.4 var(--mono);color:var(--soft)}.res .sum td.v{font:600 17px/1.2 var(--mono);color:var(--brand);white-space:nowrap}
+.res .chart{margin:28px 0 8px;max-width:640px}.res .chart img{display:block;border:1px solid var(--line);border-radius:14px}.res .chart figcaption{font-size:14.5px;color:var(--mute);margin-top:8px}.res .chart figcaption a{display:inline-block;padding:3px 0}
+@media (max-width:640px){.res .sum thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.res .sum tbody tr{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;padding:11px 14px;border-bottom:1px solid #E8EDEC}.res .sum tbody tr:last-child{border-bottom:0}.res .sum th,.res .sum td{padding:0;border:0}.res .sum tbody th{grid-column:1;grid-row:1}.res .sum td.v{grid-column:2;grid-row:1 / span 2;text-align:right}.res .sum td:nth-child(2){grid-column:1;grid-row:2;margin-top:3px}.res .sum td:nth-child(4){grid-column:1;grid-row:3;font-size:12px;color:var(--mute)}}

@@ -1,0 +1,15 @@
+{
+ "out": "/badania/wykres-sklepy-2026-11.png",
+ "eyebrow": "Pomiary własne · listopad 2026",
+ "title": "Małe polskie sklepy internetowe w&nbsp;liczbach",
+ "source": "Źródło: webskan.com/badania/ · to nie jest próba losowa",
+ "rows": [
+  {"label": "Brak co najmniej jednego z pięciu nagłówków bezpieczeństwa", "sample": "249 z 255 sklepów", "value": 98, "text": "98 %"},
+  {"label": "Brak polityki DMARC, która zatrzymuje podrobioną pocztę", "sample": "432 z 565 domen", "value": 76, "text": "76 %"},
+  {"label": "Główna treść strony pojawia się na telefonie po ponad 4 s", "sample": "190 z 255 sklepów", "value": 75, "text": "75 %"},
+  {"label": "PHP bez poprawek bezpieczeństwa", "sample": "26 z 51 sklepów, które podają wersję", "value": 51, "text": "51 %"},
+  {"label": "Brak nagłówka H1 na stronie głównej", "sample": "101 z 255 sklepów", "value": 40, "text": "40 %"},
+  {"label": "WordPress sprzed poprawki luki używanej w atakach", "sample": "26 ze 131 sklepów na WordPressie", "value": 20, "text": "20 %"},
+  {"label": "Publicznie dostępny plik, którego nie powinno być widać", "sample": "24 z 255 sklepów", "value": 9, "text": "9 %"}
+ ]
+}
