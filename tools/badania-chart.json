@@ -17,7 +17,7 @@
    "text": "80 %"
   },
   {
-   "label": "Domena nie każe odrzucać ani odkładać do spamu podrobionych maili (DMARC)",
+   "label": "Sklep nie mówi skrzynkom pocztowym, żeby zatrzymywały maile podszywające się pod sklep (DMARC)",
    "sample": "432 z 565 domen",
    "value": 76,
    "text": "76 %"
