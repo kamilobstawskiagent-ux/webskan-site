@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Przeskanowaliśmy 255 małych sklepów internetowych: co się psuje najczęściej – Webskan</title>
-<meta name="description" content="Strony główne 255 małych polskich sklepów internetowych zmierzone tym samym narzędziem w dwa dni: mediana szybkości na telefonie 58/100, LCP 8,3 s, 98 % bez kompletu nagłówków bezpieczeństwa, 9 % z publicznie dostępnymi plikami phpinfo, logami PHP albo panelem bazy danych. Liczby, metoda i trzy rzeczy do sprawdzenia we własnym sklepie.">
+<meta name="description" content="Strony główne 255 małych polskich sklepów internetowych zmierzone tym samym narzędziem w trzy dni: mediana szybkości na telefonie 58/100, LCP 8,3 s, 98 % bez kompletu nagłówków bezpieczeństwa, 9 % z publicznie dostępnymi plikami phpinfo, logami PHP albo panelem bazy danych. Liczby, metoda i trzy rzeczy do sprawdzenia we własnym sklepie.">
 <link rel="canonical" href="https://webskan.com/blog/skan-255-sklepow-internetowych/">
 <meta property="og:title" content="Przeskanowaliśmy 255 małych sklepów internetowych: co się psuje najczęściej">
 <meta property="og:description" content="Mediana szybkości na telefonie 58/100, LCP 8,3 s, 98 % bez kompletu nagłówków bezpieczeństwa, 9 % z publicznie dostępnymi plikami, których nie powinno być widać. Liczby z 255 sklepów i trzy rzeczy do sprawdzenia dziś.">
@@ -24,7 +24,7 @@
 <article>
 <p class="eyebrow">Blog · 12 listopada 2026 · 7 min czytania</p>
 <h1>Przeskanowaliśmy 255 małych sklepów internetowych: co się psuje najczęściej</h1>
-<p class="lead">W dwa dni (10–11 listopada 2026) zmierzyliśmy strony główne 255 małych polskich sklepów internetowych tym samym narzędziem, z tego samego komputera i w tych samych warunkach. Wynik jest laboratoryjny, ale porównanie między sklepami jest uczciwe – i mało pocieszające: mediana szybkości na telefonie to 58/100, główna treść pojawia się po 8 sekundach, a co jedenasty sklep ma w internecie plik, którego nie powinien tam mieć.</p>
+<p class="lead">W trzy dni (9–11 listopada 2026) zmierzyliśmy strony główne 255 małych polskich sklepów internetowych tym samym narzędziem, z tego samego komputera i w tych samych warunkach. Wynik jest laboratoryjny, ale porównanie między sklepami jest uczciwe – i mało pocieszające: mediana szybkości na telefonie to 58/100, główna treść pojawia się po 8 sekundach, a co jedenasty sklep ma w internecie plik, którego nie powinien tam mieć.</p>
 
 <h2>Metoda w trzech zdaniach</h2>
 <p>Każdy sklep dostał ten sam pomiar strony głównej: Lighthouse w prawdziwej przeglądarce Chrome z symulacją telefonu i łącza 4G (tak liczy też Google PageSpeed Insights w trybie „laboratoryjnym”), plus kilkanaście sprawdzeń nagłówków HTTP, przekierowań, certyfikatu, HTML i publicznie dostępnych plików. Do zestawienia weszły tylko sklepy, dla których Lighthouse zdołał wystawić pełną ocenę – 255 z około 290 zmierzonych. Próba to małe sklepy z kilkudziesięciu nisz (zoo, kawa i herbata, kosmetyki, ogród, zabawki, sport, zdrowa żywność, rękodzieło, części i narzędzia) na WooCommerce, PrestaShop, Shopify i własnych silnikach; nie jest to próba reprezentatywna dla całego polskiego e-commerce, tylko obraz tego, jak wygląda typowy mały sklep.</p>
@@ -104,9 +104,10 @@
 </section>
 
 <h2>Zastrzeżenia</h2>
+<p><strong>Aktualizacja z 27 listopada 2026 r.:</strong> szybkość, nagłówki i podstawy SEO zmierzyliśmy ponownie na całej liście jednego dnia: <a href="/blog/pomiar-526-sklepow-internetowych/">526 sklepów zmierzonych jednego dnia</a>. Odsłoniętych plików nie szukaliśmy ponownie; ta liczba pochodzi tylko z pomiaru opisanego tutaj.</p>
 <p>Zestawienie wszystkich naszych pomiarów, z próbą, datą i metodą: <a href="/badania/">Małe polskie sklepy internetowe w liczbach</a>.</p>
 <ul>
-<li>Pomiar z 10–11 listopada 2026, z jednego komputera w Polsce, po jednym przebiegu Lighthouse na sklep. Pojedynczy wynik potrafi różnić się o kilka punktów między przebiegami; mediany i udziały procentowe są na to odporne, pojedyncze rekordy mniej.</li>
+<li>Pomiar z 9–11 listopada 2026, z jednego komputera w Polsce, po jednym przebiegu Lighthouse na sklep. Pojedynczy wynik potrafi różnić się o kilka punktów między przebiegami; mediany i udziały procentowe są na to odporne, pojedyncze rekordy mniej.</li>
 <li>Do statystyki weszły tylko sklepy z pełną oceną Lighthouse (255 z ok. 290). Sklepy, które zablokowały pomiar albo nie załadowały się w 90 s, pominięto – gdyby je doliczyć, wyniki szybkości byłyby gorsze, nie lepsze.</li>
 <li>„Brak kompletu nagłówków bezpieczeństwa” oznacza brak co najmniej jednego z pięciu wymienionych; sklep z czterema z pięciu liczy się tak samo jak sklep bez żadnego.</li>
 <li>Pliki publicznie dostępne liczono według stanu z chwili skanu; każdy z 24 przypadków zweryfikowano ręcznie (kod HTTP 200 i treść pasująca do rodzaju pliku).</li>

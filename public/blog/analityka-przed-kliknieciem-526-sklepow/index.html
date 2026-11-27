@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zanim klient kliknie cokolwiek: 60 % sklepów wysyła już zapytanie do Google Analytics albo piksela Mety – Webskan</title>
+<meta name="description" content="Wczytaliśmy strony główne 526 małych polskich sklepów internetowych i nie kliknęliśmy niczego. 296 wysłało w tym czasie pomiar do Google Analytics, 109 do piksela Mety. W 155 sklepach wszystkie pomiary Google miały znacznik braku zgody.">
+<link rel="canonical" href="https://webskan.com/blog/analityka-przed-kliknieciem-526-sklepow/">
+<meta property="og:title" content="Zanim klient kliknie cokolwiek: 60 % sklepów wysyła już zapytanie do Google Analytics albo piksela Mety">
+<meta property="og:description" content="Wczytaliśmy strony główne 526 małych polskich sklepów internetowych i nie kliknęliśmy niczego. 296 wysłało w tym czasie pomiar do Google Analytics, 109 do piksela Mety. W 155 sklepach wszystkie pomiary Google miały znacznik braku zgody.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://webskan.com/blog/analityka-przed-kliknieciem-526-sklepow/">
+<meta property="og:image" content="https://webskan.com/og-pl-2a636789.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><meta name="theme-color" content="#0E3B43">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Zanim klient kliknie cokolwiek: 60 % sklepów wysyła już zapytanie do Google Analytics albo piksela Mety", "description": "Wczytaliśmy strony główne 526 małych polskich sklepów internetowych i nie kliknęliśmy niczego. 296 wysłało w tym czasie pomiar do Google Analytics, 109 do piksela Mety. W 155 sklepach wszystkie pomiary Google miały znacznik braku zgody.", "datePublished": "2026-11-27", "dateModified": "2026-11-27", "inLanguage": "pl", "author": {"@type": "Organization", "name": "Webskan", "url": "https://webskan.com/"}, "publisher": {"@type": "Organization", "name": "Webskan", "url": "https://webskan.com/"}, "mainEntityOfPage": "https://webskan.com/blog/analityka-przed-kliknieciem-526-sklepow/"}</script>
+<link rel="alternate" type="application/rss+xml" title="Webskan – blog (RSS)" href="/blog/feed.xml">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/">web<span>skan</span></a><nav><a href="/blog/">Blog</a><a href="/#cena">Cennik</a><a href="/#faq">FAQ</a><a href="/en/blog/" hreflang="en">EN</a></nav></header>
+<main class="post">
+<article>
+<p class="eyebrow">Blog · 27 listopada 2026 · 5 min czytania</p>
+<h1>Zanim klient kliknie cokolwiek: 60 % sklepów wysyła już zapytanie do Google Analytics albo piksela Mety</h1>
+<p class="lead">Wczytaliśmy strony główne 526 małych polskich sklepów internetowych w czystej przeglądarce i nie kliknęliśmy niczego: ani banera zgód, ani żadnego przycisku. Zapisaliśmy, dokąd przeglądarka w tym czasie wysłała zapytania. W 318 sklepach (60 %) poszło zapytanie pomiarowe do Google Analytics albo do piksela Mety.</p>
+
+<h2>Co zobaczyliśmy</h2>
+<table class="vitals headers">
+<thead><tr><th>Przed jakimkolwiek kliknięciem</th><th>Sklepy</th><th>Udział</th></tr></thead>
+<tbody>
+<tr><td>Zapytanie pomiarowe do Google Analytics</td><td data-l="Sklepy">296</td><td data-l="Udział">56 %</td></tr>
+<tr><td>Zapytanie do piksela Mety (Facebook)</td><td data-l="Sklepy">109</td><td data-l="Udział">21 %</td></tr>
+<tr><td>Jedno i drugie</td><td data-l="Sklepy">87</td><td data-l="Udział">17 %</td></tr>
+<tr><td>Co najmniej jedno z nich</td><td data-l="Sklepy">318</td><td data-l="Udział">60 %</td></tr>
+<tr><td>Żadne z nich</td><td data-l="Sklepy">208</td><td data-l="Udział">40 %</td></tr>
+</tbody>
+</table>
+<p>To nie to samo co obecność skryptu na stronie. 352 sklepy wczytały skrypt Google (Tag Manager albo gtag); 58 z nich nie wysłało w tym czasie żadnego pomiaru do Google Analytics. Liczymy tylko zapytania, które naprawdę wyszły.</p>
+
+<h2>Google Analytics: w ponad połowie tych sklepów wszystkie pomiary mają znacznik „zgody nie ma”</h2>
+<p>Jeśli sklep korzysta z trybu uzyskiwania zgody Google (Consent Mode), każdy pomiar Google Analytics 4 niesie parametr <code>gcs</code> ze stanem zgody. Dzięki temu z zewnątrz widać trzy różne sytuacje.</p>
+<table class="vitals headers">
+<thead><tr><th>296 sklepów z pomiarem Google Analytics</th><th>Sklepy</th><th>Odsetek wszystkich 526 sklepów</th></tr></thead>
+<tbody>
+<tr><td>Wszystkie pomiary ze znacznikiem „zgody nie ma”</td><td data-l="Sklepy">155</td><td data-l="Udział">29 %</td></tr>
+<tr><td>Co najmniej jeden pomiar bez żadnej informacji o zgodzie</td><td data-l="Sklepy">133</td><td data-l="Udział">25 %</td></tr>
+<tr><td>Pomiar ze znacznikiem „zgoda jest”</td><td data-l="Sklepy">8</td><td data-l="Udział">2 %</td></tr>
+</tbody>
+</table>
+<ul>
+<li><strong>155 sklepów: wszystkie pomiary mają znacznik „zgody nie ma”</strong> (<code>gcs=G100</code>). To 52 % sklepów z pomiarem. Google opisuje takie zapytania jako pomiary bez plików cookie. W adresach, które zapisaliśmy, zapytanie trafia na serwery Google i zawiera między innymi adres oglądanej strony.</li>
+<li><strong>133 sklepy: co najmniej jeden pomiar bez informacji o zgodzie.</strong> Taki pomiar nie niesie znacznika odmowy, więc z samego zapytania nie wynika, że nikt się nie zgodził. W 7 z tych sklepów część pomiarów ma znacznik „zgody nie ma”, a część nie ma żadnego. 44 sklepy z tej grupy wysyłają też pomiary w starym formacie Universal Analytics, którego Google nie przetwarza od lipca 2023 r.; zapytania nadal trafiają na jego serwery.</li>
+<li><strong>8 sklepów: co najmniej jeden pomiar ma znacznik „zgoda jest”</strong>, choć w naszym wczytaniu nikt niczego nie kliknął. Przyczyną mogą być ustawienia narzędzia zgód (na przykład reguły dla regionów), kod motywu albo to, że pomiar robiła zautomatyzowana przeglądarka.</li>
+</ul>
+
+<h2>Piksel Mety: 109 sklepów</h2>
+<p>W 109 sklepach (21 %) przeglądarka wysłała zapytanie pod adres <code>facebook.com/tr</code>, czyli zdarzenie piksela Mety. Skrypt piksela wczytało 118 sklepów; w 11 z nich nie poszło żadne zdarzenie. Dwa sklepy wysłały zdarzenie, choć tego skryptu nie zapisaliśmy.</p>
+<p>41 sklepów ma we wszystkich pomiarach Google Analytics znacznik „zgody nie ma”, a jednocześnie przeglądarka wysyła w nich zdarzenie do Mety.</p>
+
+<h2>Czego ten pomiar nie mówi</h2>
+<ul>
+<li><strong>Nie oceniamy zgodności z prawem.</strong> To zależy od tego, co dokładnie sklep zapisuje i przetwarza oraz na jakiej podstawie. Z zewnątrz widać tylko, że zapytanie wyszło i jaki miało znacznik.</li>
+<li><strong>Nie wiemy, czy sklep w ogóle pokazał baner zgód.</strong> Dlatego piszemy „przed jakimkolwiek kliknięciem”, a nie „przed zgodą”.</li>
+<li><strong>To dolna granica.</strong> Liczymy tylko Google Analytics i piksel Mety. Pomiar kończył się zwykle kilka sekund po wczytaniu strony, więc zapytania wysyłane później, po przewinięciu albo po pierwszym ruchu użytkownika, nie weszły do zestawienia. Część wtyczek przyspieszających celowo opóźnia skrypty do pierwszej interakcji. Nie widzimy też pomiarów wysyłanych przez własną subdomenę sklepu.</li>
+<li><strong>Mierzyła zautomatyzowana przeglądarka.</strong> Miała ustawiony język angielski. Narzędzie zgód może ją traktować inaczej niż zwykłego klienta z Polski.</li>
+</ul>
+
+<h2>Sprawdź swój sklep w dwie minuty</h2>
+<ol>
+<li>Otwórz sklep w oknie prywatnym przeglądarki Chrome i niczego nie klikaj.</li>
+<li>Naciśnij F12 (na Macu Cmd+Option+I), wybierz zakładkę Sieć (Network) i odśwież stronę.</li>
+<li>W polu filtra wpisz <code>collect</code>. Każdy wiersz z adresem <code>google-analytics.com</code> albo <code>analytics.google.com</code> to pomiar wysłany przed kliknięciem. W jego adresie poszukaj <code>gcs=</code>: <code>G100</code> to znacznik „zgody nie ma”, <code>G111</code> lub <code>G101</code> to zgoda na analitykę, a brak <code>gcs</code> w pomiarze <code>/g/collect</code> oznacza, że sklep nie przekazuje stanu zgody.</li>
+<li>Wpisz w filtrze <code>facebook.com/tr</code>. Każdy wiersz to zdarzenie piksela Mety.</li>
+<li>Jeśli po drodze kliknąłeś baner, zamknij wszystkie okna prywatne i zacznij od nowa.</li>
+</ol>
+<p>Jeśli coś wychodzi, a nie powinno: ustawienie jest w narzędziu banera zgód (większość ma przełącznik blokowania skryptów do czasu decyzji i integrację z trybem zgody Google) albo w Menedżerze tagów Google, gdzie każdy tag ma warunek zgody. Piksel Mety trzeba objąć tym samym warunkiem osobno.</p>
+
+<section class="fullbox" id="skan">
+<h2>Sprawdź swoją stronę – za darmo, w minutę</h2>
+<p>Darmowy szybki skan Webskan mierzy szybkość strony na telefonie, HTTPS, nagłówki bezpieczeństwa, odsłonięte pliki i podstawy SEO. Bez e-maila, bez rejestracji.</p>
+<form class="scanform" action="/api/scan" method="post"><input type="hidden" name="lang" value="pl"><input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><input type="text" name="url" inputmode="url" placeholder="https://twojafirma.pl" required maxlength="500" aria-label="Adres strony"><button class="btn" type="submit">Skanuj za darmo</button></form>
+</section>
+
+<h2>Metoda i zastrzeżenia</h2>
+<p>Zestawienie wszystkich naszych pomiarów, z próbą, datą i metodą: <a href="/badania/">Małe polskie sklepy internetowe w liczbach</a>.</p>
+<ul>
+<li>Próba: 526 sklepów z pełnym wynikiem <a href="/blog/pomiar-526-sklepow-internetowych/">pomiaru z 27 listopada 2026 r.</a>, z listy 567 domen małych polskich sklepów układanej ręcznie według branż, bez dużych sieci. To nie jest próba losowa.</li>
+<li>Pomiar: to samo jedno wczytanie strony głównej, z którego pochodzi pomiar szybkości. Przeglądarka Chrome z czystym profilem (bez plików cookie i historii), symulacja telefonu, komputer w Polsce. Żadnych kliknięć, przewijania ani wpisywania.</li>
+<li>Zapytanie pomiarowe do Google Analytics: adres ze ścieżką <code>/g/collect</code>, <code>/j/collect</code>, <code>/r/collect</code> albo <code>/collect</code> w domenie <code>google-analytics.com</code> lub <code>analytics.google.com</code>, z odpowiedzią serwera o kodzie 2xx lub 3xx. Rzadkiej ścieżki <code>/g/s/collect</code>, którą zobaczyliśmy w jednym sklepie, nie liczymy. Zapytanie do piksela Mety: adres <code>facebook.com/tr</code>.</li>
+<li>Stan zgody: parametr <code>gcs</code> w adresie pomiaru Google Analytics 4 (<code>G100</code> – odmowa dla reklam i analityki, <code>G111</code> lub <code>G101</code> – zgoda co najmniej na analitykę). Pomiar bez <code>gcs</code> albo z wartością <code>G1--</code> liczymy jako „bez informacji o zgodzie”.</li>
+<li>Sklep z pomiarami różnego rodzaju trafia do jednej grupy: „zgoda jest”, jeśli ma choć jeden taki pomiar; „zgody nie ma”, tylko jeśli wszystkie jego pomiary mają ten znacznik; w pozostałych przypadkach „bez informacji o zgodzie”.</li>
+<li>Innych narzędzi (reklamy Google, TikTok, Hotjar, systemy mailingowe) nie liczyliśmy. Nazw sklepów nie podajemy.</li>
+</ul>
+</article>
+</article>
+</main>
+<footer>© 2026 Webskan · <a href="/blog/">Blog</a> · <a href="/blog/feed.xml">RSS</a> · <a href="/badania/">Badania</a> · <a href="/regulamin/">Regulamin</a> · <a href="/prywatnosc/">Polityka prywatności</a> · <a href="/developers/" hreflang="en">Dla programistów (EN)</a> · kontakt: <a href="mailto:kontakt@webskan.com">kontakt@webskan.com</a></footer>
+</div>
+</body>
+</html>
