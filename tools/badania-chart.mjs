@@ -24,8 +24,20 @@ h1{font:700 50px/1.08 B;letter-spacing:-.02em}
 .foot{padding:26px 72px 40px;display:flex;justify-content:space-between;align-items:baseline;font:500 19px M;color:#4F6266}
 .logo{font:700 34px B;color:#0E3B43;letter-spacing:-.02em}.logo span{color:#13696B}
 </style><div class="top"><div class="eb">${cfg.eyebrow}</div><h1>${cfg.title}</h1></div><div class="body">${rows}</div><div class="foot"><span>${cfg.source}</span><span class="logo">web<span>skan</span></span></div>`;
+// Wariant na telefon (27.11, uwaga Kamila: 1200 px ściśnięte do ekranu było nieczytelne): szerokość 600 px CSS × 2, wysokość z treści, większe pismo.
+const mobileCss = `<style>body{width:600px;height:auto;display:block}.top{padding:30px 32px 26px}.eb{font-size:17px;margin-bottom:12px}h1{font-size:38px}
+.body{display:block;padding:8px 32px 0}.row{grid-template-columns:1fr 150px;column-gap:12px;row-gap:9px;padding:20px 0;border-bottom:1px solid #DDE5E3}.row:last-child{border-bottom:0}
+.lab{font-size:25px;line-height:1.24}.lab small{font-size:18px;margin-top:5px}.row b{font-size:33px}.track{height:12px}
+.foot{display:block;padding:22px 32px 30px;font-size:17px;line-height:1.4}.foot .logo{display:block;margin-top:12px;font-size:30px}</style>`;
 const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
 const p = await b.newPage({ viewport: { width: 1200, height: 1200 } });
 await p.setContent(html); await p.evaluate(() => document.fonts.ready);
 await p.screenshot({ path: new URL('../public' + cfg.out, import.meta.url).pathname });
-await b.close(); console.log('ok', cfg.out);
+console.log('ok', cfg.out);
+if (cfg.outMobile) {
+  const m = await b.newPage({ viewport: { width: 600, height: 900 }, deviceScaleFactor: 2 });
+  await m.setContent(html + mobileCss); await m.evaluate(() => document.fonts.ready);
+  await m.screenshot({ path: new URL('../public' + cfg.outMobile, import.meta.url).pathname, fullPage: true });
+  console.log('ok', cfg.outMobile, await m.evaluate(() => [document.documentElement.scrollWidth * 2, document.documentElement.scrollHeight * 2].join('x')));
+}
+await b.close();
