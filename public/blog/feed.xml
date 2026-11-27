@@ -8,11 +8,11 @@
 <language>pl</language>
 <lastBuildDate>Fri, 27 Nov 2026 07:00:00 GMT</lastBuildDate>
 <item>
-<title>Zanim klient kliknie cokolwiek: 60 % sklepów wysyła już zapytanie do Google Analytics albo piksela Mety</title>
+<title>Zanim klient cokolwiek kliknie: 133 sklepy wysyłają do Google Analytics pomiar bez informacji o zgodzie, 109 uruchamia piksel Mety. Sprawdź swój sklep</title>
 <link>https://webskan.com/blog/analityka-przed-kliknieciem-526-sklepow/</link>
 <guid isPermaLink="true">https://webskan.com/blog/analityka-przed-kliknieciem-526-sklepow/</guid>
 <pubDate>Fri, 27 Nov 2026 07:00:00 GMT</pubDate>
-<description>Wczytaliśmy strony główne 526 małych polskich sklepów internetowych i nie kliknęliśmy niczego. 296 wysłało w tym czasie pomiar do Google Analytics, 109 do piksela Mety. W 155 sklepach wszystkie pomiary Google miały znacznik braku zgody.</description>
+<description>Wczytaliśmy strony główne 526 małych polskich sklepów internetowych i nie kliknęliśmy niczego. W 133 sklepach poszedł do Google Analytics pomiar bez informacji o zgodzie, w 109 zdarzenie do piksela Mety. W 155 Google Analytics wysyłał tylko pomiary ze znacznikiem braku zgody (według Google: bez plików cookie).</description>
 </item>
 <item>
 <title>526 małych sklepów internetowych zmierzonych jednego dnia: szybkość, nagłówki bezpieczeństwa, podstawy SEO</title>

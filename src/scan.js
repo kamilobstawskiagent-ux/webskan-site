@@ -53,8 +53,11 @@ const T = {
       no_lang: ['Brak atrybutu języka (lang)', 'Czytniki ekranu i Google nie wiedzą, w jakim języku jest strona.'],
       page_heavy: ['Strona waży {v} MB', 'Na telefonie z wolnym łączem ładuje się długo i zużywa transfer.'],
       a11y_low: ['Dostępność {v}/100', 'Automatyczne testy wykryły bariery dla osób z niepełnosprawnościami.'],
+      ga_no_consent_info: ['Google Analytics dostaje pomiar, zanim odwiedzający cokolwiek kliknie', 'Podczas wczytywania strony, bez żadnego kliknięcia, nasza przeglądarka wysłała do Google Analytics {v} {v|pomiar|pomiary|pomiarów} bez informacji o stanie zgody. Sprawdź w narzędziu banera zgód albo w Menedżerze tagów Google, czy pomiar czeka na decyzję odwiedzającego. To opis tego, co wyszło z przeglądarki, nie ocena prawna.'],
+      ga_consent_granted: ['Google Analytics dostaje pomiar ze znacznikiem „zgoda jest”, choć nikt niczego nie kliknął', 'Podczas wczytywania strony, bez żadnego kliknięcia, nasza przeglądarka wysłała do Google Analytics {v} {v|pomiar|pomiary|pomiarów} ze znacznikiem udzielonej zgody. Przyczyną bywają ustawienia domyślne narzędzia zgód (na przykład reguły dla regionów) albo kod motywu. To opis tego, co wyszło z przeglądarki, nie ocena prawna.'],
+      meta_pixel_early: ['Piksel Mety wysyła zdarzenie, zanim odwiedzający cokolwiek kliknie', 'Podczas wczytywania strony, bez żadnego kliknięcia, nasza przeglądarka wysłała {v} {v|zdarzenie|zdarzenia|zdarzeń} do piksela Mety (facebook.com/tr). Sprawdź, czy piksel jest objęty tym samym warunkiem zgody co pozostałe narzędzia. To opis tego, co wyszło z przeglądarki, nie ocena prawna.'],
     },
-    ok: { https: 'przekierowanie na https', tls: 'ważny certyfikat TLS', hsts: 'HSTS', title: 'tytuł strony', meta: 'opis meta', h1: 'jeden nagłówek H1', alt: 'opisy obrazków', viewport: 'wersja mobilna (viewport)', canonical: 'adres kanoniczny', og: 'Open Graph', lang: 'język dokumentu', lcp: 'szybkie ładowanie (LCP)', cls: 'stabilny układ (CLS)' },
+    ok: { https: 'przekierowanie na https', tls: 'ważny certyfikat TLS', hsts: 'HSTS', title: 'tytuł strony', meta: 'opis meta', h1: 'jeden nagłówek H1', alt: 'opisy obrazków', viewport: 'wersja mobilna (viewport)', canonical: 'adres kanoniczny', og: 'Open Graph', lang: 'język dokumentu', lcp: 'szybkie ładowanie (LCP)', cls: 'stabilny układ (CLS)', gaDenied: 'Google Analytics przed kliknięciem tylko ze znacznikiem braku zgody (tryb zgody)', noTrackers: 'bez pomiarów Google Analytics i piksela Mety przed kliknięciem' },
   },
   en: {
     path: (id) => `/en/scan/${id}`, home: '/en/', formAnchor: '/en/#order',
@@ -103,8 +106,11 @@ const T = {
       no_lang: ['Missing language attribute (lang)', 'Screen readers and Google cannot tell the page language.'],
       page_heavy: ['Page weighs {v} MB', 'Slow to load on mobile data and wasteful.'],
       a11y_low: ['Accessibility {v}/100', 'Automated tests found barriers for people with disabilities.'],
+      ga_no_consent_info: ['Google Analytics receives a hit before the visitor clicks anything', 'While the page loaded, with no click at all, our browser sent {v} {v|hit|hits} to Google Analytics with no consent state attached. Check in your consent banner tool or in Google Tag Manager whether the tag waits for the visitor’s choice. This describes what left the browser; it is not a legal assessment.'],
+      ga_consent_granted: ['Google Analytics receives a hit marked “consent granted” although nobody clicked anything', 'While the page loaded, with no click at all, our browser sent {v} {v|hit|hits} to Google Analytics marked as consented. Usual causes are default settings of the consent tool (for example region rules) or theme code. This describes what left the browser; it is not a legal assessment.'],
+      meta_pixel_early: ['The Meta pixel fires before the visitor clicks anything', 'While the page loaded, with no click at all, our browser sent {v} {v|event|events} to the Meta pixel (facebook.com/tr). Check that the pixel is covered by the same consent condition as your other tools. This describes what left the browser; it is not a legal assessment.'],
     },
-    ok: { https: 'https redirect', tls: 'valid TLS certificate', hsts: 'HSTS', title: 'page title', meta: 'meta description', h1: 'single H1', alt: 'image alt texts', viewport: 'mobile viewport', canonical: 'canonical URL', og: 'Open Graph', lang: 'document language', lcp: 'fast loading (LCP)', cls: 'stable layout (CLS)' },
+    ok: { https: 'https redirect', tls: 'valid TLS certificate', hsts: 'HSTS', title: 'page title', meta: 'meta description', h1: 'single H1', alt: 'image alt texts', viewport: 'mobile viewport', canonical: 'canonical URL', og: 'Open Graph', lang: 'document language', lcp: 'fast loading (LCP)', cls: 'stable layout (CLS)', gaDenied: 'Google Analytics before any click only with the consent-denied flag (Consent Mode)', noTrackers: 'no Google Analytics or Meta pixel hits before any click' },
   },
 };
 
@@ -565,6 +571,9 @@ function renderResult(job, lang, env, u) {
   if (seo.canonical) oks.push(t.ok.canonical);
   if (seo.openGraph?.count >= 2) oks.push(t.ok.og);
   if (seo.lang) oks.push(t.ok.lang);
+  const trk = lh.trackers; // analityka przed kliknięciem (skany od 27.11)
+  if (trk?.ga?.state === 'denied') oks.push(t.ok.gaDenied);
+  if (trk && trk.ga?.state === 'none' && !trk.meta?.hits) oks.push(t.ok.noTrackers);
   const date = new Date(job.finishedAt).toLocaleDateString(lang === 'pl' ? 'pl-PL' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Warsaw' });
   const link = `${u.origin}${t.path(job.id)}`;
   const noLh = s.performance == null; // Lighthouse bez ocen (interstitial / NO_FCP) – zamiast kresek wyjaśnienie (10.11)

@@ -5,7 +5,7 @@
  "source": "Źródło: webskan.com/badania/ · to nie jest próba losowa",
  "rows": [
   {
-   "label": "Brak co najmniej jednego z pięciu nagłówków bezpieczeństwa",
+   "label": "Serwer bez co najmniej jednego z pięciu zabezpieczeń przeglądarki (nagłówki bezpieczeństwa)",
    "sample": "518 z 526 sklepów",
    "value": 98,
    "text": "98 %"
@@ -17,28 +17,28 @@
    "text": "80 %"
   },
   {
-   "label": "Brak polityki DMARC, która zatrzymuje podrobioną pocztę",
+   "label": "Domena nie każe odrzucać ani odkładać do spamu podrobionych maili (DMARC)",
    "sample": "432 z 565 domen",
    "value": 76,
    "text": "76 %"
   },
   {
-   "label": "Google Analytics lub piksel Mety przed jakimkolwiek kliknięciem",
-   "sample": "318 z 526 sklepów",
-   "value": 60,
-   "text": "60 %"
-  },
-  {
    "label": "PHP bez poprawek bezpieczeństwa",
-   "sample": "26 z 51 sklepów, które podają wersję",
+   "sample": "wśród 51 sklepów, które podają wersję",
    "value": 51,
-   "text": "51 %"
+   "text": "26 z 51"
   },
   {
-   "label": "Brak nagłówka H1 na stronie głównej",
+   "label": "Strona główna bez głównego nagłówka w kodzie (H1)",
    "sample": "208 z 526 sklepów",
    "value": 40,
    "text": "40 %"
+  },
+  {
+   "label": "Google Analytics bez informacji o zgodzie lub piksel Mety, zanim klient cokolwiek kliknie",
+   "sample": "200 z 526 sklepów",
+   "value": 38,
+   "text": "38 %"
   },
   {
    "label": "WordPress sprzed poprawki luki używanej w atakach",
@@ -47,7 +47,7 @@
    "text": "20 %"
   },
   {
-   "label": "Publicznie dostępny plik, którego nie powinno być widać",
+   "label": "Plik widoczny dla każdego, choć nie powinien być",
    "sample": "24 z 255 sklepów",
    "value": 9,
    "text": "9 %"
