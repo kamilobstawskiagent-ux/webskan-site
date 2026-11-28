@@ -322,3 +322,10 @@ dialog.lightbox button{position:fixed;top:12px;right:12px;z-index:2;width:48px;h
 @media print{.res .chart .zoomhint{display:none}}
 .res .study details{border:0;max-width:none;display:flex;flex-direction:column;flex:1}.res .study summary{padding:0;font:inherit}.res .study summary:hover{color:inherit}.res .study summary::after{content:none}.res .study details p.more{padding:0;margin:4px 0 0;color:inherit;max-width:none}
 @media (max-width:640px){.res .study summary{padding:0 46px 0 0}.res .study summary::after{content:""}.res .sum td:nth-child(2),.res .sum td:nth-child(4){font:400 13.5px/1.45 var(--text);color:var(--mute)}.res .sum td:nth-child(2){margin-top:6px}}
+/* /badania/: karta, do której prowadzi kotwica z adresu (#poczta, #php…), jest wyróżniona – ramka zostaje, tło gaśnie */
+.res .study:target{border-color:var(--brand2);box-shadow:0 0 0 2px var(--brand2),0 10px 28px rgba(14,59,67,.13);animation:study-hit 2.4s ease-out 1}
+.res .study:target .eyebrow{color:var(--brand2)}
+.res .study:target h3{text-decoration:underline;text-decoration-color:var(--ochre);text-decoration-thickness:3px;text-underline-offset:6px}
+@keyframes study-hit{0%,35%{background:#FBF1D3}100%{background:var(--paper)}}
+@media (prefers-reduced-motion:reduce){.res .study:target{animation:none}}
+@media print{.res .study:target{box-shadow:none;border-color:var(--line)}.res .study:target h3{text-decoration:none}}
