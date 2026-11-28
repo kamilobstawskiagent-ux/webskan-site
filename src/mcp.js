@@ -185,7 +185,8 @@ function diffFindings(before, after, afterResult) {
   before = before.filter((f) => !VOLATILE.test(f.id)); after = after.filter((f) => !VOLATILE.test(f.id));
   const bid = new Set(before.map((f) => f.id)), aid = new Set(after.map((f) => f.id));
   const blocked = new Set(afterResult.blocked || []), badPages = new Set(afterResult.badPages || []);
-  const unverifiable = (f) => { const at = f.id.indexOf('@'); if (at < 0) return false; const target = f.id.slice(at + 1); return blocked.has(target) || badPages.has(target); };
+  const lhIncomplete = after.some((f) => f.id === 'perf.lighthouse.incomplete'); // 28.11: ux.tracking.* pochodzi z pomiaru Lighthouse – nieudany pomiar ≠ naprawione
+  const unverifiable = (f) => { if (lhIncomplete && f.id.startsWith('ux.tracking.')) return true; const at = f.id.indexOf('@'); if (at < 0) return false; const target = f.id.slice(at + 1); return blocked.has(target) || badPages.has(target); };
   const gone = before.filter((f) => !aid.has(f.id));
   const brief = (f) => ({ id: f.id, severity: f.severity, title: f.title });
   return { fixed: gone.filter((f) => !unverifiable(f)).map(brief), open: after.filter((f) => bid.has(f.id)).map(brief), new: after.filter((f) => !bid.has(f.id)), unverified: gone.filter(unverifiable).map(brief) };
